@@ -26,7 +26,7 @@ class _RightSideState extends State<RightSide> {
           TopBar(
             controller: _controller,
           ),
-          const YouTubeHomeScreen()
+          Expanded(child: YouTubeHomeScreen())
         ],
       ),
     );

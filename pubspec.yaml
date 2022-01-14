@@ -43,6 +43,12 @@ dependencies:
   path_provider: ^2.0.8
   bitsdojo_window: ^0.1.1+1
   collapsible_sidebar: ^2.0.1+2
+  smooth_scroll:
+    git:
+      url: https://github.com/Spsden/smooth_scroll.git
+    
+
+  #smooth_scroll_web: ^0.0.4
 
 dev_dependencies:
   flutter_test:

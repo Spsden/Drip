@@ -79,7 +79,9 @@ class _SideBarState extends State<SideBar> {
         selectedIconBox: Colors.red.shade800,
         selectedTextColor: Colors.white,
         selectedIconColor: Colors.black,
-        textStyle: const TextStyle(fontSize: 15, fontStyle: FontStyle.normal),
+        unselectedIconColor: Colors.white,
+        unselectedTextColor: Colors.white,
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
         titleStyle: const TextStyle(
             fontSize: 20,
             fontStyle: FontStyle.normal,

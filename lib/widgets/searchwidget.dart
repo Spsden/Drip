@@ -31,7 +31,8 @@ class _SearchWidgetState extends State<SearchWidget> {
         Card(
           shadowColor: Colors.black26,
           margin: const EdgeInsets.fromLTRB(18, 7, 18, 7),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           color: Colors.black,
           elevation: 5.0,
           child: SizedBox(
@@ -44,7 +45,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 decoration: InputDecoration(
                   filled: true,
                   focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none),
                   fillColor: Colors.black54,
                   prefixIcon: widget.leading,

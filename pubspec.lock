@@ -373,6 +373,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  smooth_scroll:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: facd1918a75bbaee45b928e1f230321adfc41d78
+      url: "https://github.com/Spsden/smooth_scroll.git"
+    source: git
+    version: "0.0.1"
   source_span:
     dependency: transitive
     description:
