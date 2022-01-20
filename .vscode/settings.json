@@ -1,0 +1,9 @@
+{
+    "dart.previewFlutterUiGuides": true,
+    "dart.previewFlutterUiGuidesCustomTracking": true,
+    "editor.mouseWheelZoom": true,
+    "editor.lineHeight": 20,
+    "editor.letterSpacing": 1,
+    "terminal.integrated.lineHeight": 0,
+    "terminal.integrated.fontFamily": "JetBrains Mono Medium"
+}
