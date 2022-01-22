@@ -148,7 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
               onDestinationSelected: (int index) {
                 setState(() {
                   _selectedIndex = index;
-                  _pageController.jumpToPage(index);
+                  _pageController.animateToPage(index,
+                      curve: Curves.fastLinearToSlowEaseIn,
+                      duration: Duration(milliseconds: 600));
                   // _loadscreen = screens[_selectedIndex];
 
                   //TopBar();
@@ -198,6 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: const TopBar()),
                   Expanded(
                       child: PageView(
+                    scrollDirection: Axis.vertical,
                     controller: _pageController,
                     physics: NeverScrollableScrollPhysics(),
                     children: screens,
