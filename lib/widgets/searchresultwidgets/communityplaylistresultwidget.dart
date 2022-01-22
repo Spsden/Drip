@@ -11,6 +11,8 @@ class CommunityPlaylistSearch extends StatelessWidget {
     required this.communityPlaylist,
   }) : super(key: key);
 
+  // int thmbnailindex = communityPlaylist[]
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,6 +54,7 @@ class CommunityPlaylistSearch extends StatelessWidget {
                 shrinkWrap: false,
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                //
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
@@ -73,7 +76,7 @@ class CommunityPlaylistSearch extends StatelessWidget {
                                     'assets/ytCover.png',
                                   )),
                               imageUrl: communityPlaylist[index]
-                                  .thumbnails[1]
+                                  .thumbnails[0]
                                   .url
                                   .toString(),
                               placeholder: (context, url) => Image(

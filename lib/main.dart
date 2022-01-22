@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Drip',
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -78,23 +79,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
   // Widget _loadscreen = YouTubeHomeScreen();
 
-  Widget _loadscreen = SearchPage();
+  late Widget _loadscreen;
 
-  List<Widget> screens = [
-    YouTubeHomeScreen(),
+  late PageController _pageController;
 
-    SearchPage(),
-    //SearchPage(),
-    // SearchPage()
-    noResult('Error 404!'),
-    //YouTubeHomeScreen()
-  ];
+  late List<Widget> screens;
+  // [
+  //   YouTubeHomeScreen(),
+
+  //   SearchPage(),
+  //   //SearchPage(),
+  //   // SearchPage()
+  //   noResult('Error 404!'),
+  //   //YouTubeHomeScreen()
+  // ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _selectedIndex = 0;
+
+    screens = [
+      YouTubeHomeScreen(),
+
+      SearchPage(),
+      //SearchPage(),
+      // SearchPage()
+      noResult('Error 404!'),
+      //YouTubeHomeScreen()
+    ];
+
+    _pageController = PageController(initialPage: _selectedIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    //super.build(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: WindowBorder(
@@ -118,7 +148,8 @@ class _MyHomePageState extends State<MyHomePage> {
               onDestinationSelected: (int index) {
                 setState(() {
                   _selectedIndex = index;
-                  _loadscreen = screens[_selectedIndex];
+                  _pageController.jumpToPage(index);
+                  // _loadscreen = screens[_selectedIndex];
 
                   //TopBar();
                 });
@@ -159,19 +190,19 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Expanded(
-              child: Container(
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(10),
-                //),
-                child: Column(
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: TopBar()),
-                    Expanded(child: _loadscreen),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const TopBar()),
+                  Expanded(
+                      child: PageView(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: screens,
+                  )),
+                ],
               ),
             )
           ],

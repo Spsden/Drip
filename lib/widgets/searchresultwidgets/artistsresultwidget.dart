@@ -66,7 +66,8 @@ class ArtistsSearch extends StatelessWidget {
                             fit: BoxFit.cover,
                             image: AssetImage('assets/artist.jpg'),
                           ),
-                          imageUrl: artists[index].thumbnails[1].url.toString(),
+                          imageUrl:
+                              artists[index].thumbnails![1].url.toString(),
                           placeholder: (context, url) => const Image(
                               fit: BoxFit.fill,
                               image: AssetImage('assets/artist.jpg')),

@@ -25,7 +25,8 @@ class SearchPage extends StatefulWidget {
   _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage>
+    with AutomaticKeepAliveClientMixin<SearchPage> {
   final TextEditingController _searchcontroller = TextEditingController();
 
   String query = '';
@@ -38,8 +39,10 @@ class _SearchPageState extends State<SearchPage> {
   // late List listOfSearchResults = [];
   // late Topresults _topresults;
   // late List<Songs> _searchpageresults;
-
   bool fetched = false;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -59,6 +62,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     //super.build(context);
     // final bool rotated =
     //     MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
@@ -69,20 +73,22 @@ class _SearchPageState extends State<SearchPage> {
     if (!status) {
       status = true;
       SearchMusic.getArtists(query == '' ? 'Arijit' : query).then((value) {
-        setState(() {
-          listOfSearchResults = value;
-          // artists = listOfSearchResults[0];
-          // songs = listOfSearchResults[1];
-          // communityplaylists = listOfSearchResults[2];
-          // albums = listOfSearchResults[3];
-          // _topresults = listOfSearchResults[4];
-          artists = listOfSearchResults['artistsearch'];
-          songs = listOfSearchResults['songsearch'];
-          communityplaylists = listOfSearchResults['communityplaylistsearch'];
-          albums = listOfSearchResults['albumsearch'];
-          // _topresults = listOfSearchResults['topresults'];
-          fetched = true;
-        });
+        if (this.mounted) {
+          setState(() {
+            listOfSearchResults = value;
+            // artists = listOfSearchResults[0];
+            // songs = listOfSearchResults[1];
+            // communityplaylists = listOfSearchResults[2];
+            // albums = listOfSearchResults[3];
+            // _topresults = listOfSearchResults[4];
+            artists = listOfSearchResults['artistsearch'];
+            songs = listOfSearchResults['songsearch'];
+            communityplaylists = listOfSearchResults['communityplaylistsearch'];
+            albums = listOfSearchResults['albumsearch'];
+            // _topresults = listOfSearchResults['topresults'];
+            fetched = true;
+          });
+        }
       });
     }
     return Container(
@@ -127,14 +133,14 @@ class _SearchPageState extends State<SearchPage> {
                   ? Container(
                       width: 200,
                       height: 200,
-                      child: CircularProgressIndicator())
+                      child: const CircularProgressIndicator())
                   : Expanded(
                       child: SingleChildScrollView(
                         clipBehavior: Clip.hardEdge,
                         primary: false,
                         physics: const BouncingScrollPhysics(
                             parent: AlwaysScrollableScrollPhysics()),
-                        padding: EdgeInsets.fromLTRB(15, 0, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(15, 0, 10, 10),
                         child: Column(
                           children: [
                             Align(

@@ -5,8 +5,8 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<Artists> ArtistsFromJson(String str) =>
-    List<Artists>.from(json.decode(str).map((x) => Artists.fromJson(x)));
+List<Artists>? ArtistsFromJson(String str) =>
+    List<Artists>.from(json.decode(str).map((x) => Artists?.fromJson(x)));
 
 String ArtistsToJson(List<Artists> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -28,9 +28,9 @@ class Artists {
   String? radioId;
   String? resultType;
   String? shuffleId;
-  List<Thumbnail> thumbnails;
+  List<Thumbnail>? thumbnails;
 
-  factory Artists.fromJson(Map<String, dynamic> json) => Artists(
+  factory Artists.fromJson(Map<String?, dynamic?> json) => Artists(
         artist: json["artist"],
         browseId: json["browseId"],
         category: json["category"],
@@ -38,7 +38,7 @@ class Artists {
         resultType: json["resultType"],
         shuffleId: json["shuffleId"],
         thumbnails: List<Thumbnail>.from(
-            json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
+            json["thumbnails"]?.map((x) => Thumbnail.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,28 +48,28 @@ class Artists {
         "radioId": radioId,
         "resultType": resultType,
         "shuffleId": shuffleId,
-        "thumbnails": List<dynamic>.from(thumbnails.map((x) => x.toJson())),
+        "thumbnails": List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
       };
 }
 
 class Thumbnail {
   Thumbnail({
-    required this.height,
-    required this.url,
-    required this.width,
+    this.height,
+    this.url,
+    this.width,
   });
 
-  int height;
-  String url;
-  int width;
+  int? height;
+  String? url;
+  int? width;
 
-  factory Thumbnail.fromJson(Map<String, dynamic> json) => Thumbnail(
+  factory Thumbnail.fromJson(Map<String?, dynamic?> json) => Thumbnail(
         height: json["height"],
         url: json["url"],
         width: json["width"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String?, dynamic?> toJson() => {
         "height": height,
         "url": url,
         "width": width,
