@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/searchpage.dart';
+import 'package:drip/screens/searchpagerevision.dart';
 import 'package:drip/widgets/noresult.dart';
-import 'package:drip/widgets/rightbar.dart';
-import 'package:drip/widgets/sidebar.dart';
+
 import 'package:drip/widgets/topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -16,7 +16,7 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setMinWindowSize(const Size(600, 600));
+  await DesktopWindow.setMinWindowSize(const Size(1000, 600));
 
   if (Platform.isWindows) {
     await Hive.initFlutter('Drip');
@@ -79,28 +79,31 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  //Widget _loadscreen = YouTubeHomeScreen();
+  // Widget _loadscreen = YouTubeHomeScreen();
 
   Widget _loadscreen = SearchPage();
 
   List<Widget> screens = [
-    //YouTubeHomeScreen(),
-    //noResult('Error 404!'),
+    YouTubeHomeScreen(),
+
     SearchPage(),
-    SearchPage(),
-    SearchPage()
+    //SearchPage(),
+    // SearchPage()
+    noResult('Error 404!'),
     //YouTubeHomeScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: WindowBorder(
         child: Row(
           children: [
             NavigationRail(
+              minWidth: 20,
               leading: const Padding(
-                padding: EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(6.0, 0, 0, 0),
                 child: Text(
                   'Drip',
                   style: TextStyle(
@@ -110,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.black87,
               selectedIndex: _selectedIndex,
               onDestinationSelected: (int index) {
                 setState(() {
@@ -123,30 +126,30 @@ class _MyHomePageState extends State<MyHomePage> {
               labelType: NavigationRailLabelType.selected,
               destinations: const <NavigationRailDestination>[
                 NavigationRailDestination(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                     label: Text('Home'),
                     icon: Icon(
-                      Icons.home_rounded,
+                      fluent.FluentIcons.home,
                       color: Colors.white,
                     ),
                     selectedIcon: Icon(
-                      Icons.home,
+                      fluent.FluentIcons.home,
                       color: Colors.red,
                     )),
                 NavigationRailDestination(
                     label: Text('Search'),
                     icon: Icon(
-                      Icons.search_rounded,
+                      fluent.FluentIcons.search,
                       color: Colors.white,
                     ),
                     selectedIcon: Icon(
-                      Icons.search_rounded,
+                      fluent.FluentIcons.search,
                       color: Colors.red,
                     )),
                 NavigationRailDestination(
                     label: Text('Playlists'),
                     icon: Icon(
-                      Icons.playlist_play_rounded,
+                      fluent.FluentIcons.stream_playlist,
                       color: Colors.white,
                     ),
                     selectedIcon: Icon(
@@ -156,16 +159,24 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Expanded(
-              child: Column(
-                children: [
-                  TopBar(),
-                  Expanded(child: _loadscreen),
-                ],
+              child: Container(
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(10),
+                //),
+                child: Column(
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: TopBar()),
+                    Expanded(child: _loadscreen),
+                  ],
+                ),
               ),
             )
           ],
         ),
-        color: Colors.redAccent.shade700,
+        color: Colors.red.shade800.withOpacity(0.8),
         width: 0,
         //child: SideBar(),
       ),

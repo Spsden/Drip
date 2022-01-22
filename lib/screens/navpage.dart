@@ -1,6 +1,7 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/searchpage.dart';
+import 'package:drip/screens/searchpagerevision.dart';
 import 'package:drip/widgets/noresult.dart';
 import 'package:drip/widgets/topbar.dart';
 import 'package:flutter/material.dart';

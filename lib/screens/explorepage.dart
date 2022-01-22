@@ -87,7 +87,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
         : MediaQuery.of(context).size.height / 2.5;
     if (boxSize > 250) boxSize = 250;
     return Container(
-      color: Colors.black54,
+      color: Colors.black,
       child: Scrollbar(
         thickness: 10,
         controller: _scrollController,
@@ -175,9 +175,10 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                             child: Text(
                               '${searchedList[index]["title"]}',
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
+                                ///color: Theme.of(context).colorScheme.secondary,
+                                color: Colors.white,
                                 fontSize: 18,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
                           ),
@@ -231,8 +232,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                 child: Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.0),
-                                      color:
-                                          Colors.red.shade900.withOpacity(0.5)),
+                                      color: Colors.brown.withOpacity(0.4)),
                                   margin: EdgeInsets.all(10),
                                   width: item['type'] != 'playlist'
                                       ? (boxSize - 30) * (16 / 9)

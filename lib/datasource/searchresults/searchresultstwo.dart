@@ -79,7 +79,7 @@ class SearchMusic {
 
         if ((listMap['category']).toString() == 'Top result') {
           // topresult.add(listMap);
-          // topresult = listMap;
+          //  topresult = listMap;
         }
 
         if ((listMap['category']).toString() == 'Community playlists') {
@@ -90,7 +90,7 @@ class SearchMusic {
       var artistFiltered = jsonEncode(artistslist);
       var albumFiltered = jsonEncode(albumlist);
       var songsFiltered = jsonEncode(songslist);
-      //var topresultFiltered = jsonEncode(topresult);
+      // var topresultFiltered = jsonEncode(topresult);
       var communityplaylistFiltered = jsonEncode(communityplaylistlist);
 
       // for (var i = 0; i < morefilter.length; i++) {
@@ -137,7 +137,7 @@ class SearchMusic {
         'songsearch': songsearch,
         'albumsearch': albumsearch,
         'communityplaylistsearch': communityplaylistsearch,
-        //'topresults': toppresult
+        // 'topresults': toppresult
       };
 
       // var forsake = artistsearch[0];
@@ -148,12 +148,13 @@ class SearchMusic {
       //   songsearch,
       //   communityplaylistsearch,
       //   albumsearch,
-      //   toppresult
+      //   //toppresult
       // ];
 
       return mapofsearchresults;
+      // return listofsearchresults;
     } else {
-      print(response.statusCode.toString());
+      // print(response.statusCode.toString());
       return <Artists>[];
     }
   }

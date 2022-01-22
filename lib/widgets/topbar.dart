@@ -47,12 +47,12 @@ class TopBar extends StatelessWidget {
               Row(
                 children: [
                   MinimizeWindowButton(
-                    colors: WindowButtonColors(iconNormal: Colors.red),
+                    colors: WindowButtonColors(iconNormal: Colors.white),
                   ),
                   MaximizeWindowButton(
-                      colors: WindowButtonColors(iconNormal: Colors.red)),
+                      colors: WindowButtonColors(iconNormal: Colors.white)),
                   CloseWindowButton(
-                      colors: WindowButtonColors(iconNormal: Colors.red))
+                      colors: WindowButtonColors(iconNormal: Colors.white))
                 ],
               )
             ],
