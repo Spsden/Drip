@@ -327,6 +327,9 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                   );
                 },
               ),
+              SizedBox(
+                height: 65,
+              )
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/searchpage.dart';
@@ -200,12 +201,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             Expanded(
-              child: Column(
+              child: Stack(
+                fit: StackFit.loose,
+                overflow: Overflow.visible,
                 children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const TopBar()),
                   Expanded(
                       child: PageView(
                     scrollDirection: Axis.vertical,
@@ -213,6 +212,28 @@ class _MyHomePageState extends State<MyHomePage> {
                     physics: NeverScrollableScrollPhysics(),
                     children: screens,
                   )),
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                          child: Container(
+                            height: 80.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: const TopBar()),
+                    ),
+                  ),
                 ],
               ),
             )

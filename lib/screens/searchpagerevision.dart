@@ -98,7 +98,7 @@ class _SearchPageState extends State<SearchPage>
           Align(
             alignment: Alignment.topLeft,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(10, 0, 20, 30),
+              padding: const EdgeInsets.fromLTRB(10, 40, 20, 20),
               width: 400,
               child: CupertinoSearchTextField(
                 controller: _searchcontroller,
@@ -166,7 +166,10 @@ class _SearchPageState extends State<SearchPage>
                                     height: 30,
                                   ),
                                   CommunityPlaylistSearch(
-                                      communityPlaylist: communityplaylists)
+                                      communityPlaylist: communityplaylists),
+                                  const SizedBox(
+                                    height: 65,
+                                  ),
                                 ],
                               ),
                             )
