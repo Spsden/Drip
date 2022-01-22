@@ -126,24 +126,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //super.build(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: WindowBorder(
         child: Row(
           children: [
             NavigationRail(
+              elevation: 5,
+              groupAlignment: 0.0,
               minWidth: 20,
-              leading: const Padding(
-                padding: EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                child: Text(
-                  'Drip',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      letterSpacing: 4,
-                      fontWeight: FontWeight.bold),
-                ),
+              leading: const Text(
+                'Drip',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.bold),
               ),
-              backgroundColor: Colors.black87,
+              backgroundColor: Colors.red.shade700.withRed(220),
               selectedIndex: _selectedIndex,
               onDestinationSelected: (int index) {
                 setState(() {
@@ -160,34 +159,43 @@ class _MyHomePageState extends State<MyHomePage> {
               destinations: const <NavigationRailDestination>[
                 NavigationRailDestination(
                     padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    label: Text('Home'),
+                    label: Text(
+                      'Home',
+                      style: TextStyle(color: Colors.black),
+                    ),
                     icon: Icon(
                       fluent.FluentIcons.home,
                       color: Colors.white,
                     ),
                     selectedIcon: Icon(
                       fluent.FluentIcons.home,
-                      color: Colors.red,
+                      color: Colors.black,
                     )),
                 NavigationRailDestination(
-                    label: Text('Search'),
+                    label: Text(
+                      'Search',
+                      style: TextStyle(color: Colors.black),
+                    ),
                     icon: Icon(
                       fluent.FluentIcons.search,
                       color: Colors.white,
                     ),
                     selectedIcon: Icon(
                       fluent.FluentIcons.search,
-                      color: Colors.red,
+                      color: Colors.black,
                     )),
                 NavigationRailDestination(
-                    label: Text('Playlists'),
+                    label: Text(
+                      'Playlists',
+                      style: TextStyle(color: Colors.black),
+                    ),
                     icon: Icon(
                       fluent.FluentIcons.stream_playlist,
                       color: Colors.white,
                     ),
                     selectedIcon: Icon(
                       Icons.playlist_play,
-                      color: Colors.red,
+                      color: Colors.black,
                     ))
               ],
             ),

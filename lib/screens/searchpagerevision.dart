@@ -35,7 +35,7 @@ class _SearchPageState extends State<SearchPage>
   late List<Artists> artists = [];
   late List<Albums> albums = [];
   late List<Songs> songs = [];
-  late List<CommunityPlaylist> communityplaylists;
+  late List<CommunityPlaylist> communityplaylists = [];
   // late List listOfSearchResults = [];
   // late Topresults _topresults;
   // late List<Songs> _searchpageresults;

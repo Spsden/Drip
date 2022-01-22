@@ -105,6 +105,13 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
           padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  'Hi, Suraj',
+                  style: TextStyle(fontSize: 40.0),
+                ),
+              ),
               if (headList.isNotEmpty)
                 CarouselSlider.builder(
                   // PageView.builder(
