@@ -5,7 +5,6 @@ import 'package:drip/datasource/searchresults/artistsdataclass.dart';
 import 'package:drip/datasource/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasource/searchresults/searchresultstwo.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
-import 'package:drip/datasource/searchresults/topresultsdataclass.dart';
 import 'package:drip/widgets/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/widgets/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/widgets/searchresultwidgets/communityplaylistresultwidget.dart';
@@ -15,10 +14,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-  //final String incomingquery;
+  final String incomingquery;
   const SearchPage({
     Key? key,
-    //required this.incomingquery,
+    required this.incomingquery,
   }) : super(key: key);
 
   @override
@@ -72,7 +71,8 @@ class _SearchPageState extends State<SearchPage>
     // if (boxSize > 250) boxSize = 250;
     if (!status) {
       status = true;
-      SearchMusic.getArtists(query == '' ? 'Arijit' : query).then((value) {
+      SearchMusic.getArtists(query == '' ? widget.incomingquery : query)
+          .then((value) {
         if (this.mounted) {
           setState(() {
             listOfSearchResults = value;
@@ -153,17 +153,17 @@ class _SearchPageState extends State<SearchPage>
                               ),
                             ),
                             SingleChildScrollView(
-                              padding: fluent.EdgeInsets.only(bottom: 10),
+                              padding: const fluent.EdgeInsets.only(bottom: 10),
                               child: Column(
                                 children: [
                                   SongsSearch(songs: songs),
                                   ArtistsSearch(artists: artists),
                                   const SizedBox(
-                                    height: 30,
+                                    height: 10,
                                   ),
                                   AlbumSearch(albums: albums),
                                   const SizedBox(
-                                    height: 30,
+                                    height: 40,
                                   ),
                                   CommunityPlaylistSearch(
                                       communityPlaylist: communityplaylists),

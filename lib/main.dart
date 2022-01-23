@@ -62,6 +62,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Drip',
       theme: ThemeData(
+        //sliderTheme: Slidert,
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
@@ -106,7 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
     screens = [
       YouTubeHomeScreen(),
 
-      SearchPage(),
+      SearchPage(
+        incomingquery: 'Home',
+      ),
       //SearchPage(),
       // SearchPage()
       noResult('Error 404!'),
@@ -122,6 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement dispose
     super.dispose();
   }
+
+  double _sliderval = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -203,13 +208,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               child: Stack(
                 fit: StackFit.loose,
-                overflow: Overflow.visible,
+                clipBehavior: Clip.none,
                 children: [
                   Expanded(
                       child: PageView(
                     scrollDirection: Axis.vertical,
                     controller: _pageController,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     children: screens,
                   )),
                   Positioned.fill(
@@ -217,14 +222,37 @@ class _MyHomePageState extends State<MyHomePage> {
                       alignment: Alignment.bottomCenter,
                       child: ClipRect(
                         child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                          child: Container(
+                          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                          child: SizedBox(
+                            child: Column(
+                              children: [Text('')],
+                            ),
+                            width: double.infinity,
                             height: 80.0,
                           ),
                         ),
                       ),
                     ),
                   ),
+                  Positioned(
+                      bottom: 53.5,
+                      left: 0,
+                      right: 0,
+                      child: SliderTheme(
+                        data: SliderThemeData(
+                            activeTrackColor: Colors.red,
+                            trackHeight: 3,
+                            thumbColor: Colors.red),
+                        child: Slider(
+                            value: _sliderval,
+                            max: 300,
+                            divisions: 30,
+                            onChanged: (slidevalue) {
+                              setState(() {
+                                _sliderval = slidevalue;
+                              });
+                            }),
+                      )),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.topCenter,

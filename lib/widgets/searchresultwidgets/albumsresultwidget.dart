@@ -41,8 +41,10 @@ class AlbumSearch extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
-          height: 260,
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.symmetric(vertical: 20.0),
+          height: 250,
           //width: double.infinity,
           child: Expanded(
             child: ListView.builder(
@@ -51,42 +53,61 @@ class AlbumSearch extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
               itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Expanded(
-                      child: Card(
-                        margin: EdgeInsets.only(top: 15.0),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: CachedNetworkImage(
+                return Container(
+                  color: Colors.transparent,
+                  margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  width: 200,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.transparent,
+                    child: Wrap(
+                      children: [
+                        CachedNetworkImage(
+                          width: 200,
+                          height: 200,
+                          // imageBuilder: (context, imageProvider) =>
+                          //     CircleAvatar(
+                          //   radius: 80,
+                          //   backgroundImage: imageProvider,
+                          // ),
                           fit: BoxFit.cover,
                           errorWidget: (context, _, __) => const Image(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                'assets/ytCover.png',
-                              )),
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/artist.jpg'),
+                          ),
                           imageUrl: albums[index].thumbnails[1].url.toString(),
-                          placeholder: (context, url) => Image(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                'assets/ytCover.png',
-                              )),
+                          placeholder: (context, url) => const Image(
+                              fit: BoxFit.fill,
+                              image: AssetImage('assets/artist.jpg')),
                         ),
-                      ),
+                        ListTile(
+                          title: Text(
+                            albums[index].title.toString(),
+                            style: const TextStyle(
+                              ///color: Theme.of(context).colorScheme.secondary,
+                              color: Colors.white,
+                              fontSize: 18,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          subtitle: Text(
+                            albums[index].artists[0].name.toString() +
+                                '\n' +
+                                albums[index].year.toString(),
+                            style: const TextStyle(
+                              ///color: Theme.of(context).colorScheme.secondary,
+                              color: Colors.white,
+                              fontSize: 18,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Text(
-                      albums[index].title.toString(),
-                      textAlign: TextAlign.center,
-                      softWrap: false,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                  ),
                 );
               },
             ),

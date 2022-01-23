@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasource/yapiservices.dart';
+import 'package:drip/screens/searchpagerevision.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -134,15 +135,15 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                   ) =>
                       GestureDetector(
                     onTap: () {
-                      //   Navigator.push(
-                      //     context,
-                      //     PageRouteBuilder(
-                      //       opaque: false,
-                      //       pageBuilder: (_, __, ___) => YouTubeSearchPage(
-                      //         query: headList[index]['title'].toString(),
-                      //       ),
-                      //     ),
-                      //   );
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder: (_, __, ___) => SearchPage(
+                            incomingquery: headList[index]['title'].toString(),
+                          ),
+                        ),
+                      );
                     },
                     child: Card(
                       elevation: 5,

@@ -56,47 +56,63 @@ class CommunityPlaylistSearch extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                 //
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 40, 0),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Card(
-                            margin: EdgeInsets.only(top: 15.0),
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: CachedNetworkImage(
+                  return Container(
+                    color: Colors.transparent,
+                    margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                    width: 200,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      color: Colors.transparent,
+                      child: Wrap(
+                        children: [
+                          CachedNetworkImage(
+                            width: 300,
+                            height: 200,
+                            //   imageBuilder: (context, imageProvider) =>
+                            //  ,
+                            // imageBuilder: (context, imageProvider) =>
+                            //     CircleAvatar(
+                            //   radius: 80,
+                            //   backgroundImage: imageProvider,
+                            // ),
+                            fit: BoxFit.cover,
+                            errorWidget: (context, _, __) => const Image(
                               fit: BoxFit.cover,
-                              errorWidget: (context, _, __) => Image(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    'assets/ytCover.png',
-                                  )),
-                              imageUrl: communityPlaylist[index]
-                                  .thumbnails[0]
-                                  .url
-                                  .toString(),
-                              placeholder: (context, url) => Image(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    'assets/ytCover.png',
-                                  )),
+                              image: AssetImage('assets/artist.jpg'),
                             ),
+                            imageUrl: communityPlaylist[index]
+                                .thumbnails[0]
+                                .url
+                                .toString(),
+                            placeholder: (context, url) => const Image(
+                                fit: BoxFit.fill,
+                                image: AssetImage('assets/artist.jpg')),
                           ),
-                        ),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        Text(
-                          communityPlaylist[index].title.toString(),
-                          textAlign: TextAlign.center,
-                          // softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                          ListTile(
+                            title: Text(
+                              communityPlaylist[index].title.toString(),
+                              style: const TextStyle(
+                                ///color: Theme.of(context).colorScheme.secondary,
+                                color: Colors.white,
+                                fontSize: 18,
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            subtitle: Text(
+                              communityPlaylist[index].author.toString(),
+                              style: const TextStyle(
+                                ///color: Theme.of(context).colorScheme.secondary,
+                                color: Colors.white,
+                                fontSize: 18,
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },

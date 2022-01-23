@@ -31,15 +31,14 @@ class Artists {
   List<Thumbnail>? thumbnails;
 
   factory Artists.fromJson(Map<String?, dynamic?> json) => Artists(
-        artist: json["artist"],
-        browseId: json["browseId"],
-        category: json["category"],
-        radioId: json["radioId"],
-        resultType: json["resultType"],
-        shuffleId: json["shuffleId"],
-        thumbnails: List<Thumbnail>.from(
-            json["thumbnails"]?.map((x) => Thumbnail.fromJson(x))),
-      );
+      artist: json["artist"],
+      browseId: json["browseId"],
+      category: json["category"],
+      radioId: json["radioId"],
+      resultType: json["resultType"],
+      shuffleId: json["shuffleId"],
+      thumbnails: List<Thumbnail>.from(
+          json["thumbnails"]?.map((x) => Thumbnail.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "artist": artist,
@@ -69,7 +68,7 @@ class Thumbnail {
         width: json["width"],
       );
 
-  Map<String?, dynamic?> toJson() => {
+  Map<String?, dynamic?>? toJson() => {
         "height": height,
         "url": url,
         "width": width,
