@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/searchpage.dart';
 import 'package:drip/screens/searchpagerevision.dart';
@@ -82,41 +83,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late int _selectedIndex;
-  // Widget _loadscreen = YouTubeHomeScreen();
 
-  late Widget _loadscreen;
 
   late PageController _pageController;
 
-  late List<Widget> screens;
-  // [
-  //   YouTubeHomeScreen(),
 
-  //   SearchPage(),
-  //   //SearchPage(),
-  //   // SearchPage()
-  //   noResult('Error 404!'),
-  //   //YouTubeHomeScreen()
-  // ];
+
+  late List<Widget> screens;
+
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     _selectedIndex = 0;
 
     screens = [
-      YouTubeHomeScreen(),
-
-      SearchPage(
+      FirstPageStack(),
+      //const YouTubeHomeScreen(),
+      const SearchPage(
         incomingquery: 'Home',
       ),
-      //SearchPage(),
-      // SearchPage()
       noResult('Error 404!'),
-      //YouTubeHomeScreen()
     ];
-
     _pageController = PageController(initialPage: _selectedIndex);
+
   }
 
   @override
@@ -275,23 +265,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class ConstantScrollBehavior extends ScrollBehavior {
-  const ConstantScrollBehavior();
+// class ConstantScrollBehavior extends ScrollBehavior {
+//   const ConstantScrollBehavior();
+//
+//   @override
+//   Widget buildScrollbar(
+//           BuildContext context, Widget child, ScrollableDetails details) =>
+//       child;
+//
+//   @override
+//   Widget buildOverscrollIndicator(
+//           BuildContext context, Widget child, ScrollableDetails details) =>
+//       child;
+//
+//   @override
+//   TargetPlatform getPlatform(BuildContext context) => TargetPlatform.macOS;
+//
+//   @override
+//   ScrollPhysics getScrollPhysics(BuildContext context) =>
+//       const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
+// }
 
-  @override
-  Widget buildScrollbar(
-          BuildContext context, Widget child, ScrollableDetails details) =>
-      child;
 
-  @override
-  Widget buildOverscrollIndicator(
-          BuildContext context, Widget child, ScrollableDetails details) =>
-      child;
-
-  @override
-  TargetPlatform getPlatform(BuildContext context) => TargetPlatform.macOS;
-
-  @override
-  ScrollPhysics getScrollPhysics(BuildContext context) =>
-      const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
-}

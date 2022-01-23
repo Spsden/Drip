@@ -15,7 +15,8 @@ List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
 List headList = Hive.box('cache').get('ytHomeHead', defaultValue: []) as List;
 
 class YouTubeHomeScreen extends StatefulWidget {
-  const YouTubeHomeScreen({Key? key}) : super(key: key);
+  // final ValueChanged<String>? onPushSearch;
+  const YouTubeHomeScreen({Key? key, }) : super(key: key);
 
   @override
   _YouTubeHomeScreenState createState() => _YouTubeHomeScreenState();
@@ -72,6 +73,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
     super.initState();
   }
 
+
   @override
   void dispose() {
     _controller.dispose();
@@ -106,9 +108,9 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
           padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
           child: Column(
             children: [
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
-                child: const Text(
+                child: Text(
                   'Hi, Suraj',
                   style: TextStyle(fontSize: 40.0),
                 ),
@@ -135,15 +137,18 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                   ) =>
                       GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          opaque: false,
-                          pageBuilder: (_, __, ___) => SearchPage(
-                            incomingquery: headList[index]['title'].toString(),
-                          ),
-                        ),
-                      );
+                      //onPushSearch?.call(headList[index]['title'].toString());
+                      Navigator.of(context).pushNamed('searchpage', arguments: headList[index]['title'].toString()
+                        );
+                      // Navigator.push(
+                      //   context,
+                      //   PageRouteBuilder(
+                      //     opaque: false,
+                      //     pageBuilder: (_, __, ___) => SearchPage(
+                      //       incomingquery: headList[index]['title'].toString(),
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: Card(
                       elevation: 5,

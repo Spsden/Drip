@@ -53,7 +53,7 @@ class ArtistsSearch extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             itemBuilder: (context, index) {
               return Container(
-                color: Colors.transparent,
+                //color: Colors.transparent,
                 margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
                 width: 160,
                 child: Card(

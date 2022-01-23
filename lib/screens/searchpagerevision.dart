@@ -14,7 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-  final String incomingquery;
+   final String incomingquery;
   const SearchPage({
     Key? key,
     required this.incomingquery,
@@ -56,11 +56,16 @@ class _SearchPageState extends State<SearchPage>
     super.dispose();
   }
 
-  //List<Searchresults> searchview = _searchpageresults;
-  //SearchApi().fetchd
+
+
+
 
   @override
   Widget build(BuildContext context) {
+
+    // final Object? args = ModalRoute.of(context)?.settings.arguments as Map;
+    // var incomingquery = args['searchkey'].toString();
+
     super.build(context);
     //super.build(context);
     // final bool rotated =
@@ -99,41 +104,69 @@ class _SearchPageState extends State<SearchPage>
             alignment: Alignment.topLeft,
             child: Container(
               padding: const EdgeInsets.fromLTRB(10, 40, 20, 20),
-              width: 400,
-              child: CupertinoSearchTextField(
-                controller: _searchcontroller,
+              //width: 400,
+              child: Row(
+                children: [
+                  Navigator.of(context).canPop() ?  Row(
+                    children: [
 
-                // onChanged: (value) {
-                //   url =
-                //       'http://127.0.0.1:5000/search?query=$value&filter=songs&limit=20';
-                // },
-                style: TextStyle(color: Colors.white),
-                onSubmitted: (_value) async {
-                  setState(() {
-                    fetched = false;
-                    query = _value;
-                    status = false;
-                    listOfSearchResults = {};
-                  });
-                },
+                      GestureDetector(
 
-                //backgroundColor: Colors.red.shade700.withOpacity(0.3),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.white,
-                        style: BorderStyle.solid,
-                        width: 1.5),
-                    color: Colors.red.shade900.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10)),
+                          child: const Icon(fluent.FluentIcons.chevron_left_med),
+                          onTap: () {Navigator.of(context).pop() ;}),
+                      const fluent.SizedBox(width: 20,),
+
+                    ],
+
+                  )
+                 : SizedBox(),
+
+
+
+
+                  fluent.SizedBox(
+
+                    width: 400,
+                    child: CupertinoSearchTextField(
+                      controller: _searchcontroller,
+
+                      // onChanged: (value) {
+                      //   url =
+                      //       'http://127.0.0.1:5000/search?query=$value&filter=songs&limit=20';
+                      // },
+                      style: TextStyle(color: Colors.white),
+                      onSubmitted: (_value) async {
+                        setState(() {
+                          fetched = false;
+                          query = _value;
+                          status = false;
+                          listOfSearchResults = {};
+                        });
+                      },
+
+                      //backgroundColor: Colors.red.shade700.withOpacity(0.3),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.white,
+                              style: BorderStyle.solid,
+                              width: 0.5),
+                         // color: Colors.red.shade900.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+
+                ],
+
               ),
             ),
           ),
           Container(
               child: (!fetched)
                   ? Container(
-                      width: 200,
-                      height: 200,
-                      child: const CircularProgressIndicator())
+                alignment: Alignment.center,
+                      width: 500,
+                      height: 500,
+                      child: const CircularProgressIndicator(color: Colors.red))
                   : Expanded(
                       child: SingleChildScrollView(
                         clipBehavior: Clip.hardEdge,
@@ -145,9 +178,10 @@ class _SearchPageState extends State<SearchPage>
                           children: [
                             Align(
                               alignment: Alignment.topLeft,
-                              child: Text(
+                              child: Text( query == '' ? 'Results for ${widget.incomingquery}' :
                                 'Results for $query',
                                 style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
                                   fontSize: 40.0,
                                 ),
                               ),
