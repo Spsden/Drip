@@ -38,6 +38,7 @@ dependencies:
   fluent_ui: ^3.6.0
   badges: ^2.0.2
   marquee: ^2.2.0
+  loading_animation_widget: ^1.0.0+3
 
 dev_dependencies:
   flutter_test:

@@ -76,7 +76,7 @@ class SongsSearch extends StatelessWidget {
                         width: 20,
                       ),
                       SizedBox(
-                        width: 200,
+                        width: 150,
                         child: Text(
                           songs[index].title.toString(),
                           overflow: TextOverflow.ellipsis,
@@ -93,7 +93,7 @@ class SongsSearch extends StatelessWidget {
                         width: 20,
                       ),
                       SizedBox(
-                        width: 200,
+                        width: 150,
                         child: Text(
                           songs[index].artists![0].name.toString(),
                           overflow: TextOverflow.ellipsis,

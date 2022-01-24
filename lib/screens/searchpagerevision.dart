@@ -5,6 +5,8 @@ import 'package:drip/datasource/searchresults/artistsdataclass.dart';
 import 'package:drip/datasource/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasource/searchresults/searchresultstwo.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:drip/widgets/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/widgets/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/widgets/searchresultwidgets/communityplaylistresultwidget.dart';
@@ -110,9 +112,14 @@ class _SearchPageState extends State<SearchPage>
                   Navigator.of(context).canPop() ?  Row(
                     children: [
 
-                      GestureDetector(
+                      InkWell(
+
+
 
                           child: const Icon(fluent.FluentIcons.chevron_left_med),
+                          hoverColor: Colors.red,
+
+
                           onTap: () {Navigator.of(context).pop() ;}),
                       const fluent.SizedBox(width: 20,),
 
@@ -166,7 +173,8 @@ class _SearchPageState extends State<SearchPage>
                 alignment: Alignment.center,
                       width: 500,
                       height: 500,
-                      child: const CircularProgressIndicator(color: Colors.red))
+                      child: LoadingAnimationWidget.staggeredDotsWave(color: Colors.red, size: 300))
+                      //const CircularProgressIndicator(color: Colors.red))
                   : Expanded(
                       child: SingleChildScrollView(
                         clipBehavior: Clip.hardEdge,

@@ -134,11 +134,15 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: const Text(
                 'Drip',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 15,
                     letterSpacing: 2,
                     fontWeight: FontWeight.bold),
               ),
+              // trailing: Icon(
+              //   fluent.FluentIcons.settings,
+              //   color: Colors.white,
+              // ),
               backgroundColor: Colors.red.shade700.withRed(220),
               selectedIndex: _selectedIndex,
               onDestinationSelected: (int index) {
