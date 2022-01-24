@@ -1,7 +1,6 @@
 import 'package:drip/datasource/searchresults/albumsdataclass.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class AlbumSearch extends StatelessWidget {
   late List<Albums> albums = [];

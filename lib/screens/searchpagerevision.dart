@@ -178,8 +178,8 @@ class _SearchPageState extends State<SearchPage>
                           children: [
                             Align(
                               alignment: Alignment.topLeft,
-                              child: Text( query == '' ? 'Results for ${widget.incomingquery}' :
-                                'Results for $query',
+                              child: Text( query == '' ? 'Results for \"${widget.incomingquery}\"' :
+                                'Results for \"$query\"',
                                 style: const TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 40.0,
@@ -191,18 +191,23 @@ class _SearchPageState extends State<SearchPage>
                               child: Column(
                                 children: [
                                   SongsSearch(songs: songs),
-                                  ArtistsSearch(artists: artists),
+                                  artists.isNotEmpty ?
+                                  ArtistsSearch(artists: artists) :
+                                      Text('No Artists available'),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  AlbumSearch(albums: albums),
+                                  albums.isNotEmpty ?
+                                  AlbumSearch(albums: albums) :
+                                  Text('No Albums available'),
                                   const SizedBox(
                                     height: 40,
                                   ),
+                                  communityplaylists.isNotEmpty ?
                                   CommunityPlaylistSearch(
-                                      communityPlaylist: communityplaylists),
+                                      communityPlaylist: communityplaylists) : Text('No Playlists available'),
                                   const SizedBox(
-                                    height: 65,
+                                    height: 100,
                                   ),
                                 ],
                               ),

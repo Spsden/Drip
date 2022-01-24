@@ -5,6 +5,7 @@ import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/searchpage.dart';
 import 'package:drip/screens/searchpagerevision.dart';
+import 'package:drip/widgets/bottomplayercontrols.dart';
 import 'package:drip/widgets/noresult.dart';
 
 import 'package:drip/widgets/topbar.dart';
@@ -214,9 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
                           child: SizedBox(
-                            child: Column(
-                              children: [Text('')],
-                            ),
+                            child: PlayerControls(),
                             width: double.infinity,
                             height: 80.0,
                           ),

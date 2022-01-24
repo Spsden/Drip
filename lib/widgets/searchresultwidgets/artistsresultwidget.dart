@@ -60,13 +60,14 @@ class ArtistsSearch extends StatelessWidget {
                   color: Colors.transparent,
                   child: Wrap(
                     children: [
+
                       CachedNetworkImage(
                         imageBuilder: (context, imageProvider) => CircleAvatar(
                           radius: 80,
                           backgroundImage: imageProvider,
                         ),
                         fit: BoxFit.cover,
-                        errorWidget: (context, _, __) => const Image(
+                        errorWidget: (context, url,  error) => const Image(
                           fit: BoxFit.cover,
                           image: AssetImage('assets/artist.jpg'),
                         ),

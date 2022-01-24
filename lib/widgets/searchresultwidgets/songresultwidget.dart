@@ -56,6 +56,7 @@ class SongsSearch extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    mainAxisAlignment: fluent.MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
                           width: 40,
@@ -92,7 +93,7 @@ class SongsSearch extends StatelessWidget {
                         width: 20,
                       ),
                       SizedBox(
-                        width: 150,
+                        width: 200,
                         child: Text(
                           songs[index].artists![0].name.toString(),
                           overflow: TextOverflow.ellipsis,
@@ -102,7 +103,7 @@ class SongsSearch extends StatelessWidget {
                         width: 20,
                       ),
                       SizedBox(
-                          width: 150,
+                          width: 200,
                           child: Text(
                             songs[index].album!.name.toString(),
                             overflow: TextOverflow.ellipsis,
