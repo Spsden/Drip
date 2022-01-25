@@ -5,10 +5,13 @@ import 'package:drip/datasource/searchresults/albumsdataclass.dart';
 import 'package:drip/datasource/searchresults/artistsdataclass.dart';
 import 'package:drip/datasource/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart' as http;
 
 class SearchMusic {
-  static const String serverAddress = 'http://127.0.0.1:5000/';
+ // static const String serverAddress = 'http://127.0.0.1:5000/';
+  //static const String serverAddress = 'http://192.168.0.106:5000/';
+  static const String serverAddress = 'http://spden.pythonanywhere.com/';
 
   // Future<List<Artists>> getArtists(String searchquery) async {
   //   try {

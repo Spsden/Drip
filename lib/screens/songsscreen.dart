@@ -31,7 +31,7 @@ class _SongsListPageState extends State<SongsListPage> {
     super.initState();
 
     _sc.addListener(() {
-      if (_sc.position.pixels == _sc.position.maxScrollExtent) {
+      if (_sc.position.pixels == _sc.position.maxScrollExtent && !isLoading) {
         songLoader(page);
       }
     });
@@ -106,7 +106,7 @@ class _SongsListPageState extends State<SongsListPage> {
                           page = 0;
                           thispagesearchquery = _value;
                           songLoader(page);
-                          //fetched = false;
+                          fetched = true;
                         });
                       },
                       decoration: BoxDecoration(
