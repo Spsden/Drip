@@ -5,8 +5,6 @@ import 'package:drip/datasource/searchresults/albumsdataclass.dart';
 import 'package:drip/datasource/searchresults/artistsdataclass.dart';
 import 'package:drip/datasource/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
-import 'package:drip/datasource/searchresults/topresultsdataclass.dart';
-import 'package:drip/datasource/spreadclassmodels/modelsnew.dart';
 import 'package:http/http.dart' as http;
 
 class SearchMusic {
@@ -93,37 +91,7 @@ class SearchMusic {
       // var topresultFiltered = jsonEncode(topresult);
       var communityplaylistFiltered = jsonEncode(communityplaylistlist);
 
-      // for (var i = 0; i < morefilter.length; i++) {
-      //   var listMap = morefilter[i];
-      //   if ((listMap['category']).toString() == 'Albums') {
-      //     albumlist.add(listMap);
-      //   }
-      // }
 
-      // for (var i = 0; i < morefilter.length; i++) {
-      //   var listMap = morefilter[i];
-      //   if ((listMap['category']).toString() == 'Songs') {
-      //     songslist.add(listMap);
-      //   }
-      // }
-
-      // for (var i = 0; i < morefilter.length; i++) {
-      //   var listMap = morefilter[i];
-      //   if ((listMap['category']).toString() == 'Top result') {
-      //     topresult.add(listMap);
-      //   }
-      // }
-
-      // for (var i = 0; i < morefilter.length; i++) {
-      //   var listMap = morefilter[i];
-      //   if ((listMap['category']).toString() == 'Community playlists') {
-      //     communityplaylistlist.add(listMap);
-      //   }
-      // }
-
-      //print(communityplaylistlist.toString());
-
-      //var excludeoutput = servres['output'] as List;
 
       final List<Artists>? artistsearch = ArtistsFromJson(artistFiltered);
       final List<Songs>? songsearch = songsFromJson(songsFiltered);
@@ -157,5 +125,38 @@ class SearchMusic {
       // print(response.statusCode.toString());
       return <Artists>[];
     }
+  }
+
+  static Future getOnlySongs(String searchquery, int limit) async {
+    //int numOfResults = 30;
+
+    final response = await http.get(Uri.parse(serverAddress +
+        'searchwithfilter?query=' +
+        searchquery +
+        '&filter=songs&limit=' +
+        limit.toString()));
+
+    if (response.statusCode == 200){
+
+      var responselist = jsonDecode(response.body) as List;
+      var filtered = jsonEncode(responselist);
+
+      final List<Songs> songOnlyResults = songsFromJson(filtered);
+     // print(responselist.toString());
+     // return Songs.fromJson(jsonDecode(response.body));
+     // print(songOnlyResults.toString());
+      return songOnlyResults;
+
+
+
+
+
+    } else {
+      return <Songs> [];
+    }
+
+
+
+
   }
 }

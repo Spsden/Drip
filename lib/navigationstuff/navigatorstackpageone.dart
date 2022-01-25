@@ -1,5 +1,6 @@
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/searchpagerevision.dart';
+import 'package:drip/screens/songsscreen.dart';
 import 'package:flutter/material.dart';
 
 class FirstPageStack extends StatefulWidget {
@@ -25,6 +26,11 @@ class _FirstPageStackState extends State<FirstPageStack> {
             return MaterialPageRoute(builder: (context) => SearchPage(incomingquery: args.toString()) , settings: settings);
             break;
 
+          case 'songslistpage' :
+            final args = settings.arguments;
+            return MaterialPageRoute(builder: (context) => SongsListPage(incomingquery: args.toString(),) , settings: settings);
+            break;
+
           default:
             throw Exception("Invalid route");
             
@@ -45,7 +51,26 @@ class SecondPageStack extends StatefulWidget {
 class _SecondPageStackState extends State<SecondPageStack> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Navigator(
+      initialRoute: 'searchpage',
+      onGenerateRoute: (RouteSettings settingsforpagetwo) {
+
+        switch (settingsforpagetwo.name) {
+
+          case 'searchpage' :
+            return MaterialPageRoute(builder: (context) => SearchPage(incomingquery: 'Home') , settings: settingsforpagetwo);
+            break;
+            
+          case 'songslistpage' :
+            final args = settingsforpagetwo.arguments;
+            return MaterialPageRoute(builder: (context) => SongsListPage(incomingquery: args.toString(),) , settings: settingsforpagetwo);
+            break;
+        }
+     },
+
+
+
+    );
   }
 }
 

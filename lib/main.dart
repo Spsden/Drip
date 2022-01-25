@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
-import 'package:drip/screens/searchpage.dart';
+
 import 'package:drip/screens/searchpagerevision.dart';
 import 'package:drip/widgets/bottomplayercontrols.dart';
 import 'package:drip/widgets/noresult.dart';
@@ -101,9 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
     screens = [
       FirstPageStack(),
       //const YouTubeHomeScreen(),
-      const SearchPage(
-        incomingquery: 'Home',
-      ),
+      SecondPageStack(),
+      // const SearchPage(
+      //   incomingquery: 'Home',
+      // ),
       noResult('Error 404!'),
     ];
     _pageController = PageController(initialPage: _selectedIndex);

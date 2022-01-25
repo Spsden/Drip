@@ -16,7 +16,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-   final String incomingquery;
+  final String incomingquery;
+
   const SearchPage({
     Key? key,
     required this.incomingquery,
@@ -37,6 +38,7 @@ class _SearchPageState extends State<SearchPage>
   late List<Albums> albums = [];
   late List<Songs> songs = [];
   late List<CommunityPlaylist> communityplaylists = [];
+
   // late List listOfSearchResults = [];
   // late Topresults _topresults;
   // late List<Songs> _searchpageresults;
@@ -58,24 +60,13 @@ class _SearchPageState extends State<SearchPage>
     super.dispose();
   }
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
     // final Object? args = ModalRoute.of(context)?.settings.arguments as Map;
     // var incomingquery = args['searchkey'].toString();
 
     super.build(context);
-    //super.build(context);
-    // final bool rotated =
-    //     MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
-    // double boxSize = !rotated
-    //     ? MediaQuery.of(context).size.width / 2
-    //     : MediaQuery.of(context).size.height / 2.5;
-    // if (boxSize > 250) boxSize = 250;
+
     if (!status) {
       status = true;
       SearchMusic.getArtists(query == '' ? widget.incomingquery : query)
@@ -109,30 +100,23 @@ class _SearchPageState extends State<SearchPage>
               //width: 400,
               child: Row(
                 children: [
-                  Navigator.of(context).canPop() ?  Row(
-                    children: [
-
-                      InkWell(
-
-
-
-                          child: const Icon(fluent.FluentIcons.chevron_left_med),
-                          hoverColor: Colors.red,
-
-
-                          onTap: () {Navigator.of(context).pop() ;}),
-                      const fluent.SizedBox(width: 20,),
-
-                    ],
-
-                  )
-                 : SizedBox(),
-
-
-
-
+                  Navigator.of(context).canPop()
+                      ? Row(
+                          children: [
+                            InkWell(
+                                child: const Icon(
+                                    fluent.FluentIcons.chevron_left_med),
+                                hoverColor: Colors.red,
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                }),
+                            const fluent.SizedBox(
+                              width: 20,
+                            ),
+                          ],
+                        )
+                      : SizedBox(),
                   fluent.SizedBox(
-
                     width: 400,
                     child: CupertinoSearchTextField(
                       controller: _searchcontroller,
@@ -141,7 +125,7 @@ class _SearchPageState extends State<SearchPage>
                       //   url =
                       //       'http://127.0.0.1:5000/search?query=$value&filter=songs&limit=20';
                       // },
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                       onSubmitted: (_value) async {
                         setState(() {
                           fetched = false;
@@ -157,24 +141,23 @@ class _SearchPageState extends State<SearchPage>
                               color: Colors.white,
                               style: BorderStyle.solid,
                               width: 0.5),
-                         // color: Colors.red.shade900.withOpacity(0.2),
+                          // color: Colors.red.shade900.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
-
                 ],
-
               ),
             ),
           ),
           Container(
               child: (!fetched)
                   ? Container(
-                alignment: Alignment.center,
+                      alignment: Alignment.center,
                       width: 500,
                       height: 500,
-                      child: LoadingAnimationWidget.staggeredDotsWave(color: Colors.red, size: 300))
-                      //const CircularProgressIndicator(color: Colors.red))
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                          color: Colors.red, size: 300))
+                  //const CircularProgressIndicator(color: Colors.red))
                   : Expanded(
                       child: SingleChildScrollView(
                         clipBehavior: Clip.hardEdge,
@@ -186,8 +169,10 @@ class _SearchPageState extends State<SearchPage>
                           children: [
                             Align(
                               alignment: Alignment.topLeft,
-                              child: Text( query == '' ? 'Results for \"${widget.incomingquery}\"' :
-                                'Results for \"$query\"',
+                              child: Text(
+                                query == ''
+                                    ? 'Results for \"${widget.incomingquery}\"'
+                                    : 'Results for \"$query\"',
                                 style: const TextStyle(
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: 40.0,
@@ -198,22 +183,23 @@ class _SearchPageState extends State<SearchPage>
                               padding: const fluent.EdgeInsets.only(bottom: 10),
                               child: Column(
                                 children: [
-                                  SongsSearch(songs: songs),
-                                  artists.isNotEmpty ?
-                                  ArtistsSearch(artists: artists) :
-                                      Text('No Artists available'),
+                                  SongsSearch(songs: songs,toSongsList: query == '' ? widget.incomingquery : query),
+                                  artists.isNotEmpty
+                                      ? ArtistsSearch(artists: artists)
+                                      : Text('No Artists available'),
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  albums.isNotEmpty ?
-                                  AlbumSearch(albums: albums) :
-                                  Text('No Albums available'),
+                                  albums.isNotEmpty
+                                      ? AlbumSearch(albums: albums)
+                                      : Text('No Albums available'),
                                   const SizedBox(
                                     height: 40,
                                   ),
-                                  communityplaylists.isNotEmpty ?
-                                  CommunityPlaylistSearch(
-                                      communityPlaylist: communityplaylists) : Text('No Playlists available'),
+                                  communityplaylists.isNotEmpty
+                                      ? CommunityPlaylistSearch(
+                                          communityPlaylist: communityplaylists)
+                                      : Text('No Playlists available'),
                                   const SizedBox(
                                     height: 100,
                                   ),

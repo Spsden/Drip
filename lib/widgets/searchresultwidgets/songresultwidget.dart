@@ -1,3 +1,4 @@
+import 'package:drip/datasource/searchresults/searchresultstwo.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 
@@ -6,22 +7,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class SongsSearch extends StatelessWidget {
   late List<Songs> songs = [];
+  final String toSongsList;
   SongsSearch({
     Key? key,
-    required this.songs,
+    required this.songs, required this.toSongsList,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: fluent.MainAxisAlignment.center,
       children: [
         SizedBox(
           width: double.infinity,
           height: 30,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children:  [
+              const Text(
                 'Songs',
                 style: TextStyle(
                   ///color: Theme.of(context).colorScheme.secondary,
@@ -30,13 +33,19 @@ class SongsSearch extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                 ),
               ),
-              Text(
-                'Show all     ',
-                style: TextStyle(
-                  ///color: Theme.of(context).colorScheme.secondary,
-                  color: Colors.red,
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed('songslistpage', arguments: toSongsList);
+
+                },
+                child: const Text(
+                  'Show more     ',
+                  style: TextStyle(
+                    ///color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ),
             ],
