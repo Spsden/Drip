@@ -52,6 +52,7 @@ class SongsSearch extends StatelessWidget {
           ),
         ),
         SizedBox(
+          
           height: 250,
           child: ListView.builder(
             itemCount: songs.length,
@@ -59,74 +60,81 @@ class SongsSearch extends StatelessWidget {
             scrollDirection: Axis.vertical,
             // padding: const EdgeInsets.only(bottom: 10),
             itemBuilder: (context, index) {
-              return Container(
-                margin: const EdgeInsets.only(top: 10),
-                color: Colors.brown.withOpacity(0.4),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: fluent.MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            errorWidget: (context, _, __) => const Image(
+              return InkWell(
+                  hoverColor: Colors.red.withOpacity(0.4),
+                onTap: () {},
+
+
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(0,5,0,5),
+                  //margin: const EdgeInsets.only(top: 10),
+                  color: Colors.brown.withOpacity(0.4),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: fluent.MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: CachedNetworkImage(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/cover.jpg'),
-                            ),
-                            imageUrl: songs[index].thumbnails[0].url.toString(),
-                            placeholder: (context, url) => const Image(
+                              errorWidget: (context, _, __) => const Image(
                                 fit: BoxFit.cover,
-                                image: AssetImage('assets/cover.jpg')),
-                          )),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      SizedBox(
-                        width: 150,
-                        child: Text(
-                          songs[index].title.toString(),
-                          overflow: TextOverflow.ellipsis,
+                                image: AssetImage('assets/cover.jpg'),
+                              ),
+                              imageUrl: songs[index].thumbnails[0].url.toString(),
+                              placeholder: (context, url) => const Image(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('assets/cover.jpg')),
+                            )),
+                        const SizedBox(
+                          width: 20,
                         ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      const Icon(
-                        fluent.FluentIcons.play_solid,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      SizedBox(
-                        width: 150,
-                        child: Text(
-                          songs[index].artists![0].name.toString(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      SizedBox(
-                          width: 200,
-                          child: Text(
-                            songs[index].album!.name.toString(),
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      SizedBox(
+                        SizedBox(
                           width: 150,
                           child: Text(
-                            songs[index].duration.toString(),
+                            songs[index].title.toString(),
                             overflow: TextOverflow.ellipsis,
-                          )),
-                    ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        const Icon(
+                          fluent.FluentIcons.play_solid,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: Text(
+                            songs[index].artists![0].name.toString(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        SizedBox(
+                            width: 200,
+                            child: Text(
+                              songs[index].album!.name.toString(),
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        SizedBox(
+                            width: 150,
+                            child: Text(
+                              songs[index].duration.toString(),
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                      ],
+                    ),
                   ),
                 ),
               );

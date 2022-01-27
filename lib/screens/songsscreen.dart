@@ -67,6 +67,13 @@ class _SongsListPageState extends State<SongsListPage> {
     super.dispose();
   }
 
+  void onClick(){
+    var thumbnail;
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -160,90 +167,98 @@ class _SongsListPageState extends State<SongsListPage> {
                                 width: 500,
                                 height: 500,
                                 child: LoadingAnimationWidget.staggeredDotsWave(
-                                    color: Colors.red, size: 300));
+                                    color: Colors.red, size: 100));
                           } else {
-                            return Container(
-                              margin: const EdgeInsets.only(top: 10),
-                              color: Colors.brown.withOpacity(0.4),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      fluent.MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          errorWidget: (context, _, __) =>
-                                              const Image(
+                            return InkWell(
+                              hoverColor: Colors.red.withOpacity(0.4),
+                              onTap: () {
+
+                              },
+
+                              child: Container(
+                               // padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                margin: const EdgeInsets.fromLTRB(0,5,0,5),
+                                color: Colors.brown.withOpacity(0.4),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        fluent.MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                          width: 40,
+                                          height: 40,
+                                          child: CachedNetworkImage(
                                             fit: BoxFit.cover,
-                                            image:
-                                                AssetImage('assets/cover.jpg'),
-                                          ),
-                                          imageUrl: songlist[index]
-                                              .thumbnails[0]
-                                              .url
-                                              .toString(),
-                                          placeholder: (context, url) =>
-                                              const Image(
-                                                  fit: BoxFit.cover,
-                                                  image: AssetImage(
-                                                      'assets/cover.jpg')),
-                                        )),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 150,
-                                      child: Text(
-                                        songlist[index].title.toString(),
-                                        overflow: TextOverflow.ellipsis,
+                                            errorWidget: (context, _, __) =>
+                                                const Image(
+                                              fit: BoxFit.cover,
+                                              image:
+                                                  AssetImage('assets/cover.jpg'),
+                                            ),
+                                            imageUrl: songlist[index]
+                                                .thumbnails[0]
+                                                .url
+                                                .toString(),
+                                            placeholder: (context, url) =>
+                                                const Image(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage(
+                                                        'assets/cover.jpg')),
+                                          )),
+                                      const SizedBox(
+                                        width: 20,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    const Icon(
-                                      fluent.FluentIcons.play_solid,
-                                      color: Colors.white,
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 150,
-                                      child: Text(
-                                        songlist[index]
-                                            .artists![0]
-                                            .name
-                                            .toString(),
-                                        overflow: TextOverflow.ellipsis,
+                                      SizedBox(
+                                        width: 150,
+                                        child: Text(
+                                          songlist[index].title.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    SizedBox(
-                                        width: 200,
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      const Icon(
+                                        fluent.FluentIcons.play_solid,
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 150,
                                         child: Text(
                                           songlist[index]
-                                              .album!
+                                              .artists![0]
                                               .name
                                               .toString(),
                                           overflow: TextOverflow.ellipsis,
-                                        )),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    SizedBox(
-                                        width: 150,
-                                        child: Text(
-                                          songlist[index].duration.toString(),
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
-                                  ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      SizedBox(
+                                          width: 200,
+                                          child: Text(
+                                            songlist[index]
+                                                .album!
+                                                .name
+                                                .toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      SizedBox(
+                                          width: 150,
+                                          child: Text(
+                                            songlist[index].duration.toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
