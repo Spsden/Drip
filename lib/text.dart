@@ -3,17 +3,19 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 void main(List<String> args) async {
   var yt = YoutubeExplode();
 
-  var manifest = await yt.videos.streamsClient.getManifest('ZrOKjDZOtkA');
+  var manifest = await yt.videos.streamsClient.getManifest('7D4vNcK6D38');
 
 
   var streaminfo = manifest.audioOnly.withHighestBitrate();
 
-  var strrm = manifest.audio.first.audioCodec.toString();
-   var strma = manifest.audioOnly.first.url.toString();
+  //var strrm = manifest.audio.first.url.toString();
+   //var strma = manifest.audioOnly.first.url.toString();
+   var  codec = manifest.audioOnly.withHighestBitrate().audioCodec.toString();
 
-  //var strma = manifest.audio.withHighestBitrate().url.toString();
+ var strma = manifest.audioOnly.withHighestBitrate().url.toString();
 
   print(strma);
+   print(codec);
 
 
 

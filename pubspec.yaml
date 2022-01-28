@@ -39,6 +39,12 @@ dependencies:
   badges: ^2.0.2
   marquee: ^2.2.0
   loading_animation_widget: ^1.0.0+3
+  audio_video_progress_bar: ^0.10.0
+  just_audio: ^0.9.18
+  just_audio_libwinmedia: ^0.0.4
+  rxdart: ^0.27.3
+  audio_service: ^0.18.3
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:

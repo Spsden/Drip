@@ -1,5 +1,9 @@
+import 'package:drip/datasource/audioplayer/audioplayer.dart';
+import 'package:drip/datasource/audioplayer/audioplayer2.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 
 class PlayerControls extends StatefulWidget {
   const PlayerControls({Key? key}) : super(key: key);
@@ -9,6 +13,26 @@ class PlayerControls extends StatefulWidget {
 }
 
 class _PlayerControlsState extends State<PlayerControls> {
+   String statevalue = "Playing";
+
+
+  @override
+  void initState() {
+    super.initState();
+
+
+
+  }
+
+   @override
+   void dispose() {
+    // _audioPlayerControls.dispose();
+     super.dispose();
+   }
+
+
+
+
   double _sliderval = 20;
 
   @override
@@ -17,126 +41,140 @@ class _PlayerControlsState extends State<PlayerControls> {
     var height = size.height;
     var width = size.width;
 
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-              //width: 300,
-              child: Row(
-            children: [
-              Image(image: AssetImage('assets/cover.jpg')),
-              SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                width: 150,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hum Badi Door- Sonu Nigam',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.normal,
-                          overflow: TextOverflow.ellipsis),
-                    ),
-                    Text(
-                      'Robi Tasr',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          )),
-          fluent.Center(
-            child: Container(
-              width: 250,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.shuffle),
-                    iconSize: 20,
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(fluent.FluentIcons.previous),
-                    iconSize: 25,
-                    onPressed: () {},
-                  ),
-                  Stack(
-                    children: [
-                      fluent.Center(
-                        child: SizedBox(
-                          child: CircularProgressIndicator(
-                            //valueColor: Colors.red,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                      fluent.Center(
-                          child: IconButton(
-                        icon: Icon(fluent.FluentIcons.play),
-                        iconSize: 27,
-                        onPressed: () {},
-                      )),
-                    ],
-                  ),
-                  IconButton(
-                    icon: Icon(fluent.FluentIcons.next),
-                    iconSize: 25,
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.repeat),
-                    iconSize: 20,
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            child: Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<AudioPlayerControls>(
+      builder: (_,AudioPlayerControlsModel,child)=>
+       Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+                //width: 300,
+                child: Row(
               children: [
-                Text(
-                  '1.28/3.22',
-                  style: TextStyle(color: Colors.white60),
-                ),
-                fluent.SizedBox(
+                Image(image: AssetImage('assets/cover.jpg')),
+                SizedBox(
                   width: 10,
                 ),
-                IconButton(
-                  icon: Icon(fluent.FluentIcons.volume3),
-                  iconSize: 25,
-                  onPressed: () {},
-                ),
-                SliderTheme(
-                  data: SliderThemeData(
-                      activeTrackColor: Colors.red,
-                      trackHeight: 3,
-                      thumbColor: Colors.red),
-                  child: Slider(
-                      value: _sliderval,
-                      max: 300,
-                      divisions: 30,
-                      onChanged: (slidevalue) {
-                        setState(() {
-                          _sliderval = slidevalue;
-                        });
-                      }),
+                SizedBox(
+                  width: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Hum Badi Door- Sonu Nigam',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                      Text(
+                        'Robi Tasr',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
                 )
               ],
+            )),
+            fluent.Center(
+              child: Container(
+                width: 250,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.shuffle),
+                      iconSize: 20,
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(fluent.FluentIcons.previous),
+                      iconSize: 25,
+                      onPressed: () {},
+                    ),
+
+                    ValueListenableBuilder<ButtonState>(
+                      valueListenable: AudioPlayerControlsModel.buttonNotifier,
+                      builder: (_, value, __) {
+                        switch (value) {      case ButtonState.loading:
+                          return Container(
+                            margin: const EdgeInsets.all(8.0),
+                            width: 32.0,
+                            height: 32.0,
+                            child: const CircularProgressIndicator(),
+                          );      case ButtonState.paused:
+                          return IconButton(
+                            icon: const Icon(Icons.play_arrow),
+                            iconSize: 32.0,
+                            onPressed: () {AudioPlayerControlsModel.play();},
+                          );      case ButtonState.playing:
+                          return IconButton(
+                            icon: const Icon(Icons.pause),
+                            iconSize: 32.0,
+                            onPressed: () {AudioPlayerControlsModel.pause();},
+                          );
+                        }
+                      },
+                    ),
+
+
+
+                    IconButton(
+                      icon: Icon(fluent.FluentIcons.next),
+                      iconSize: 25,
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.repeat),
+                      iconSize: 20,
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )
-        ],
+            Container(
+              child: Row(
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '1.28/3.22',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                  fluent.SizedBox(
+                    width: 10,
+                  ),
+                  IconButton(
+                    icon: Icon(fluent.FluentIcons.volume3),
+                    iconSize: 25,
+                    onPressed: () {},
+                  ),
+                  SliderTheme(
+                    data: SliderThemeData(
+                        activeTrackColor: Colors.red,
+                        trackHeight: 3,
+                        thumbColor: Colors.red),
+                    child: Slider(
+                        value: _sliderval,
+                        max: 100,
+                        divisions: 30,
+                        onChanged: (volume) {
+                          setState(() {
+
+                            _sliderval = volume;
+                          });
+                          //AudioPlayerControlsModel.volume(volume);
+                        }),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

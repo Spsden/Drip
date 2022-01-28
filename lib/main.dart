@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:drip/datasource/audioplayer/audioplayer.dart';
 import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
+import 'package:provider/provider.dart';
 
 import 'package:drip/screens/searchpagerevision.dart';
 import 'package:drip/widgets/bottomplayercontrols.dart';
@@ -16,6 +19,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
+
+import 'datasource/audioplayer/audioplayer2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +73,9 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: ChangeNotifierProvider(
+          create: (BuildContext context) => AudioPlayerControls(),
+          child: const MyHomePage(title: 'Flutter Demo Home Page')),
     );
   }
 }
@@ -85,19 +92,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late int _selectedIndex;
 
-
   late PageController _pageController;
-
-
-
   late List<Widget> screens;
+  late final AudioPlayerControls _audioPlayerControls;
 
   @override
   void initState() {
-
     super.initState();
     _selectedIndex = 0;
-
     screens = [
       FirstPageStack(),
       //const YouTubeHomeScreen(),
@@ -109,11 +111,13 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
     _pageController = PageController(initialPage: _selectedIndex);
 
+    _audioPlayerControls = AudioPlayerControls();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _audioPlayerControls.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -230,22 +234,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   Positioned(
                       bottom: 53.5,
-                      left: 0,
-                      right: 0,
-                      child: SliderTheme(
-                        data: SliderThemeData(
-                            activeTrackColor: Colors.red,
-                            trackHeight: 3,
-                            thumbColor: Colors.red),
-                        child: Slider(
-                            value: _sliderval,
-                            max: 300,
-                            divisions: 30,
-                            onChanged: (slidevalue) {
-                              setState(() {
-                                _sliderval = slidevalue;
-                              });
-                            }),
+                      left: 5,
+                      right: 5,
+                      child: Consumer<AudioPlayerControls>(
+                        builder: (_, audioplayerModel, child) => ProgressBar(
+                          bufferedBarColor: Colors.red.shade200,
+                          progressBarColor: Colors.red.shade700,
+                          thumbColor: Colors.red.shade700,
+                          progress: audioplayerModel.position,
+                          buffered: audioplayerModel.bufferposition,
+                          total: audioplayerModel.totalDuration,
+                          onSeek: (duration) {
+                            audioplayerModel.seek(duration);
+                          },
+                        ),
                       )),
                   Positioned.fill(
                     child: Align(
@@ -289,5 +291,3 @@ class _MyHomePageState extends State<MyHomePage> {
 //   ScrollPhysics getScrollPhysics(BuildContext context) =>
 //       const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
 // }
-
-
