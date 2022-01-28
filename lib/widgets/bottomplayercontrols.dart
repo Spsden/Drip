@@ -1,3 +1,4 @@
+import 'package:drip/datasource/audioplayer/audiodata.dart';
 import 'package:drip/datasource/audioplayer/audioplayer.dart';
 import 'package:drip/datasource/audioplayer/audioplayer2.dart';
 import 'package:drip/main.dart';
@@ -5,6 +6,8 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class PlayerControls extends StatefulWidget {
   const PlayerControls({Key? key}) : super(key: key);
@@ -20,14 +23,10 @@ class _PlayerControlsState extends State<PlayerControls>  {
 
 
 
-   ValueNotifier slideSheetState = ValueNotifier(true);
-
-   //final slideSheetState = ValueNotifier<slidstate>(slidstate = true);
-
-
   @override
   void initState() {
     super.initState();
+
 
 
 
@@ -60,7 +59,22 @@ class _PlayerControlsState extends State<PlayerControls>  {
                //width: 300,
                child: Row(
              children: [
-               Image(image: AssetImage('assets/cover.jpg')),
+               //Image(image: AssetImage('assets/cover.jpg')),
+                 CachedNetworkImage(
+                 fit: BoxFit.cover,
+                 errorWidget: (context, _, __) =>
+                 const Image(
+                   fit: BoxFit.cover,
+                   image:
+                   AssetImage('assets/cover.jpg'),
+                 ),
+                 imageUrl:   Provider.of<AudioData>(context).thumbnailsetter ,
+                 placeholder: (context, url) =>
+                 const Image(
+                     fit: BoxFit.cover,
+                     image: AssetImage(
+                         'assets/cover.jpg')),
+               ),
                SizedBox(
                  width: 10,
                ),
@@ -69,16 +83,16 @@ class _PlayerControlsState extends State<PlayerControls>  {
                  child: Column(
                    mainAxisAlignment: MainAxisAlignment.center,
                    crossAxisAlignment: CrossAxisAlignment.start,
-                   children: const [
+                   children:  [
                      Text(
-                       'Hum Badi Door- Sonu Nigam',
+                       Provider.of<AudioData>(context).titlesetter.toString() == "" ? 'No music loaded' : Provider.of<AudioData>(context).titlesetter,
                        style: TextStyle(
                            fontSize: 15,
                            fontWeight: FontWeight.normal,
                            overflow: TextOverflow.ellipsis),
                      ),
                      Text(
-                       'Robi Tasr',
+                       Provider.of<AudioData>(context).artistsetter.toString() == "" ? 'Click on a song' : Provider.of<AudioData>(context).artistsetter,
                        style: TextStyle(
                          fontSize: 15,
                          fontWeight: FontWeight.bold,

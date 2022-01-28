@@ -1,8 +1,10 @@
+import 'package:drip/datasource/audioplayer/audiodata.dart';
 import 'package:drip/datasource/searchresults/searchresultstwo.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -25,6 +27,9 @@ class _SongsListPageState extends State<SongsListPage> {
   bool fetched = false;
   String thispagesearchquery = '';
 
+
+
+
   @override
   void initState() {
     songLoader(page);
@@ -35,6 +40,11 @@ class _SongsListPageState extends State<SongsListPage> {
         songLoader(page);
       }
     });
+
+
+
+
+    
   }
 
   void songLoader(int page) {
@@ -60,6 +70,8 @@ class _SongsListPageState extends State<SongsListPage> {
           }
     });
   }
+
+
 
   @override
   void dispose() {
@@ -171,9 +183,7 @@ class _SongsListPageState extends State<SongsListPage> {
                           } else {
                             return InkWell(
                               hoverColor: Colors.red.withOpacity(0.4),
-                              onTap: () {
-
-                              },
+                              onTap: () => context.read<AudioData>().songDetails(songlist[index].videoId, songlist[index].artists![0].name, songlist[index].title, songlist[index].thumbnails[0].url),
 
                               child: Container(
                                // padding: EdgeInsets.fromLTRB(0, 5, 0, 5),

@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:drip/datasource/audioplayer/audiodata.dart';
 import 'package:drip/datasource/audioplayer/audioplayer.dart';
 import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
+import 'package:drip/screens/songsscreen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:drip/screens/searchpagerevision.dart';
@@ -71,6 +73,11 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<AudioPlayerControls>(
             create: (BuildContext context) {
               return AudioPlayerControls();
+            },
+          ),
+          ChangeNotifierProvider<AudioData>(
+            create: (BuildContext context) {
+              return AudioData();
             },
           ),
           // ChangeNotifierProvider<ShopNameNotifier>(
