@@ -45,6 +45,7 @@ dependencies:
   rxdart: ^0.27.3
   audio_service: ^0.18.3
   provider: ^6.0.2
+  sliding_sheet: ^0.5.2
 
 dev_dependencies:
   flutter_test:

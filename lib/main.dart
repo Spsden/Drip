@@ -19,6 +19,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:sliding_sheet/sliding_sheet.dart';
 
 import 'datasource/audioplayer/audioplayer2.dart';
 
@@ -65,18 +66,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Drip',
-      theme: ThemeData(
-        //sliderTheme: Slidert,
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-      ),
-      home: ChangeNotifierProvider(
-          create: (BuildContext context) => AudioPlayerControls(),
-          child: const MyHomePage(title: 'Flutter Demo Home Page')),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AudioPlayerControls>(
+            create: (BuildContext context) {
+              return AudioPlayerControls();
+            },
+          ),
+          // ChangeNotifierProvider<ShopNameNotifier>(
+          // create: (BuildContext context) {
+          // return ShopNameNotifier();
+          // },
+          // )
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Drip',
+          theme: ThemeData(
+            //sliderTheme: Slidert,
+            brightness: Brightness.dark,
+            primarySwatch: Colors.blue,
+          ),
+          home: MyHomePage(
+            title: 'Flutter',
+          ),
+          // home: ChangeNotifierProvider(
+          //     create: (BuildContext context) => AudioPlayerControls(),
+          //     child: const MyHomePage(title: 'Flutter Demo Home Page')),
+        ));
   }
 }
 
@@ -95,6 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late PageController _pageController;
   late List<Widget> screens;
   late final AudioPlayerControls _audioPlayerControls;
+  bool sheetCollapsed = true;
+  late SheetController _sheetcontroller;
 
   @override
   void initState() {
@@ -112,6 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageController = PageController(initialPage: _selectedIndex);
 
     _audioPlayerControls = AudioPlayerControls();
+    _sheetcontroller = SheetController();
   }
 
   @override
@@ -210,45 +230,132 @@ class _MyHomePageState extends State<MyHomePage> {
                 fit: StackFit.loose,
                 clipBehavior: Clip.none,
                 children: [
-                  Expanded(
+                  Positioned.fill(
                       child: PageView(
                     scrollDirection: Axis.vertical,
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: screens,
                   )),
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ClipRect(
+                  SlidingSheet(
+                    color: Colors.transparent,
+
+                    closeOnBackdropTap: true,
+                    duration: Duration(milliseconds: 300),
+                    controller: _sheetcontroller,
+                    //elevation: 8,
+                    cornerRadius: 3,
+                    snapSpec: SnapSpec(
+                      snap: sheetCollapsed,
+                      snappings: [80, 200, double.infinity],
+                      positioning: SnapPositioning.pixelOffset,
+                    ),
+                    builder: (context, state) {
+                      return ClipRect(
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                          child: SizedBox(
-                            child: PlayerControls(),
-                            width: double.infinity,
-                            height: 80.0,
+                          child: Container(
+                            height: 400,
+                            color: Colors.transparent,
+                            child: Center(
+                              child: Text('Test between'),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
+                    headerBuilder: (context, state) {
+                      return Container(
+                        alignment: Alignment.center,
+                        height: 80,
+                        child: Stack(children: [
+                          ClipRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                              child: SizedBox(
+                                child: PlayerControls(),
+                                width: double.infinity,
+                                height: 100.0,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              bottom: 40.5,
+                              left: 300,
+                              right: 300,
+                              child: Consumer<AudioPlayerControls>(
+                                builder: (_, audioplayerModel, child) =>
+                                    ProgressBar(
+                                  bufferedBarColor: Colors.red.shade200,
+                                  progressBarColor: Colors.red.shade700,
+                                  thumbColor: Colors.red.shade700,
+                                  progress: audioplayerModel.position,
+                                  buffered: audioplayerModel.bufferposition,
+                                  total: audioplayerModel.totalDuration,
+                                  onSeek: (duration) {
+                                    audioplayerModel.seek(duration);
+                                  },
+                                ),
+                              )),
+
+                          Positioned(
+                            bottom: 20,
+                            right : 3,
+                            child: IconButton(
+
+                                icon: Icon(Icons.playlist_play),
+                              onPressed: () {
+                                  setState(() {
+                                    if (sheetCollapsed) {
+                                      _sheetcontroller.expand();
+                                          sheetCollapsed = false;
+
+                                    } else {
+                                      _sheetcontroller.collapse();
+                                      sheetCollapsed = true;
+                                    }
+                                  });
+                              },
+
+                              hoverColor: Colors.red.shade400,
+                            ),
+                          )
+                        ]),
+                      );
+                    },
                   ),
-                  Positioned(
-                      bottom: 53.5,
-                      left: 5,
-                      right: 5,
-                      child: Consumer<AudioPlayerControls>(
-                        builder: (_, audioplayerModel, child) => ProgressBar(
-                          bufferedBarColor: Colors.red.shade200,
-                          progressBarColor: Colors.red.shade700,
-                          thumbColor: Colors.red.shade700,
-                          progress: audioplayerModel.position,
-                          buffered: audioplayerModel.bufferposition,
-                          total: audioplayerModel.totalDuration,
-                          onSeek: (duration) {
-                            audioplayerModel.seek(duration);
-                          },
-                        ),
-                      )),
+                  // Positioned.fill(
+                  //   child: Align(
+                  //     alignment: Alignment.bottomCenter,
+                  //     child: ClipRect(
+                  //       child: BackdropFilter(
+                  //         filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                  //         child: SizedBox(
+                  //           child: PlayerControls(),
+                  //           width: double.infinity,
+                  //           height: 80.0,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // ,Positioned(
+                  //     bottom: 53.5,
+                  //     left: 5,
+                  //     right: 5,
+                  //     child: Consumer<AudioPlayerControls>(
+                  //       builder: (_, audioplayerModel, child) => ProgressBar(
+                  //         bufferedBarColor: Colors.red.shade200,
+                  //         progressBarColor: Colors.red.shade700,
+                  //         thumbColor: Colors.red.shade700,
+                  //         progress: audioplayerModel.position,
+                  //         buffered: audioplayerModel.bufferposition,
+                  //         total: audioplayerModel.totalDuration,
+                  //         onSeek: (duration) {
+                  //           audioplayerModel.seek(duration);
+                  //         },
+                  //       ),
+                  //     )),
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.topCenter,

@@ -89,129 +89,126 @@ class _SearchPageState extends State<SearchPage>
         }
       });
     }
-    return Container(
-      color: Colors.black,
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(10, 40, 20, 20),
-              //width: 400,
-              child: Row(
-                children: [
-                  Navigator.of(context).canPop()
-                      ? Row(
-                          children: [
-                            InkWell(
-                                child: const Icon(
-                                    fluent.FluentIcons.chevron_left_med),
-                                hoverColor: Colors.red,
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                }),
-                            const fluent.SizedBox(
-                              width: 20,
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
-                  fluent.SizedBox(
-                    width: 400,
-                    child: CupertinoSearchTextField(
-                      controller: _searchcontroller,
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(10, 40, 20, 20),
+            //width: 400,
+            child: Row(
+              children: [
+                Navigator.of(context).canPop()
+                    ? Row(
+                        children: [
+                          InkWell(
+                              child: const Icon(
+                                  fluent.FluentIcons.chevron_left_med),
+                              hoverColor: Colors.red,
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              }),
+                          const fluent.SizedBox(
+                            width: 20,
+                          ),
+                        ],
+                      )
+                    : SizedBox(),
+                fluent.SizedBox(
+                  width: 400,
+                  child: CupertinoSearchTextField(
+                    controller: _searchcontroller,
 
-                      // onChanged: (value) {
-                      //   url =
-                      //       'http://127.0.0.1:5000/search?query=$value&filter=songs&limit=20';
-                      // },
-                      style: const TextStyle(color: Colors.white),
-                      onSubmitted: (_value) async {
-                        setState(() {
-                          fetched = false;
-                          query = _value;
-                          status = false;
-                          listOfSearchResults = {};
-                        });
-                      },
+                    // onChanged: (value) {
+                    //   url =
+                    //       'http://127.0.0.1:5000/search?query=$value&filter=songs&limit=20';
+                    // },
+                    style: const TextStyle(color: Colors.white),
+                    onSubmitted: (_value) async {
+                      setState(() {
+                        fetched = false;
+                        query = _value;
+                        status = false;
+                        listOfSearchResults = {};
+                      });
+                    },
 
-                      //backgroundColor: Colors.red.shade700.withOpacity(0.3),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white,
-                              style: BorderStyle.solid,
-                              width: 0.5),
-                          // color: Colors.red.shade900.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
+                    //backgroundColor: Colors.red.shade700.withOpacity(0.3),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            color: Colors.white,
+                            style: BorderStyle.solid,
+                            width: 0.5),
+                        // color: Colors.red.shade900.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10)),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          Container(
-              child: (!fetched)
-                  ? Container(
-                      alignment: Alignment.center,
-                      width: 500,
-                      height: 500,
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: Colors.red, size: 300))
-                  //const CircularProgressIndicator(color: Colors.red))
-                  : Expanded(
-                      child: SingleChildScrollView(
-                        clipBehavior: Clip.hardEdge,
-                        primary: false,
-                        physics: const BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        padding: const EdgeInsets.fromLTRB(15, 0, 10, 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                query == ''
-                                    ? 'Results for \"${widget.incomingquery}\"'
-                                    : 'Results for \"$query\"',
-                                style: const TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  fontSize: 40.0,
-                                ),
+        ),
+        Expanded(
+            child: (!fetched)
+                ? Container(
+                    alignment: Alignment.center,
+                    width: 500,
+                    height: 500,
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: Colors.red, size: 300))
+                //const CircularProgressIndicator(color: Colors.red))
+                : Expanded(
+                    child: SingleChildScrollView(
+                      clipBehavior: Clip.hardEdge,
+                      primary: false,
+                      physics: const BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      padding: const EdgeInsets.fromLTRB(15, 0, 10, 10),
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              query == ''
+                                  ? 'Results for \"${widget.incomingquery}\"'
+                                  : 'Results for \"$query\"',
+                              style: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 40.0,
                               ),
                             ),
-                            SingleChildScrollView(
-                              padding: const fluent.EdgeInsets.only(bottom: 10),
-                              child: Column(
-                                children: [
-                                  SongsSearch(songs: songs,toSongsList: query == '' ? widget.incomingquery : query),
-                                  artists.isNotEmpty
-                                      ? ArtistsSearch(artists: artists)
-                                      : Text('No Artists available'),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  albums.isNotEmpty
-                                      ? AlbumSearch(albums: albums)
-                                      : Text('No Albums available'),
-                                  const SizedBox(
-                                    height: 40,
-                                  ),
-                                  communityplaylists.isNotEmpty
-                                      ? CommunityPlaylistSearch(
-                                          communityPlaylist: communityplaylists)
-                                      : Text('No Playlists available'),
-                                  const SizedBox(
-                                    height: 100,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                          SingleChildScrollView(
+                            padding: const fluent.EdgeInsets.only(bottom: 10),
+                            child: Column(
+                              children: [
+                                SongsSearch(songs: songs,toSongsList: query == '' ? widget.incomingquery : query),
+                                artists.isNotEmpty
+                                    ? ArtistsSearch(artists: artists)
+                                    : Text('No Artists available'),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                albums.isNotEmpty
+                                    ? AlbumSearch(albums: albums)
+                                    : Text('No Albums available'),
+                                const SizedBox(
+                                  height: 40,
+                                ),
+                                communityplaylists.isNotEmpty
+                                    ? CommunityPlaylistSearch(
+                                        communityPlaylist: communityplaylists)
+                                    : Text('No Playlists available'),
+                                const SizedBox(
+                                  height: 100,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    ))
-        ],
-      ),
+                    ),
+                  ))
+      ],
     );
   }
 }
