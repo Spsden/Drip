@@ -1,4 +1,5 @@
 import 'package:drip/datasource/audioplayer/audiodata.dart';
+import 'package:drip/datasource/audioplayer/audioplayer2.dart';
 import 'package:drip/datasource/searchresults/searchresultstwo.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,9 +28,6 @@ class _SongsListPageState extends State<SongsListPage> {
   bool fetched = false;
   String thispagesearchquery = '';
 
-
-
-
   @override
   void initState() {
     songLoader(page);
@@ -40,11 +38,6 @@ class _SongsListPageState extends State<SongsListPage> {
         songLoader(page);
       }
     });
-
-
-
-
-    
   }
 
   void songLoader(int page) {
@@ -59,29 +52,22 @@ class _SongsListPageState extends State<SongsListPage> {
                 : thispagesearchquery,
             numofresultsload)
         .then((value) {
-          if (this.mounted) {
-            setState(() {
-              songlist = value;
-              fetched = true;
-              isLoading = false;
-              page++;
-              numofresultsload += 20;
-            });
-          }
+      if (this.mounted) {
+        setState(() {
+          songlist = value;
+          fetched = true;
+          isLoading = false;
+          page++;
+          numofresultsload += 20;
+        });
+      }
     });
   }
-
-
 
   @override
   void dispose() {
     _sc.dispose();
     super.dispose();
-  }
-
-  void onClick(){
-    var thumbnail;
-
   }
 
 
@@ -170,8 +156,7 @@ class _SongsListPageState extends State<SongsListPage> {
                         itemCount: songlist.length + 1,
                         controller: _sc,
                         shrinkWrap: true,
-                        //scrollDirection: Axis.vertical,
-                        // padding: const EdgeInsets.only(bottom: 10),
+
                         itemBuilder: (context, index) {
                           if (index == songlist.length) {
                             return Container(
@@ -183,11 +168,21 @@ class _SongsListPageState extends State<SongsListPage> {
                           } else {
                             return InkWell(
                               hoverColor: Colors.red.withOpacity(0.4),
-                              onTap: () => context.read<AudioData>().songDetails(songlist[index].videoId, songlist[index].artists![0].name, songlist[index].title, songlist[index].thumbnails[0].url),
+                              onTap: ()  { context
+                                  .read<AudioData>()
+                                  .songDetails(
+                                      songlist[index].videoId,
+                                      songlist[index].artists![0].name,
+                                      songlist[index].title,
+                                      songlist[index].thumbnails[0].url);
+                             // AudioPlayerControls().shuffle(context);
+
+                              },
+
 
                               child: Container(
-                               // padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                margin: const EdgeInsets.fromLTRB(0,5,0,5),
+                                // padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 color: Colors.brown.withOpacity(0.4),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -203,8 +198,8 @@ class _SongsListPageState extends State<SongsListPage> {
                                             errorWidget: (context, _, __) =>
                                                 const Image(
                                               fit: BoxFit.cover,
-                                              image:
-                                                  AssetImage('assets/cover.jpg'),
+                                              image: AssetImage(
+                                                  'assets/cover.jpg'),
                                             ),
                                             imageUrl: songlist[index]
                                                 .thumbnails[0]

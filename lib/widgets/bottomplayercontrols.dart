@@ -118,7 +118,10 @@ class _PlayerControlsState extends State<PlayerControls>  {
                    IconButton(
                      icon: Icon(fluent.FluentIcons.previous),
                      iconSize: 25,
-                     onPressed: () {},
+                     onPressed: () {
+                       // AudioPlayerControlsModel.shuffle(context);
+
+                     },
                    ),
 
                    ValueListenableBuilder<ButtonState>(
@@ -150,7 +153,9 @@ class _PlayerControlsState extends State<PlayerControls>  {
                    IconButton(
                      icon: Icon(fluent.FluentIcons.next),
                      iconSize: 25,
-                     onPressed: () {},
+                     onPressed: () {
+                      // AudioPlayerControlsModel.playnext();
+                     },
                    ),
                    IconButton(
                      icon: Icon(Icons.repeat),
