@@ -2,16 +2,22 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasource/audioplayer/audiodata.dart';
 import 'package:drip/datasource/audioplayer/audioplayer.dart';
+import 'package:drip/datasource/audioplayer/audioplayerbar.dart';
 import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/songsscreen.dart';
+import 'package:drip/widgets/musicbar.dart';
+
 import 'package:provider/provider.dart';
+import 'package:libwinmedia/libwinmedia.dart';
 
 import 'package:drip/screens/searchpagerevision.dart';
 import 'package:drip/widgets/bottomplayercontrols.dart';
 import 'package:drip/widgets/noresult.dart';
+
 
 import 'package:drip/widgets/topbar.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +44,8 @@ void main() async {
   await openHiveBox('settings');
   await openHiveBox('Favorite Songs');
   await openHiveBox('cache', limit: true);
+  DartVLC.initialize();
+  //LWM.initialize();
   runApp(const MyApp());
 }
 
@@ -70,9 +78,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<AudioPlayerControls>(
+          ChangeNotifierProvider<PlayerNotifiers>(
             create: (BuildContext context) {
-              return AudioPlayerControls();
+              return PlayerNotifiers();
             },
           ),
           ChangeNotifierProvider<AudioData>(
@@ -80,11 +88,8 @@ class MyApp extends StatelessWidget {
               return AudioData();
             },
           ),
-          // ChangeNotifierProvider<ShopNameNotifier>(
-          // create: (BuildContext context) {
-          // return ShopNameNotifier();
-          // },
-          // )
+
+
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -94,7 +99,7 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
             primarySwatch: Colors.blue,
           ),
-          home: MyHomePage(
+          home: const MyHomePage(
             title: 'Flutter',
           ),
           // home: ChangeNotifierProvider(
@@ -118,18 +123,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late PageController _pageController;
   late List<Widget> screens;
-  late final AudioPlayerControls _audioPlayerControls;
+  // late final AudioPlayerControls _audioPlayerControls;
   bool sheetCollapsed = true;
   late SheetController _sheetcontroller;
+
+  refresh() {
+
+  }
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = 0;
     screens = [
-      FirstPageStack(),
+      const FirstPageStack(),
       //const YouTubeHomeScreen(),
-      SecondPageStack(),
+      const SecondPageStack(),
       // const SearchPage(
       //   incomingquery: 'Home',
       // ),
@@ -137,14 +146,14 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
     _pageController = PageController(initialPage: _selectedIndex);
 
-    _audioPlayerControls = AudioPlayerControls();
+    // _audioPlayerControls = AudioPlayerControls();
     _sheetcontroller = SheetController();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
-    _audioPlayerControls.dispose();
+    // _audioPlayerControls.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -182,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _selectedIndex = index;
                   _pageController.animateToPage(index,
                       curve: Curves.fastLinearToSlowEaseIn,
-                      duration: Duration(milliseconds: 600));
+                      duration: const Duration(milliseconds: 500));
                   // _loadscreen = screens[_selectedIndex];
 
                   //TopBar();
@@ -244,92 +253,101 @@ class _MyHomePageState extends State<MyHomePage> {
                     physics: const NeverScrollableScrollPhysics(),
                     children: screens,
                   )),
-                  SlidingSheet(
-                    color: Colors.transparent,
+                  Container(
+                    child: Stack(
+                      children: [
+                        SlidingSheet(
+                          color: Colors.transparent,
 
-                    closeOnBackdropTap: true,
-                    duration: Duration(milliseconds: 300),
-                    controller: _sheetcontroller,
-                    //elevation: 8,
-                    cornerRadius: 3,
-                    snapSpec: SnapSpec(
-                      snap: sheetCollapsed,
-                      snappings: [80, 200, double.infinity],
-                      positioning: SnapPositioning.pixelOffset,
-                    ),
-                    builder: (context, state) {
-                      return ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                          child: Container(
-                            height: 400,
-                            color: Colors.transparent,
-                            child: Center(
-                              child: Text('Test between'),
-                            ),
+                          closeOnBackdropTap: true,
+                          duration: const Duration(milliseconds: 200),
+                          controller: _sheetcontroller,
+                          //elevation: 8,
+                          cornerRadius: 3,
+                          snapSpec: SnapSpec(
+                            snap: sheetCollapsed,
+                            snappings: [100, 200, double.infinity],
+                            positioning: SnapPositioning.pixelOffset,
                           ),
-                        ),
-                      );
-                    },
-                    headerBuilder: (context, state) {
-                      return Container(
-                        alignment: Alignment.center,
-                        height: 80,
-                        child: Stack(children: [
-                          ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                              child: SizedBox(
-                                child: PlayerControls(),
-                                width: double.infinity,
-                                height: 100.0,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              bottom: 40.5,
-                              left: 300,
-                              right: 300,
-                              child: Consumer<AudioPlayerControls>(
-                                builder: (_, audioplayerModel, child) =>
-                                    ProgressBar(
-                                  bufferedBarColor: Colors.red.shade200,
-                                  progressBarColor: Colors.red.shade700,
-                                  thumbColor: Colors.red.shade700,
-                                  progress: audioplayerModel.position,
-                                  buffered: audioplayerModel.bufferposition,
-                                  total: audioplayerModel.totalDuration,
-                                  onSeek: (duration) {
-                                    audioplayerModel.seek(duration);
-                                  },
+                          builder: (context, state) {
+                            return ClipRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                                child: Container(
+                                  height: 400,
+                                  color: Colors.transparent,
+                                  child: const Center(
+                                    child: Text('Test between'),
+                                  ),
                                 ),
-                              )),
+                              ),
+                            );
+                          },
+                          footerBuilder: (context, state) {
+                            return Container(
+                              alignment: Alignment.center,
+                              height: 100,
+                              child: Stack(children: [
+                                ClipRect(
+                                  child: BackdropFilter(
+                                    filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                                    child: const SizedBox(
+                                      child: AudioPlayerBar(),
+                                      width: double.infinity,
+                                      height: 100,
+                                      //: 100.0,
+                                    ),
+                                  ),
+                                ),
 
-                          Positioned(
-                            bottom: 20,
-                            right : 3,
-                            child: IconButton(
 
-                                icon: Icon(Icons.playlist_play),
-                              onPressed: () {
-                                  setState(() {
-                                    if (sheetCollapsed) {
-                                      _sheetcontroller.expand();
+                                Positioned(
+                                  bottom: 20,
+                                  right : 3,
+                                  child: IconButton(
+
+                                    icon: const Icon(Icons.playlist_play),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (sheetCollapsed) {
+                                          _sheetcontroller.expand();
                                           sheetCollapsed = false;
 
-                                    } else {
-                                      _sheetcontroller.collapse();
-                                      sheetCollapsed = true;
-                                    }
-                                  });
-                              },
+                                        } else {
+                                          _sheetcontroller.collapse();
+                                          sheetCollapsed = true;
+                                        }
+                                      });
+                                    },
 
-                              hoverColor: Colors.red.shade400,
-                            ),
-                          )
-                        ]),
-                      );
-                    },
+                                    hoverColor: Colors.red.shade400,
+                                  ),
+                                )
+                              ]),
+                            );
+                          },
+                        ),
+                        Positioned(
+                          bottom: 70.5,
+                          left: 1,
+                          right: 1,
+                          child:  ValueListenableBuilder<ProgressBarState>(
+                            valueListenable: progressNotifier,
+                            builder: (_, value, __) {
+                              return ProgressBar(
+                                thumbColor: Colors.red.shade400,
+                                progressBarColor: Colors.red.shade700.withRed(220),
+                                progress: value.current,
+                                // buffered: value.buffered,
+                                total: value.total,
+                                onSeek: (position) => AudioControlClass.seek(position),
+                              );
+                            },
+                          ),),
+
+                      ],
+
+                    ),
                   ),
                   // Positioned.fill(
                   //   child: Align(

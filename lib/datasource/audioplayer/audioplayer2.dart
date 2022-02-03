@@ -1,121 +1,155 @@
+import 'dart:ffi';
 
-import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 
-class AudioPlayerControls extends ChangeNotifier{
-  // static const url =
-  //     'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
-  Duration totalDuration = Duration();
-  Duration position = Duration();
-  Duration bufferposition = Duration();
-  String audioState = "";
-  final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
-  //var buttonState = ButtonState.paused;
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:dart_vlc/dart_vlc.dart' as mediaplayer;
+import 'package:flutter/foundation.dart';
+//import 'package:libwinmedia/libwinmedia.dart' as mediaplayer;
+import 'package:provider/provider.dart';
 
-  // var url =
-  //     "https://rr3---sn-g5pauxapo-jj0e.googlevideo.com/videoplayback?expire=1643314567&ei=J6nyYemDGY_MvwSK05TgDw&ip=202.168.85.193&id=o-AP5d4QclmBG9_M2KJc6cVFKw8JE0LAWMhBGItba5epAV&itag=139&source=youtube&requiressl=yes&mh=vT&mm=31%2C29&mn=sn-g5pauxapo-jj0e%2Csn-gwpa-h55e7&ms=au%2Crdu&mv=m&mvi=3&pl=24&gcr=in&initcwndbps=710000&vprv=1&mime=audio%2Fmp4&gir=yes&clen=1580572&dur=258.817&lmt=1614620515153040&mt=1643292592&fvip=3&keepalive=yes&fexp=24001373%2C24007246&c=ANDROID_EMBEDDED_PLAYER&txp=5531432&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cgcr%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&sig=AOq0QJ8wRgIhAJ5r-T2GxEjWUqIyXJEAa4R8oAfol026uS2ydBWNEWjgAiEA3dOIuhH_kvGMaMYdUrtZzvLJeNbbbsLMaNn7NYdVy9o%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRgIhAKi1HcX8ww4NTDMCVexqEpvmVfnl1CfjkgyeyehXuTR8AiEAlE6Mb2EBZNvdjQutknNC3LD-CC3Y2xP8y5OYFJmE0Jo%3D";
 
-  late AudioPlayer _audioPlayer;
+import 'audiodartclass.dart';
+import 'audiodata.dart';
 
-  AudioPlayerControls() {
-    _init();
+// class ControlButtons{
+//   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
+//
+//
+// }
+enum ButtonState { paused, playing, loading }
+
+
+
+final progressNotifier = ValueNotifier<ProgressBarState>(
+  ProgressBarState(
+    current: Duration.zero,
+    //buffered: Duration.zero,
+    total: Duration.zero,
+  ),
+);
+
+final ValueNotifier<ButtonState> buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
+
+
+
+class ProgressBarState {
+  ProgressBarState({
+    required this.current,
+    //required this.buffered,
+    required this.total,
+  });
+  final Duration current;
+ // final Duration buffered;
+  final Duration total;
+}
+
+
+late final  mediaplayer.Player player = mediaplayer.Player(id: 12)..
+positionStream.listen((mediaplayer.PositionState state) {
+
+  final oldState = progressNotifier.value;
+  progressNotifier.value = ProgressBarState(current: state.position!, total: state.duration!);
+  playerAlerts.position = state.position!;
+  playerAlerts.total = state.duration!;
+
+  
+})
+..playbackStream.listen((mediaplayer.PlaybackState state) {
+
+  final isPlaying = state.isPlaying;
+  final processing = state.isSeekable;
+
+  if(!isPlaying){
+    buttonNotifier.value = ButtonState.paused;
+
+  }
+  if(isPlaying){
+    buttonNotifier.value = ButtonState.playing;
   }
 
-  void _init() async {
-    _audioPlayer = AudioPlayer();
-
-    await _audioPlayer
-        .setAudioSource(ConcatenatingAudioSource(children: [
-     // AudioSource.uri(Uri.parse(
-       //   "https://rr3---sn-g5pauxapo-jj0e.googlevideo.com/videoplayback?expire=1643386822&ei=ZsPzYZfwN5OevQTVx7ToAQ&ip=202.168.85.144&id=o-ANtPPpqgqX4OR3UQU3FnHTNKyFt9iZHbhT9X2rQ9hBdX&itag=140&source=youtube&requiressl=yes&mh=mG&mm=31%2C29&mn=sn-g5pauxapo-jj0e%2Csn-gwpa-h55e7&ms=au%2Crdu&mv=m&mvi=3&pl=24&initcwndbps=776250&vprv=1&mime=audio%2Fmp4&gir=yes&clen=6480498&dur=400.381&lmt=1642210753645537&mt=1643364811&fvip=4&keepalive=yes&fexp=24001373%2C24007246&c=ANDROID_EMBEDDED_PLAYER&txp=5532434&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&sig=AOq0QJ8wRgIhAIW68nBxgr363vTBm1e9FzRvNP_Thlr-zsPq4Z1_zAAuAiEAzcA5tDo_ihkdSvwOh_mkYZ5TxxweXO2NeMthXVoyrJo%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRgIhAM0Hyt8OadRfufoVoE36kbBrFtnRILmBuv-FyjIKV-I2AiEA8dtxRkV136vRAisb8cVTjPqSXfCUlUCI9RBW9ihyGEc%3D")),
-      // AudioSource.uri(Uri.parse(
-      // "shorturl.at/gkoHI")),
-      //AudioSource.uri(Url.)
-       AudioSource.uri(Uri.parse(
-           "https://scummbar.com/mi2/MI1-CD/01%20-%20Opening%20Themes%20-%20Introduction.mp3")),
-    ]))
-        .catchError((error) {
-      // catch load errors: 404, invalid url ...
-      print("An error occured $error");
-    });
-
-    _audioPlayer.durationStream.listen((event) {
-      totalDuration = event!;
-      notifyListeners();
-    });
-
-    _audioPlayer.positionStream.listen((event) {
-      position = event;
-      notifyListeners();
-    });
-
-    _audioPlayer.bufferedPositionStream.listen((event) {
-      bufferposition = event;
-
-    });
-
-    _audioPlayer.playerStateStream.listen((playerState) {
-      final isplaying = playerState.playing;
-      final processingState = playerState.processingState;
-
-      if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering)
-      {
-        // audioState = "Lo
-        //buttonState = ButtonState.loading;
-        // notifyListeners();
-        buttonNotifier.value = ButtonState.loading;
-
-      }
-      else if (!isplaying) {
-        //audioState = "Paused";
-        // buttonState = ButtonState.paused;
-        // notifyListeners();
-        buttonNotifier.value = ButtonState.paused;
-      }
-
-      else if (processingState != ProcessingState.completed) {
-        //audioState = "Playing";
-        // buttonState = ButtonState.playing;
-
-        // notifyListeners();
-        buttonNotifier.value = ButtonState.playing;
-      }
-      else {
-        _audioPlayer.seek(Duration.zero);
-        _audioPlayer.pause();
-      }
-    });
 
 
+  playerAlerts.playStatus = state.isPlaying;
+  playerAlerts.playbackComplete = state.isCompleted;
+});
 
 
+//List<Media> medias = <Media>[];
 
+abstract class AudioControlClass {
+// mediaplayer.Player player = mediaplayer.Player(id: 0);
 
+  static Future<void> addMusic(List<Music> music) async {
 
-
-
+    // music.forEach((song) {
+    //   player.add(
+    //     mediaplayer.Media(
+    //       uri: song.filePath!,
+    //       extras: song.toMap(),
+    //     ),
+    //   );
+    //
+    // });
+    //
 
   }
 
-  void play() {
-    _audioPlayer.play();
+
+
+  static Future<void> setVolume(double volume) async {
+
+    player.setVolume(volume);
+
+
   }
 
-  void pause() {
-    _audioPlayer.pause();
+  static Future<void> seek(Duration position) async {
+
+    player.seek(position);
+
   }
 
-  void dispose() {
-    _audioPlayer.dispose();
+  static Future <void> play({
+    //required int index,
+    required String audioUrl,
+
+   // required List<Music> music,
+  }) async {
+
+    //List<Music> _music = music;
+    //index = _music.indexOf(music[index]);
+    
+    player.open(
+      mediaplayer.Media.network(audioUrl),
+      autoStart: true
+    );
+
+    // player.open([mediaplayer.Media(uri: audioUrl)]);
+
+
+
+
+    await Future.delayed(const Duration(milliseconds: 100));
+    player.jump(0);
+
+
+    await Future.delayed(const Duration(milliseconds: 100));
+    player.play();
+
+
+
+
   }
 
-  void seek(Duration position) {
-    _audioPlayer.seek(position);
-  }
+  static Future<void> playOrPause() async {
 
-  void volume(double volume){
-    _audioPlayer.setVolume(volume);
+    if (player.playback.isPlaying) {
+      player.pause();
+    } else {
+      player.play();
+    }
+
 
   }
 
@@ -124,5 +158,60 @@ class AudioPlayerControls extends ChangeNotifier{
 
 }
 
-//
-enum ButtonState { paused, playing, loading }
+
+
+var playerAlerts = PlayerNotifiers();
+class PlayerNotifiers extends ChangeNotifier {
+  bool _playStatus = false;
+  bool _playbackComplete = false;
+  Duration _position = Duration.zero;
+  Duration _total = Duration.zero;
+  bool _buffering = false;
+  List<Music> _music = <Music> [];
+
+  bool get playStatus => _playStatus;
+  bool get playbackComplete => _playbackComplete;
+  Duration get position => _position;
+  Duration get total => _total;
+  bool get buffering => _buffering;
+  List<Music> get music => _music;
+
+
+  set music(List<Music> songs) {
+    _music = songs;
+    notifyListeners();
+  }
+  set playStatus(bool playStatus) {
+    _playStatus = playStatus;
+    notifyListeners();
+  }
+  set playbackComplete(bool playbackComplete) {
+    _playbackComplete = playbackComplete;
+    notifyListeners();
+  }
+  set buffering(bool buffering) {
+    _buffering = buffering;
+    notifyListeners();
+  }
+  set position(Duration position) {
+    _position = position;
+    notifyListeners();
+  }
+  set total(Duration total) {
+    _total = total;
+    notifyListeners();
+  }
+
+  @override
+  // ignore: must_call_super
+  void dispose() {}
+
+
+}
+
+
+
+
+
+
+
