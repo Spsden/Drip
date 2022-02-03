@@ -24,24 +24,16 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     with TickerProviderStateMixin {
   bool isPlaying = false;
   bool buffering = false;
+  bool volIcon = true;
 
 
 
-  late AnimationController _controller;
+
+
 
   @override
   void initState() {
-    _controller =
-        AnimationController(duration: Duration(milliseconds: 200), vsync: this);
 
-    var playPauseStatus = Provider.of<PlayerNotifiers>(context, listen: false);
-    playPauseStatus.addListener(() {
-      if (playPauseStatus.playStatus) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
-      }
-    });
 
     super.initState();
     //init();
@@ -49,7 +41,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
   @override
   void dispose() {
-    _controller.dispose();
+
     //_yt.close();
     // _audioPlayerControls.dispose();
     super.dispose();
@@ -63,25 +55,16 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     var height = size.height;
     var width = size.width;
     return Row(
+
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
+
+          Container(
+            padding: const EdgeInsets.only(left: 10.0),
             width: 250,
             child: Row(
               children: [
-                // playerNotifier.music.first.networkAlbumArt != null
-                //     ? Image.network(
-                //         playerNotifier.music.first.networkAlbumArt!,
-                //         height: 50,
-                //         width: 50,
-                //         fit: BoxFit.cover,
-                //       )
-                //     : Image.asset(
-                //         'assets/cover.jpg',
-                //         height: 50,
-                //         width: 50,
-                //         fit: BoxFit.cover,
-                //       ),
+
                 CachedNetworkImage(
                   fit: BoxFit.cover,
                   errorWidget: (context, _, __) => const Image(
@@ -96,7 +79,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
                   width: 10,
                 ),
                 SizedBox(
-                  width: 120,
+                  width: 150,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,42 +154,49 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
                         ),
                         borderRadius: BorderRadius.circular(32.0),
                       ),
-                      child: StreamBuilder<PlaybackState>(
-                        stream: player.playbackStream,
-                        builder: (context, snapshot) {
-                          final playerState = snapshot.data;
-                         // final processingState = playerState?.processingState;
-                          final playing = playerState?.isPlaying;
-                          // if (processingState == ProcessingState.loading ||
-                          //     processingState == ProcessingState.buffering) {
-                          //   return Container(
-                          //     margin: EdgeInsets.all(8.0),
-                          //     width: 64.0,
-                          //     height: 64.0,
-                          //     child: CircularProgressIndicator(),
-                          //   );
-                           if (playing != true) {
-                            return IconButton(
-                              hoverColor: Colors.red,
-                              icon: Icon(Icons.play_arrow),
-                              iconSize: 40.0,
-                              onPressed: player.play,
-                            );
-                          } else if (playing == true) {
-                            return IconButton(
-                              hoverColor: Colors.red,
-                              icon: Icon(Icons.pause),
-                              iconSize: 40.0,
-                              onPressed: player.pause,
-                            );
-                          } else {
-                            return IconButton(
-                              icon: Icon(Icons.replay),
-                              iconSize: 40.0,
-                              onPressed: () => AudioControlClass.seek(Duration.zero),
-                            );
-                          }
-                        },
+                      child: Stack(
+                        children: [
+                      
+                          StreamBuilder<PlaybackState>(
+                            stream: player.playbackStream,
+                            builder: (context, snapshot) {
+                              final playerState = snapshot.data;
+                              // final processingState = playerState?.processingState;
+                              final playing = playerState?.isPlaying;
+                              // if (processingState == ProcessingState.loading ||
+                              //     processingState == ProcessingState.buffering) {
+                              //   return Container(
+                              //     margin: EdgeInsets.all(8.0),
+                              //     width: 64.0,
+                              //     height: 64.0,
+                              //     child: CircularProgressIndicator(),
+                              //   );
+                              if (playing != true) {
+                                return IconButton(
+                                  hoverColor: Colors.red,
+                                  icon: Icon(Icons.play_arrow),
+                                  iconSize: 40.0,
+                                  onPressed: player.play,
+                                );
+                              } else if (playing == true) {
+                                return IconButton(
+                                  hoverColor: Colors.red,
+                                  icon: Icon(Icons.pause),
+                                  iconSize: 40.0,
+                                  onPressed: player.pause,
+                                );
+                              } else {
+                                return IconButton(
+                                  icon: Icon(Icons.replay),
+                                  iconSize: 40.0,
+                                  onPressed: () => AudioControlClass.seek(Duration.zero),
+                                );
+                              }
+                            },
+                          ),
+
+                        ],
+
                       ),
                     ),
 
@@ -235,30 +225,56 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
           Row(
             children: [
               IconButton(
-                icon: Icon(Icons.volume_up),
+                icon: volIcon ? const Icon(Icons.volume_up) :const Icon(Icons.volume_mute)  ,
                 iconSize: 25,
-                onPressed: () {},
+                onPressed: () {
+
+
+                  if(volIcon){
+                    AudioControlClass.setVolume(0.0);
+                    setState(() {
+                      volIcon = !volIcon;
+                    });
+                  } else if(!volIcon){
+                    AudioControlClass.setVolume(0.4);
+                    setState(() {
+                      volIcon = !volIcon;
+                    });
+                  }
+
+                },
               ),
-              SliderTheme(
-                data: const SliderThemeData(
-                    activeTrackColor: Colors.red,
-                    trackHeight: 3,
-                    thumbColor: Colors.red),
-                child: Container(
-                  width: width / 7,
-                  child: Slider(
-                      value: _sliderval,
-                      max: 100,
-                      divisions: 30,
-                      onChanged: (volume) {
-                        setState(() {
-                          _sliderval = volume;
-                        });
-                        //AudioPlayerControlsModel.volume(volume);
-                      }),
-                ),
-              ),
+              
               SizedBox(
+                width: 200,
+                child: StreamBuilder<GeneralState>(
+                  stream: player.generalStream,
+                    builder: (context,snapshot) {
+                    final generalStream = snapshot.data;
+                      return SliderTheme(
+                        data: const SliderThemeData(
+                            activeTrackColor: Colors.red,
+                            trackHeight: 3,
+                            thumbColor: Colors.red),
+                        child: Container(
+                          width: width / 7,
+                          child: Slider(
+                              value: snapshot.data?.volume ?? 0.4,
+                              min: 0.0,
+                              max: 1.0,
+                              //divisions: 30,
+                              onChanged: (volume) {
+                                AudioControlClass.setVolume(volume);
+
+                                //AudioPlayerControlsModel.volume(volume);
+                              }),
+                        ),
+                      );
+
+                    }),
+              ),
+
+              const SizedBox(
                 width: 30,
               )
             ],
