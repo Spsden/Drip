@@ -29,7 +29,12 @@ final progressNotifier = ValueNotifier<ProgressBarState>(
   ),
 );
 
-final ValueNotifier<ButtonState> buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
+//final ValueNotifier<ButtonState> buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
+
+final ValueNotifier<double> bufferProgress = ValueNotifier<double>(0.0);
+
+
+
 
 
 
@@ -60,18 +65,22 @@ positionStream.listen((mediaplayer.PositionState state) {
   final isPlaying = state.isPlaying;
   final processing = state.isSeekable;
 
-  if(!isPlaying){
-    buttonNotifier.value = ButtonState.paused;
-
-  }
-  if(isPlaying){
-    buttonNotifier.value = ButtonState.playing;
-  }
+  // if(!isPlaying){
+  //   buttonNotifier.value = ButtonState.paused;
+  //
+  // }
+  // if(isPlaying){
+  //   buttonNotifier.value = ButtonState.playing;
+  // }
 
 
 
   playerAlerts.playStatus = state.isPlaying;
   playerAlerts.playbackComplete = state.isCompleted;
+})
+..bufferingProgressStream.listen((bufferingProgress) {
+  bufferProgress.value = bufferingProgress;
+
 });
 
 

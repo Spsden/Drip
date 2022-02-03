@@ -5,6 +5,7 @@ import 'package:drip/datasource/searchresults/artistsdataclass.dart';
 import 'package:drip/datasource/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasource/searchresults/searchresultstwo.dart';
 import 'package:drip/datasource/searchresults/songsdataclass.dart';
+import 'package:drip/widgets/common/musiclist.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:drip/widgets/searchresultwidgets/albumsresultwidget.dart';
@@ -160,11 +161,12 @@ class _SearchPageState extends State<SearchPage>
                   primary: false,
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  padding: const EdgeInsets.fromLTRB(15, 0, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(5, 0, 10, 5),
                   child: Column(
                     children: [
 
                       SingleChildScrollView(
+
                         padding: const fluent.EdgeInsets.only(bottom: 10),
                         child: Column(
                           children: [Text(
@@ -178,7 +180,56 @@ class _SearchPageState extends State<SearchPage>
                               fontSize: 40.0,
                             ),
                           ),
-                            SongsSearch(songs: songs,toSongsList: query == '' ? widget.incomingquery : query),
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                             children: [
+                               const Text(
+                                 'Songs',
+                                 style: TextStyle(
+                                   ///color: Theme.of(context).colorScheme.secondary,
+                                   color: Colors.white,
+                                   fontSize: 18,
+                                   fontWeight: FontWeight.normal,
+                                 ),
+                               ),
+                               InkWell(
+                                 onTap: () {
+                                   Navigator.of(context).pushNamed('songslistpage', arguments:  query == '' ? widget.incomingquery : query);
+
+                                 },
+                                 child: const Text(
+                                   'Show more     ',
+                                   style: TextStyle(
+                                     ///color: Theme.of(context).colorScheme.secondary,
+                                     color: Colors.red,
+                                     fontSize: 18,
+                                     fontWeight: FontWeight.normal,
+                                   ),
+                                 ),
+                               ),
+
+                             ],
+                           ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+
+                           Align(
+                             alignment: Alignment.centerLeft,
+                             child: Container(
+
+                               color: Colors.black12,
+                               padding: EdgeInsets.all(10),
+                              // width: MediaQuery.of(context).size.width *3/4,
+                               height: MediaQuery.of(context).size.height *1/3,
+                                 child: MusicList(isExpandedPage: false, incomingquery: 'home', songs: songs, toSongsList: query == '' ? widget.incomingquery : query)),
+                           ),
+
+
+                           // SongsSearch(songs: songs,toSongsList: query == '' ? widget.incomingquery : query),
+                            const SizedBox(
+                              height: 30,
+                            ),
                             artists.isNotEmpty
                                 ? ArtistsSearch(artists: artists)
                                 : Text('No Artists available'),

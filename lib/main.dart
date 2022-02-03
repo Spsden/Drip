@@ -9,7 +9,7 @@ import 'package:drip/datasource/audioplayer/audioplayerbar.dart';
 import 'package:drip/navigationstuff/navigatorstackpageone.dart';
 import 'package:drip/screens/explorepage.dart';
 import 'package:drip/screens/songsscreen.dart';
-import 'package:drip/widgets/musicbar.dart';
+
 
 import 'package:provider/provider.dart';
 import 'package:libwinmedia/libwinmedia.dart';
@@ -33,7 +33,7 @@ import 'datasource/audioplayer/audioplayer2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setMinWindowSize(const Size(1000, 600));
+  await DesktopWindow.setMinWindowSize(const Size(1100, 600));
 
   if (Platform.isWindows) {
     await Hive.initFlutter('Drip');
