@@ -273,9 +273,9 @@ class _MyHomePageState extends State<MyHomePage> {
         } ,
         //setState(() => index = i),
         size: const NavigationPaneSize(
-          openWidth: 150,
-          openMinWidth: 150,
-          openMaxWidth: 150,
+          openWidth: 200,
+          openMinWidth: 200,
+          openMaxWidth: 200,
         ),
         header: Container(
           height: kOneLineTileHeight,
