@@ -5,6 +5,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/common/musiclist.dart';
+import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/settings.dart';
 
@@ -211,10 +212,10 @@ class _MyHomePageState extends State<MyHomePage> {
       const FirstPageStack(),
       //const YouTubeHomeScreen(),
       const SecondPageStack(),
-      // const SearchPage(
-      //   incomingquery: 'Home',
-      // ),
-       Settings(controller: settingsController,)
+      TrackBars(),
+      //TrackList(incomingSongQuery: 'ap',),
+
+      Settings(controller: settingsController,)
     ];
     _pageController = PageController(initialPage: _selectedIndex);
 
@@ -305,6 +306,10 @@ class _MyHomePageState extends State<MyHomePage> {
           PaneItem(
             icon: const Icon(FluentIcons.search),
             title: const Text('Search'),
+          ),
+          PaneItem(
+            icon: const Icon(FluentIcons.playlist_music),
+            title: const Text('Song'),
           ),
           PaneItemSeparator(),
 

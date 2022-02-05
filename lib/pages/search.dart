@@ -1,21 +1,9 @@
 import 'dart:ffi';
 
-import 'package:drip/datasources/searchresults/albumsdataclass.dart';
-import 'package:drip/datasources/searchresults/artistsdataclass.dart';
-import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
-import 'package:drip/datasources/searchresults/searchresultstwo.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/pages/common/musiclist.dart';
-import 'package:drip/pages/primarysearchresults.dart';
-import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
-import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
-import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
-import 'package:drip/theme.dart';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart' as mat;
@@ -35,37 +23,10 @@ class SearchFunction extends StatefulWidget {
 class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAliveClientMixin<SearchFunction>{
   static const _historyLength = 5;
 
-  List<String> _searchHistory = ['Atif', 'Arijit', 'Sonu', 'Prateek'];
+  final List<String> _searchHistory = ['Atif', 'Arijit', 'Sonu', 'Prateek'];
   late List<String> filteredSearchHistory;
    String selectedTerm = '';
 
-  // bool status = false;
-  late Map listOfSearchResults = {};
-  late List<Artists> artists = [];
-  late List<Albums> albums = [];
-  late List<Songs> songs = [];
-  late List<CommunityPlaylist> communityPlaylists = [];
-
-
- /// late bool fetched = false;
-
-  Future<void> getPrimarySearchResults(String search) async {
-    SearchMusic.getArtists(search ).then((value) {
-      if (mounted) {
-        setState(() {
-
-          listOfSearchResults = value;
-          artists = listOfSearchResults['artistsearch'];
-          songs = listOfSearchResults['songsearch'];
-          communityPlaylists = listOfSearchResults['communityplaylistsearch'];
-          albums = listOfSearchResults['albumsearch'];
-          //fetched = true;
-          // _topresults = listOfSearchResults['topresults'];
-
-        });
-      }
-    });
-  }
 
   List<String> filterSearchTerms({
     required String filter,
@@ -133,13 +94,6 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
         controller: widget.controller,
         body: widget.body,
 
-        // PrimarySearchResults(
-        //   searchTerm: 'lol',
-        //   songs: songs,
-        //   albums: albums,
-        //   artists: artists,
-        //   communityPlaylists: communityPlaylists,
-        // ),
         transition: CircularFloatingSearchBarTransition(),
         physics: const BouncingScrollPhysics(),
         title: Text(selectedTerm),
@@ -281,203 +235,4 @@ class SearchResultsListView extends StatelessWidget {
   }
 }
 
-// class SearchPage extends StatefulWidget {
-//   final String inComingQuery;
-//
-//   const SearchPage({
-//     Key? key,
-//     required this.inComingQuery,
-//   }) : super(key: key);
-//
-//   @override
-//   _SearchPageState createState() => _SearchPageState();
-// }
-//
-// class _SearchPageState extends State<SearchPage> {
-//   // final autoSuggestBox = TextEditingController();
-//
-//   String query = '';
-//   bool status = false;
-//   late Map listOfSearchResults = {};
-//   late List<Artists> artists = [];
-//   late List<Albums> albums = [];
-//   late List<Songs> songs = [];
-//   late List<CommunityPlaylist> communityPlaylists = [];
-//   bool fetched = false;
-//
-//   // //late  ScrollController controller;
-//   // void setFetched(bool fetchedSetter) {
-//   //   fetchedSetter = fetched;
-//   // }
-//   //
-//   // void setStatus(bool statusSetter) {
-//   //   statusSetter = status;
-//   // }
-//   //
-//   // void setListOfResults(Map listOfResultsSetter) {
-//   //   listOfSearchResults = listOfResultsSetter;
-//   // }
-//   //
-//   // void setQuery(String querySetter) {
-//   //   query = querySetter;
-//   // }
-//
-//   // @override
-//   // bool get wantKeepAlive => true;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     //controller = ScrollController();
-//
-//     // WidgetsBinding.instance?.addPostFrameCallback((_) {
-//     //   //controller = ScrollController(keepScrollOffset: true,initialScrollOffset: 0.0);
-//     //   //write or call your logic
-//     //   //code will run when widget rendering complete
-//     // });
-//   }
-//
-//   @override
-//   void dispose() {
-//     // controller.dispose();
-//
-//     super.dispose();
-//   }
-//
-//   // setStateCallBack() {
-//   //   if (mounted) {
-//   //     setState(() {});
-//   //   }
-//   // }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     //super.build(context);
-//     const spacer = SizedBox(height: 10.0);
-//     const biggerSpacer = SizedBox(height: 40.0);
-//
-//     if (!status) {
-//       status = true;
-//       SearchMusic.getArtists(widget.inComingQuery).then((value) {
-//         if (mounted) {
-//           setState(() {
-//             listOfSearchResults = value;
-//             artists = listOfSearchResults['artistsearch'];
-//             songs = listOfSearchResults['songsearch'];
-//             communityPlaylists = listOfSearchResults['communityplaylistsearch'];
-//             albums = listOfSearchResults['albumsearch'];
-//             // _topresults = listOfSearchResults['topresults'];
-//             fetched = true;
-//           });
-//         }
-//       });
-//     }
-//     return (!fetched)
-//         ? Center(
-//             child: LoadingAnimationWidget.staggeredDotsWave(
-//                 color: context.watch<AppTheme>().color, size: 300),
-//           )
-//         : Padding(
-//             padding: const EdgeInsets.only(left: 10.0, right: 8.0),
-//             child: ListView(
-//               //controller: controller,
-//               clipBehavior: Clip.hardEdge,
-//               primary: false,
-//
-//               children: [
-//                 Text(
-//                   query == ''
-//                       ? 'Results for \"${widget.inComingQuery}\"'
-//                       : 'Results for \"$query\"',
-//                   style: const TextStyle(
-//                     overflow: TextOverflow.ellipsis,
-//                     fontSize: 30.0,
-//                   ),
-//                 ),
-//                 biggerSpacer,
-//
-//                 SizedBox(
-//                   width: double.infinity,
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Text("Songs"),
-//                       Button(
-//                         child: Text('Show more'),
-//                         onPressed: () {},
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//                 spacer,
-//                 SizedBox(
-//                     height: MediaQuery.of(context).size.height * 1 / 3,
-//                     child: Placeholder()
-//                     //MusicList(isExpandedPage: false, incomingquery : 'home', songs: songs, toSongsList: query == '' ? widget.incomingquery : query),
-//                     ),
-//                 biggerSpacer,
-//                 SizedBox(
-//                   width: double.infinity,
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       const Text("Artists"),
-//                       Button(
-//                         child: const Text('Show more'),
-//                         onPressed: () {},
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//                 spacer,
-//                 artists.isNotEmpty
-//                     ? ArtistsSearch(artists: artists)
-//                     : const Text('No Artists available'),
-//                 //biggerSpacer,
-//                 SizedBox(
-//                   width: double.infinity,
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       const Text("Albums"),
-//                       Button(
-//                         child: const Text('Show more'),
-//                         onPressed: () {},
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//                 spacer,
-//                 albums.isNotEmpty
-//                     ? AlbumSearch(albums: albums)
-//                     : Text('No Albums available'),
-//                 const SizedBox(
-//                   height: 40,
-//                 ),
-//                 // biggerSpacer,
-//                 SizedBox(
-//                   width: double.infinity,
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       const Text("Albums"),
-//                       Button(
-//                         child: const Text('Show more'),
-//                         onPressed: () {},
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//                 spacer,
-//                 communityPlaylists.isNotEmpty
-//                     ? CommunityPlaylistSearch(
-//                         communityPlaylist: communityPlaylists)
-//                     : Text('No Playlists available'),
-//
-//                 biggerSpacer,
-//                 biggerSpacer,
-//               ],
-//             ),
-//           );
-//   }
-// }
+
