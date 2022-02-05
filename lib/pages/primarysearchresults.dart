@@ -3,89 +3,95 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultstwo.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/src/provider.dart';
 
 import '../theme.dart';
 
-class AllSearchResults extends StatefulWidget {
-  final String searchQuery;
+class PrimarySearchResults extends StatefulWidget {
+  final String searchTerm;
+   final List<Artists> artists ;
+   final List<Albums> albums ;
+   final List<Songs> songs ;
+  final  List<CommunityPlaylist> communityPlaylists  ;
 
-  const AllSearchResults({Key? key, required this.searchQuery})
+  // final bool status;
+
+  // final Map listOfSearchResults;
+
+   PrimarySearchResults(
+      {Key? key,
+      required this.searchTerm,
+      // required this.status,
+    required this.artists, required this.albums, required this.songs, required this.communityPlaylists,
+
+      // required this.listOfSearchResults
+      })
       : super(key: key);
 
   @override
-  _AllSearchResultsState createState() => _AllSearchResultsState();
+  PrimarySearchResultsState createState() => PrimarySearchResultsState();
 }
 
-class _AllSearchResultsState extends State<AllSearchResults> {
+class PrimarySearchResultsState extends State<PrimarySearchResults> {
+  late String searchQuery;
+
   String query = '';
-  bool fetched = false;
-  bool status = false;
+  late bool status = false;
   late Map listOfSearchResults = {};
-  late List<Artists> artists = [];
-  late List<Albums> albums = [];
-  late List<Songs> songs = [];
-  late List<CommunityPlaylist> communityPlaylists = [];
-  final FloatingSearchBarController _controller = FloatingSearchBarController();
+  // late List<Artists> artists = [];
+  // late List<Albums> albums = [];
+  // late List<Songs> songs = [];
+  // late List<CommunityPlaylist> communityPlaylists = [];
+  late bool fetched = false;
 
   @override
   void initState() {
-    _controller.query = widget.searchQuery;
+    // TODO: implement initState
     super.initState();
-  }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
-    if (!status) {
-      status = true;
-      SearchMusic.getArtists(query == '' ? widget.searchQuery : query)
-          .then((value) {
-        if (this.mounted) {
-          setState(() {
-            listOfSearchResults = value;
-            artists = listOfSearchResults['artistsearch'];
-            songs = listOfSearchResults['songsearch'];
-            communityPlaylists = listOfSearchResults['communityplaylistsearch'];
-            albums = listOfSearchResults['albumsearch'];
-            // _topresults = listOfSearchResults['topresults'];
-            fetched = true;
-          });
-        }
-      });
-    }
-    return Expanded(
-        child: SearchFunction(
-          liveSearch: false,
-      controller: _controller,
-      onSubmitted: (searchQuery) async {
-        setState(() {
-          fetched = false;
-          query = searchQuery;
-          status = false;
-          listOfSearchResults = {};
-        });
-      },
-      body: (!fetched)
+    if (widget.searchTerm.isEmpty) {
+      return Center(
+        child: Text(
+          'Search Something ',
+          style: TextStyle(fontSize: 40),
+        ),
+      );
+    } else {
+      // if (!status) {
+      //   status = true;
+      //   SearchMusic.getArtists(widget.searchTerm).then((value) {
+      //     if (mounted) {
+      //       setState(() {
+      //         listOfSearchResults = value;
+      //         artists = listOfSearchResults['artistsearch'];
+      //         songs = listOfSearchResults['songsearch'];
+      //         communityPlaylists =
+      //             listOfSearchResults['communityplaylistsearch'];
+      //         albums = listOfSearchResults['albumsearch'];
+      //         // _topresults = listOfSearchResults['topresults'];
+      //         fetched = true;
+      //       });
+      //     }
+      //   });
+     // }
+       return
+       (!fetched)
           ? Center(
               child: LoadingAnimationWidget.staggeredDotsWave(
                   color: context.watch<AppTheme>().color, size: 300),
-            )
-          : Padding(
+            ):
+            Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 8.0, top: 100),
               child: ListView(
                 //controller: controller,
@@ -95,7 +101,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 children: [
                   Text(
                     query == ''
-                        ? 'Results for \"${widget.searchQuery}\"'
+                        ? 'Results for \"${widget.searchTerm}\"'
                         : 'Results for \"$query\"',
                     style: const TextStyle(
                       overflow: TextOverflow.ellipsis,
@@ -138,8 +144,8 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     ),
                   ),
                   spacer,
-                  artists.isNotEmpty
-                      ? ArtistsSearch(artists: artists)
+                  widget.artists.isNotEmpty
+                      ? ArtistsSearch(artists: widget.artists)
                       : const Text('No Artists available'),
                   //biggerSpacer,
                   SizedBox(
@@ -156,8 +162,8 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     ),
                   ),
                   spacer,
-                  albums.isNotEmpty
-                      ? AlbumSearch(albums: albums)
+                  widget.albums.isNotEmpty
+                      ? AlbumSearch(albums: widget.albums)
                       : Text('No Albums available'),
                   const SizedBox(
                     height: 40,
@@ -177,16 +183,21 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     ),
                   ),
                   spacer,
-                  communityPlaylists.isNotEmpty
+                 widget. communityPlaylists.isNotEmpty
                       ? CommunityPlaylistSearch(
-                          communityPlaylist: communityPlaylists)
+                          communityPlaylist: widget.communityPlaylists)
                       : Text('No Playlists available'),
 
                   biggerSpacer,
                   biggerSpacer,
                 ],
               ),
-            ),
-    ));
+            );
+    }
+    // return Container(
+    //   child: Center(
+    //     child: Text(searchQuery),
+    //   ),
+    // );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:drip/pages/common/musiclist.dart';
 import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/search.dart';
+import 'package:drip/pages/searchpage.dart';
 
 
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _FirstPageStackState extends State<FirstPageStack> {
 
           case 'searchpage':
             final args = settings.arguments;
-            return MaterialPageRoute(builder: (context) => SearchPage(incomingquery: args.toString()) , settings: settings);
+            return MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery: args.toString()), settings: settings);
             break;
 
           case 'songslistpage' :
@@ -43,6 +44,8 @@ class _FirstPageStackState extends State<FirstPageStack> {
 }
 
 
+
+
 class SecondPageStack extends StatefulWidget {
   const SecondPageStack({Key? key}) : super(key: key);
 
@@ -51,6 +54,10 @@ class SecondPageStack extends StatefulWidget {
 }
 
 class _SecondPageStackState extends State<SecondPageStack> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -60,7 +67,7 @@ class _SecondPageStackState extends State<SecondPageStack> {
         switch (settingsforpagetwo.name) {
 
           case 'searchpage' :
-            return MaterialPageRoute(builder: (context) => SearchPage(incomingquery: 'Home') , settings: settingsforpagetwo);
+            return MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery: 'lol') , settings: settingsforpagetwo);
             break;
 
           case 'songslistpage' :
@@ -75,4 +82,6 @@ class _SecondPageStackState extends State<SecondPageStack> {
     );
   }
 }
+
+
 
