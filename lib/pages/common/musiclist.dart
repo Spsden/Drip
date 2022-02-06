@@ -258,7 +258,7 @@ class MusicListWidgetState extends State<MusicListWidget> {
                     //    songlist[index].title,
                     //    songlist[index].thumbnails[0].url);
 
-                    await context.read<AudioData>().songDetails(audioUrl,
+                    await context.read<ActiveAudioData>().songDetails(audioUrl,
                         context.watch<MusicListDataManagement>().songList[index].videoId,
                         context.watch<MusicListDataManagement>().songList[index].artists![0].name,
                         context.watch<MusicListDataManagement>().songList[index].title,

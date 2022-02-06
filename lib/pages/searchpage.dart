@@ -3,6 +3,7 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultstwo.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
@@ -49,13 +50,15 @@ class _AllSearchResultsState extends State<AllSearchResults> {
 
   @override
   Widget build(BuildContext context) {
+    String incomq = widget.searchQuery;
+    Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
     if (!status) {
       status = true;
       SearchMusic.getArtists(query == '' ? widget.searchQuery : query)
           .then((value) {
-        if (this.mounted) {
+        if (mounted) {
           setState(() {
             listOfSearchResults = value;
             artists = listOfSearchResults['artistsearch'];
@@ -96,10 +99,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 query == ''
                     ? 'Results for \"${widget.searchQuery}\"'
                     : 'Results for \"$query\"',
-                style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 30.0,
-                ),
+                style:  typography.display?.apply(fontSizeFactor: 1.0),
               ),
               biggerSpacer,
 
@@ -108,18 +108,22 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Songs"),
+                    Text("Songs",
+                    style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
                     Button(
-                      child: Text('Show more'),
-                      onPressed: () {},
+                      child: Text('Show more'
+                      ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('songslistpage',arguments:  query == '' ? widget.searchQuery : query);
+                      },
                     )
                   ],
                 ),
               ),
               spacer,
               SizedBox(
-                  height: MediaQuery.of(context).size.height * 1 / 3,
-                  child: Placeholder()
+                  //height: MediaQuery.of(context).size.height * 1 / 3,
+                  child: TrackBars(songs: songs,isFromPrimarySearchPage: true,)
                   //MusicList(isExpandedPage: false, incomingquery : 'home', songs: songs, toSongsList: query == '' ? widget.incomingquery : query),
                   ),
               biggerSpacer,
@@ -128,9 +132,12 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Artists"),
+                    Text("Artists",
+                      style:  typography.subtitle?.apply(fontSizeFactor: 1.0),
+                      ),
                     Button(
-                      child: const Text('Show more'),
+                      child:  Text('Show more'
+                          ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
                       onPressed: () {},
                     )
                   ],
@@ -146,9 +153,11 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Albums"),
+                     Text("Albums",
+                       style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
                     Button(
-                      child: const Text('Show more'),
+                      child:  Text('Show more'
+                        ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
                       onPressed: () {},
                     )
                   ],
@@ -167,9 +176,11 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Albums"),
+                     Text("Community Playlists"
+                     ,style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
                     Button(
-                      child: const Text('Show more'),
+                      child:  Text('Show more'
+                        ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
                       onPressed: () {},
                     )
                   ],
@@ -181,6 +192,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                       communityPlaylist: communityPlaylists)
                   : Text('No Playlists available'),
 
+              biggerSpacer,
               biggerSpacer,
               biggerSpacer,
             ],

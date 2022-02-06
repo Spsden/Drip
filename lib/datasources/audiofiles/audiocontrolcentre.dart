@@ -7,6 +7,7 @@ import 'package:dart_vlc/dart_vlc.dart' as mediaplayer;
 import 'package:flutter/foundation.dart';
 //import 'package:libwinmedia/libwinmedia.dart' as mediaplayer;
 import 'package:provider/provider.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 
 
@@ -84,11 +85,23 @@ positionStream.listen((mediaplayer.PositionState state) {
 
 });
 
+final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
 //List<Media> medias = <Media>[];
 
 abstract class AudioControlClass {
 // mediaplayer.Player player = mediaplayer.Player(id: 0);
+
+static Future<String> getAudioUri(String videoId) async{
+  final StreamManifest manifest =
+  await _youtubeExplode.videos.streamsClient.getManifest(videoId);
+
+  var audioUrl = manifest.audioOnly.withHighestBitrate().url.toString();
+
+  return audioUrl;
+
+
+}
 
   static Future<void> addMusic(List<Music> music) async {
 

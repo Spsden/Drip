@@ -78,11 +78,11 @@ void main() async {
   } else {
     darkMode = true;
   }
-  // if (!kIsWeb &&
-  //     [TargetPlatform.windows, TargetPlatform.linux]
-  //         .contains(defaultTargetPlatform)) {
-  //   await flutter_acrylic.Window.initialize();
-  // }
+  if (!kIsWeb &&
+      [TargetPlatform.windows, TargetPlatform.linux]
+          .contains(defaultTargetPlatform)) {
+    //await flutter_acrylic.Window.initialize();
+  }
 
   runApp(const MyApp());
 
@@ -131,9 +131,9 @@ class MyApp extends StatelessWidget {
           return PlayerNotifiers();
         },
       ),
-      ChangeNotifierProvider<AudioData>(
+      ChangeNotifierProvider<ActiveAudioData>(
         create: (BuildContext context) {
-          return AudioData();
+          return ActiveAudioData();
         },
       ),
       ChangeNotifierProvider<MusicListDataManagement>(
@@ -212,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const FirstPageStack(),
       //const YouTubeHomeScreen(),
       const SecondPageStack(),
-      TrackBars(),
+      //TrackBars(),
       //TrackList(incomingSongQuery: 'ap',),
 
       Settings(controller: settingsController,)
@@ -528,33 +528,27 @@ class TopBar extends StatelessWidget {
             children: [
               Expanded(
                   child: MoveWindow(
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        8,
-                        0,
-                        0,
-                        0,
-                      ),
-                      // child: Align(
-                      //   alignment: Alignment.centerLeft,
-                      //   child: Text(
-                      //     'Drip',
-                      //     style: TextStyle(
-                      //         color: Colors.white,
-                      //         fontSize: 20,
-                      //         letterSpacing: 4,
-                      //         fontWeight: FontWeight.bold),
-                      //   ),
-                      // ),
+                    child: Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            0,
+                            7,
+                            0,
+                            0,
+                          ),
+                          child: Center(
+                            child: Text('Drip',
+                            style: TextStyle(fontSize: 20),),
+                          ),
+
+                        ),
+
+                      ],
+
                     ),
                   )),
-              // SearchWidget(
-              //   onSubmitted: (_query) {
-              //     setQuery(_query);
-              //     isSearchSelected = true;
-              //   },
-              //   // textcontroller: controller,
-              // ),
+
               Expanded(child: MoveWindow()),
               Row(
                 children: [

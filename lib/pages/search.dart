@@ -91,6 +91,7 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
 
     return mat.Scaffold(
       body: FloatingSearchBar(
+        transitionCurve: Curves.easeIn,
         controller: widget.controller,
         body: widget.body,
 

@@ -1,8 +1,8 @@
-import 'package:drip/pages/common/musiclist.dart';
+
+import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchpage.dart';
-
 
 import 'package:flutter/material.dart';
 
@@ -21,30 +21,34 @@ class _FirstPageStackState extends State<FirstPageStack> {
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
           case 'youtubehomescreen':
-            return MaterialPageRoute(builder: (context) => YouTubeHomeScreen() , settings: settings);
+            return MaterialPageRoute(
+                builder: (context) => YouTubeHomeScreen(), settings: settings);
             break;
 
           case 'searchpage':
             final args = settings.arguments;
-            return MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery: args.toString()), settings: settings);
+            return MaterialPageRoute(
+                builder: (context) =>
+                    AllSearchResults(searchQuery: args.toString()),
+                settings: settings);
             break;
 
-          case 'songslistpage' :
+          case 'songslistpage':
             final args = settings.arguments;
-            return MaterialPageRoute(builder: (context) => MusicList(isExpandedPage: true,incomingquery: args.toString(),songs: [],toSongsList: args.toString(),) , settings: settings);
+            return MaterialPageRoute(
+                builder: (context) =>TrackList(songQuery: args.toString(),
+                  // incomingSongQuery: args.toString(),
+                ),
+                settings: settings);
             break;
 
           default:
             throw Exception("Invalid route");
-
         }
       },
     );
   }
 }
-
-
-
 
 class SecondPageStack extends StatefulWidget {
   const SecondPageStack({Key? key}) : super(key: key);
@@ -54,34 +58,28 @@ class SecondPageStack extends StatefulWidget {
 }
 
 class _SecondPageStackState extends State<SecondPageStack> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Navigator(
       initialRoute: 'searchpage',
       onGenerateRoute: (RouteSettings settingsforpagetwo) {
-
         switch (settingsforpagetwo.name) {
-
-          case 'searchpage' :
-            return MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery: 'lol') , settings: settingsforpagetwo);
+          case 'searchpage':
+            return MaterialPageRoute(
+                builder: (context) => AllSearchResults(searchQuery: 'lol'),
+                settings: settingsforpagetwo);
             break;
 
-          case 'songslistpage' :
+          case 'songslistpage':
             final args = settingsforpagetwo.arguments;
-            return MaterialPageRoute(builder: (context) => MusicList(isExpandedPage: true,incomingquery: args.toString(),songs: [],toSongsList: args.toString(),) , settings: settingsforpagetwo);
+            return MaterialPageRoute(
+                builder: (context) => TrackList(songQuery: args.toString(),
+                  // incomingSongQuery: args.toString(),
+                ),
+                settings: settingsforpagetwo);
             break;
         }
       },
-
-
-
     );
   }
 }
-
-
-

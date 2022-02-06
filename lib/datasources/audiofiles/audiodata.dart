@@ -2,6 +2,7 @@ import 'dart:async';
 
 
 
+
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -10,7 +11,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 
 
-class AudioData extends ChangeNotifier {
+class ActiveAudioData extends ChangeNotifier {
 
 
 
@@ -47,6 +48,8 @@ class AudioData extends ChangeNotifier {
 
 
 }
+
+
 
 
 

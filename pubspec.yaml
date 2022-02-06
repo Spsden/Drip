@@ -56,6 +56,7 @@ dependencies:
   fluentui_system_icons: ^1.1.158
   desktop_window: ^0.4.0
   material_floating_search_bar: ^0.3.6
+  infinite_scroll_pagination: ^3.1.0
 
 dev_dependencies:
   flutter_test:

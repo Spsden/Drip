@@ -101,7 +101,7 @@ class TrackInfo extends StatelessWidget {
             fit: BoxFit.cover,
             image: AssetImage('assets/cover.jpg'),
           ),
-          imageUrl: Provider.of<AudioData>(context).thumbnailsetter,
+          imageUrl: Provider.of<ActiveAudioData>(context).thumbnailsetter,
           placeholder: (context, url) => const Image(
               fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
         ),
@@ -113,18 +113,18 @@ class TrackInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              Provider.of<AudioData>(context).titlesetter.toString() ==
+              Provider.of<ActiveAudioData>(context).titlesetter.toString() ==
                   ""
                   ? 'Click on a song'
-                  : Provider.of<AudioData>(context).titlesetter,
+                  : Provider.of<ActiveAudioData>(context).titlesetter,
               style: mat.Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(height: 4.0),
             Text(
-              Provider.of<AudioData>(context).artistsetter.toString() ==
+              Provider.of<ActiveAudioData>(context).artistsetter.toString() ==
                   ""
                   ? 'Click on a song'
-                  : Provider.of<AudioData>(context).artistsetter,
+                  : Provider.of<ActiveAudioData>(context).artistsetter,
               style: mat.Theme.of(context)
                   .textTheme
                   .subtitle1!
