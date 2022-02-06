@@ -1,8 +1,7 @@
-import 'dart:ffi';
 
 
+import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:fluent_ui/fluent_ui.dart' as fluent;
 
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +90,14 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
 
     return mat.Scaffold(
       body: FloatingSearchBar(
-        transitionCurve: Curves.easeIn,
+        border: BorderSide(color: context.watch<AppTheme>().color,width: 2,style: BorderStyle.solid),
+        //axisAlignment: -1,
+
+
+        // width: MediaQuery.of(context).size.width *1/2,
+        // openWidth: MediaQuery.of(context).size.width  ,
+        transitionCurve: Curves.easeInOutCubic,
+        transitionDuration: const Duration(milliseconds: 200),
         controller: widget.controller,
         body: widget.body,
 
@@ -99,7 +105,16 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
         physics: const BouncingScrollPhysics(),
         title: Text(selectedTerm),
         hint: "Let's Play.....",
-        actions: [FloatingSearchBarAction.searchToClear()],
+        actions: [
+          // FloatingSearchBarAction(
+          //   showIfOpened: false,
+          //   child: CircularButton(
+          //     icon: const Icon(FluentIcons.video),
+          //     onPressed: () {},
+          //   ),
+          // ),
+
+          FloatingSearchBarAction.searchToClear()],
         onQueryChanged: (query) {
           setState(() {
             filteredSearchHistory = filterSearchTerms(filter: query);
@@ -115,6 +130,8 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
           //print(widget.IncomingQuery);
 
           floatController.close();
+
+
         },
         builder: (BuildContext context, Animation<double> transition) {
           return ClipRRect(
@@ -127,7 +144,7 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
                   if (filteredSearchHistory.isNotEmpty &&
                       floatController.query.isEmpty) {
                     return mat.Container(
-                      height: 100,
+                      height: 50,
                       width: double.infinity,
                       alignment: Alignment.center,
                       child: const Text(
