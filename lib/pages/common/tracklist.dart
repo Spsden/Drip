@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
+import 'package:drip/datasources/audiofiles/audiodata.dart';
 import 'package:drip/datasources/searchresults/searchresultstwo.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/pages/search.dart';
@@ -84,9 +85,19 @@ class _TrackBarsState extends State<TrackBars> {
                 // customBorder: mat.ShapeBorder(),
                 //hoverColor: Colors.grey[130],
                 onPressed: () async {
-                  var audioUrl = await AudioControlClass.getAudioUri(
-                      widget.songs[index].videoId);
+                  var audioUrl =
+                  await AudioControlClass.getAudioUri(widget.songs[index].videoId);
                   print(audioUrl.toString());
+
+                  playerAlerts.buffering = true;
+                  await context.read<ActiveAudioData>().songDetails(
+                      audioUrl,
+                      widget.songs[index].videoId,
+                      widget.songs[index].artists![0].name,
+                      widget.songs[index].title,
+                      widget.songs[index].thumbnails[0].url);
+
+                  await AudioControlClass.play(audioUrl: audioUrl);
                 },
                 builder: (BuildContext, states) {
                   return AnimatedContainer(
@@ -130,7 +141,7 @@ class _TrackBarsState extends State<TrackBars> {
                                   fit: BoxFit.cover,
                                   image: AssetImage('assets/cover.jpg')),
                             ),
-                            biggerSpacer,
+                            spacer,
 
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 1 / 4,
@@ -150,6 +161,7 @@ class _TrackBarsState extends State<TrackBars> {
                               ),
                             ),
                             spacer,
+                            if( MediaQuery.of(context).size.width > 500)
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 1 / 8,
                               child: Text(
@@ -306,6 +318,16 @@ class _TrackListItemState extends State<TrackListItem> {
         var audioUrl =
             await AudioControlClass.getAudioUri(widget.songs.videoId);
         print(audioUrl.toString());
+
+        playerAlerts.buffering = true;
+        await context.read<ActiveAudioData>().songDetails(
+            audioUrl,
+            widget.songs.videoId,
+            widget.songs.artists![0].name,
+            widget.songs.title,
+            widget.songs.thumbnails[0].url);
+
+        await AudioControlClass.play(audioUrl: audioUrl);
       },
       builder: (BuildContext, states) {
         return AnimatedContainer(
@@ -346,7 +368,7 @@ class _TrackListItemState extends State<TrackListItem> {
                         fit: BoxFit.cover,
                         image: AssetImage('assets/cover.jpg')),
                   ),
-                  biggerSpacer,
+                  spacer,
 
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 1 / 4,
@@ -366,6 +388,7 @@ class _TrackListItemState extends State<TrackListItem> {
                     ),
                   ),
                   spacer,
+                  if( MediaQuery.of(context).size.width > 500)
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 1 / 8,
                     child: Text(

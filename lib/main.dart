@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'dart:ui';
 
@@ -45,7 +46,12 @@ const String appTitle = 'Drip';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DesktopWindow.setMinWindowSize(const Size(755, 545));
+
+    await DesktopWindow.setMinWindowSize(const Size(480, 540));
+   // DesktopWindow.setWindowSize(Size(755,545));
+
+
+
 
   setPathUrlStrategy();
 
@@ -60,6 +66,10 @@ void main() async {
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
   WidgetsFlutterBinding.ensureInitialized();
+  // if(Platform.isWindows){
+  //   await Window.initialize();
+  //
+  // }
   await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
   //await Window.initialize();
@@ -236,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
       appBar: NavigationAppBar(
+
         title: TopBar()
 
       ),
@@ -280,11 +291,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         header: Container(
           height: kOneLineTileHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: const FlutterLogo(
-            style: FlutterLogoStyle.horizontal,
-            size: 100,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+          child: const Text('Drip',
+          style:TextStyle(
+            fontSize: 20
+          ) ,)
         ),
         displayMode: PaneDisplayMode.compact,
         indicatorBuilder: () {
@@ -354,101 +365,99 @@ class _MyHomePageState extends State<MyHomePage> {
           //   // noResult('Error 404!'),
           //
           // ]),
-          Container(
-            child: Stack(
-              children: [
-                SlidingSheet(
-                  color: Colors.transparent,
+          Stack(
+            children: [
+              SlidingSheet(
+                color: Colors.transparent,
 
-                  closeOnBackdropTap: true,
-                  duration: const Duration(milliseconds: 200),
-                  controller: _sheetcontroller,
-                  //elevation: 8,
-                  cornerRadius: 3,
-                  snapSpec: SnapSpec(
-                    snap: sheetCollapsed,
-                    snappings: [100, 200, double.infinity],
-                    positioning: SnapPositioning.pixelOffset,
-                  ),
-                  builder: (context, state) {
-                    return ClipRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 3/4,
-                          color: Colors.transparent,
-                          child: const Center(
-                            child: Text('Test between'),
+                closeOnBackdropTap: true,
+                duration: const Duration(milliseconds: 200),
+                controller: _sheetcontroller,
+                //elevation: 8,
+                cornerRadius: 3,
+                snapSpec: SnapSpec(
+                  snap: sheetCollapsed,
+                  snappings: [100, 200, double.infinity],
+                  positioning: SnapPositioning.pixelOffset,
+                ),
+                builder: (context, state) {
+                  return ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 3/4,
+                        color: Colors.transparent,
+                        child: const Center(
+                          child: Text('Test between'),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                footerBuilder: (context, state) {
+                  return Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    child: Stack(children: [
+                      ClipRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                          child: const SizedBox(
+                            child: AudioPlayerBar(),
+                            width: double.infinity,
+                            height: 100,
+                            //: 100.0,
                           ),
                         ),
                       ),
-                    );
-                  },
-                  footerBuilder: (context, state) {
-                    return Container(
-                      alignment: Alignment.center,
-                      height: 100,
-                      child: Stack(children: [
-                        ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                            child: const SizedBox(
-                              child: AudioPlayerBar(),
-                              width: double.infinity,
-                              height: 100,
-                              //: 100.0,
-                            ),
-                          ),
+
+
+                      Positioned(
+                        bottom: 20,
+                        right : 3,
+                        child: IconButton(
+
+                          icon: const Icon(FluentIcons.playlist_music),
+                          onPressed: () {
+                            setState(() {
+                              if (sheetCollapsed) {
+                                _sheetcontroller.expand();
+                                sheetCollapsed = false;
+
+                              } else {
+                                _sheetcontroller.collapse();
+                                sheetCollapsed = true;
+                              }
+                            });
+                          },
+
+                         // hoverColor: Colors.red.shade400,
                         ),
-
-
-                        Positioned(
-                          bottom: 20,
-                          right : 3,
-                          child: IconButton(
-
-                            icon: const Icon(FluentIcons.playlist_music),
-                            onPressed: () {
-                              setState(() {
-                                if (sheetCollapsed) {
-                                  _sheetcontroller.expand();
-                                  sheetCollapsed = false;
-
-                                } else {
-                                  _sheetcontroller.collapse();
-                                  sheetCollapsed = true;
-                                }
-                              });
-                            },
-
-                           // hoverColor: Colors.red.shade400,
-                          ),
-                        )
-                      ]),
+                      )
+                    ]),
+                  );
+                },
+              ),
+              Positioned(
+                bottom: 70.5,
+                left: 5,
+                right: 5,
+                child:  ValueListenableBuilder<ProgressBarState>(
+                  valueListenable: progressNotifier,
+                  builder: (_, value, __) {
+                    return av.ProgressBar(
+                      thumbColor: context.watch<AppTheme>().color,
+                      progressBarColor: context.watch<AppTheme>().color,
+                      progress: value.current,
+                      // buffered: value.buffered,
+                      total: value.total,
+                      onSeek: (position) => AudioControlClass.seek(position),
                     );
                   },
-                ),
-                Positioned(
-                  bottom: 70.5,
-                  left: 5,
-                  right: 5,
-                  child:  ValueListenableBuilder<ProgressBarState>(
-                    valueListenable: progressNotifier,
-                    builder: (_, value, __) {
-                      return av.ProgressBar(
-                        thumbColor: context.watch<AppTheme>().color,
-                        progressBarColor: context.watch<AppTheme>().color,
-                        progress: value.current,
-                        // buffered: value.buffered,
-                        total: value.total,
-                        onSeek: (position) => AudioControlClass.seek(position),
-                      );
-                    },
-                  ),),
+                ),),
 
-              ],
+            ],
 
-            ),
           ),
 
         ],

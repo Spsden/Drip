@@ -66,7 +66,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    return Container(
+    return SizedBox(
       height: 84.0,
       width: double.infinity,
       //color: Colors.black87,
@@ -74,11 +74,12 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            TrackInfo(),
-            const Spacer(),
+            const TrackInfo(),
+             MediaQuery.of(context).size.width > 500 ?
+            const Spacer() : const SizedBox(width: 5,),
            PlayerControls(),
             const Spacer(),
-           if (MediaQuery.of(context).size.width > 700) MoreControls(),
+           if (MediaQuery.of(context).size.width > 800) MoreControls(),
 
           ],
         ),
@@ -95,41 +96,50 @@ class TrackInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+
         CachedNetworkImage(
+          width: MediaQuery.of(context).size.width > 500 ? 70 : 0 ,
+          height: MediaQuery.of(context).size.height > 500 ? 70 : 0 ,
           fit: BoxFit.cover,
           errorWidget: (context, _, __) => const Image(
             fit: BoxFit.cover,
             image: AssetImage('assets/cover.jpg'),
           ),
-          imageUrl: Provider.of<ActiveAudioData>(context).thumbnailsetter,
+          imageUrl:  context.watch<ActiveAudioData>().thumbnail,
           placeholder: (context, url) => const Image(
               fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
         ),
         const SizedBox(
           width: 10,
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              Provider.of<ActiveAudioData>(context).titlesetter.toString() ==
-                  ""
-                  ? 'Click on a song'
-                  : Provider.of<ActiveAudioData>(context).titlesetter,
-              style: mat.Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(height: 4.0),
-            Text(
-              Provider.of<ActiveAudioData>(context).artistsetter.toString() ==
-                  ""
-                  ? 'Click on a song'
-                  : Provider.of<ActiveAudioData>(context).artistsetter,
-              style: mat.Theme.of(context)
-                  .textTheme
-                  .subtitle1!
-            )
-          ],
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 1/5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                 context.watch<ActiveAudioData>().title.toString()
+
+                // Provider.of<ActiveAudioData>(context).titlesetter.toString() ==
+                //     ""
+                //     ? 'Click on a song'
+                //     : Provider.of<ActiveAudioData>(context).titlesetter,
+                ,style: mat.Theme.of(context).textTheme.bodyText1,
+              ),
+              const SizedBox(height: 4.0),
+              Text(
+                Provider.of<ActiveAudioData>(context,listen: false).artists.toString() ==
+                    ""
+                    ? 'Click on a song'
+                    : Provider.of<ActiveAudioData>(context,listen: false).artists,
+                style: const TextStyle(
+                  fontSize: 15,
+                  overflow: TextOverflow.ellipsis
+                )
+              )
+            ],
+          ),
         ),
       ],
     );
@@ -139,6 +149,8 @@ class TrackInfo extends StatelessWidget {
 class PlayerControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+     double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
+     double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
     //final selected = context.watch<CurrentTrackModel>().selected;
     return
       mat.Material(
@@ -146,13 +158,13 @@ class PlayerControls extends StatelessWidget {
         child: Row(
           children: [
             mat.IconButton(
-              icon: Icon(mat.Icons.shuffle),
-              iconSize: 30,
+              icon: const Icon(mat.Icons.shuffle),
+              iconSize: smallIcons,
               onPressed: () {},
             ),
             mat.IconButton(
               icon: const Icon(mat.Icons.skip_previous),
-              iconSize: 30,
+              iconSize: smallIcons,
               onPressed: () {
                 print(Music().filePath.toString());
                 // print(Provider.of<AudioData>(context, listen: false)
@@ -163,10 +175,10 @@ class PlayerControls extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.white,
+                  color: context.watch<AppTheme>().color,
                   width: 1.0,
                 ),
-                borderRadius: BorderRadius.circular(32.0),
+                borderRadius: BorderRadius.circular(largeIcons),
               ),
               child: Stack(
                 children: [
@@ -178,32 +190,25 @@ class PlayerControls extends StatelessWidget {
                       // final processingState = playerState?.processingState;
                       final playing = playerState?.isPlaying;
 
-                      // if (processingState == ProcessingState.loading ||
-                      //     processingState == ProcessingState.buffering) {
-                      //   return Container(
-                      //     margin: EdgeInsets.all(8.0),
-                      //     width: 64.0,
-                      //     height: 64.0,
-                      //     child: CircularProgressIndicator(),
-                      //   );
+
                       if (playing != true) {
                         return mat.IconButton(
                           hoverColor: Colors.red,
                           icon: Icon(mat.Icons.play_arrow),
-                          iconSize: 40.0,
+                          iconSize: largeIcons,
                           onPressed: player.play,
                         );
                       } else if (playing == true) {
                         return mat.IconButton(
                           hoverColor: Colors.red,
                           icon: Icon(mat.Icons.pause),
-                          iconSize: 40.0,
+                          iconSize: largeIcons,
                           onPressed: player.pause,
                         );
                       } else {
                         return mat.IconButton(
                           icon: Icon(mat.Icons.replay),
-                          iconSize: 40.0,
+                          iconSize: largeIcons,
                           onPressed: () =>
                               AudioControlClass.seek(Duration.zero),
                         );
@@ -216,10 +221,10 @@ class PlayerControls extends StatelessWidget {
                       builder: (_,value,__){
                         return value < 10 ?
                         Container(
-                          margin: EdgeInsets.all(8.0),
-                          width: 40.0,
-                          height: 40.0,
-                          child: mat.CircularProgressIndicator(),
+                          margin: const EdgeInsets.all(8.0),
+                          width: largeIcons,
+                          height: largeIcons,
+                          child: const mat.CircularProgressIndicator(),
                         ) : SizedBox();
                       })
 
@@ -232,12 +237,12 @@ class PlayerControls extends StatelessWidget {
             ),
             mat.IconButton(
               icon: const Icon(mat.Icons.skip_next),
-              iconSize: 30,
+              iconSize: smallIcons,
               onPressed: () {},
             ),
             mat.IconButton(
               icon: const Icon(mat.Icons.repeat),
-              iconSize: 30,
+              iconSize: smallIcons,
               onPressed: () {},
             ),
           ],
