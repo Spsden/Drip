@@ -3,6 +3,7 @@ import 'dart:core';
 
 
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:http/http.dart' as http;
 
 import 'albumsdataclass.dart';
@@ -14,42 +15,6 @@ class SearchMusic {
   //static const String serverAddress = 'http://192.168.0.106:5000/';
   static const String serverAddress = 'http://spden.pythonanywhere.com/';
 
-  // Future<List<Artists>> getArtists(String searchquery) async {
-  //   try {
-  //     final response = await http
-  //         .get(Uri.parse(serverAddress + 'search?query=' + searchquery));
-
-  //     if (response.statusCode == 200) {
-  //       var servres = response.body;
-  //       var result = jsonDecode(response.body) as Map;
-
-  //       var morefilter = Map.from(result)
-  //         ..removeWhere((key, value) =>
-  //             key['output']['category'].toString() != 'Artists');
-
-  //       var filtered = jsonEncode(morefilter);
-
-  //       // var jsondec = jsonDecode(response.body) as Map;
-  //       // var morefilter = jsondec['output'] as Map;
-  //       // var filtered = jsonEncode(morefilter);
-
-  //       print(filtered.toString());
-  //       print('just called');
-
-  //       final List<Artists> artistsearch = ArtistsFromJson(filtered);
-  //       return artistsearch;
-
-  //       //var finalfiltered = jsonEncode(outputremove);
-
-  //     } else {
-  //       print(response.statusCode.toString());
-  //       return <Artists>[];
-  //     }
-  //   } catch (e) {
-  //     print('catchblock');
-  //     return <Artists>[];
-  //   }
-  // }
 
   static Future getArtists(String searchquery) async {
     final response = await http
@@ -112,16 +77,6 @@ class SearchMusic {
         // 'topresults': toppresult
       };
 
-      // var forsake = artistsearch[0];
-      // print(forsake.browseId.toString() + 'HEREEEEEEE');
-
-      // var listofsearchresults = [
-      //   artistsearch,
-      //   songsearch,
-      //   communityplaylistsearch,
-      //   albumsearch,
-      //   //toppresult
-      // ];
 
       return mapofsearchresults;
       // return listofsearchresults;
@@ -158,9 +113,27 @@ class SearchMusic {
     } else {
       return <Songs> [];
     }
-
-
-
-
   }
+
+  static Future getWatchPlaylist(String videoId,int limit) async {
+    final response = await http.get(Uri.parse(serverAddress + 'searchwatchplaylist?videoId=' + videoId + '&limit=' + limit.toString()));
+
+    if (response.statusCode == 200) {
+      var rawResponse = response.body.toString();
+
+      // var watchPlaylistMap = json.decode(rawResponse) as Map;
+      // var tracks = jsonEncode(watchPlaylistMap['tracks']) ;
+      // var tracksList = jsonDecode(tracks) as List;
+      // var tracksFinal = jsonEncode(tracksList.toString());
+
+     // print(tracks.toString());
+      final WatchPlaylists watchPlaylists = watchPlaylistsFromJson(rawResponse);
+      return watchPlaylists;
+     // print(watchPlaylists.length);
+
+
+    }
+  }
+
+
 }

@@ -27,19 +27,47 @@ class _FirstPageStackState extends State<FirstPageStack> {
 
           case 'searchpage':
             final args = settings.arguments;
-            return MaterialPageRoute(
-                builder: (context) =>
-                    AllSearchResults(searchQuery: args.toString()),
-                settings: settings);
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => AllSearchResults(searchQuery: args.toString()),
+            transitionsBuilder: (context,animation,secondaryAnimation,child) {
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.fastLinearToSlowEaseIn;
+
+              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            });
+              //
+              // MaterialPageRoute(
+              //   builder: (context) =>
+              //       AllSearchResults(searchQuery: args.toString()),
+              //   settings: settings);
             break;
 
           case 'songslistpage':
             final args = settings.arguments;
-            return MaterialPageRoute(
-                builder: (context) =>TrackList(songQuery: args.toString(),
-                  // incomingSongQuery: args.toString(),
-                ),
-                settings: settings);
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => TrackList(songQuery: args.toString()),
+                transitionsBuilder: (context,animation,secondaryAnimation,child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.fastLinearToSlowEaseIn;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                });
+
+              // MaterialPageRoute(
+              //   builder: (context) =>TrackList(songQuery: args.toString(),
+              //     // incomingSongQuery: args.toString(),
+              //   ),
+              //   settings: settings);
             break;
 
           default:

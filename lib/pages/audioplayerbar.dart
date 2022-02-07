@@ -3,6 +3,8 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/audiodartclass.dart';
 import 'package:drip/datasources/audiofiles/audiodata.dart';
+import 'package:drip/datasources/searchresults/searchresultstwo.dart';
+import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -160,7 +162,16 @@ class PlayerControls extends StatelessWidget {
             mat.IconButton(
               icon: const Icon(mat.Icons.shuffle),
               iconSize: smallIcons,
-              onPressed: () {},
+              onPressed: () async{
+                WatchPlaylists watchPlaylists;
+               await  SearchMusic.getWatchPlaylist('FM2ykrYbzqg',20).then((value) {
+                 watchPlaylists = value;
+                 print(watchPlaylists.tracks![2].title.toString());
+               });
+
+
+
+              },
             ),
             mat.IconButton(
               icon: const Icon(mat.Icons.skip_previous),
