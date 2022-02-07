@@ -59,6 +59,9 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
   ..playbackStream.listen((mediaplayer.PlaybackState state) {
     final isPlaying = state.isPlaying;
     final processing = state.isSeekable;
+    final isCompleted = state.isCompleted;
+
+
 
 
 
@@ -124,6 +127,7 @@ abstract class AudioControlClass {
     //required int index,
     required String audioUrl,
     required String videoId,
+    required BuildContext context,
 
     // required List<Music> music,
   }) async {
@@ -131,7 +135,7 @@ abstract class AudioControlClass {
     medias.add(Media.network(audioUrl));
     currentMediaIndex = 0;
     mediaplayer.Playlist playlist = mediaplayer.Playlist(
-        medias: medias, playlistMode: mediaplayer.PlaylistMode.loop);
+        medias: medias, playlistMode: mediaplayer.PlaylistMode.single);
 
 
     // medias.add(Media.network(audioUrl));
@@ -154,7 +158,9 @@ abstract class AudioControlClass {
     player.play();
 
     await addMusic(videoId);
-   // Future.delayed()
+
+   // Future.delayed(player.position.duration! - player.position.position!);
+
   }
 
   static Future<void> playOrPause() async {
@@ -168,6 +174,8 @@ abstract class AudioControlClass {
   void dispose() {
     _youtubeExplode.close();
   }
+
+
 
   static Future<void> nextMusic(BuildContext context) async {
     // player.next();
@@ -199,6 +207,7 @@ abstract class AudioControlClass {
 
 
 }
+
 
 
 var playerAlerts = PlayerNotifiers();

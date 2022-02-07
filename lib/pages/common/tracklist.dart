@@ -114,7 +114,7 @@ class _TrackBarsState extends State<TrackBars> {
 
 
 
-                  await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs[index].videoId.toString());
+                  await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs[index].videoId.toString(), context: context);
 
 
 
@@ -347,7 +347,7 @@ class _TrackListItemState extends State<TrackListItem> {
             widget.songs.title,
             widget.songs.thumbnails[0].url);
 
-        await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs.videoId.toString());
+        await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs.videoId.toString(), context: context);
       },
       builder: (BuildContext, states) {
         return AnimatedContainer(

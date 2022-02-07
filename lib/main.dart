@@ -385,7 +385,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 3/4,
+                        height: MediaQuery.of(context).size.height -40,
                         color: Colors.transparent,
                         child: const Center(
                           child: Text('Test between'),

@@ -36,18 +36,20 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
   bool buffering = false;
   bool volIcon = true;
   double bufferValue = 0.0;
+  bool isCompleted = false;
+
+
+
+
+
+
 
   @override
   void initState() {
-    // if (mounted) {
-    //   player.bufferingProgressStream.listen(
-    //     (bufferingProgress) {
-    //       setState(() {
-    //         bufferValue = bufferingProgress;
-    //       });
-    //     },
-    //   );
-    // }
+
+
+
+
 
 
     super.initState();
@@ -123,10 +125,6 @@ class TrackInfo extends StatelessWidget {
               Text(
                  context.watch<ActiveAudioData>().title.toString()
 
-                // Provider.of<ActiveAudioData>(context).titlesetter.toString() ==
-                //     ""
-                //     ? 'Click on a song'
-                //     : Provider.of<ActiveAudioData>(context).titlesetter,
                 ,style: mat.Theme.of(context).textTheme.bodyText1,
               ),
               const SizedBox(height: 4.0),
@@ -155,6 +153,7 @@ class PlayerControls extends StatelessWidget {
   Widget build(BuildContext context) {
      double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
      double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
+
     //final selected = context.watch<CurrentTrackModel>().selected;
     return
       mat.Material(
@@ -194,28 +193,37 @@ class PlayerControls extends StatelessWidget {
                     stream: player.playbackStream,
                     builder: (context, snapshot) {
                       final playerState = snapshot.data;
+                      final isCompleted = playerState?.isCompleted;
+
 
                       // final processingState = playerState?.processingState;
                       final playing = playerState?.isPlaying;
 
 
-                      if (playing != true) {
+
+
+
+                       if (playing != true) {
                         return mat.IconButton(
-                          hoverColor: Colors.red,
+                          hoverColor: context.watch<AppTheme>().color,
                           icon: const Icon(mat.Icons.play_arrow),
                           iconSize: largeIcons,
                           onPressed: player.play,
                         );
-                      } else if (playing == true) {
+                      }
+
+                      else if (playing == true) {
                         return mat.IconButton(
-                          hoverColor: Colors.red,
+                          hoverColor: context.watch<AppTheme>().color,
                           icon: const Icon(mat.Icons.pause),
                           iconSize: largeIcons,
                           onPressed: player.pause,
                         );
-                      } else {
+                      }
+
+                      else {
                         return mat.IconButton(
-                          icon: const Icon(mat.Icons.replay),
+                          icon: const Icon(mat.Icons.album),
                           iconSize: largeIcons,
                           onPressed: () =>
                               AudioControlClass.seek(Duration.zero),
@@ -248,7 +256,8 @@ class PlayerControls extends StatelessWidget {
               iconSize: smallIcons,
               onPressed: () {
                  AudioControlClass.nextMusic(context);
-               // player.next();
+                //AudioControlClass.nex();
+               //player.next();
                 print(medias.length.toString());
                 //medias.forEach((element) {print(element.toString());});
               },
