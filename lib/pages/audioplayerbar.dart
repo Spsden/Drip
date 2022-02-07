@@ -1,10 +1,8 @@
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'dart:async';
+
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/audiofiles/audiodartclass.dart';
 import 'package:drip/datasources/audiofiles/audiodata.dart';
-import 'package:drip/datasources/searchresults/searchresultstwo.dart';
-import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -41,11 +39,18 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
 
 
+void autoPress() {
+  if(playerAlerts.playbackComplete){
+    AudioControlClass.nextMusic(context,1);
+    //return Text('Next Song');
+  }
 
+}
 
 
   @override
   void initState() {
+
 
 
 
@@ -78,10 +83,10 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            const TrackInfo(),
+             TrackInfo(),
              MediaQuery.of(context).size.width > 500 ?
             const Spacer() : const SizedBox(width: 5,),
-           PlayerControls(),
+           PlayBackControls(),
             const Spacer(),
            if (MediaQuery.of(context).size.width > 800) MoreControls(),
 
@@ -146,13 +151,47 @@ class TrackInfo extends StatelessWidget {
   }
 }
 
-class PlayerControls extends StatelessWidget {
-  const PlayerControls({Key? key}) : super(key: key);
+
+class PlayBackControls extends StatefulWidget {
+  const PlayBackControls({Key? key}) : super(key: key);
+
+  @override
+  _PlayBackControlsState createState() => _PlayBackControlsState();
+}
+
+class _PlayBackControlsState extends State<PlayBackControls> {
+
+  void autoPress(BuildContext context) async{
+
+
+    if(playerAlerts.playbackComplete){
+
+      Timer.run(() {
+        AudioControlClass.nextMusic(context,1);
+        print('tap');
+
+      });
+
+
+
+
+
+    }
+
+  }
+  @override
+  void initState() {
+    super.initState();
+
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-     double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
-     double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
+    double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
+    double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
 
     //final selected = context.watch<CurrentTrackModel>().selected;
     return
@@ -174,7 +213,7 @@ class PlayerControls extends StatelessWidget {
               icon: const Icon(mat.Icons.skip_previous),
               iconSize: smallIcons,
               onPressed: () {
-               // print(Music().filePath.toString());
+                // print(Music().filePath.toString());
                 AudioControlClass.previousMusic(context);
 
               },
@@ -203,7 +242,7 @@ class PlayerControls extends StatelessWidget {
 
 
 
-                       if (playing != true) {
+                      if (playing != true) {
                         return mat.IconButton(
                           hoverColor: context.watch<AppTheme>().color,
                           icon: const Icon(mat.Icons.play_arrow),
@@ -211,6 +250,20 @@ class PlayerControls extends StatelessWidget {
                           onPressed: player.play,
                         );
                       }
+                      else if(playerAlerts.playbackComplete){
+                        // AudioControlClass.nextMusic(context,1);
+                        autoPress(context);
+
+
+
+                        return mat.IconButton(
+                          hoverColor: context.watch<AppTheme>().color,
+                          icon: const Icon(mat.Icons.play_arrow),
+                          iconSize: largeIcons,
+                          onPressed: (){},
+                        );
+                      }
+
 
                       else if (playing == true) {
                         return mat.IconButton(
@@ -221,7 +274,9 @@ class PlayerControls extends StatelessWidget {
                         );
                       }
 
-                      else {
+
+
+                      else  {
                         return mat.IconButton(
                           icon: const Icon(mat.Icons.album),
                           iconSize: largeIcons,
@@ -255,9 +310,9 @@ class PlayerControls extends StatelessWidget {
               icon: const Icon(mat.Icons.skip_next),
               iconSize: smallIcons,
               onPressed: () {
-                 AudioControlClass.nextMusic(context);
+                AudioControlClass.nextMusic(context,2);
                 //AudioControlClass.nex();
-               //player.next();
+                //player.next();
                 print(medias.length.toString());
                 //medias.forEach((element) {print(element.toString());});
               },
@@ -276,6 +331,165 @@ class PlayerControls extends StatelessWidget {
 
   }
 }
+
+
+// class PlayerControls extends StatelessWidget {
+//   const PlayerControls({Key? key}) : super(key: key);
+//
+//   void autoPress(BuildContext context) {
+//     if(playerAlerts.playbackComplete){
+//       AudioControlClass.nextMusic(context,1);
+//       print('tap');
+//     }
+//
+//
+//   }
+//
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//      double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
+//      double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
+//
+//     //final selected = context.watch<CurrentTrackModel>().selected;
+//     return
+//       mat.Material(
+//         color: Colors.transparent,
+//         child: Row(
+//           children: [
+//             mat.IconButton(
+//               icon: const Icon(mat.Icons.shuffle),
+//               iconSize: smallIcons,
+//               onPressed: () async{
+//                 //SearchMusic.getWatchPlaylist(videoId, limit)
+//
+//
+//
+//               },
+//             ),
+//             mat.IconButton(
+//               icon: const Icon(mat.Icons.skip_previous),
+//               iconSize: smallIcons,
+//               onPressed: () {
+//                // print(Music().filePath.toString());
+//                 AudioControlClass.previousMusic(context);
+//
+//               },
+//             ),
+//             Container(
+//               decoration: BoxDecoration(
+//                 border: Border.all(
+//                   color: context.watch<AppTheme>().color,
+//                   width: 1.0,
+//                 ),
+//                 borderRadius: BorderRadius.circular(largeIcons),
+//               ),
+//               child: Stack(
+//                 children: [
+//                   StreamBuilder<PlaybackState>(
+//                     stream: player.playbackStream,
+//                     builder: (context, snapshot) {
+//                       final playerState = snapshot.data;
+//                       final isCompleted = playerState?.isCompleted;
+//
+//
+//                       // final processingState = playerState?.processingState;
+//                       final playing = playerState?.isPlaying;
+//
+//
+//
+//
+//
+//                        if (playing != true) {
+//                         return mat.IconButton(
+//                           hoverColor: context.watch<AppTheme>().color,
+//                           icon: const Icon(mat.Icons.play_arrow),
+//                           iconSize: largeIcons,
+//                           onPressed: player.play,
+//                         );
+//                       }
+//                        else if(playerAlerts.playbackComplete){
+//                          // AudioControlClass.nextMusic(context,1);
+//                          autoPress(context);
+//
+//
+//
+//                          return mat.IconButton(
+//                            hoverColor: context.watch<AppTheme>().color,
+//                            icon: const Icon(mat.Icons.play_arrow),
+//                            iconSize: largeIcons,
+//                            onPressed: (){},
+//                          );
+//                        }
+//
+//
+//                       else if (playing == true) {
+//                         return mat.IconButton(
+//                           hoverColor: context.watch<AppTheme>().color,
+//                           icon: const Icon(mat.Icons.pause),
+//                           iconSize: largeIcons,
+//                           onPressed: player.pause,
+//                         );
+//                       }
+//
+//
+//
+//                       else  {
+//                         return mat.IconButton(
+//                           icon: const Icon(mat.Icons.album),
+//                           iconSize: largeIcons,
+//                           onPressed: () =>
+//                               AudioControlClass.seek(Duration.zero),
+//                         );
+//                       }
+//                     },
+//                   ),
+//
+//                   ValueListenableBuilder<double>(
+//                       valueListenable: bufferProgress,
+//                       builder: (_,value,__){
+//                         return value < 10 ?
+//                         Container(
+//                           margin: const EdgeInsets.all(8.0),
+//                           width: largeIcons,
+//                           height: largeIcons,
+//                           child: const mat.CircularProgressIndicator(),
+//                         ) : const SizedBox();
+//                       })
+//
+//
+//
+//                 ],
+//
+//
+//               ),
+//             ),
+//             mat.IconButton(
+//               icon: const Icon(mat.Icons.skip_next),
+//               iconSize: smallIcons,
+//               onPressed: () {
+//                  AudioControlClass.nextMusic(context,2);
+//                 //AudioControlClass.nex();
+//                //player.next();
+//                 print(medias.length.toString());
+//                 //medias.forEach((element) {print(element.toString());});
+//               },
+//             ),
+//             mat.IconButton(
+//               icon: const Icon(mat.Icons.repeat),
+//               iconSize: smallIcons,
+//               onPressed: () {},
+//             ),
+//           ],
+//         ),
+//       );
+//
+//
+//
+//
+//   }
+// }
 
 class MoreControls extends StatefulWidget {
   const MoreControls({Key? key}) : super(key: key);

@@ -239,7 +239,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.brown.withOpacity(0.4)),
+                                    color: Colors.grey[850]),
                                 margin: EdgeInsets.all(10),
                                 width: item['type'] != 'playlist'
                                     ? (boxSize - 30) * (16 / 9)

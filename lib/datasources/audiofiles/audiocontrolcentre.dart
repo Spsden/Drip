@@ -177,10 +177,10 @@ abstract class AudioControlClass {
 
 
 
-  static Future<void> nextMusic(BuildContext context) async {
+  static Future<void> nextMusic(BuildContext context,int nIndex) async {
     // player.next();
     // player.jump(3);
-    currentMediaIndex +=2;
+    currentMediaIndex +=nIndex;
     print(currentMediaIndex);
    await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
         tracks[currentMediaIndex-1].videoId.toString(),
