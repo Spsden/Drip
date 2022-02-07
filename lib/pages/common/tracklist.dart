@@ -7,6 +7,7 @@ import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -269,6 +270,7 @@ class _TrackListState extends State<TrackList> {
 
   @override
   Widget build(BuildContext context) {
+    Typography typography = FluentTheme.of(context).typography;
     return SearchFunction(
         liveSearch: false,
         controller: _controller,
@@ -287,28 +289,50 @@ class _TrackListState extends State<TrackList> {
             onRefresh: () => Future.sync(
               () => _pagingController.refresh(),
             ),
-            child: PagedListView.separated(
-              pagingController: _pagingController,
-              padding: const EdgeInsets.all(10),
-              separatorBuilder: (context, index) => SizedBox(
-                height: 0,
-              ),
-              builderDelegate: PagedChildBuilderDelegate<Songs>(
-                animateTransitions: true,
-                transitionDuration: const Duration(milliseconds: 200),
-                firstPageProgressIndicatorBuilder: (_) => Center(
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: context.watch<AppTheme>().color, size: 300),
+            child: CustomScrollView(
+              scrollBehavior: const FluentScrollBehavior(),
+              slivers: [
+                const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                SliverToBoxAdapter(
+
+                 child: Text(widget.songQuery == ''
+                     ? '  Results for \"${query}\"'
+                     : '  Results for \"${widget.songQuery}\"',
+                 style:  typography.display?.apply(fontSizeFactor: 1.0),
+                 maxLines: 1,
+                 overflow: TextOverflow.ellipsis,)
                 ),
-                newPageProgressIndicatorBuilder: (_) => Center(
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: context.watch<AppTheme>().color, size: 100),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 15,),
                 ),
-                itemBuilder: (context, songs, index) => TrackListItem(
-                  songs: songs,
+                PagedSliverList.separated(
+                  //physics: BouncingScrollPhysics(),
+
+                  pagingController: _pagingController,
+                 // padding: const EdgeInsets.all(10),
+                  separatorBuilder: (context, index) => const SizedBox(
+                    height: 0,
+                  ),
+                  builderDelegate: PagedChildBuilderDelegate<Songs>(
+                    animateTransitions: true,
+                    transitionDuration: const Duration(milliseconds: 200),
+                    firstPageProgressIndicatorBuilder: (_) => Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                          color: context.watch<AppTheme>().color, size: 300),
+                    ),
+                    newPageProgressIndicatorBuilder: (_) => Center(
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                          color: context.watch<AppTheme>().color, size: 100),
+                    ),
+                    itemBuilder: (context, songs, index) => TrackListItem(
+                      songs: songs,
+                    ),
+                    // firstPageErrorIndicatorBuilder: (context) =>
+                  ),
                 ),
-                // firstPageErrorIndicatorBuilder: (context) =>
-              ),
+
+              ],
+
             ),
           ),
         ));
