@@ -146,11 +146,11 @@ class MyApp extends StatelessWidget {
           return ActiveAudioData();
         },
       ),
-      ChangeNotifierProvider<MusicListDataManagement>(
-        create: (BuildContext context) {
-          return MusicListDataManagement();
-        },
-      ),
+      // ChangeNotifierProvider<MusicListDataManagement>(
+      //   create: (BuildContext context) {
+      //     return MusicListDataManagement();
+      //   },
+      // ),
       // ChangeNotifierProvider<AppTheme>(
       //   create: (BuildContext context) {
       //     return AppTheme();

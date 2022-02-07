@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/audiodata.dart';
 import 'package:drip/datasources/searchresults/searchresultstwo.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
@@ -18,6 +20,7 @@ class TrackBars extends StatefulWidget {
   final List<Songs> songs;
   final VoidCallback? onScroll;
   final bool? isLoading;
+
 
   const TrackBars(
       {Key? key,
@@ -35,10 +38,20 @@ class _TrackBarsState extends State<TrackBars> {
   //_TrackListState().
   final ScrollController _sc = ScrollController();
 
+  late WatchPlaylists watchPlaylists;
+
+  void printing() async{
+    watchPlaylists.tracks?.forEach((track){
+      print(track.title.toString());
+    });
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     //bool loading = _TrackListState().isLoading;
     _sc.addListener(() {
       if (_sc.position.pixels == _sc.position.maxScrollExtent) {
@@ -97,7 +110,14 @@ class _TrackBarsState extends State<TrackBars> {
                       widget.songs[index].title,
                       widget.songs[index].thumbnails[0].url);
 
-                  await AudioControlClass.play(audioUrl: audioUrl);
+                  currentMediaIndex = 0;
+
+
+
+                  await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs[index].videoId.toString());
+
+
+
                 },
                 builder: (BuildContext, states) {
                   return AnimatedContainer(
@@ -327,7 +347,7 @@ class _TrackListItemState extends State<TrackListItem> {
             widget.songs.title,
             widget.songs.thumbnails[0].url);
 
-        await AudioControlClass.play(audioUrl: audioUrl);
+        await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs.videoId.toString());
       },
       builder: (BuildContext, states) {
         return AnimatedContainer(

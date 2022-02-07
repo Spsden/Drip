@@ -39,15 +39,15 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
   @override
   void initState() {
-    if (mounted) {
-      player.bufferingProgressStream.listen(
-        (bufferingProgress) {
-          setState(() {
-            bufferValue = bufferingProgress;
-          });
-        },
-      );
-    }
+    // if (mounted) {
+    //   player.bufferingProgressStream.listen(
+    //     (bufferingProgress) {
+    //       setState(() {
+    //         bufferValue = bufferingProgress;
+    //       });
+    //     },
+    //   );
+    // }
 
 
     super.initState();
@@ -149,6 +149,8 @@ class TrackInfo extends StatelessWidget {
 }
 
 class PlayerControls extends StatelessWidget {
+  const PlayerControls({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
      double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
@@ -163,11 +165,7 @@ class PlayerControls extends StatelessWidget {
               icon: const Icon(mat.Icons.shuffle),
               iconSize: smallIcons,
               onPressed: () async{
-                WatchPlaylists watchPlaylists;
-               await  SearchMusic.getWatchPlaylist('FM2ykrYbzqg',20).then((value) {
-                 watchPlaylists = value;
-                 print(watchPlaylists.tracks![2].title.toString());
-               });
+                //SearchMusic.getWatchPlaylist(videoId, limit)
 
 
 
@@ -177,10 +175,9 @@ class PlayerControls extends StatelessWidget {
               icon: const Icon(mat.Icons.skip_previous),
               iconSize: smallIcons,
               onPressed: () {
-                print(Music().filePath.toString());
-                // print(Provider.of<AudioData>(context, listen: false)
-                //     .audioUrlSetter
-                //     .toString());
+               // print(Music().filePath.toString());
+                AudioControlClass.previousMusic(context);
+
               },
             ),
             Container(
@@ -205,20 +202,20 @@ class PlayerControls extends StatelessWidget {
                       if (playing != true) {
                         return mat.IconButton(
                           hoverColor: Colors.red,
-                          icon: Icon(mat.Icons.play_arrow),
+                          icon: const Icon(mat.Icons.play_arrow),
                           iconSize: largeIcons,
                           onPressed: player.play,
                         );
                       } else if (playing == true) {
                         return mat.IconButton(
                           hoverColor: Colors.red,
-                          icon: Icon(mat.Icons.pause),
+                          icon: const Icon(mat.Icons.pause),
                           iconSize: largeIcons,
                           onPressed: player.pause,
                         );
                       } else {
                         return mat.IconButton(
-                          icon: Icon(mat.Icons.replay),
+                          icon: const Icon(mat.Icons.replay),
                           iconSize: largeIcons,
                           onPressed: () =>
                               AudioControlClass.seek(Duration.zero),
@@ -236,7 +233,7 @@ class PlayerControls extends StatelessWidget {
                           width: largeIcons,
                           height: largeIcons,
                           child: const mat.CircularProgressIndicator(),
-                        ) : SizedBox();
+                        ) : const SizedBox();
                       })
 
 
@@ -249,7 +246,12 @@ class PlayerControls extends StatelessWidget {
             mat.IconButton(
               icon: const Icon(mat.Icons.skip_next),
               iconSize: smallIcons,
-              onPressed: () {},
+              onPressed: () {
+                 AudioControlClass.nextMusic(context);
+               // player.next();
+                print(medias.length.toString());
+                //medias.forEach((element) {print(element.toString());});
+              },
             ),
             mat.IconButton(
               icon: const Icon(mat.Icons.repeat),

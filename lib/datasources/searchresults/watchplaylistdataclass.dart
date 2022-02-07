@@ -16,8 +16,8 @@ class WatchPlaylists {
      required this.tracks,
   });
 
-  final String lyrics;
-  final String playlistId;
+  final String? lyrics;
+  final String? playlistId;
   final List<Track>? tracks;
 
   factory WatchPlaylists.fromJson(Map<String, dynamic> json) => WatchPlaylists(
