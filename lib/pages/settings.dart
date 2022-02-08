@@ -118,8 +118,12 @@ class Settings extends StatelessWidget {
           }),
           biggerSpacer,
           Text(
-            'Navigation Pane Display Mode',
+            'Navigation Pane Display Mode ',
             style: FluentTheme.of(context).typography.subtitle,
+          ),
+           Text(
+            'Keep it at compact for optimised scaling \n Buggy now :(  ',
+    style: FluentTheme.of(context).typography.caption,
           ),
           spacer,
           ...List.generate(PaneDisplayMode.values.length, (index) {

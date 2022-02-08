@@ -8,6 +8,7 @@ import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/common/musiclist.dart';
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/explorepage.dart';
+import 'package:drip/pages/playlistmain.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -222,8 +223,9 @@ class _MyHomePageState extends State<MyHomePage> {
       const FirstPageStack(),
       //const YouTubeHomeScreen(),
       const SecondPageStack(),
-      //TrackBars(),
-      //TrackList(incomingSongQuery: 'ap',),
+
+      const PlayListMain(),
+
 
       Settings(controller: settingsController,)
     ];
@@ -245,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
-      appBar: NavigationAppBar(
+      appBar: const NavigationAppBar(
 
         title: TopBar()
 
@@ -271,6 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
       //         ),
       // ),
       pane: NavigationPane(
+
         selected: _selectedIndex,
         onChanged: (i) {
           index = i;
@@ -467,55 +470,55 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class WindowButtons extends StatelessWidget {
-  const WindowButtons({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    assert(debugCheckHasFluentTheme(context));
-    assert(debugCheckHasFluentLocalizations(context));
-    final ThemeData theme = FluentTheme.of(context);
-    final buttonColors = WindowButtonColors(
-      iconNormal: theme.inactiveColor,
-      iconMouseDown: theme.inactiveColor,
-      iconMouseOver: theme.inactiveColor,
-      mouseOver: ButtonThemeData.buttonColor(
-          theme.brightness, {ButtonStates.hovering}),
-      mouseDown: ButtonThemeData.buttonColor(
-          theme.brightness, {ButtonStates.pressing}),
-    );
-    final closeButtonColors = WindowButtonColors(
-      mouseOver: Colors.red,
-      mouseDown: Colors.red.dark,
-      iconNormal: theme.inactiveColor,
-      iconMouseOver: Colors.red.basedOnLuminance(),
-      iconMouseDown: Colors.red.dark.basedOnLuminance(),
-    );
-    return Row(children: [
-      Tooltip(
-        message: FluentLocalizations.of(context).minimizeWindowTooltip,
-        child: MinimizeWindowButton(colors: buttonColors),
-      ),
-      Tooltip(
-        message: FluentLocalizations.of(context).restoreWindowTooltip,
-        child: WindowButton(
-          colors: buttonColors,
-          iconBuilder: (context) {
-            if (appWindow.isMaximized) {
-              return RestoreIcon(color: context.iconColor);
-            }
-            return MaximizeIcon(color: context.iconColor);
-          },
-          onPressed: appWindow.maximizeOrRestore,
-        ),
-      ),
-      Tooltip(
-        message: FluentLocalizations.of(context).closeWindowTooltip,
-        child: CloseWindowButton(colors: closeButtonColors),
-      ),
-    ]);
-  }
-}
+// class WindowButtons extends StatelessWidget {
+//   const WindowButtons({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     assert(debugCheckHasFluentTheme(context));
+//     assert(debugCheckHasFluentLocalizations(context));
+//     final ThemeData theme = FluentTheme.of(context);
+//     final buttonColors = WindowButtonColors(
+//       iconNormal: theme.inactiveColor,
+//       iconMouseDown: theme.inactiveColor,
+//       iconMouseOver: theme.inactiveColor,
+//       mouseOver: ButtonThemeData.buttonColor(
+//           theme.brightness, {ButtonStates.hovering}),
+//       mouseDown: ButtonThemeData.buttonColor(
+//           theme.brightness, {ButtonStates.pressing}),
+//     );
+//     final closeButtonColors = WindowButtonColors(
+//       mouseOver: Colors.red,
+//       mouseDown: Colors.red.dark,
+//       iconNormal: theme.inactiveColor,
+//       iconMouseOver: Colors.red.basedOnLuminance(),
+//       iconMouseDown: Colors.red.dark.basedOnLuminance(),
+//     );
+//     return Row(children: [
+//       Tooltip(
+//         message: FluentLocalizations.of(context).minimizeWindowTooltip,
+//         child: MinimizeWindowButton(colors: buttonColors),
+//       ),
+//       Tooltip(
+//         message: FluentLocalizations.of(context).restoreWindowTooltip,
+//         child: WindowButton(
+//           colors: buttonColors,
+//           iconBuilder: (context) {
+//             if (appWindow.isMaximized) {
+//               return RestoreIcon(color: context.iconColor);
+//             }
+//             return MaximizeIcon(color: context.iconColor);
+//           },
+//           onPressed: appWindow.maximizeOrRestore,
+//         ),
+//       ),
+//       Tooltip(
+//         message: FluentLocalizations.of(context).closeWindowTooltip,
+//         child: CloseWindowButton(colors: closeButtonColors),
+//       ),
+//     ]);
+//   }
+// }
 
 class TopBar extends StatelessWidget {
 

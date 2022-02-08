@@ -207,7 +207,9 @@ class _TrackBarsState extends State<TrackBars> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                            if( MediaQuery.of(context).size.width > 250)
                             biggerSpacer,
+                           // if( MediaQuery.of(context).size.width > 250)
                             Icon(FluentIcons.play)
                             // mat.IconButton(
                             //     iconSize : 10,
