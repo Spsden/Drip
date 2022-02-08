@@ -127,11 +127,19 @@ class _TrackBarsState extends State<TrackBars> {
                     padding: const EdgeInsets.only(top: 5, bottom: 5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: ButtonThemeData.buttonColor(Brightness.dark, states
-                          // FluentTheme.of(context),
-                          // states,
+                      color: context.watch<AppTheme>().mode == ThemeMode.dark ||
+                          context.watch<AppTheme>().mode ==
+                              ThemeMode.system
+                          ? Colors.grey[150]
+                          : Colors.grey[30]
 
-                          ),
+                      // ButtonThemeData.buttonColor(
+                      //     context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.grey[150] : Colors.grey[30]
+                      //     states
+                      //     // FluentTheme.of(context),
+                      //     // states,
+                      //
+                      //     ),
                     ),
                     duration: FluentTheme.of(context).fastAnimationDuration,
                     child: ClipRRect(
@@ -379,11 +387,18 @@ class _TrackListItemState extends State<TrackListItem> {
           padding: const EdgeInsets.only(top: 5, bottom: 5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: ButtonThemeData.buttonColor(Brightness.dark, states
-                // FluentTheme.of(context),
-                // states,
+            color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
+                context.watch<AppTheme>().mode ==
+                    ThemeMode.system
+                ? Colors.grey[150]
+                : Colors.grey[30]
 
-                ),
+            //
+            // ButtonThemeData.buttonColor(Brightness.dark, states
+            //     // FluentTheme.of(context),
+            //     // states,
+            //
+            //     ),
           ),
           duration: FluentTheme.of(context).fastAnimationDuration,
           child: ClipRRect(

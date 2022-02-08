@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/youtubehomedata.dart';
+import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,9 @@ import 'package:flutter/rendering.dart';
 
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+
+import '../datasources/audiofiles/audiodata.dart';
 
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
@@ -53,6 +58,8 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
     }
   }
 
+  //Color cardColor = fluent.Colors.grey[40];
+
   @override
   void initState() {
     _scrollController = ScrollController();
@@ -74,6 +81,8 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
       });
     }
     super.initState();
+
+
   }
 
   @override
@@ -84,6 +93,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    fluent.Typography typography = FluentTheme.of(context).typography;
     super.build(context);
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
@@ -181,12 +191,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                           padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
                           child: Text(
                             '${searchedList[index]["title"]}',
-                            style: TextStyle(
-                              ///color: Theme.of(context).colorScheme.secondary,
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                            ),
+                            style: typography.title,
                           ),
                         ),
                       ],
@@ -235,87 +240,95 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                               //         );
                             },
                             child: Padding(
-                              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: Colors.grey[850]),
+                                    color:  context.watch<AppTheme>().mode == fluent.ThemeMode.dark || context.watch<AppTheme>().mode == fluent.ThemeMode.system ? fluent.Colors.grey[150] : fluent.Colors.grey[30]
+
+
+                                   // if(co)
+
+
+                                    //fluent.Colors.grey[40]
+
+                                    // context.watch<AppTheme>().cardColor
+
+                                ),
                                 margin: EdgeInsets.all(10),
                                 width: item['type'] != 'playlist'
                                     ? (boxSize - 30) * (16 / 9)
                                     : boxSize - 30,
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      Expanded(
-                                        child: Card(
-                                          margin: EdgeInsets.only(top: 15.0),
-                                          elevation: 5,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: CachedNetworkImage(
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Card(
+                                        margin: EdgeInsets.only(top: 15.0),
+                                        elevation: 5,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        clipBehavior: Clip.antiAlias,
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          errorWidget: (context, _, __) =>
+                                              Image(
                                             fit: BoxFit.cover,
-                                            errorWidget: (context, _, __) =>
-                                                Image(
-                                              fit: BoxFit.cover,
-                                              image:
-                                                  item['type'] != 'playlist'
-                                                      ? const AssetImage(
-                                                          'assets/ytCover.png',
-                                                        )
-                                                      : const AssetImage(
-                                                          'assets/cover.jpg',
-                                                        ),
-                                            ),
-                                            imageUrl:
-                                                item['image'].toString(),
-                                            placeholder: (context, url) =>
-                                                Image(
-                                              fit: BoxFit.cover,
-                                              image:
-                                                  item['type'] != 'playlist'
-                                                      ? const AssetImage(
-                                                          'assets/ytCover.png',
-                                                        )
-                                                      : const AssetImage(
-                                                          'assets/cover.jpg',
-                                                        ),
-                                            ),
+                                            image:
+                                                item['type'] != 'playlist'
+                                                    ? const AssetImage(
+                                                        'assets/ytCover.png',
+                                                      )
+                                                    : const AssetImage(
+                                                        'assets/cover.jpg',
+                                                      ),
+                                          ),
+                                          imageUrl:
+                                              item['image'].toString(),
+                                          placeholder: (context, url) =>
+                                              Image(
+                                            fit: BoxFit.cover,
+                                            image:
+                                                item['type'] != 'playlist'
+                                                    ? const AssetImage(
+                                                        'assets/ytCover.png',
+                                                      )
+                                                    : const AssetImage(
+                                                        'assets/cover.jpg',
+                                                      ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 15.0,
-                                      ),
-                                      Text(
-                                        '${item["title"]}',
+                                    ),
+                                    SizedBox(
+                                      height: 15.0,
+                                    ),
+                                    Text(
+                                      '${item["title"]}',
+                                      textAlign: TextAlign.center,
+                                      softWrap: false,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 15),
+                                      child: Text(
+                                        item['type'] != 'video'
+                                            ? '${item["count"]} Tracks | ${item["description"]}'
+                                            : '${item["count"]} | ${item["description"]}',
                                         textAlign: TextAlign.center,
                                         softWrap: false,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 15),
-                                        child: Text(
-                                          item['type'] != 'video'
-                                              ? '${item["count"]} Tracks | ${item["description"]}'
-                                              : '${item["count"]} | ${item["description"]}',
-                                          textAlign: TextAlign.center,
-                                          softWrap: false,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .color,
-                                          ),
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .caption!
+                                              .color,
                                         ),
-                                      )
-                                    ],
-                                  ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),

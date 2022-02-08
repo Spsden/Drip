@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/artistsdataclass.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as mat;
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ArtistsSearch extends StatelessWidget {
@@ -12,6 +13,7 @@ class ArtistsSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Typography typography = FluentTheme.of(context).typography;
     return Column(
       children: [
         Container(
@@ -30,7 +32,7 @@ class ArtistsSearch extends StatelessWidget {
                 margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
                 width: 220,
                 height: 250,
-                child: Card(
+                child: mat.Card(
                   shadowColor: Colors.transparent,
                   color: Colors.transparent,
                   child: Wrap(
@@ -39,7 +41,7 @@ class ArtistsSearch extends StatelessWidget {
                     children: [
                       CachedNetworkImage(
                         imageBuilder: (context, imageProvider) => CircleAvatar(
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: mat.Colors.transparent,
                           foregroundColor: Colors.transparent,
                           radius: 100,
                           backgroundImage: imageProvider,
@@ -49,7 +51,7 @@ class ArtistsSearch extends StatelessWidget {
                           fit: BoxFit.cover,
                           image: AssetImage('assets/artist.jpg'),
                         ),
-                        imageUrl: artists[index].thumbnails![1].url.toString(),
+                        imageUrl: artists[index].thumbnails![0].url.toString(),
                         placeholder: (context, url) => const Image(
                             fit: BoxFit.fill,
                             image: AssetImage('assets/artist.jpg')),
@@ -57,13 +59,8 @@ class ArtistsSearch extends StatelessWidget {
                       //const SizedBox(height: 20,),
                       Text(
                         artists[index].artist.toString(),
-                        style: const TextStyle(
-                          ///color: Theme.of(context).colorScheme.secondary,
-                          color: Colors.white,
-                          fontSize: 18,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.normal,
-                        ),
+                        style:
+                        typography.body?.apply(fontSizeFactor: 1.2),
                       ),
                     ],
                   ),

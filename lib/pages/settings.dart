@@ -19,6 +19,35 @@ const List<String> accentColorNames = [
   'Green',
 ];
 
+
+enum Color {
+  black,
+  white,
+  sysTheme,
+}
+
+// extension CatExtension on Color {
+//
+//   Color get name {
+//     switch (this) {
+//       case Color.black:
+//         return Colors.red;
+//       case Color.white:
+//         return Colors.grey[40];
+//       case Color.sysTheme:
+//         return Colors.grey[150];
+//       default:
+//         return null;
+//     }
+//   }
+//
+//   void talk() {
+//     print('meow');
+//   }
+// }
+
+
+
 class Settings extends StatelessWidget {
   const Settings({Key? key, this.controller}) : super(key: key);
 
@@ -71,6 +100,7 @@ class Settings extends StatelessWidget {
           spacer,
           ...List.generate(ThemeMode.values.length, (index) {
             final mode = ThemeMode.values[index];
+           // final color = mode == ThemeMode.dark ? Colors.grey[50] : Colors.grey[150];
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: RadioButton(
@@ -78,6 +108,8 @@ class Settings extends StatelessWidget {
                 onChanged: (value) {
                   if (value) {
                     appTheme.mode = mode;
+
+                    //appTheme.cardCol = color;
                   }
                 },
                 content: Text('$mode'.replaceAll('ThemeMode.', '')),

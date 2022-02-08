@@ -109,6 +109,8 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                       ? 'Results for \"${widget.searchQuery}\"'
                       : 'Results for \"$query\"',
                   style:  typography.display?.apply(fontSizeFactor: 1.0),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 biggerSpacer,
 
@@ -175,7 +177,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 spacer,
                 albums.isNotEmpty
                     ? AlbumSearch(albums: albums)
-                    : Text('No Albums available'),
+                    : const Text('No Albums available'),
                 const SizedBox(
                   height: 40,
                 ),

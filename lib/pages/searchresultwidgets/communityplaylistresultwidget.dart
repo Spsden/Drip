@@ -1,6 +1,9 @@
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
+
+import '../../theme.dart';
 
 
 class CommunityPlaylistSearch extends StatelessWidget {
@@ -30,13 +33,21 @@ class CommunityPlaylistSearch extends StatelessWidget {
 
             itemBuilder: (context, index) {
               return Container(
-                color: Colors.transparent,
+                color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
+                    context.watch<AppTheme>().mode ==
+                        ThemeMode.system
+                    ? Colors.grey[150]
+                    : Colors.grey[30],
                 margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
                 width: 200,
                 child: Card(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  color: Colors.transparent,
+                  color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
+                      context.watch<AppTheme>().mode ==
+                          ThemeMode.system
+                      ? Colors.grey[150]
+                      : Colors.grey[30],
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     alignment: WrapAlignment.center,

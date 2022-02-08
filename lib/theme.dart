@@ -4,6 +4,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 
 enum NavigationIndicators { sticky, end }
+//enum CardColors {Colors.grey[150] }
 
 class AppTheme extends ChangeNotifier {
   AccentColor _color = systemAccentColor;
@@ -12,6 +13,15 @@ class AppTheme extends ChangeNotifier {
     _color = color;
     notifyListeners();
   }
+
+  Color _cardColor = Colors.grey[150];
+  Color get cardColor => _cardColor;
+  set cardCol(Color color){
+    _cardColor = cardColor;
+    notifyListeners();
+  }
+
+
 
   ThemeMode _mode = ThemeMode.system;
   ThemeMode get mode => _mode;
