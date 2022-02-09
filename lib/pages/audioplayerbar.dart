@@ -39,13 +39,6 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
 
 
-void autoPress() {
-  if(playerAlerts.playbackComplete){
-    AudioControlClass.nextMusic(context,1);
-    //return Text('Next Song');
-  }
-
-}
 
 
   @override
@@ -131,6 +124,7 @@ class TrackInfo extends StatelessWidget {
                  context.watch<ActiveAudioData>().title.toString()
 
                 ,style: mat.Theme.of(context).textTheme.bodyText1,
+                  maxLines: 1
               ),
               const SizedBox(height: 4.0),
               Text(
@@ -138,9 +132,11 @@ class TrackInfo extends StatelessWidget {
                     ""
                     ? 'Click on a song'
                     : Provider.of<ActiveAudioData>(context,listen: false).artists,
+                maxLines: 1,
                 style: const TextStyle(
                   fontSize: 15,
                   overflow: TextOverflow.ellipsis
+
                 )
               )
             ],
@@ -222,7 +218,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: context.watch<AppTheme>().color,
-                  width: 1.0,
+                  width: 2.0,
                 ),
                 borderRadius: BorderRadius.circular(largeIcons),
               ),

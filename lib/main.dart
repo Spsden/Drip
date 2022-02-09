@@ -7,8 +7,9 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/common/musiclist.dart';
 import 'package:drip/pages/common/tracklist.dart';
+import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/explorepage.dart';
-import 'package:drip/pages/playlistmain.dart';
+import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -371,6 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Stack(
             children: [
               SlidingSheet(
+                closeOnBackButtonPressed: true,
                 color: Colors.transparent,
 
                 closeOnBackdropTap: true,
@@ -388,11 +390,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
                       child: Container(
-                        height: MediaQuery.of(context).size.height -40,
+                        height: MediaQuery.of(context).size.height -155,
                         color: Colors.transparent,
-                        child: const Center(
-                          child: Text('Test between'),
-                        ),
+                        child:   CurrentPlaylist(),
                       ),
                     ),
                   );
@@ -449,6 +449,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   valueListenable: progressNotifier,
                   builder: (_, value, __) {
                     return av.ProgressBar(
+                      thumbGlowColor:   Colors.blue,
+                      baseBarColor:  context.watch<AppTheme>().color.withOpacity(0.3 ),
                       thumbColor: context.watch<AppTheme>().color,
                       progressBarColor: context.watch<AppTheme>().color,
                       progress: value.current,

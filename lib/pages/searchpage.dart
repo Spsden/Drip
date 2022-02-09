@@ -98,7 +98,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
             behavior: const FluentScrollBehavior(),
             child: ListView(
               dragStartBehavior: DragStartBehavior.down,
-              physics: BouncingScrollPhysics(parent: ClampingScrollPhysics()),
+              physics: BouncingScrollPhysics(parent: const ClampingScrollPhysics()),
               //controller: controller,
               clipBehavior: Clip.hardEdge,
               primary: false,

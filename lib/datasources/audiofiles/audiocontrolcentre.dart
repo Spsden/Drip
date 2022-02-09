@@ -29,8 +29,11 @@ final progressNotifier = ValueNotifier<ProgressBarState>(
   ),
 );
 
+final ValueNotifier<List<Track>> tracklist = ValueNotifier<List<Track>>(tracks);
+
 
 final ValueNotifier<double> bufferProgress = ValueNotifier<double>(0.0);
+final ValueNotifier<int> currentTrackIndex = ValueNotifier<int>(currentMediaIndex);
 
 
 class ProgressBarState {
@@ -53,8 +56,8 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
     final oldState = progressNotifier.value;
     progressNotifier.value =
         ProgressBarState(current: state.position!, total: state.duration!);
-    playerAlerts.position = state.position!;
-    playerAlerts.total = state.duration!;
+    // playerAlerts.position = state.position!;
+    // playerAlerts.total = state.duration!;
   })
   ..playbackStream.listen((mediaplayer.PlaybackState state) {
     final isPlaying = state.isPlaying;
@@ -64,21 +67,27 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
 
 
 
-
-    playerAlerts.playStatus = state.isPlaying;
-    playerAlerts.playbackComplete = state.isCompleted;
+    //
+    // playerAlerts.playStatus = state.isPlaying;
+     playerAlerts.playbackComplete = state.isCompleted;
   })
   ..bufferingProgressStream.listen((bufferingProgress) {
     bufferProgress.value = bufferingProgress;
-  });
+  })
+;
 
 final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
 List<mediaplayer.Media> medias = <mediaplayer.Media>[];
 int currentMediaIndex = 0;
+
 List<Track> tracks = [];
 
-abstract class AudioControlClass {
+
+abstract class AudioControlClass with ChangeNotifier{
+
+
+
 
 
   static Future<String> getAudioUri(String videoId) async {
@@ -98,6 +107,9 @@ abstract class AudioControlClass {
     await SearchMusic.getWatchPlaylist(playlistVideoId, 10).then((value) {
       watchPlaylists = value;
       tracks = watchPlaylists.tracks!;
+      tracklist.value = watchPlaylists.tracks!;
+      // playerAlerts.setTrack  = watchPlaylists.tracks!;
+
     });
     // watchPlaylists.tracks![0].title.toString();
     //watchPlaylists.tracks?.forEach((element) {print(element.title);});
@@ -171,8 +183,10 @@ abstract class AudioControlClass {
     }
   }
 
+
   void dispose() {
     _youtubeExplode.close();
+    //player.dispose();
   }
 
 
@@ -180,6 +194,7 @@ abstract class AudioControlClass {
   static Future<void> nextMusic(BuildContext context,int nIndex) async {
     // player.next();
     // player.jump(3);
+    currentTrackIndex.value = currentMediaIndex;
     if(currentMediaIndex == 0)
       {
         currentMediaIndex +=2;
@@ -200,7 +215,15 @@ abstract class AudioControlClass {
   static Future<void> previousMusic(BuildContext context) async {
     // player.next();
     // player.jump(3);
+   currentTrackIndex.value = currentMediaIndex;
+    if(currentMediaIndex == 0)
+    {
     currentMediaIndex -=2;
+    }else {
+    currentMediaIndex--;
+    }
+   currentTrackIndex.value = currentMediaIndex;
+
     print(currentMediaIndex);
     await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
         tracks[currentMediaIndex-1].videoId.toString(),
@@ -224,7 +247,8 @@ class PlayerNotifiers extends ChangeNotifier {
   Duration _position = Duration.zero;
   Duration _total = Duration.zero;
   bool _buffering = false;
-  List<Music> _music = <Music>[];
+  //List<Music> _music = <Music>[];
+  List<Track> _track = <Track>[];
 
   bool get playStatus => _playStatus;
 
@@ -236,13 +260,19 @@ class PlayerNotifiers extends ChangeNotifier {
 
   bool get buffering => _buffering;
 
-  List<Music> get music => _music;
+ // List<Music> get music => _music;
+  List<Track> get track => _track;
 
 
-  set music(List<Music> songs) {
-    _music = songs;
+  // set music(List<Music> songs) {
+  //   _music = songs;
+  //   notifyListeners();
+  // }
+  set setTrack(List<Track> track) {
+    _track = track;
     notifyListeners();
   }
+
 
   set playStatus(bool playStatus) {
     _playStatus = playStatus;
