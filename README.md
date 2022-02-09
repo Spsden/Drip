@@ -2,7 +2,7 @@
 ## (Still in development)
 
 
-A simple YouTube Music Client made written in Dart using Flutter Framework
+A simple YouTube Music Client written in Dart using Flutter Framework with  [@microsoft](https://github.com/microsoft) Fluent design guidlines.
 
 
 
