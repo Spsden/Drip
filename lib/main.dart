@@ -93,7 +93,7 @@ void main() async {
   if (!kIsWeb &&
       [TargetPlatform.windows, TargetPlatform.linux]
           .contains(defaultTargetPlatform)) {
-    await flutter_acrylic.Window.initialize();
+   // await flutter_acrylic.Window.initialize();
   }
 
   runApp(const MyApp());

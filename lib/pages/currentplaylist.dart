@@ -30,20 +30,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
     // TODO: implement initState
     super.initState();
 
-    // currentTracks = tracks;
-    //currentTracks = tracks;
 
-    //currentTracks = context.watch<PlayerNotifiers>().track;
-    // tracks.map((element)  {
-    //   _songs.forEach((subelement) {
-    //     subelement.title = element.title!;
-    //     subelement.artists![0].name = element.artists![0].name!;
-    //    // subelement.duration = element.
-    //     subelement.thumbnails[0].url = element.thumbnail![0].url!;
-    //     subelement.videoId = element.videoId!;
-    //
-    //   });
-    // });
   }
 
   @override
@@ -98,21 +85,32 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                     print(audioUrl.toString());
 
                                     playerAlerts.buffering = true;
+
                                     await context
                                         .read<ActiveAudioData>()
                                         .songDetails(
-                                            audioUrl,
-                                            _songs[index].videoId,
-                                            _songs[index].artists![0].name,
-                                            _songs[index].title,
-                                            _songs[index].thumbnails[0].url);
+                                        audioUrl,
+                                        currentTracks[index].videoId ?? '',
+                                      currentTracks[index].artists![0].name ?? '',
+                                      currentTracks[index].title ?? '',
+                                      currentTracks[index].thumbnail![0].url ?? ''
+                                    );
+                                    // await context
+                                    //     .read<ActiveAudioData>()
+                                    //     .songDetails(
+                                    //         audioUrl,
+                                    //         _songs[index].videoId,
+                                    //         _songs[index].artists![0].name,
+                                    //         _songs[index].title,
+                                    //         _songs[index].thumbnails[0].url);
 
-                                    currentMediaIndex = 0;
+                                   // currentMediaIndex = 0;
+                                    currentTrackIndex.value = 0;
 
                                     await AudioControlClass.play(
                                         audioUrl: audioUrl,
                                         videoId:
-                                            _songs[index].videoId.toString(),
+                                            currentTracks[index].videoId.toString(),
                                         context: context);
                                   },
                                   builder: (BuildContext, states) {
@@ -259,8 +257,243 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                       ]);
                 });
           });
-    } else
-      return Placeholder();
+    } else {
+      return  ValueListenableBuilder<int>(
+          valueListenable: currentTrackIndex,
+          builder: (_, trck, __) {
+            return ValueListenableBuilder<List<Track>>(
+                valueListenable: tracklist,
+                builder: (_, currentTracks, __) {
+                  return CustomScrollView(
+                    slivers: [
+                      mat.SliverAppBar(
+                        expandedHeight: size.height/3,
+                        //pinned: true,
+                        stretch: true,
+                        stretchTriggerOffset: size.height/6,
+
+                        flexibleSpace: mat.FlexibleSpaceBar(
+                          stretchModes: const [
+                            mat.StretchMode.zoomBackground
+                          ],
+                          background:  CachedNetworkImage(
+                            // height: min(constraints.maxHeight,
+                            //     constraints.maxWidth),
+                            // width: min(constraints.maxHeight,
+                            //     constraints.maxWidth),
+                            fit: BoxFit.cover,
+                            errorWidget: (context, _, __) => const Image(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/cover.jpg'),
+                            ),
+                            imageUrl:
+                            currentTracks[trck].thumbnail!.last.url.toString() ,
+                            placeholder: (context, url) => const Image(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/cover.jpg')),
+                          ),
+
+                        ),
+                      ),
+                      SliverFillRemaining(
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          //height: size.height - 200,
+                          //width: size.width / 2.5,
+                          margin: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            // border: Border.all(
+                            //     width: 2,
+                            //     color: context.watch<AppTheme>().color)
+                          ),
+                          child: ListView.builder(
+                              itemCount: currentTracks.length,
+                              shrinkWrap: true,
+                              //controller: _sc,
+                              itemBuilder: (context, index) {
+                                return HoverButton(
+                                  cursor: SystemMouseCursors.copy,
+                                  // splashColor: Colors.grey[130],
+                                  // customBorder: mat.ShapeBorder(),
+                                  //hoverColor: Colors.grey[130],
+                                  onPressed: () async {
+                                    var audioUrl =
+                                    await AudioControlClass.getAudioUri(
+                                        currentTracks[index]
+                                            .videoId
+                                            .toString());
+                                    print(audioUrl.toString());
+
+                                    playerAlerts.buffering = true;
+                                    await context
+                                        .read<ActiveAudioData>()
+                                        .songDetails(
+                                        audioUrl,
+                                        currentTracks[index].videoId ?? '',
+                                        currentTracks[index].artists![0].name ?? '',
+                                        currentTracks[index].title ?? '',
+                                        currentTracks[index].thumbnail![0].url ?? ''
+                                    );
+                                    currentTrackIndex.value = 0;
+
+                                    // currentMediaIndex = 0;
+
+                                    await AudioControlClass.play(
+                                        audioUrl: audioUrl,
+                                        videoId:
+                                        currentTracks[index].videoId.toString(),
+                                        context: context);
+                                  },
+                                  builder: (BuildContext, states) {
+                                    return AnimatedContainer(
+                                      margin: const EdgeInsets.only(
+                                          left: 10, right: 10, bottom: 15),
+                                      padding: const EdgeInsets.only(
+                                          top: 5, bottom: 5),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(8),
+                                          color: index == trck ? context.watch<AppTheme>().color :
+                                          context.watch<AppTheme>().mode ==
+                                              ThemeMode.dark ||
+                                              context
+                                                  .watch<AppTheme>()
+                                                  .mode ==
+                                                  ThemeMode.system
+                                              ? Colors.grey[150]
+                                              : Colors.grey[30]),
+                                      duration: FluentTheme.of(context)
+                                          .fastAnimationDuration,
+                                      child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(10),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                            children: [
+
+                                              CachedNetworkImage(
+                                                width: 40,
+                                                height: 40,
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                    CircleAvatar(
+                                                      backgroundColor:
+                                                      Colors.transparent,
+                                                      foregroundColor:
+                                                      Colors.transparent,
+                                                      radius: 100,
+                                                      backgroundImage:
+                                                      imageProvider,
+                                                    ),
+                                                fit: BoxFit.cover,
+                                                errorWidget: (context, _, __) =>
+                                                const Image(
+                                                  fit: BoxFit.cover,
+                                                  image: AssetImage(
+                                                      'assets/cover.jpg'),
+                                                ),
+                                                imageUrl: currentTracks[index]
+                                                    .thumbnail![0]
+                                                    .url
+                                                    .toString()
+                                                    .toString(),
+
+                                                // widget.isFromPrimarySearchPage ? _songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
+                                                placeholder: (context, url) =>
+                                                const Image(
+                                                    fit: BoxFit.cover,
+                                                    image: AssetImage(
+                                                        'assets/cover.jpg')),
+                                              ),
+                                              spacer,
+
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    1 /
+                                                    3,
+                                                child: Text(
+                                                  currentTracks[index]
+                                                      .title
+                                                      .toString(),
+                                                  // widget.isFromPrimarySearchPage ? _songs[index].title.toString() : 'Kuch is tarah',
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              spacer,
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    1 /
+                                                    15,
+                                                child: Text(
+                                                  currentTracks[index]
+                                                      .artists![0]
+                                                      .name
+                                                      .toString(),
+                                                  // widget.isFromPrimarySearchPage ? _songs[index].artists![0].name.toString() : 'Atif',
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              //spacer,
+                                              if (MediaQuery.of(context)
+                                                  .size
+                                                  .width >
+                                                  800)
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                      1 /
+                                                      15,
+                                                  child: Text(
+                                                    currentTracks[index]
+                                                        .album!
+                                                        .name
+                                                        .toString(),
+                                                    //  widget.isFromPrimarySearchPage ? _songs[index].album!.name.toString() : 'The jal band',
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    1 /
+                                                    25,
+                                                child: Text(
+                                                  // 'lol',
+                                                  currentTracks[index]
+                                                      .length
+                                                      .toString(),
+                                                  //widget.isFromPrimarySearchPage ? _songs[index].duration.toString() : '5:25',
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    );
+                                  },
+                                );
+                              }),
+                        )
+
+                      )
+                    ],
+
+                     );
+                });
+          });
+    }
   }
 }
 
