@@ -223,6 +223,12 @@ class _TrackBarsState extends State<TrackBars> {
   }
 }
 
+
+
+
+
+//Track list for infinite Pagination with search
+
 class TrackList extends StatefulWidget {
   final String songQuery;
 
@@ -303,9 +309,11 @@ class _TrackListState extends State<TrackList> {
                 const SliverToBoxAdapter(child: SizedBox(height: 80)),
                 SliverToBoxAdapter(
 
-                 child: Text(widget.songQuery == ''
-                     ? '  Results for \"${query}\"'
-                     : '  Results for \"${widget.songQuery}\"',
+                 child: Text(query,
+
+                   // widget.songQuery == ''
+                   //   ? '  Results for \"${query}\"'
+                   //   : '  Results for \"${widget.songQuery}\"',
                  style:  typography.display?.apply(fontSizeFactor: 1.0),
                  maxLines: 1,
                  overflow: TextOverflow.ellipsis,)
