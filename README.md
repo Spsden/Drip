@@ -14,6 +14,7 @@ A simple YouTube Music Client written in Dart using Flutter Framework with  [@mi
    <img width="700" alt="Options Menu" src="https://github.com/Spsden/Drip/blob/master/readme_assets/search%20page%202.png"> 
    <img width="700" alt="Read Notes" src="https://github.com/Spsden/Drip/blob/master/readme_assets/search%20screen.png"> 
    <img width="700" alt="About Screen" src="https://github.com/Spsden/Drip/blob/master/readme_assets/songs%20page.png"> 
+   <img width="700" alt="About Screen" src="https://github.com/Spsden/Drip/blob/master/readme_assets/currently%20playing.png"> 
 </p>
 
 ## Acknowledgements
