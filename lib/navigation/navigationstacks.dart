@@ -1,6 +1,7 @@
 
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/explorepage.dart';
+import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchpage.dart';
 
@@ -63,11 +64,26 @@ class _FirstPageStackState extends State<FirstPageStack> {
                   );
                 });
 
-              // MaterialPageRoute(
-              //   builder: (context) =>TrackList(songQuery: args.toString(),
-              //     // incomingSongQuery: args.toString(),
-              //   ),
-              //   settings: settings);
+
+            break;
+
+          case 'playlists':
+            final args = settings.arguments;
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) =>   PlaylistMain(playlistId: args.toString(),),
+                transitionsBuilder: (context,animation,secondaryAnimation,child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.fastLinearToSlowEaseIn;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                });
+
+
             break;
 
           default:
@@ -94,7 +110,7 @@ class _SecondPageStackState extends State<SecondPageStack> {
         switch (settingsforpagetwo.name) {
           case 'searchpage':
             return MaterialPageRoute(
-                builder: (context) => AllSearchResults(searchQuery: 'lol'),
+                builder: (context) => AllSearchResults(searchQuery: ''),
                 settings: settingsforpagetwo);
             break;
 

@@ -5,6 +5,7 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultstwo.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/pages/common/listoftracks.dart';
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/src/provider.dart';
 
@@ -59,7 +61,17 @@ class _AllSearchResultsState extends State<AllSearchResults> {
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
-    if (!status) {
+    // if(widget.searchQuery == ''){
+    //   return Container(
+    //     child: Text(
+    //       'Search Something Dude',
+    //           style:  TextStyle(
+    //         fontSize: 50
+    //     ),
+    //     ),
+    //   );
+    // }
+     if (!status) {
       status = true;
       SearchMusic.getArtists(query == '' ? widget.searchQuery : query)
           .then((value) {
@@ -87,7 +99,23 @@ class _AllSearchResultsState extends State<AllSearchResults> {
       listOfSearchResults = {};
     });
       },
-      body: (!fetched)
+      body: _controller.query.isEmpty ?  Container(
+
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height/2,),
+                  Lottie.asset('assets/searchanimation.json'),
+                  Text('Search something',style: typography.body,)
+                ],
+              ),
+            )
+
+
+          ) :
+
+
+      (!fetched)
       ? Center(
           child: LoadingAnimationWidget.staggeredDotsWave(
               color: context.watch<AppTheme>().color, size: 300),
@@ -134,8 +162,13 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 spacer,
                 SizedBox(
                     //height: MediaQuery.of(context).size.height * 1 / 3,
-                    child: TrackBars(songs: songs,isFromPrimarySearchPage: true,)
-                    //MusicList(isExpandedPage: false, incomingquery : 'home', songs: songs, toSongsList: query == '' ? widget.incomingquery : query),
+                    child: Container(
+                        alignment: Alignment.centerLeft,
+                       // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
+
+
+                    child : TrackBars(songs: songs,isFromPrimarySearchPage: true,))
+
                     ),
                 biggerSpacer,
                 SizedBox(

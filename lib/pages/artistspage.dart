@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 
 class PlayListMain extends StatefulWidget {
   const PlayListMain({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class PlayListMain extends StatefulWidget {
 }
 
 class _PlayListMainState extends State<PlayListMain> {
+  //WindowEffect effect = WindowEffect.transparent;
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

@@ -9,11 +9,11 @@ import 'package:dart_vlc/dart_vlc.dart' as mediaplayer;
 import 'package:flutter/foundation.dart';
 import 'package:provider/src/provider.dart';
 
-//import 'package:libwinmedia/libwinmedia.dart' as mediaplayer;
 import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 
+import '../searchresults/songsdataclass.dart';
 import 'audiodartclass.dart';
 import 'audiodata.dart';
 
@@ -29,35 +29,23 @@ final progressNotifier = ValueNotifier<ProgressBarState>(
   ),
 );
 
+
 final ValueNotifier<List<Track>> tracklist = ValueNotifier<List<Track>>(tracks);
-
-
 final ValueNotifier<double> bufferProgress = ValueNotifier<double>(0.0);
-final ValueNotifier<int> currentTrackIndex = ValueNotifier<int>(currentMediaIndex);
+final ValueNotifier<int> currentTrackIndex = ValueNotifier<int>(currentMediaIndex = 0);
 
 
-class ProgressBarState {
-  ProgressBarState({
-    required this.current,
-    //required this.buffered,
-    required this.total,
-  });
-
-  final Duration current;
-
-  // final Duration buffered;
-  final Duration total;
-}
 
 
+
+final YoutubeExplode _youtubeExplode = YoutubeExplode();
 late final mediaplayer.Player player = mediaplayer.Player(id: 12)
   ..
   positionStream.listen((mediaplayer.PositionState state) {
     final oldState = progressNotifier.value;
     progressNotifier.value =
         ProgressBarState(current: state.position!, total: state.duration!);
-    // playerAlerts.position = state.position!;
-    // playerAlerts.total = state.duration!;
+
   })
   ..playbackStream.listen((mediaplayer.PlaybackState state) {
     final isPlaying = state.isPlaying;
@@ -76,12 +64,12 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
   })
 ;
 
-final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
 List<mediaplayer.Media> medias = <mediaplayer.Media>[];
 int currentMediaIndex = 0;
 
 List<Track> tracks = [];
+
 
 
 abstract class AudioControlClass with ChangeNotifier{
@@ -108,11 +96,10 @@ abstract class AudioControlClass with ChangeNotifier{
       watchPlaylists = value;
       tracks = watchPlaylists.tracks!;
       tracklist.value = watchPlaylists.tracks!;
-      // playerAlerts.setTrack  = watchPlaylists.tracks!;
+
+
 
     });
-    // watchPlaylists.tracks![0].title.toString();
-    //watchPlaylists.tracks?.forEach((element) {print(element.title);});
 
     for (int i = 0; i < watchPlaylists.tracks!.length; i++) {
       String videoIdOf = watchPlaylists.tracks![i].videoId.toString();
@@ -309,7 +296,18 @@ class PlayerNotifiers extends ChangeNotifier {
 }
 
 
+class ProgressBarState {
+  ProgressBarState({
+    required this.current,
+    //required this.buffered,
+    required this.total,
+  });
 
+  final Duration current;
+
+  // final Duration buffered;
+  final Duration total;
+}
 
 
 

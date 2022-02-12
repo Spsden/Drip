@@ -142,78 +142,81 @@ class _TrackBarsState extends State<TrackBars> {
                       //     ),
                     ),
                     duration: FluentTheme.of(context).fastAnimationDuration,
-                    child: Row(mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CachedNetworkImage(
-                          width: 40,
-                          height: 40,
-                          imageBuilder: (context, imageProvider) =>
-                              CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.transparent,
-                            radius: 100,
-                            backgroundImage: imageProvider,
-                          ),
-                          fit: BoxFit.cover,
-                          errorWidget: (context, _, __) => const Image(
+                    child: Flex(
+                      direction: Axis.horizontal,
+                      children: [Row(mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CachedNetworkImage(
+                            width: 40,
+                            height: 40,
+                            imageBuilder: (context, imageProvider) =>
+                                CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              foregroundColor: Colors.transparent,
+                              radius: 100,
+                              backgroundImage: imageProvider,
+                            ),
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/cover.jpg'),
-                          ),
-                          imageUrl: widget.songs[index].thumbnails.first.url
-                              .toString(),
-
-                          // widget.isFromPrimarySearchPage ? widget.songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
-                          placeholder: (context, url) => const Image(
+                            errorWidget: (context, _, __) => const Image(
                               fit: BoxFit.cover,
-                              image: AssetImage('assets/cover.jpg')),
-                        ),
-                        spacer,
+                              image: AssetImage('assets/cover.jpg'),
+                            ),
+                            imageUrl: widget.songs[index].thumbnails.first.url
+                                .toString(),
 
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 1 / 4,
-                          child: Text(
-                            widget.songs[index].title.toString(),
-                            // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
-                            overflow: TextOverflow.ellipsis,
+                            // widget.isFromPrimarySearchPage ? widget.songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
+                            placeholder: (context, url) => const Image(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/cover.jpg')),
                           ),
-                        ),
-                        spacer,
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 1 / 8,
-                          child: Text(
-                            widget.songs[index].artists![0].name.toString(),
-                            // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
-                            overflow: TextOverflow.ellipsis,
+                          spacer,
+
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 1 / 4,
+                            child: Text(
+                              widget.songs[index].title.toString(),
+                              // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        spacer,
-                        if( MediaQuery.of(context).size.width > 500)
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 1 / 8,
-                          child: Text(
-                            widget.songs[index].album!.name.toString(),
-                            //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
-                            overflow: TextOverflow.ellipsis,
+                          spacer,
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 1 / 8,
+                            child: Text(
+                              widget.songs[index].artists![0].name.toString(),
+                              // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 1 / 15,
-                          child: Text(
-                            widget.songs[index].duration.toString(),
-                            //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
-                            overflow: TextOverflow.ellipsis,
+                          spacer,
+                          if( MediaQuery.of(context).size.width > 500)
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 1 / 8,
+                            child: Text(
+                              widget.songs[index].album!.name.toString(),
+                              //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                        if( MediaQuery.of(context).size.width > 250)
-                        biggerSpacer,
-                       // if( MediaQuery.of(context).size.width > 250)
-                        Icon(FluentIcons.play)
-                        // mat.IconButton(
-                        //     iconSize : 10,
-                        //     onPressed: () {}, icon: Icon(FluentIcons.play))
-                      ],
-                    ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 1 / 15,
+                            child: Text(
+                              widget.songs[index].duration.toString(),
+                              //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if( MediaQuery.of(context).size.width > 250)
+                          biggerSpacer,
+                         // if( MediaQuery.of(context).size.width > 250)
+                          Icon(FluentIcons.play)
+                          // mat.IconButton(
+                          //     iconSize : 10,
+                          //     onPressed: () {}, icon: Icon(FluentIcons.play))
+                        ],
+                      ),
+                    ]),
                   );
                 },
               );
