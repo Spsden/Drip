@@ -50,7 +50,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
             return ValueListenableBuilder<List<Track>>(
                 valueListenable: tracklist,
                 builder: (_, currentTracks, __) {
-                  return CommonPlaylist(currentTracks: currentTracks, trck: trck);
+                  return CommonPlaylist(currentTracks: currentTracks, trck: trck,);
                 });
           });
 

@@ -2,7 +2,6 @@
 //
 //     final watchPlaylists = watchPlaylistsFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 WatchPlaylists watchPlaylistsFromJson(String str) => WatchPlaylists.fromJson(json.decode(str));
@@ -51,7 +50,7 @@ class Track {
   final List<Album>? artists;
   final dynamic feedbackTokens;
   final String? length;
-  final dynamic? likeStatus;
+  final dynamic likeStatus;
   final List<Thumbnail>? thumbnail;
   final String? title;
   final String? videoId;

@@ -5,6 +5,7 @@ import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:provider/provider.dart';
+import 'package:drip/datasources/searchresults/playlistdataclass.dart' as explay;
 
 import '../../datasources/audiofiles/audiocontrolcentre.dart';
 import '../../datasources/audiofiles/audiodata.dart';
@@ -14,19 +15,44 @@ import '../../theme.dart';
 class CommonPlaylist extends StatefulWidget {
   final List<Track> currentTracks;
   final int trck;
-  const CommonPlaylist({Key? key, required this.currentTracks, required this.trck, }) : super(key: key);
+
+
+  const CommonPlaylist({Key? key, required this.currentTracks, required this.trck,   }) : super(key: key);
 
   @override
   _CommonPlaylistState createState() => _CommonPlaylistState();
 }
 
 class _CommonPlaylistState extends State<CommonPlaylist> {
+
+  List thisPage = [];
+  bool loaded = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
     var size = MediaQuery.of(context).size;
+
+
     if(widget.currentTracks.isEmpty ){
       return Text('Oops no playlist loaded');
     }
@@ -102,6 +128,7 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                          context: context);
                    },
                    builder: (BuildContext, states) {
+
                      return AnimatedContainer(
                        margin: const EdgeInsets.only(
                            left: 10, right: 10, bottom: 15),
@@ -156,13 +183,19 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                                    image: AssetImage(
                                        'assets/cover.jpg'),
                                  ),
-                                 imageUrl: widget.currentTracks[index]
-                                     .thumbnail![0]
-                                     .url
-                                     .toString()
-                                     .toString(),
+                                 imageUrl:
 
-                                 // widget.isFromPrimarySearchPage ? _songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
+                           widget.currentTracks[index].thumbnail![0].url.toString(),
+
+                                // someList[index].thumbnail![0].url.toString(),
+
+                                 // widget.currentTracks[index]
+                                 //     .thumbnail![0]
+                                 //     .url
+                                 //     .toString()
+                                 //     ,
+
+
                                  placeholder: (context, url) =>
                                      const Image(
                                          fit: BoxFit.cover,
@@ -178,10 +211,13 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                                      1 /
                                      8,
                                  child: Text(
-                                   widget.currentTracks[index]
-                                       .title
-                                       .toString(),
-                                   // widget.isFromPrimarySearchPage ? _songs[index].title.toString() : 'Kuch is tarah',
+                           widget.currentTracks[index].title.toString(),
+
+                                   // someList[index].title.toString(),
+                                   // widget.currentTracks[index]
+                                   //     .title
+                                   //     .toString(),
+
                                    overflow:
                                        TextOverflow.ellipsis,
                                  ),
@@ -194,11 +230,17 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                                      1 /
                                      15,
                                  child: Text(
-                                   widget.currentTracks[index]
-                                       .artists![0]
-                                       .name
-                                       .toString(),
-                                   // widget.isFromPrimarySearchPage ? _songs[index].artists![0].name.toString() : 'Atif',
+
+          widget.currentTracks[index].artists![0].name.toString(),
+                                   //someList[index].artists![0].name.toString(),
+
+
+                                   // widget.currentTracks[index]
+                                   //     .artists![0]
+                                   //     .name
+                                   //     .toString(),
+
+
                                    overflow:
                                        TextOverflow.ellipsis,
                                  ),
@@ -214,11 +256,15 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                                        1 /
                                        15,
                                    child: Text(
+
+                                     //someList[index].album!.name.toString(),
+
+
                                      widget.currentTracks[index]
                                          .album!
                                          .name
                                          .toString(),
-                                     //  widget.isFromPrimarySearchPage ? _songs[index].album!.name.toString() : 'The jal band',
+
                                      overflow:
                                          TextOverflow.ellipsis,
                                    ),
@@ -230,11 +276,12 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                                      1 /
                                      25,
                                  child: Text(
-                                   // 'lol',
+
+
                                    widget.currentTracks[index]
                                        .length
                                        .toString(),
-                                   //widget.isFromPrimarySearchPage ? _songs[index].duration.toString() : '5:25',
+
                                    overflow:
                                        TextOverflow.ellipsis,
                                  ),
@@ -250,57 +297,93 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
     );
  } else {
    return  CustomScrollView(
+     shrinkWrap: true,
      slivers: [
        mat.SliverAppBar(
-         title: Align(
-           alignment: Alignment.bottomLeft,
-           child: RichText(
-             //textAlign: TextAlign.justify,
-             text: TextSpan(
-               text: " ${context.watch<ActiveAudioData>().title}  \n",
-               style: typography.title,
 
-               children:  <TextSpan>[
-                 TextSpan(text:  " ${context.watch<ActiveAudioData>().artists}  ", style:typography.subtitle),
-                 //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
-               ],
-             ),
-           ),
-         ) ,
-         expandedHeight: size.height/3,
+         // title:
+         // RichText(
+         //   //textAlign: TextAlign.justify,
+         //   text: TextSpan(
+         //     text: " ${context.watch<ActiveAudioData>().title}  \n",
+         //     style: typography.title,
+         //
+         //     children:  <TextSpan>[
+         //       TextSpan(text:  " ${context.watch<ActiveAudioData>().artists}  ", style:typography.subtitle),
+         //       //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
+         //     ],
+         //   ),
+         // ) ,
+         expandedHeight: size.height *0.4,
          //pinned: true,
          stretch: true,
          snap:  true,
+         elevation: 0,
          //pinned: true,
+
          floating: true,
          stretchTriggerOffset: size.height/6,
 
          flexibleSpace: mat.FlexibleSpaceBar(
-           collapseMode: mat.CollapseMode.parallax,
-           stretchModes: const [
-             mat.StretchMode.zoomBackground,
-             mat.StretchMode.blurBackground
-           ],
-           background:  CachedNetworkImage(
-
-             // height: min(constraints.maxHeight,
-             //     constraints.maxWidth),
-             // width: min(constraints.maxHeight,
-             //     constraints.maxWidth),
-             fit: BoxFit.contain,
-             errorWidget: (context, _, __) => const Image(
-               fit: BoxFit.cover,
-               image: AssetImage('assets/cover.jpg'),
-             ),
-             imageUrl:
-             widget.currentTracks[widget.trck].thumbnail!.last.url.toString() ?? 'https://rukminim1.flixcart.com/image/416/416/poster/3/r/d/cute-cats-hd-poster-art-bshi4736-bshil4736-large-original-imaehwdptnnqz2sp.jpeg?q=70',
-             placeholder: (context, url) => const Image(
-                 fit: BoxFit.cover,
-                 image: AssetImage('assets/cover.jpg')),
+           title: Text(
+             '${context.watch<ActiveAudioData>().title}  \n"',
+             textAlign: TextAlign.center,
+             overflow: TextOverflow.ellipsis,
            ),
+           centerTitle: true,
+           titlePadding: const EdgeInsetsDirectional.only(
+             start: 72,
+             bottom: 16,
+             end: 120,
+           ),
+           background: Stack(
+             children: [
+               SizedBox.expand(
+                 child: ShaderMask(
+                   shaderCallback: (rect) {
+                     return const LinearGradient(
+                       begin: Alignment.center,
+                       end: Alignment.bottomCenter,
+                       colors: [
+                         Colors.black,
+                         Colors.transparent,
+                       ],
+                     ).createShader(
+                       Rect.fromLTRB(
+                         0,
+                         0,
+                         rect.width,
+                         rect.height,
+                       ),
+                     );
+                   },
+                   blendMode: BlendMode.dstIn,
+                   child: CachedNetworkImage(
+                     width: size.width,
+                     height: size.width,
+
+
+                     fit: BoxFit.cover,
+                     errorWidget: (context, _, __) => const Image(
+                       fit: BoxFit.cover,
+                       image: AssetImage('assets/cover.jpg'),
+                     ),
+                     imageUrl:
+                     widget.currentTracks[widget.trck].thumbnail!.last.url.toString() ?? 'https://rukminim1.flixcart.com/image/416/416/poster/3/r/d/cute-cats-hd-poster-art-bshi4736-bshil4736-large-original-imaehwdptnnqz2sp.jpeg?q=70',
+                     placeholder: (context, url) =>  const Image(
+
+                         fit: BoxFit.cover,
+                         image: AssetImage('assets/cover.jpg')),
+                   ),
+                 ),
+               ),
+
+             ],
+           ),
+         ),
 
          ),
-       ),
+
 
        SliverToBoxAdapter(
          child: SizedBox(height: 20,),

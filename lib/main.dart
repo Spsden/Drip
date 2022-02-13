@@ -456,6 +456,13 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var color =  context.watch<AppTheme>().mode ==
+        ThemeMode.dark ||
+        context.watch<AppTheme>().mode ==
+            ThemeMode.system
+        ? Colors.grey[150]
+        : Colors.grey[30];
+
     return SizedBox(
       height: 35.0,
       child: WindowTitleBarBox(
@@ -475,12 +482,12 @@ class TopBar extends StatelessWidget {
             Row(
               children: [
                 MinimizeWindowButton(
-                  colors: WindowButtonColors(iconNormal: context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.white : Colors.black),
+                  colors: WindowButtonColors(iconNormal: color),
                 ),
                 MaximizeWindowButton(
-                    colors: WindowButtonColors(iconNormal: context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.white : Colors.black)),
+                    colors: WindowButtonColors(iconNormal: color)),
                 CloseWindowButton(
-                    colors: WindowButtonColors(iconNormal: context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.white : Colors.black))
+                    colors: WindowButtonColors(iconNormal: color))
               ],
             )
           ],

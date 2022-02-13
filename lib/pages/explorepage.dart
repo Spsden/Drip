@@ -81,8 +81,6 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
       });
     }
     super.initState();
-
-
   }
 
   @override
@@ -101,11 +99,10 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
         ? MediaQuery.of(context).size.width / 2
         : MediaQuery.of(context).size.height / 2.5;
     if (boxSize > 250) boxSize = 250;
-    return  SingleChildScrollView(
+    return SingleChildScrollView(
         //dragStartBehavior: DragStartBehavior.start,
         controller: _scrollController,
         clipBehavior: Clip.hardEdge,
-
         primary: false,
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
@@ -213,14 +210,11 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                               Navigator.of(context).pushNamed('playlists',
                                   arguments: item['playlistId'].toString()
 
-                                 // arguments: headList[index]['title'].toString()
+                                  // arguments: headList[index]['title'].toString()
 
-
-                              );
+                                  );
                               // Navigator.of(context).pushNamed('searchpage',
                               //     arguments: headList[index]['title'].toString());
-
-
 
                               //   item['type'] == 'video'
                               //       ? Navigator.push(
@@ -256,17 +250,20 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color:  context.watch<AppTheme>().mode == fluent.ThemeMode.dark || context.watch<AppTheme>().mode == fluent.ThemeMode.system ? fluent.Colors.grey[150] : fluent.Colors.grey[30]
+                                    color: context.watch<AppTheme>().mode ==
+                                                fluent.ThemeMode.dark ||
+                                            context.watch<AppTheme>().mode ==
+                                                fluent.ThemeMode.system
+                                        ? fluent.Colors.grey[150]
+                                        : fluent.Colors.grey[30]
 
-
-                                   // if(co)
-
+                                    // if(co)
 
                                     //fluent.Colors.grey[40]
 
                                     // context.watch<AppTheme>().cardColor
 
-                                ),
+                                    ),
                                 margin: EdgeInsets.all(10),
                                 width: item['type'] != 'playlist'
                                     ? (boxSize - 30) * (16 / 9)
@@ -287,28 +284,24 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                           errorWidget: (context, _, __) =>
                                               Image(
                                             fit: BoxFit.cover,
-                                            image:
-                                                item['type'] != 'playlist'
-                                                    ? const AssetImage(
-                                                        'assets/ytCover.png',
-                                                      )
-                                                    : const AssetImage(
-                                                        'assets/cover.jpg',
-                                                      ),
+                                            image: item['type'] != 'playlist'
+                                                ? const AssetImage(
+                                                    'assets/ytCover.png',
+                                                  )
+                                                : const AssetImage(
+                                                    'assets/cover.jpg',
+                                                  ),
                                           ),
-                                          imageUrl:
-                                              item['image'].toString(),
-                                          placeholder: (context, url) =>
-                                              Image(
+                                          imageUrl: item['image'].toString(),
+                                          placeholder: (context, url) => Image(
                                             fit: BoxFit.cover,
-                                            image:
-                                                item['type'] != 'playlist'
-                                                    ? const AssetImage(
-                                                        'assets/ytCover.png',
-                                                      )
-                                                    : const AssetImage(
-                                                        'assets/cover.jpg',
-                                                      ),
+                                            image: item['type'] != 'playlist'
+                                                ? const AssetImage(
+                                                    'assets/ytCover.png',
+                                                  )
+                                                : const AssetImage(
+                                                    'assets/cover.jpg',
+                                                  ),
                                           ),
                                         ),
                                       ),
@@ -356,8 +349,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
               height: 65,
             )
           ],
-
-    ));
+        ));
   }
 }
 

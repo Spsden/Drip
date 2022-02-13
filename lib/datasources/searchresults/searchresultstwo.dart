@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 
+import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:http/http.dart' as http;
@@ -124,15 +125,12 @@ class SearchMusic {
       var rawResponse = response.body.toString();
 
 
-      // var watchPlaylistMap = json.decode(rawResponse) as Map;
-      // var tracks = jsonEncode(watchPlaylistMap['tracks']) ;
-      // var tracksList = jsonDecode(tracks) as List;
-      // var tracksFinal = jsonEncode(tracksList.toString());
 
       // print(tracks.toString());
       final WatchPlaylists watchPlaylists = watchPlaylistsFromJson(rawResponse);
+      print(watchPlaylists.tracks?.length);
       return watchPlaylists;
-      //print(watchPlaylists.tracks?.length);
+
 
 
     } else {
@@ -145,25 +143,38 @@ class SearchMusic {
 
   }
 
-    // if (response.statusCode == 200) {
-    //   var rawResponse = response.body.toString();
-    //
-    //
-    //   // var watchPlaylistMap = json.decode(rawResponse) as Map;
-    //   // var tracks = jsonEncode(watchPlaylistMap['tracks']) ;
-    //   // var tracksList = jsonDecode(tracks) as List;
-    //   // var tracksFinal = jsonEncode(tracksList.toString());
-    //
-    //  // print(tracks.toString());
-    //   final WatchPlaylists watchPlaylists = watchPlaylistsFromJson(rawResponse);
-    //   return watchPlaylists;
-    //  //print(watchPlaylists.tracks?.length);
-    //
-    //
-    // } else {
-    //   print(response.statusCode.toString());
-    // }
+
   }
+
+
+  static Future getPlaylist(String playlistId, int limit ) async {
+
+    final response = await http.get(Uri.parse(serverAddress + 'searchplaylist?playlistId=' + playlistId + '&limit=' + limit.toString()));
+
+    try{
+      if(response.statusCode == 200){
+        var rawResponse = response.body.toString();
+
+        //print(rawResponse);
+
+        final Playlists playlists = playlistsFromJson(rawResponse);
+        //print(playlists.tracks?.length);
+        return playlists;
+
+      } else {
+        print(response.statusCode.toString());
+
+      }
+
+
+
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+
+
 
 
 }

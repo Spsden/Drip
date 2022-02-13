@@ -19,7 +19,6 @@ const List<String> accentColorNames = [
   'Green',
 ];
 
-
 enum Color {
   black,
   white,
@@ -45,8 +44,6 @@ enum Color {
 //     print('meow');
 //   }
 // }
-
-
 
 class Settings extends StatelessWidget {
   const Settings({Key? key, this.controller}) : super(key: key);
@@ -86,7 +83,11 @@ class Settings extends StatelessWidget {
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
     return ScaffoldPage(
-      header: const PageHeader(title: Text('Settings',style: TextStyle(fontSize: 40),)),
+      header: const PageHeader(
+          title: Text(
+        'Settings',
+        style: TextStyle(fontSize: 40),
+      )),
       content: ListView(
         padding: EdgeInsets.only(
           bottom: kPageDefaultVerticalPadding,
@@ -100,7 +101,7 @@ class Settings extends StatelessWidget {
           spacer,
           ...List.generate(ThemeMode.values.length, (index) {
             final mode = ThemeMode.values[index];
-           // final color = mode == ThemeMode.dark ? Colors.grey[50] : Colors.grey[150];
+            // final color = mode == ThemeMode.dark ? Colors.grey[50] : Colors.grey[150];
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: RadioButton(
@@ -121,9 +122,9 @@ class Settings extends StatelessWidget {
             'Navigation Pane Display Mode ',
             style: FluentTheme.of(context).typography.subtitle,
           ),
-           Text(
+          Text(
             'Keep it at compact for optimised scaling \n Buggy now :(  ',
-    style: FluentTheme.of(context).typography.caption,
+            style: FluentTheme.of(context).typography.caption,
           ),
           spacer,
           ...List.generate(PaneDisplayMode.values.length, (index) {
