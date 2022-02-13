@@ -235,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
-      appBar:  NavigationAppBar(
+      appBar:  const NavigationAppBar(
 
 
         // leading:  Padding(
@@ -254,12 +254,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
         selected: _selectedIndex,
         onChanged: (i) {
+
           index = i;
           _selectedIndex = i;
           _pageController.animateToPage(index,
               curve: Curves.fastLinearToSlowEaseIn,
               duration: const Duration(milliseconds: 400));
           setState(() {
+            if (!sheetCollapsed) {
+              _sheetcontroller.collapse();
+              sheetCollapsed = true;
+            }
+
 
           });
 
@@ -459,9 +465,9 @@ class TopBar extends StatelessWidget {
             Expanded(
                 child: MoveWindow(
                   child: Padding(
-                    padding: mat.EdgeInsets.only(top: 5),
+                    padding: mat.EdgeInsets.only(top: 7),
                     child: const Text('Drip',
-                      style: TextStyle(fontSize: 20),),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                   ),
                 )),
 
@@ -469,12 +475,12 @@ class TopBar extends StatelessWidget {
             Row(
               children: [
                 MinimizeWindowButton(
-                  colors: WindowButtonColors(iconNormal: Colors.white),
+                  colors: WindowButtonColors(iconNormal: context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.white : Colors.black),
                 ),
                 MaximizeWindowButton(
-                    colors: WindowButtonColors(iconNormal: Colors.white)),
+                    colors: WindowButtonColors(iconNormal: context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.white : Colors.black)),
                 CloseWindowButton(
-                    colors: WindowButtonColors(iconNormal: Colors.white))
+                    colors: WindowButtonColors(iconNormal: context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.white : Colors.black))
               ],
             )
           ],

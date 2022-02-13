@@ -110,15 +110,20 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                        decoration: BoxDecoration(
                            borderRadius:
                                BorderRadius.circular(8),
-                           color: index == widget.trck ? context.watch<AppTheme>().color :
-                               context.watch<AppTheme>().mode ==
-                                           ThemeMode.dark ||
-                                       context
-                                               .watch<AppTheme>()
-                                               .mode ==
-                                           ThemeMode.system
-                                   ? Colors.grey[150]
-                                   : Colors.grey[30]),
+                           color: Colors.grey[30].withOpacity(0.2)
+                           // color:
+                           // index == widget.trck ? context.watch<AppTheme>().color :
+                           //     context.watch<AppTheme>().mode ==
+                           //                 ThemeMode.dark ||
+                           //             context
+                           //                     .watch<AppTheme>()
+                           //                     .mode ==
+                           //                 ThemeMode.system
+                           //         ? Colors.grey[150]
+                           //         : Colors.grey[30]
+
+
+                       ),
                        duration: FluentTheme.of(context)
                            .fastAnimationDuration,
                        child: ClipRRect(

@@ -121,7 +121,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
               color: context.watch<AppTheme>().color, size: 300),
         )
       : Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 8.0, top: 100),
+          padding: const EdgeInsets.only(left: 10.0, right: 8.0, top: 90),
           child: ScrollConfiguration(
             behavior: const FluentScrollBehavior(),
             child: ListView(

@@ -118,21 +118,51 @@ class SearchMusic {
   static Future getWatchPlaylist(String videoId,int limit) async {
     final response = await http.get(Uri.parse(serverAddress + 'searchwatchplaylist?videoId=' + videoId + '&limit=' + limit.toString()));
 
+
+  try {
     if (response.statusCode == 200) {
       var rawResponse = response.body.toString();
+
 
       // var watchPlaylistMap = json.decode(rawResponse) as Map;
       // var tracks = jsonEncode(watchPlaylistMap['tracks']) ;
       // var tracksList = jsonDecode(tracks) as List;
       // var tracksFinal = jsonEncode(tracksList.toString());
 
-     // print(tracks.toString());
+      // print(tracks.toString());
       final WatchPlaylists watchPlaylists = watchPlaylistsFromJson(rawResponse);
       return watchPlaylists;
-     // print(watchPlaylists.length);
+      //print(watchPlaylists.tracks?.length);
 
 
+    } else {
+      print(response.statusCode.toString());
     }
+
+
+  } catch (e) {
+    print(e.toString());
+
+  }
+
+    // if (response.statusCode == 200) {
+    //   var rawResponse = response.body.toString();
+    //
+    //
+    //   // var watchPlaylistMap = json.decode(rawResponse) as Map;
+    //   // var tracks = jsonEncode(watchPlaylistMap['tracks']) ;
+    //   // var tracksList = jsonDecode(tracks) as List;
+    //   // var tracksFinal = jsonEncode(tracksList.toString());
+    //
+    //  // print(tracks.toString());
+    //   final WatchPlaylists watchPlaylists = watchPlaylistsFromJson(rawResponse);
+    //   return watchPlaylists;
+    //  //print(watchPlaylists.tracks?.length);
+    //
+    //
+    // } else {
+    //   print(response.statusCode.toString());
+    // }
   }
 
 

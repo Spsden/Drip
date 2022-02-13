@@ -90,7 +90,10 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
 
     return mat.Scaffold(
       body: FloatingSearchBar(
-        border: BorderSide(color: context.watch<AppTheme>().color,width: 2,style: BorderStyle.solid),
+        width: MediaQuery.of(context).size.width/2,
+        border: BorderSide(color: context.watch<AppTheme>().color,width: 2,style: BorderStyle.none),
+        borderRadius: BorderRadius.circular(10),
+        margins: const EdgeInsets.only(top: 10),
         //axisAlignment: -1,
 
 

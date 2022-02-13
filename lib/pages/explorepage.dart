@@ -211,10 +211,15 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                           return GestureDetector(
                             onTap: () {
                               Navigator.of(context).pushNamed('playlists',
+                                  arguments: item['playlistId'].toString()
+
                                  // arguments: headList[index]['title'].toString()
 
 
                               );
+                              // Navigator.of(context).pushNamed('searchpage',
+                              //     arguments: headList[index]['title'].toString());
+
 
 
                               //   item['type'] == 'video'

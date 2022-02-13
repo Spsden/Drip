@@ -1,3 +1,4 @@
+import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/searchresultstwo.dart';
 import 'package:drip/pages/common/listoftracks.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -30,17 +31,15 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
     //fetchPlaylist(widget.playlistId);
     super.initState();
-  }
+
+    // fetch() async{
+    //    watchPlaylists =  await AudioControlClass.playlistFetch(widget.playlistId) as WatchPlaylists;
+    //   playlistTracks = watchPlaylists.tracks!;
+    //   fetched = true;
+    //
+    // }
 
 
-  Future <void> fetchPlaylist(String playlistId) async{
-
-    await SearchMusic.getWatchPlaylist(playlistId, 30).then((value) => {
-
-
-        playlistTracks = value.tracks
-
-    });
   }
 
   @override
@@ -56,23 +55,18 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
   @override
   Widget build(BuildContext context) {
-    if (!status)  {
+    if(!status){
       status = true;
-      SearchMusic.getWatchPlaylist('RDAMVMs-bZD3O3P80',30)
-          .then((value) {
-        if (mounted) {
+      SearchMusic.getWatchPlaylist(widget.playlistId, 10).then((value) => {
+        if(mounted){
           setState(() {
-            watchPlaylists = value;
-            print(value.toString());
-
-            playlistTracks = watchPlaylists.tracks!;
-
-            // _topresults = listOfSearchResults['topresults'];
-            fetched = true;
-          });
+            playlistTracks = value;
+          })
         }
       });
+
     }
+
 
     return Column(
       children: [
@@ -82,6 +76,21 @@ class _PlaylistMainState extends State<PlaylistMain> {
             onPressed: (){
               Navigator.of(context).pop();
             }),
+
+        RaisedButton(onPressed: () async{
+          print(widget.playlistId);
+
+
+
+        }
+        //   print(widget.playlistId.toString() + 'hagduhgfhusd');
+        //   await SearchMusic.getWatchPlaylist(widget.playlistId, 10).then((value) => {
+        //     print(value.toString())
+        //   });
+        //
+        // }
+
+        ),
 
         Expanded(child:
         (!fetched) ?
