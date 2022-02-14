@@ -109,7 +109,7 @@ class TrackCardLarge extends StatelessWidget {
                   width: size * 1 / 8,
                   child: Text(
                     data.artist,
-                    // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
