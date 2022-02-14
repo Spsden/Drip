@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
+import 'package:drip/pages/common/commonlistoftracks.dart';
 
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/currentplaylist.dart';
@@ -13,6 +14,7 @@ import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
@@ -207,6 +209,8 @@ class _MyHomePageState extends State<MyHomePage> {
       //const YouTubeHomeScreen(),
       const SecondPageStack(),
 
+      //TrackCard(),
+
       const PlayListMain(),
       const CurrentPlaylist(fromMainPage: true),
 
@@ -236,15 +240,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
-      appBar:  const NavigationAppBar(
+      appBar:   NavigationAppBar(
+
+        //leading: BackBu
 
 
         // leading:  Padding(
         //   padding: EdgeInsets.only(top: 5),
-        //     child: IconButton(onPressed: () {
+        //     child: Navigator.of(context).canPop() ?
+        //
+        //     IconButton(onPressed: () {
         //       Navigator.of(context).pop();
-        //     }, icon: Icon(FluentIcons.back),)),
-        // //automaticallyImplyLeading: ,
+        //     }, icon: Icon(FluentIcons.back),) : Icon(FluentIcons.back)
+        //
+        // ),
+        //automaticallyImplyLeading: ,
 
         title: TopBar()
 

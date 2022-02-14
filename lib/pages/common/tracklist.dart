@@ -94,6 +94,8 @@ class _TrackBarsState extends State<TrackBars> {
                       color: context.watch<AppTheme>().color, size: 100));
             } else {
               return HoverButton(
+                
+
                 cursor: SystemMouseCursors.copy,
                 // splashColor: Colors.grey[130],
                 // customBorder: mat.ShapeBorder(),
