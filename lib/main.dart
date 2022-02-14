@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
-import 'package:drip/pages/common/musiclist.dart';
+
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/explorepage.dart';
@@ -208,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const SecondPageStack(),
 
       const PlayListMain(),
+      const CurrentPlaylist(fromMainPage: true),
 
 
       Settings(controller: settingsController,)
@@ -310,6 +311,10 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text('Song'),
           ),
           PaneItemSeparator(),
+          PaneItem(
+            icon: mat.Icon(FluentIcons.playlist_music),
+            title: const Text('Play queue'),
+          ),
 
         ],
         // autoSuggestBox: AutoSuggestBox(
@@ -364,7 +369,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Container(
                         height: MediaQuery.of(context).size.height -155,
                         color: Colors.transparent,
-                        child:   CurrentPlaylist(),
+                        child:    CurrentPlaylist(fromMainPage: false),
                       ),
                     ),
                   );
@@ -460,8 +465,8 @@ class TopBar extends StatelessWidget {
         ThemeMode.dark ||
         context.watch<AppTheme>().mode ==
             ThemeMode.system
-        ? Colors.grey[150]
-        : Colors.grey[30];
+        ? Colors.grey[30]
+        :  Colors.grey[150];
 
     return SizedBox(
       height: 35.0,
@@ -474,7 +479,7 @@ class TopBar extends StatelessWidget {
                   child: Padding(
                     padding: mat.EdgeInsets.only(top: 7),
                     child: const Text('Drip',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
                   ),
                 )),
 

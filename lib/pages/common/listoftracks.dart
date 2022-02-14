@@ -249,26 +249,26 @@ class _CommonPlaylistState extends State<CommonPlaylist> {
                                if (MediaQuery.of(context)
                                        .size
                                        .width > 1000)
-                                 SizedBox(
-                                   width: MediaQuery.of(context)
-                                           .size
-                                           .width *
-                                       1 /
-                                       15,
-                                   child: Text(
-
-                                     //someList[index].album!.name.toString(),
-
-
-                                     widget.currentTracks[index]
-                                         .album!
-                                         .name
-                                         .toString(),
-
-                                     overflow:
-                                         TextOverflow.ellipsis,
-                                   ),
-                                 ),
+                                 // SizedBox(
+                                 //   width: MediaQuery.of(context)
+                                 //           .size
+                                 //           .width *
+                                 //       1 /
+                                 //       15,
+                                 //   child: Text(
+                                 //
+                                 //     //someList[index].album!.name.toString(),
+                                 //
+                                 //
+                                 //     widget.currentTracks[index]
+                                 //         .album!
+                                 //         .name
+                                 //         .toString(),
+                                 //
+                                 //     overflow:
+                                 //         TextOverflow.ellipsis,
+                                 //   ),
+                                 // ),
                                SizedBox(
                                  width: MediaQuery.of(context)
                                          .size
@@ -606,83 +606,103 @@ class AlbumArtCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     var size = MediaQuery.of(context).size;
-    return Container(
-      padding: const EdgeInsets.all(20),
-      constraints: BoxConstraints(
-          maxHeight: size.width / 2.5, maxWidth: size.width / 2.5),
-      // decoration: BoxDecoration(
-      //   borderRadius: BorderRadius.circular(8)
-      // ),
-
-      child: mat.Card(
-        clipBehavior: Clip.antiAlias,
-        shape: mat.RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+    return Column(
+      crossAxisAlignment: mat.CrossAxisAlignment.start,
+      children: [
+        Text(
+          '  Play queue',
+          style: TextStyle(fontSize: 40,fontWeight: mat.FontWeight.w600),
         ),
-        child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) =>
-                Stack(
-                  children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          constraints: BoxConstraints(
+              maxHeight: size.width > 1000 ? 450 :
 
-                                 CachedNetworkImage(
-                                  height: min(constraints.maxHeight,
-                                      constraints.maxWidth),
-                                  width: min(constraints.maxHeight,
-                                      constraints.maxWidth),
-                                  fit: BoxFit.cover,
-                                  errorWidget: (context, _, __) => const Image(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage('assets/cover.jpg'),
-                                  ),
-                                  imageUrl:
-                                  tracks[trck].thumbnail!.last.url.toString() ,
-                                  placeholder: (context, url) => const Image(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage('assets/cover.jpg')),
+              size.width / 2.5,
+
+              maxWidth: size.width > 1000 ? 450 :
+
+    size.width / 2.5,),
+          // decoration: BoxDecoration(
+          //   borderRadius: BorderRadius.circular(8)
+          // ),
+
+          child: mat.Card(
+            clipBehavior: Clip.antiAlias,
+            shape: mat.RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) =>
+                    Stack(
+                      children: [
+
+                        CachedNetworkImage(
+                          height: min(constraints.maxHeight,
+                              constraints.maxWidth),
+                          width: min(constraints.maxHeight,
+                              constraints.maxWidth),
+                          fit: BoxFit.cover,
+                          errorWidget: (context, _, __) => const Image(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/cover.jpg'),
+                          ),
+                          imageUrl:
+                          tracks[trck].thumbnail!.last.url.toString() ,
+                          placeholder: (context, url) => const Image(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/cover.jpg')),
+                        ),
+
+                        // Image.network(
+                        //
+                        //   "https://wallpaperaccess.com/full/2817687.jpg",
+                        //   fit: BoxFit.cover,
+                        //   height: min(constraints.maxHeight,
+                        //       constraints.maxWidth),
+                        //   width: min(constraints.maxHeight,
+                        //       constraints.maxWidth),
+                        // ),
+                        Container(
+                          height: min(constraints.maxHeight, constraints.maxWidth),
+                          width: min(constraints.maxHeight, constraints.maxWidth),
+                          //margin: const mat.EdgeInsets.only(bottom: 10),
+                          child: mat.Align(
+                              alignment: Alignment.bottomLeft,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: " ${context.watch<ActiveAudioData>().title}  \n",
+                                  style: typography.title,
+
+                                  children:  <TextSpan>[
+                                    TextSpan(text:  " ${context.watch<ActiveAudioData>().artists}  ", style:typography.subtitle),
+                                    //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
+                                  ],
                                 ),
+                              )
+                          ),
+                          decoration: const BoxDecoration(
+                              gradient: mat.LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    // const Color(0xCC000000),
+                                    Color(0x00000000),
+                                    Color(0x00000000),
+                                    Color(0xCC000000),
+                                    // context.watch<AppTheme>().color.withOpacity(0.5),
+                                    Color(0xCC000000),
+                                  ])),
+                        ),
 
-                    // Image.network(
-                    //
-                    //   "https://wallpaperaccess.com/full/2817687.jpg",
-                    //   fit: BoxFit.cover,
-                    //   height: min(constraints.maxHeight,
-                    //       constraints.maxWidth),
-                    //   width: min(constraints.maxHeight,
-                    //       constraints.maxWidth),
-                    // ),
-                    Container(
-                      height: min(constraints.maxHeight, constraints.maxWidth),
-                      width: min(constraints.maxHeight, constraints.maxWidth),
-                      margin: const mat.EdgeInsets.only(bottom: 10),
-                      child: mat.Align(
-                          alignment: Alignment.bottomLeft,
-                          child: RichText(
-                            text: TextSpan(
-                              text: " ${context.watch<ActiveAudioData>().title}  \n",
-                              style: typography.title,
 
-                              children:  <TextSpan>[
-                                TextSpan(text:  " ${context.watch<ActiveAudioData>().artists}  ", style:typography.subtitle),
-                                //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
-                              ],
-                            ),
-                          )
-                      ),
-                      decoration: const BoxDecoration(
-                          gradient: mat.LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                // const Color(0xCC000000),
-                                Color(0x00000000),
-                                Color(0x00000000),
-                                // context.watch<AppTheme>().color.withOpacity(0.5),
-                                Color(0xCC000000),
-                              ])),
-                    )
-                  ],
-                )),
-      ),
+                      ],
+                    )),
+          ),
+        ),
+
+      ],
+
     );
   }
 }

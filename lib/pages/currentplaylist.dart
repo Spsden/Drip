@@ -15,7 +15,8 @@ import '../datasources/audiofiles/audiodata.dart';
 import '../datasources/searchresults/watchplaylistdataclass.dart';
 
 class CurrentPlaylist extends StatefulWidget {
-  const CurrentPlaylist({Key? key}) : super(key: key);
+  final bool fromMainPage;
+  const CurrentPlaylist({Key? key, required this.fromMainPage}) : super(key: key);
 
   @override
   _CurrentPlaylistState createState() => _CurrentPlaylistState();
@@ -50,7 +51,16 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
             return ValueListenableBuilder<List<Track>>(
                 valueListenable: tracklist,
                 builder: (_, currentTracks, __) {
-                  return CommonPlaylist(currentTracks: currentTracks, trck: trck,);
+                 // if(widget.fromMainPage){
+                 //   return Column(
+                 //     children: [
+                 //     CommonPlaylist(currentTracks: currentTracks, trck: trck,),
+                 //       SizedBox(height: 50,)
+                 //     ],
+                 //   );
+                 // } else {
+                   return CommonPlaylist(currentTracks: currentTracks, trck: trck,);
+                // }
                 });
           });
 

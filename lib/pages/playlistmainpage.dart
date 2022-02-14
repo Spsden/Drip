@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
     as watch;
 
+import '../datasources/audiofiles/audiodata.dart';
 import '../theme.dart';
 
 class PlaylistMain extends StatefulWidget {
@@ -106,12 +107,13 @@ class _PlaylistMainState extends State<PlaylistMain> {
                         color: context.watch<AppTheme>().color, size: 300),
                   )
                 : SingleChildScrollView(
+             // padding: EdgeInsets.all(15),
              // controller: _scrollController,
               clipBehavior: Clip.hardEdge,
               primary: false,
               physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics()),
-            //  padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+             /// padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
 
                   child: Column(
                       children: [
@@ -230,19 +232,126 @@ class _PlaylistMainState extends State<PlaylistMain> {
                         ),
                         
                          ListView.builder(
+
                              physics: const BouncingScrollPhysics(),
                              shrinkWrap: true,
-                             padding: const EdgeInsets.only(bottom: 10),
-                            itemCount: myProducts.length,
+                             padding: const EdgeInsets.all( 15),
+                            itemCount: _tracks.length,
 
                               itemBuilder: (context,index) {
-                              return mat.Card(
-                                key: UniqueKey(),
+                              return HoverButton(
+                                cursor: SystemMouseCursors.copy,
+                                // splashColor: Colors.grey[130],
+                                // customBorder: mat.ShapeBorder(),
+                                //hoverColor: Colors.grey[130],
+                                onPressed: () async {
+                                   var audioUrl =
+                                   await AudioControlClass.getAudioUri(_tracks[index].videoId.toString());
+                                  // print(audioUrl.toString());
 
-                                child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text(myProducts[index])),
+                                  playerAlerts.buffering = true;
+                                  await context.read<ActiveAudioData>().songDetails(
+                                      audioUrl,
+                                      _tracks[index].videoId.toString(),
+                                      _tracks[index].artists![0].name,
+                                      _tracks[index].title.toString(),
+                                      _tracks[index].thumbnails[0].url.toString());
 
+                                 await AudioControlClass.play(audioUrl: audioUrl, videoId: _tracks[index].videoId.toString(), context: context);
+                                },
+                                builder: (BuildContext, states) {
+                                  return AnimatedContainer(
+                                    margin: const EdgeInsets.only(left: 10, right: 20, bottom: 15),
+                                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                            context.watch<AppTheme>().mode ==
+                                                ThemeMode.system
+                                            ? Colors.grey[150]
+                                            : Colors.grey[30]
+
+                                      //
+                                      // ButtonThemeData.buttonColor(Brightness.dark, states
+                                      //     // FluentTheme.of(context),
+                                      //     // states,
+                                      //
+                                      //     ),
+                                    ),
+                                    duration: FluentTheme.of(context).fastAnimationDuration,
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            CachedNetworkImage(
+                                              width: 40,
+                                              height: 40,
+                                              imageBuilder: (context, imageProvider) => CircleAvatar(
+                                                backgroundColor: Colors.transparent,
+                                                foregroundColor: Colors.transparent,
+                                                radius: 100,
+                                                backgroundImage: imageProvider,
+                                              ),
+                                              fit: BoxFit.cover,
+                                              errorWidget: (context, _, __) => const Image(
+                                                fit: BoxFit.cover,
+                                                image: AssetImage('assets/cover.jpg'),
+                                              ),
+                                              imageUrl: _tracks[index].thumbnails.first.url.toString(),
+
+                                              // widget.isFromPrimarySearchPage ? widget.songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
+                                              placeholder: (context, url) => const Image(
+                                                  fit: BoxFit.cover,
+                                                  image: AssetImage('assets/cover.jpg')),
+                                            ),
+                                            spacer,
+
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 1 / 4,
+                                              child: Text(
+                                                _tracks[index].title.toString(),
+                                                // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            spacer,
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 1 / 8,
+                                              child: Text(
+                                                  _tracks[index].artists![0].name.toString(),
+                                                // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            spacer,
+                                            // if( MediaQuery.of(context).size.width > 500)
+                                            //   SizedBox(
+                                            //     width: MediaQuery.of(context).size.width * 1 / 8,
+                                            //     child: Text(
+                                            //       'lol',
+                                            //     //  _tracks[index].album.name.toString(),
+                                            //       //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
+                                            //       overflow: TextOverflow.ellipsis,
+                                            //     ),
+                                            //   ),
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 1 / 15,
+                                              child: Text(
+                                                _tracks[index].duration.toString(),
+                                                //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            biggerSpacer,
+                                            const Icon(FluentIcons.play)
+                                            // mat.IconButton(
+                                            //     iconSize : 10,
+                                            //     onPressed: () {}, icon: Icon(FluentIcons.play))
+                                          ],
+                                        )),
+                                  );
+                                },
                               );
                               }),
 
