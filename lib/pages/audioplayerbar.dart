@@ -27,7 +27,7 @@ class AudioPlayerBar extends StatefulWidget {
 }
 
 class AudioPlayerBarState extends State<AudioPlayerBar>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin,AutomaticKeepAliveClientMixin<AudioPlayerBar>  {
 
 
   bool isPlaying = false;
@@ -89,6 +89,10 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     );
 
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class TrackInfo extends StatelessWidget {
@@ -96,6 +100,7 @@ class TrackInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //super.build(context);
     return Row(
       children: [
 

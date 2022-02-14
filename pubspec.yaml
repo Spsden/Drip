@@ -58,6 +58,7 @@ dependencies:
   material_floating_search_bar: ^0.3.6
   infinite_scroll_pagination: ^3.1.0
   lottie: ^1.2.1
+  msix: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -113,3 +114,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+msix_config:
+  display_name: Drip
+  publisher_display_name: SurajPratapSingh
+  identity_name: spden.app.drip
+  msix_version: 1.0.0.0
+  #logo_path: C:\<PathToIcon>\<Logo.png>
+  capabilities: "internetClient"

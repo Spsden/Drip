@@ -127,3 +127,37 @@ class _SecondPageStackState extends State<SecondPageStack> {
     );
   }
 }
+
+// class SecondPageStack extends StatefulWidget {
+//   const SecondPageStack({Key? key}) : super(key: key);
+//
+//   @override
+//   _SecondPageStackState createState() => _SecondPageStackState();
+// }
+//
+// class _SecondPageStackState extends State<SecondPageStack> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Navigator(
+//       initialRoute: 'searchpage',
+//       onGenerateRoute: (RouteSettings settingsforpagetwo) {
+//         switch (settingsforpagetwo.name) {
+//           case 'searchpage':
+//             return MaterialPageRoute(
+//                 builder: (context) => AllSearchResults(searchQuery: ''),
+//                 settings: settingsforpagetwo);
+//             break;
+//
+//           case 'songslistpage':
+//             final args = settingsforpagetwo.arguments;
+//             return MaterialPageRoute(
+//                 builder: (context) => TrackList(songQuery: args.toString(),
+//                   // incomingSongQuery: args.toString(),
+//                 ),
+//                 settings: settingsforpagetwo);
+//             break;
+//         }
+//       },
+//     );
+//   }
+// }

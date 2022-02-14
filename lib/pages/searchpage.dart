@@ -99,20 +99,15 @@ class _AllSearchResultsState extends State<AllSearchResults> {
       listOfSearchResults = {};
     });
       },
-      body: _controller.query.isEmpty ?  Container(
-
-            child: Center(
-              child: Column(
-                children: [
-                  SizedBox(height: MediaQuery.of(context).size.height/2,),
-                  Lottie.asset('assets/searchanimation.json'),
-                  Text('Search something',style: typography.body,)
-                ],
-              ),
-            )
-
-
-          ) :
+      body: !status ?  Center(
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height/2,),
+            Lottie.asset('assets/searchanimation.json'),
+            Text('Search something',style: typography.body,)
+          ],
+        ),
+      ) :
 
 
       (!fetched)
