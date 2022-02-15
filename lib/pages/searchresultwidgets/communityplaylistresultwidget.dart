@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart' ;
+import 'package:flutter/material.dart' as mat;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,13 @@ class CommunityPlaylistSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool rotated =
+        MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
+    double boxSize = !rotated
+        ? MediaQuery.of(context).size.width / 2
+        : MediaQuery.of(context).size.height / 2.5;
+    if (boxSize > 250) boxSize = 250;
+    Typography typography = FluentTheme.of(context).typography;
     return Column(
       children: [
 
@@ -32,73 +40,92 @@ class CommunityPlaylistSearch extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
 
             itemBuilder: (context, index) {
-              return Container(
-                color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
-                    context.watch<AppTheme>().mode ==
-                        ThemeMode.system
-                    ? Colors.grey[150]
-                    : Colors.grey[30],
-                margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                width: 200,
-                child: InkWell(
-                  onTap: () {
+              return mat.InkWell(
 
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
-                        context.watch<AppTheme>().mode ==
-                            ThemeMode.system
-                        ? Colors.grey[150]
-                        : Colors.grey[30],
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      alignment: WrapAlignment.center,
+                onTap: () {
+                  Navigator.of(context).pushNamed('playlists',
+                      arguments: communityPlaylist[index].browseId.toString()
+
+                    // arguments: headList[index]['title'].toString()
+
+                  );
+                 // Navigator.
+
+                },
+                child:  Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color:
+                        context.watch<AppTheme>().mode == ThemeMode.dark ||
+                            context.watch<AppTheme>().mode ==
+                                ThemeMode.system
+                            ? Colors.grey[150]
+                            : Colors.grey[30]
+
+                      // if(co)
+
+                      //fluent.Colors.grey[40]
+
+                      // context.watch<AppTheme>().cardColor
+
+                    ),
+                    margin: EdgeInsets.all(10),
+                    width: boxSize - 30,
+                    child: Column(
                       children: [
-                        CachedNetworkImage(
-                          width: 180,
-                          height: 180,
-                          //   imageBuilder: (context, imageProvider) =>
-                          //  ,
-                          // imageBuilder: (context, imageProvider) =>
-                          //     CircleAvatar(
-                          //   radius: 80,
-                          //   backgroundImage: imageProvider,
-                          // ),
-                          fit: BoxFit.cover,
-                          errorWidget: (context, _, __) => const Image(
-                            fit: BoxFit.cover,
-                            image: AssetImage('assets/artist.jpg'),
+                        Expanded(
+                          child: mat.Card(
+                            margin: EdgeInsets.only(top: 15.0),
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            clipBehavior: Clip.antiAlias,
+                            child: CachedNetworkImage(
+                              width: 150,
+                              height: 150,
+                              // imageBuilder: (context, imageProvider) =>
+                              //     CircleAvatar(
+                              //   radius: 80,
+                              //   backgroundImage: imageProvider,
+                              // ),
+                              fit: BoxFit.cover,
+                              errorWidget: (context, _, __) => const Image(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/artist.jpg'),
+                              ),
+                              imageUrl:
+                              communityPlaylist[index].thumbnails[1].url.toString(),
+                              placeholder: (context, url) => const Image(
+                                  fit: BoxFit.fill,
+                                  image: AssetImage('assets/artist.jpg')),
+                            ),
                           ),
-                          imageUrl: communityPlaylist[index]
-                              .thumbnails[0]
-                              .url
-                              .toString(),
-                          placeholder: (context, url) => const Image(
-                              fit: BoxFit.fill,
-                              image: AssetImage('assets/artist.jpg')),
                         ),
-                        ListTile(
-                          title: Text(
-                            communityPlaylist[index].title.toString(),
-                            style: const TextStyle(
-                              ///color: Theme.of(context).colorScheme.secondary,
-                              color: Colors.white,
-                              fontSize: 18,
-                              overflow: TextOverflow.ellipsis,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                          subtitle: Text(
-                            communityPlaylist[index].author.toString(),
-                            style: const TextStyle(
-                              ///color: Theme.of(context).colorScheme.secondary,
-                              color: Colors.white,
-                              fontSize: 18,
-                              overflow: TextOverflow.ellipsis,
-                              fontWeight: FontWeight.normal,
-                            ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        Text(
+                          communityPlaylist[index].title.toString(),
+                          style:
+                          typography.bodyStrong?.apply(fontSizeFactor: 1.2),
+                          textAlign: TextAlign.center,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 15),
+                          child: Text(
+                            communityPlaylist[index].author.toString() +
+                                '\n' +
+                                communityPlaylist[index].itemCount.toString(),
+                            style: typography.bodyStrong
+                                ?.apply(fontSizeFactor: 1.0),
+                            textAlign: TextAlign.center,
+                            softWrap: false,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         )
                       ],

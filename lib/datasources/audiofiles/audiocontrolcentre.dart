@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 
 import 'package:dart_vlc/dart_vlc.dart';
-import 'package:drip/datasources/searchresults/searchresultstwo.dart';
+import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:dart_vlc/dart_vlc.dart' as mediaplayer;
@@ -15,7 +15,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import '../searchresults/songsdataclass.dart';
 import 'audiodartclass.dart';
-import 'audiodata.dart';
+import 'activeaudiodata.dart';
 
 
 enum ButtonState { paused, playing, loading }

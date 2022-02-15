@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:drip/datasources/searchresults/albumsdataclass.dart';
 import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
-import 'package:drip/datasources/searchresults/searchresultstwo.dart';
+import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 
 import 'package:drip/pages/common/tracklist.dart';
@@ -71,7 +71,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
     //     ),
     //   );
     // }
-     if (!status) {
+    if (!status) {
       status = true;
       SearchMusic.getArtists(query == '' ? widget.searchQuery : query)
           .then((value) {
@@ -92,199 +92,203 @@ class _AllSearchResultsState extends State<AllSearchResults> {
       liveSearch: false,
       controller: _controller,
       onSubmitted: (searchQuery) async {
-    setState(() {
-      fetched = false;
-      query = searchQuery;
-      status = false;
-      listOfSearchResults = {};
-    });
+        setState(() {
+          fetched = false;
+          query = searchQuery;
+          status = false;
+          listOfSearchResults = {};
+        });
       },
       body:
 
-      // _controller.query.isEmpty ?  Center(
-      //   child: Column(
-      //     children: [
-      //       SizedBox(height: MediaQuery.of(context).size.height/2,),
-      //       Lottie.asset('assets/searchanimation.json'),
-      //       Text('Search something',style: typography.body,)
-      //     ],
-      //   ),
-      // ) :
+          // _controller.query.isEmpty ?  Center(
+          //   child: Column(
+          //     children: [
+          //       SizedBox(height: MediaQuery.of(context).size.height/2,),
+          //       Lottie.asset('assets/searchanimation.json'),
+          //       Text('Search something',style: typography.body,)
+          //     ],
+          //   ),
+          // ) :
 
+          (!fetched)
+              ? Center(
+                  child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: context.watch<AppTheme>().color, size: 300),
+                )
+              : Padding(
+                  padding:
+                      const EdgeInsets.only(left: 10.0, right: 10.0, top: 90),
+                  child: ScrollConfiguration(
+                    behavior: const FluentScrollBehavior(),
+                    child: ListView(
+                      dragStartBehavior: DragStartBehavior.down,
+                      physics: BouncingScrollPhysics(
+                          parent: const ClampingScrollPhysics()),
+                      //controller: controller,
+                      clipBehavior: Clip.hardEdge,
+                      primary: false,
 
-      (!fetched)
-      ? Center(
-          child: LoadingAnimationWidget.staggeredDotsWave(
-              color: context.watch<AppTheme>().color, size: 300),
-        )
-      : Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 90),
-          child: ScrollConfiguration(
-            behavior: const FluentScrollBehavior(),
-            child: ListView(
-              dragStartBehavior: DragStartBehavior.down,
-              physics: BouncingScrollPhysics(parent: const ClampingScrollPhysics()),
-              //controller: controller,
-              clipBehavior: Clip.hardEdge,
-              primary: false,
-
-              children: [
-                Text(
-                  query == ''
-                      ? 'Results for \"${widget.searchQuery}\"'
-                      : 'Results for \"$query\"',
-                  style:  typography.display?.apply(fontSizeFactor: 1.0),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                biggerSpacer,
-
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Songs",
-                      style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
-
-                      FilledButton(
-                        child: Row(
-                          children: [
-                            //Icon(FluentIcons.more),
-                           // spacer,
-                            Text(
-                              'Show more',
-                              style: typography.bodyStrong
-                                  ?.apply(fontSizeFactor: 1.0),
-                            ),
-                          ],
+                      children: [
+                        Text(
+                          query == ''
+                              ? 'Results for \"${widget.searchQuery}\"'
+                              : 'Results for \"$query\"',
+                          style: typography.display?.apply(fontSizeFactor: 1.0),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        onPressed: () {Navigator.of(context).pushNamed('songslistpage',arguments:  query == '' ? widget.searchQuery : query);},
-                      ),
-                      // Button(
-                      //   child: Text('Show more'
-                      //   ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
-                      //   onPressed: () {
-                      //     Navigator.of(context).pushNamed('songslistpage',arguments:  query == '' ? widget.searchQuery : query);
-                      //   },
-                      // )
-                    ],
-                  ),
-                ),
-                spacer,
-                SizedBox(
-                    //height: MediaQuery.of(context).size.height * 1 / 3,
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                       // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
+                        biggerSpacer,
 
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Songs",
+                                style: typography.subtitle
+                                    ?.apply(fontSizeFactor: 1.0),
+                              ),
+                              FilledButton(
+                                child: Row(
+                                  children: const [
+                                    //Icon(FluentIcons.more),
+                                    // spacer,
+                                    Text('Show more',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500)),
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pushNamed(
+                                      'songslistpage',
+                                      arguments: query == ''
+                                          ? widget.searchQuery
+                                          : query);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        spacer,
+                        SizedBox(
+                            //height: MediaQuery.of(context).size.height * 1 / 3,
+                            child: Container(
+                                alignment: Alignment.centerLeft,
+                                // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
 
-                    child :
+                                child: TrackBars(
+                                  songs: songs,
+                                  isFromPrimarySearchPage: true,
+                                ))),
+                        biggerSpacer,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Artists",
+                                style: typography.subtitle
+                                    ?.apply(fontSizeFactor: 1.0),
+                              ),
+                              FilledButton(
+                                child: Row(
+                                  children: const [
+                                    //Icon(FluentIcons.more),
+                                    // spacer,
+                                    Text('Show more',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500)),
+                                  ],
+                                ),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                        spacer,
+                        artists.isNotEmpty
+                            ? ArtistsSearch(artists: artists)
+                            : const Text('No Artists available'),
+                        //biggerSpacer,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Albums",
+                                style: typography.subtitle
+                                    ?.apply(fontSizeFactor: 1.0),
+                              ),
+                              FilledButton(
+                                child: Row(
+                                  children: const [
+                                    //Icon(FluentIcons.more),
+                                    // spacer,
+                                    Text('Show more',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500)),
+                                  ],
+                                ),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                        spacer,
+                        albums.isNotEmpty
+                            ? AlbumSearch(albums: albums)
+                            : const Text('No Albums available'),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        // biggerSpacer,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Community Playlists",
+                                style: typography.subtitle
+                                    ?.apply(fontSizeFactor: 1.0),
+                              ),
+                              FilledButton(
+                                child: Row(
+                                  children: const [
+                                    //Icon(FluentIcons.more),
+                                    // spacer,
+                                    Text('Show more',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500)),
+                                    spacer
+                                  ],
+                                ),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+                        spacer,
+                        communityPlaylists.isNotEmpty
+                            ? CommunityPlaylistSearch(
+                                communityPlaylist: communityPlaylists)
+                            : Text('No Playlists available'),
 
-                    TrackBars(songs: songs,isFromPrimarySearchPage: true,))
-
+                        biggerSpacer,
+                        biggerSpacer,
+                        biggerSpacer,
+                      ],
                     ),
-                biggerSpacer,
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Artists",
-                        style:  typography.subtitle?.apply(fontSizeFactor: 1.0),
-                        ),
-                      FilledButton(
-                        child: Row(
-                          children: [
-                            //Icon(FluentIcons.more),
-                            // spacer,
-                            Text(
-                              'Show more',
-                              style: typography.bodyStrong
-                                  ?.apply(fontSizeFactor: 1.0),
-                            ),
-                          ],
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
                   ),
                 ),
-                spacer,
-                artists.isNotEmpty
-                    ? ArtistsSearch(artists: artists)
-                    : const Text('No Artists available'),
-                //biggerSpacer,
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text("Albums",
-                         style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
-                      FilledButton(
-                        child: Row(
-                          children: [
-                            //Icon(FluentIcons.more),
-                            // spacer,
-                            Text(
-                              'Show more',
-                              style: typography.bodyStrong
-                                  ?.apply(fontSizeFactor: 1.0),
-                            ),
-                          ],
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-                spacer,
-                albums.isNotEmpty
-                    ? AlbumSearch(albums: albums)
-                    : const Text('No Albums available'),
-                const SizedBox(
-                  height: 40,
-                ),
-                // biggerSpacer,
-                SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text("Community Playlists"
-                       ,style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
-                      FilledButton(
-                        child: Row(
-                          children: [
-                            //Icon(FluentIcons.more),
-                            // spacer,
-                            Text(
-                              'Show more',
-                              style: typography.bodyStrong
-                                  ?.apply(fontSizeFactor: 1.0),
-                            ),
-                            spacer
-                          ],
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-                spacer,
-                communityPlaylists.isNotEmpty
-                    ? CommunityPlaylistSearch(
-                        communityPlaylist: communityPlaylists)
-                    : Text('No Playlists available'),
-
-                biggerSpacer,
-                biggerSpacer,
-                biggerSpacer,
-              ],
-            ),
-          ),
-        ),
     );
   }
 }
@@ -293,9 +297,8 @@ class MyCustomScrollBehavior extends mat.MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
-
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

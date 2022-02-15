@@ -12,7 +12,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../datasources/audiofiles/audiodata.dart';
+import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/watchplaylistdataclass.dart';
 
 class CurrentPlaylist extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/audiofiles/audiodata.dart';
-import 'package:drip/datasources/searchresults/searchresultstwo.dart';
+import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
+import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:drip/pages/search.dart';

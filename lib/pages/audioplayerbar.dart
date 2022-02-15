@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/audiofiles/audiodata.dart';
+import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -68,22 +68,28 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    return SizedBox(
-      height: 84.0,
-      width: double.infinity,
-      //color: Colors.black87,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-             TrackInfo(),
-             MediaQuery.of(context).size.width > 500 ?
-            const Spacer() : const SizedBox(width: 5,),
-           PlayBackControls(),
-            const Spacer(),
-           if (MediaQuery.of(context).size.width > 800) MoreControls(),
+    return mat.LayoutBuilder(
+      builder: (context, constraints) =>
+      SizedBox(
+        height: 84.0,
+        width: double.infinity,
+        //color: Colors.black87,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+               TrackInfo(),
+               MediaQuery.of(context).size.width > 500 ?
+              const Spacer() : const SizedBox(width: 5,),
+             PlayBackControls(),
+              const Spacer(),
+             //if (MediaQuery.of(context).size.width > 800)
+              if(constraints.maxWidth >800)
 
-          ],
+               MoreControls(),
+
+            ],
+          ),
         ),
       ),
     );

@@ -30,7 +30,7 @@ import 'package:url_strategy/url_strategy.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'datasources/audiofiles/audiocontrolcentre.dart';
-import 'datasources/audiofiles/audiodata.dart';
+import 'datasources/audiofiles/activeaudiodata.dart';
 import 'navigation/navigationstacks.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart' as av;
 import 'theme.dart';
@@ -240,21 +240,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
-      appBar:   NavigationAppBar(
+      appBar:   const NavigationAppBar(
 
         //leading: BackBu
 
-
-        // leading:  Padding(
-        //   padding: EdgeInsets.only(top: 5),
-        //     child: Navigator.of(context).canPop() ?
-        //
-        //     IconButton(onPressed: () {
-        //       Navigator.of(context).pop();
-        //     }, icon: Icon(FluentIcons.back),) : Icon(FluentIcons.back)
-        //
-        // ),
-        //automaticallyImplyLeading: ,
 
         title: TopBar()
 
@@ -322,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           PaneItemSeparator(),
           PaneItem(
-            icon: mat.Icon(FluentIcons.playlist_music),
+            icon: const mat.Icon(FluentIcons.playlist_music),
             title: const Text('Play queue'),
           ),
 

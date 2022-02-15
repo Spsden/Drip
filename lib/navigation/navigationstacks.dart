@@ -116,29 +116,52 @@ class _SecondPageStackState extends State<SecondPageStack> {
 
           case 'songslistpage':
             final args = settingsforpagetwo.arguments;
-            return MaterialPageRoute(
-                builder: (context) => TrackList(songQuery: args.toString(),
-                  // incomingSongQuery: args.toString(),
-                ),
-                settings: settingsforpagetwo);
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => TrackList(songQuery: args.toString()),
+                transitionsBuilder: (context,animation,secondaryAnimation,child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.fastLinearToSlowEaseIn;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                });
+
+
             break;
+
+          case 'communityPlaylists':
+            final args = settingsforpagetwo.arguments;
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) =>   PlaylistMain(playlistId: args.toString(),),
+                transitionsBuilder: (context,animation,secondaryAnimation,child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.fastLinearToSlowEaseIn;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                });
         }
       },
     );
   }
 }
 
-// class SecondPageStack extends StatefulWidget {
-//   const SecondPageStack({Key? key}) : super(key: key);
+
 //
-//   @override
-//   _SecondPageStackState createState() => _SecondPageStackState();
-// }
+// class CommunityPlaylistPageStack extends StatelessWidget {
+//   const CommunityPlaylistPageStack({Key? key}) : super(key: key);
 //
-// class _SecondPageStackState extends State<SecondPageStack> {
 //   @override
 //   Widget build(BuildContext context) {
-//     return Navigator(
+//     return   Navigator(
 //       initialRoute: 'searchpage',
 //       onGenerateRoute: (RouteSettings settingsforpagetwo) {
 //         switch (settingsforpagetwo.name) {
@@ -156,8 +179,12 @@ class _SecondPageStackState extends State<SecondPageStack> {
 //                 ),
 //                 settings: settingsforpagetwo);
 //             break;
+//
+//           default:
+//             throw Exception("Invalid route");
 //         }
 //       },
 //     );
 //   }
 // }
+//

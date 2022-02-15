@@ -13,8 +13,9 @@ import 'package:flutter/rendering.dart';
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../datasources/audiofiles/audiodata.dart';
+import '../datasources/audiofiles/activeaudiodata.dart';
 
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
@@ -207,12 +208,19 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                           final item = searchedList[index]['playlists'][idx];
                           return GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushNamed('playlists',
-                                  arguments: item['playlistId'].toString()
+
+                              if(item['type'] == 'video'){
+                                var query = item['title'].toString();
+                                launch('https://www.youtube.com/results?search_query=$query');
+                              } else {
+                                Navigator.of(context).pushNamed('playlists',
+                                    arguments: item['playlistId'].toString()
 
                                   // arguments: headList[index]['title'].toString()
 
-                                  );
+                                );
+                              }
+
                               // Navigator.of(context).pushNamed('searchpage',
                               //     arguments: headList[index]['title'].toString());
 

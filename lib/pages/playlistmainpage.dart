@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
-import 'package:drip/datasources/searchresults/searchresultstwo.dart';
+import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/commonlistoftracks.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
     as watch;
 
-import '../datasources/audiofiles/audiodata.dart';
+import '../datasources/audiofiles/activeaudiodata.dart';
 import '../theme.dart';
 
 class PlaylistMain extends StatefulWidget {
@@ -198,13 +198,14 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     ),
                                     FilledButton(
                                       child: Row(
-                                        children: [
+                                        children: const [
                                           Icon(FluentIcons.play),
                                           spacer,
                                           Text(
                                             'Shuffle',
-                                            style: typography.bodyStrong
-                                                ?.apply(fontSizeFactor: 1.0),
+                                              style: TextStyle(
+                                                  color: Colors.white,fontWeight: FontWeight.w500
+                                              )
                                           ),
                                         ],
                                       ),
