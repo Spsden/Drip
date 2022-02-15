@@ -95,7 +95,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                      var audioUrl =
                                      await AudioControlClass.getAudioUri(
                                          currentTracks[index].videoId.toString());
-                                     // print(audioUrl.toString());
+                                      print(audioUrl.toString());
 
                                      playerAlerts.buffering = true;
                                      await context
@@ -117,9 +117,13 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                          currentTracks[index].videoId.toString(),
                                          context: context);
                                    },
-                                   color: index / 2 != 0
+                                   color: index % 2 != 0
                                        ? Colors.transparent
-                                       : Colors.grey[150], SuperSize: size,
+                                       : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                       context.watch<AppTheme>().mode ==
+                                           ThemeMode.system
+                                       ? Colors.grey[150]
+                                       : Colors.grey[30], SuperSize: size,
                                    widthy: 800,
                                    fromQueue: true,
                                  ),
@@ -243,7 +247,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                          var audioUrl =
                                          await AudioControlClass.getAudioUri(
                                              currentTracks[index].videoId.toString());
-                                         // print(audioUrl.toString());
+                                          print(audioUrl.toString());
 
                                          playerAlerts.buffering = true;
                                          await context
@@ -265,9 +269,13 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                              currentTracks[index].videoId.toString(),
                                              context: context);
                                        },
-                                       color: index / 2 != 0
+                                       color: index % 2 != 0
                                            ? Colors.transparent
-                                           : Colors.grey[150], SuperSize: size,
+                                           : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                           context.watch<AppTheme>().mode ==
+                                               ThemeMode.system
+                                           ? Colors.grey[150]
+                                           : Colors.grey[30], SuperSize: size,
                                        widthy: 800,
                                        fromQueue: true,
                                      ),
@@ -367,20 +375,32 @@ class AlbumArtCard extends StatelessWidget {
                           height: min(constraints.maxHeight, constraints.maxWidth),
                           width: min(constraints.maxHeight, constraints.maxWidth),
                           //margin: const mat.EdgeInsets.only(bottom: 10),
-                          child: mat.Align(
-                              alignment: Alignment.bottomLeft,
-                              child: RichText(
-                                text: TextSpan(
-                                  text: " ${context.watch<ActiveAudioData>().title}  \n",
-                                  style: typography.title,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
 
-                                  children:  <TextSpan>[
-                                    TextSpan(text:  " ${context.watch<ActiveAudioData>().artists}  ", style:typography.subtitle),
-                                    //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
-                                  ],
-                                ),
-                              )
+
+
+                                children:  [
+                            Text(
+                             "${context.watch<ActiveAudioData>().title}",
+                              style: typography.title?.copyWith(color: Colors.white)
+
+                              // const mat.TextStyle(
+                              //   fontSize: 20,
+                              // ),
+
+                            ),
+                                  Text( "${context.watch<ActiveAudioData>().artists}  ",
+                                      textAlign: mat.TextAlign.left,
+                                      style:typography.subtitle?.copyWith(color: Colors.white)),
+                                  //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
+                                ],
+                              ),
                           ),
+
                           decoration: const BoxDecoration(
                               gradient: mat.LinearGradient(
                                   begin: Alignment.topCenter,

@@ -137,16 +137,17 @@ class TrackCardLarge extends StatelessWidget {
         ),
       );
     } else {
-      return TrackCardSmall(color: color,data: data,);
+      return TrackCardSmall(color: color,data: data, onTrackTap: () { onTrackTap(); },);
 
     }
   }
 }
 
 class TrackCardSmall extends StatelessWidget {
-  const TrackCardSmall({Key? key, required this.color, required this.data}) : super(key: key);
+  const TrackCardSmall({Key? key, required this.color, required this.data, required this.onTrackTap}) : super(key: key);
   final Color color;
   final TrackCardData data;
+  final Function() onTrackTap;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +159,9 @@ class TrackCardSmall extends StatelessWidget {
       borderRadius: mat.BorderRadius.circular(10),
       color: color,
       child: mat.InkWell(
-        onTap: () {},
+        onTap: () {
+          onTrackTap();
+        },
         child: Padding(
           padding: EdgeInsets.all(5),
           child: Row(

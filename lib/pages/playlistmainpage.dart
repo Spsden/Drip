@@ -282,9 +282,13 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                             _tracks[index].videoId.toString(),
                                         context: context);
                                   },
-                                  color: index / 2 != 0
+                                  color: index % 2 != 0
                                       ? Colors.transparent
-                                      : Colors.grey[150] , fromQueue: false, SuperSize: size,
+                                      : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                      context.watch<AppTheme>().mode ==
+                                          ThemeMode.system
+                                      ? Colors.grey[150]
+                                      : Colors.grey[30] , fromQueue: false, SuperSize: size,
                                 ),
                               );
 

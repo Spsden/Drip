@@ -180,11 +180,18 @@ abstract class AudioControlClass with ChangeNotifier{
     }
   }
 
+  AudioControlClass(){
+    @override
+    void dispose() {
+      _youtubeExplode.close();
+      player.dispose();
+    }
 
-  void dispose() {
-    _youtubeExplode.close();
-    //player.dispose();
   }
+
+
+
+
 
 
 
@@ -212,23 +219,28 @@ abstract class AudioControlClass with ChangeNotifier{
   static Future<void> previousMusic(BuildContext context) async {
     // player.next();
     // player.jump(3);
-   currentTrackIndex.value = currentMediaIndex;
-    if(currentMediaIndex == 0)
-    {
-    currentMediaIndex -=2;
-    }else {
-    currentMediaIndex--;
-    }
+
+
    currentTrackIndex.value = currentMediaIndex;
 
-    print(currentMediaIndex);
-    await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
-        tracks[currentMediaIndex-1].videoId.toString(),
-        tracks[currentMediaIndex-1].artists![0].name.toString(),
-        tracks[currentMediaIndex-1].title.toString(),
-        tracks[currentMediaIndex-1].thumbnail![0].url.toString());
+   if(currentMediaIndex > 0){
+     currentMediaIndex--;
 
-    player.open(medias[currentMediaIndex], autoStart: true);
+     currentTrackIndex.value = currentMediaIndex;
+
+     print(currentMediaIndex);
+     await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
+         tracks[currentMediaIndex-1].videoId.toString(),
+         tracks[currentMediaIndex-1].artists![0].name.toString(),
+         tracks[currentMediaIndex-1].title.toString(),
+         tracks[currentMediaIndex-1].thumbnail![0].url.toString());
+
+     player.open(medias[currentMediaIndex], autoStart: true);
+
+   }
+
+
+
   }
 
 
