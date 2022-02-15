@@ -64,6 +64,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                    return Text('Oops no playlist loaded');
                  } else if (size.width >700){
                    return Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                      children: [
                        AlbumArtCard(tracks: currentTracks,trck: trck,),
                        Expanded(

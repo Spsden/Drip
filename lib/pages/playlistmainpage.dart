@@ -36,23 +36,15 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
   @override
   void initState() {
-    // TODO: implement initState
 
-    //fetchPlaylist(widget.playlistId);
     super.initState();
 
-    // fetch() async{
-    //    _playlists =  await SearchMusic.getPlaylist(widget.playlistId, 20)
-    //
-    //   _tracks = _playlists.tracks;
-    //   fetched = true;
-    //
-    // }
+
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+
     super.dispose();
   }
 
@@ -91,15 +83,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
               }),
         ),
 
-        // mat.RaisedButton(onPressed: () async{
-        //  // SearchMusic.getWatchPlaylist('Y_GaJwGKOZ4', 20);
-        //   SearchMusic.getPlaylist(widget.playlistId, 20);
-        //   print(_tracks.length);
-        //
-        // }
-        //
-        //
-        // ),
+
 
         Expanded(
             child: (!fetched)

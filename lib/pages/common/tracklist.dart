@@ -15,6 +15,9 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../theme.dart';
+import 'commonlistoftracks.dart';
+
+///Trackbars for main Search Page
 
 class TrackBars extends StatefulWidget {
   final bool isFromPrimarySearchPage;
@@ -54,12 +57,12 @@ class _TrackBarsState extends State<TrackBars> {
     super.initState();
 
     //bool loading = _TrackListState().isLoading;
-    _sc.addListener(() {
-      if (_sc.position.pixels == _sc.position.maxScrollExtent) {
-        widget.onScroll;
-        print('scrollslol');
-      }
-    });
+    // _sc.addListener(() {
+    //   if (_sc.position.pixels == _sc.position.maxScrollExtent) {
+    //     widget.onScroll;
+    //     print('scrollslol');
+    //   }
+    // });
   }
 
   @override
@@ -93,134 +96,60 @@ class _TrackBarsState extends State<TrackBars> {
                   child: LoadingAnimationWidget.staggeredDotsWave(
                       color: context.watch<AppTheme>().color, size: 100));
             } else {
-              return HoverButton(
-                
+              return  Padding(
+                padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                child: TrackCardLarge(
+                  data: TrackCardData(
+                      title: widget.songs[index].title.toString(),
+                      artist: widget.songs[index]
+                          .artists![0]
+                          .name
+                          .toString(),
+                      album: 'Drip',
+                      duration:
+                      widget.songs[index].duration.toString(),
+                      thumbnail: widget.songs[index]
+                          .thumbnails[0]
+                          .url
+                          .toString()),
+                  songIndex: index,
+                  onTrackTap: () async {
+                    var audioUrl =
+                    await AudioControlClass.getAudioUri(
+                        widget.songs[index].videoId.toString());
+                    print(audioUrl.toString());
 
-                cursor: SystemMouseCursors.copy,
-                // splashColor: Colors.grey[130],
-                // customBorder: mat.ShapeBorder(),
-                //hoverColor: Colors.grey[130],
-                onPressed: () async {
-                  var audioUrl =
-                  await AudioControlClass.getAudioUri(widget.songs[index].videoId);
-                  print(audioUrl.toString());
+                    playerAlerts.buffering = true;
+                    await context
+                        .read<ActiveAudioData>()
+                        .songDetails(
+                        audioUrl,
+                        widget.songs[index].videoId.toString(),
+                        widget.songs[index].artists![0].name.toString(),
+                        widget.songs[index].title.toString(),
+                        widget.songs[index]
+                            .thumbnails[0]
+                            .url
+                            .toString());
+                    currentMediaIndex = 0;
 
-                  playerAlerts.buffering = true;
-                  await context.read<ActiveAudioData>().songDetails(
-                      audioUrl,
-                      widget.songs[index].videoId,
-                      widget.songs[index].artists![0].name,
-                      widget.songs[index].title,
-                      widget.songs[index].thumbnails[0].url);
-
-                  currentMediaIndex = 0;
-
-
-
-                  await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs[index].videoId.toString(), context: context);
-
-
-
-                },
-                builder: (BuildContext, states) {
-                  return AnimatedContainer(
-                    margin:
-                        const EdgeInsets.only(left: 10, right: 20, bottom: 15),
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: context.watch<AppTheme>().mode == ThemeMode.dark ||
-                          context.watch<AppTheme>().mode ==
-                              ThemeMode.system
-                          ? Colors.grey[150]
-                          : Colors.grey[30]
-
-                      // ButtonThemeData.buttonColor(
-                      //     context.watch<AppTheme>().mode == ThemeMode.dark ? Colors.grey[150] : Colors.grey[30]
-                      //     states
-                      //     // FluentTheme.of(context),
-                      //     // states,
-                      //
-                      //     ),
-                    ),
-                    duration: FluentTheme.of(context).fastAnimationDuration,
-                    child: Flex(
-                      direction: Axis.horizontal,
-                      children: [Row(mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CachedNetworkImage(
-                            width: 40,
-                            height: 40,
-                            imageBuilder: (context, imageProvider) =>
-                                CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              foregroundColor: Colors.transparent,
-                              radius: 100,
-                              backgroundImage: imageProvider,
-                            ),
-                            fit: BoxFit.cover,
-                            errorWidget: (context, _, __) => const Image(
-                              fit: BoxFit.cover,
-                              image: AssetImage('assets/cover.jpg'),
-                            ),
-                            imageUrl: widget.songs[index].thumbnails.first.url
-                                .toString(),
-
-                            // widget.isFromPrimarySearchPage ? widget.songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
-                            placeholder: (context, url) => const Image(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/cover.jpg')),
-                          ),
-                          spacer,
-
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 1 / 4,
-                            child: Text(
-                              widget.songs[index].title.toString(),
-                              // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          spacer,
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 1 / 8,
-                            child: Text(
-                              widget.songs[index].artists![0].name.toString(),
-                              // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          spacer,
-                          if( MediaQuery.of(context).size.width > 500)
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 1 / 8,
-                            child: Text(
-                              widget.songs[index].album!.name.toString(),
-                              //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 1 / 15,
-                            child: Text(
-                              widget.songs[index].duration.toString(),
-                              //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if( MediaQuery.of(context).size.width > 250)
-                          biggerSpacer,
-                         // if( MediaQuery.of(context).size.width > 250)
-                          Icon(FluentIcons.play)
-                          // mat.IconButton(
-                          //     iconSize : 10,
-                          //     onPressed: () {}, icon: Icon(FluentIcons.play))
-                        ],
-                      ),
-                    ]),
-                  );
-                },
+                    await AudioControlClass.play(
+                        audioUrl: audioUrl,
+                        videoId:
+                        widget.songs[index].videoId.toString(),
+                        context: context);
+                  },
+                  color: index % 2 != 0
+                      ? Colors.transparent
+                      : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                      context.watch<AppTheme>().mode ==
+                          ThemeMode.system
+                      ? Colors.grey[150]
+                      : Colors.grey[30], SuperSize:
+                  MediaQuery.of(context).size,
+                  widthy: 800,
+                  fromQueue: true,
+                ),
               );
             }
           }),
@@ -435,7 +364,7 @@ class _TrackListItemState extends State<TrackListItem> {
                     ),
                     imageUrl: widget.songs.thumbnails.first.url.toString(),
 
-                    // widget.isFromPrimarySearchPage ? widget.songs[index].thumbnails.first.url.toString() : 'https://loveshayariimages.in/wp-content/uploads/2020/09/Sad-Alone-Boy-Images-104.jpg',
+
                     placeholder: (context, url) => const Image(
                         fit: BoxFit.cover,
                         image: AssetImage('assets/cover.jpg')),

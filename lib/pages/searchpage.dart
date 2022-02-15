@@ -99,15 +99,17 @@ class _AllSearchResultsState extends State<AllSearchResults> {
       listOfSearchResults = {};
     });
       },
-      body: !status ?  Center(
-        child: Column(
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height/2,),
-            Lottie.asset('assets/searchanimation.json'),
-            Text('Search something',style: typography.body,)
-          ],
-        ),
-      ) :
+      body:
+
+      // _controller.query.isEmpty ?  Center(
+      //   child: Column(
+      //     children: [
+      //       SizedBox(height: MediaQuery.of(context).size.height/2,),
+      //       Lottie.asset('assets/searchanimation.json'),
+      //       Text('Search something',style: typography.body,)
+      //     ],
+      //   ),
+      // ) :
 
 
       (!fetched)
@@ -116,7 +118,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
               color: context.watch<AppTheme>().color, size: 300),
         )
       : Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 8.0, top: 90),
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 90),
           child: ScrollConfiguration(
             behavior: const FluentScrollBehavior(),
             child: ListView(
@@ -144,13 +146,28 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     children: [
                       Text("Songs",
                       style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
-                      Button(
-                        child: Text('Show more'
-                        ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('songslistpage',arguments:  query == '' ? widget.searchQuery : query);
-                        },
-                      )
+
+                      FilledButton(
+                        child: Row(
+                          children: [
+                            //Icon(FluentIcons.more),
+                           // spacer,
+                            Text(
+                              'Show more',
+                              style: typography.bodyStrong
+                                  ?.apply(fontSizeFactor: 1.0),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {Navigator.of(context).pushNamed('songslistpage',arguments:  query == '' ? widget.searchQuery : query);},
+                      ),
+                      // Button(
+                      //   child: Text('Show more'
+                      //   ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
+                      //   onPressed: () {
+                      //     Navigator.of(context).pushNamed('songslistpage',arguments:  query == '' ? widget.searchQuery : query);
+                      //   },
+                      // )
                     ],
                   ),
                 ),
@@ -162,7 +179,9 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                        // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
 
 
-                    child : TrackBars(songs: songs,isFromPrimarySearchPage: true,))
+                    child :
+
+                    TrackBars(songs: songs,isFromPrimarySearchPage: true,))
 
                     ),
                 biggerSpacer,
@@ -174,11 +193,20 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                       Text("Artists",
                         style:  typography.subtitle?.apply(fontSizeFactor: 1.0),
                         ),
-                      Button(
-                        child:  Text('Show more'
-                            ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
+                      FilledButton(
+                        child: Row(
+                          children: [
+                            //Icon(FluentIcons.more),
+                            // spacer,
+                            Text(
+                              'Show more',
+                              style: typography.bodyStrong
+                                  ?.apply(fontSizeFactor: 1.0),
+                            ),
+                          ],
+                        ),
                         onPressed: () {},
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -194,11 +222,20 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     children: [
                        Text("Albums",
                          style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
-                      Button(
-                        child:  Text('Show more'
-                          ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
+                      FilledButton(
+                        child: Row(
+                          children: [
+                            //Icon(FluentIcons.more),
+                            // spacer,
+                            Text(
+                              'Show more',
+                              style: typography.bodyStrong
+                                  ?.apply(fontSizeFactor: 1.0),
+                            ),
+                          ],
+                        ),
                         onPressed: () {},
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -217,11 +254,21 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     children: [
                        Text("Community Playlists"
                        ,style:  typography.subtitle?.apply(fontSizeFactor: 1.0),),
-                      Button(
-                        child:  Text('Show more'
-                          ,style:  typography.bodyStrong?.apply(fontSizeFactor: 1.0),),
+                      FilledButton(
+                        child: Row(
+                          children: [
+                            //Icon(FluentIcons.more),
+                            // spacer,
+                            Text(
+                              'Show more',
+                              style: typography.bodyStrong
+                                  ?.apply(fontSizeFactor: 1.0),
+                            ),
+                            spacer
+                          ],
+                        ),
                         onPressed: () {},
-                      )
+                      ),
                     ],
                   ),
                 ),

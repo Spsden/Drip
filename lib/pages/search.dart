@@ -78,7 +78,7 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
   @override
   void dispose() {
     floatController.dispose();
-    // TODO: implement dispose
+
     super.dispose();
   }
 
@@ -109,13 +109,7 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
         title: Text(selectedTerm),
         hint: "Let's Play.....",
         actions: [
-          // FloatingSearchBarAction(
-          //   showIfOpened: false,
-          //   child: CircularButton(
-          //     icon: const Icon(FluentIcons.video),
-          //     onPressed: () {},
-          //   ),
-          // ),
+         // FloatingSearchBarAction.()
 
           FloatingSearchBarAction.searchToClear()],
         onQueryChanged: (query) {
@@ -124,13 +118,20 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
           });
         },
         onSubmitted: (query) async {
-          selectedTerm = query;
-          widget.onSubmitted(query);
+          // selectedTerm = query;
+          // widget.onSubmitted(query);
 
+
+
+          setState(() {
+            selectedTerm = query;
+            widget.onSubmitted(query);
+            addSearchTerm(query);
+          });
           //await getPrimarySearchResults(selectedTerm);
 
-          addSearchTerm(query);
-          //print(widget.IncomingQuery);
+          //addSearchTerm(query);
+
 
           floatController.close();
 
@@ -210,7 +211,7 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
   }
 
   @override
-  // TODO: implement wantKeepAlive
+
   bool get wantKeepAlive => true;
 }
 
