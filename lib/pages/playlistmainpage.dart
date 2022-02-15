@@ -222,6 +222,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
                             shrinkWrap: true,
                             padding: const EdgeInsets.all(15),
                             itemCount: _tracks.length,
+
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
@@ -279,6 +280,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
 
                             }),
+                        SizedBox(height: 120,)
                       ],
                     ),
                   ))

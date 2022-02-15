@@ -90,7 +90,6 @@ class TrackCardLarge extends StatelessWidget {
                   ),
                   imageUrl: data.thumbnail,
 
-                  //'https://www.jagranimages.com/images/newimg/20052021/20_05_2021-arijit_singh_21660518.jpg',
 
                   placeholder: (context, url) =>
                   const Image(
@@ -164,63 +163,70 @@ class TrackCardSmall extends StatelessWidget {
         },
         child: Padding(
           padding: EdgeInsets.all(5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: Column(
             children: [
-              CachedNetworkImage(
-                width: 50,
-                height: 50,
-                imageBuilder: (context, imageProvider) => CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.transparent,
-                  radius: 100,
-                  backgroundImage: imageProvider,
-                ),
-                fit: BoxFit.cover,
-                errorWidget: (context, _, __) => const Image(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/cover.jpg'),
-                ),
-                imageUrl: data.thumbnail,
-                placeholder: (context, url) => const Image(
-                    fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
-              ),
-              spacer,
-              mat.Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: mat.CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 1 / 2.3,
-                    child: Text(
-                      data.title,
-                      style: TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w400),
-                      overflow: TextOverflow.ellipsis,
+                  CachedNetworkImage(
+                    width: 50,
+                    height: 50,
+                    imageBuilder: (context, imageProvider) => CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.transparent,
+                      radius: 100,
+                      backgroundImage: imageProvider,
                     ),
+                    fit: BoxFit.cover,
+                    errorWidget: (context, _, __) => const Image(
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/cover.jpg'),
+                    ),
+                    imageUrl: data.thumbnail,
+                    placeholder: (context, url) => const Image(
+                        fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
                   ),
                   spacer,
+                  mat.Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: mat.CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 1 / 2.3,
+                        child: Text(
+                          data.title,
+                          style: const TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w400),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      spacer,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 1 / 2.5,
+                        child: Text(
+                          data.artist,
+                          // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 1 / 2.5,
+                    // width: MediaQuery.of(context).size.width * 1 / 8,
                     child: Text(
-                      data.artist,
+                      data.duration,
                       // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  spacer,
+                  const Icon(FluentIcons.more)
                 ],
               ),
-              SizedBox(
-                // width: MediaQuery.of(context).size.width * 1 / 8,
-                child: Text(
-                  data.duration,
-                  // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              spacer,
-              const Icon(FluentIcons.more)
+
+
             ],
+
           ),
         ),
       ),

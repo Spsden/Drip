@@ -28,6 +28,8 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
 
   //late List<Track> currentTracks = [];
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -40,6 +42,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -69,6 +72,8 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                        AlbumArtCard(tracks: currentTracks,trck: trck,),
                        Expanded(
                          child: ListView.builder(
+
+                             controller: _scrollController,
                              physics: const BouncingScrollPhysics(),
                              shrinkWrap: true,
                              itemCount: currentTracks.length,
@@ -76,7 +81,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                              //controller: _sc,
                              itemBuilder: (context, index) {
                                return  Padding(
-                                 padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                                 padding: EdgeInsets.fromLTRB(20, 12, 0, 0),
                                  child: TrackCardLarge(
                                    data: TrackCardData(
                                        title: currentTracks[index].title.toString(),
@@ -139,6 +144,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                    );
                  } else {
                    return CustomScrollView(
+                     controller: _scrollController,
                      shrinkWrap: true,
                      slivers: [
                        mat.SliverAppBar(
@@ -219,72 +225,70 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                          child: SizedBox(height: 20,),
                        ),
                        SliverFillRemaining(
-                           child:   Expanded(
-                             child: ListView.builder(
-                                 physics: const BouncingScrollPhysics(),
-                                 shrinkWrap: true,
-                                 itemCount: currentTracks.length,
+                           child:   ListView.builder(
+                               physics: const BouncingScrollPhysics(),
+                               shrinkWrap: true,
+                               itemCount: currentTracks.length,
 
-                                 //controller: _sc,
-                                 itemBuilder: (context, index) {
-                                   return  Padding(
-                                     padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
-                                     child: TrackCardLarge(
-                                       data: TrackCardData(
-                                           title: currentTracks[index].title.toString(),
-                                           artist: currentTracks[index]
-                                               .artists![0]
-                                               .name
-                                               .toString(),
-                                           album: 'Drip',
-                                           duration:
-                                           currentTracks[index].length.toString(),
-                                           thumbnail: currentTracks[index]
+                               //controller: _sc,
+                               itemBuilder: (context, index) {
+                                 return  Padding(
+                                   padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                                   child: TrackCardLarge(
+                                     data: TrackCardData(
+                                         title: currentTracks[index].title.toString(),
+                                         artist: currentTracks[index]
+                                             .artists![0]
+                                             .name
+                                             .toString(),
+                                         album: 'Drip',
+                                         duration:
+                                         currentTracks[index].length.toString(),
+                                         thumbnail: currentTracks[index]
+                                             .thumbnail![0]
+                                             .url
+                                             .toString()),
+                                     songIndex: index,
+                                     onTrackTap: () async {
+                                       var audioUrl =
+                                       await AudioControlClass.getAudioUri(
+                                           currentTracks[index].videoId.toString());
+                                        print(audioUrl.toString());
+
+                                       playerAlerts.buffering = true;
+                                       await context
+                                           .read<ActiveAudioData>()
+                                           .songDetails(
+                                           audioUrl,
+                                           currentTracks[index].videoId.toString(),
+                                           currentTracks[index].artists![0].name.toString(),
+                                           currentTracks[index].title.toString(),
+                                           currentTracks[index]
                                                .thumbnail![0]
                                                .url
-                                               .toString()),
-                                       songIndex: index,
-                                       onTrackTap: () async {
-                                         var audioUrl =
-                                         await AudioControlClass.getAudioUri(
-                                             currentTracks[index].videoId.toString());
-                                          print(audioUrl.toString());
+                                               .toString());
+                                       currentMediaIndex = 0;
 
-                                         playerAlerts.buffering = true;
-                                         await context
-                                             .read<ActiveAudioData>()
-                                             .songDetails(
-                                             audioUrl,
-                                             currentTracks[index].videoId.toString(),
-                                             currentTracks[index].artists![0].name.toString(),
-                                             currentTracks[index].title.toString(),
-                                             currentTracks[index]
-                                                 .thumbnail![0]
-                                                 .url
-                                                 .toString());
-                                         currentMediaIndex = 0;
-
-                                         await AudioControlClass.play(
-                                             audioUrl: audioUrl,
-                                             videoId:
-                                             currentTracks[index].videoId.toString(),
-                                             context: context);
-                                       },
-                                       color: index % 2 != 0
-                                           ? Colors.transparent
-                                           : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                                           context.watch<AppTheme>().mode ==
-                                               ThemeMode.system
-                                           ? Colors.grey[150]
-                                           : Colors.grey[30], SuperSize: size,
-                                       widthy: 800,
-                                       fromQueue: true,
-                                     ),
-                                   );
+                                       await AudioControlClass.play(
+                                           audioUrl: audioUrl,
+                                           videoId:
+                                           currentTracks[index].videoId.toString(),
+                                           context: context);
+                                     },
+                                     color: index % 2 != 0
+                                         ? Colors.transparent
+                                         : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                         context.watch<AppTheme>().mode ==
+                                             ThemeMode.system
+                                         ? Colors.grey[150]
+                                         : Colors.grey[30], SuperSize: size,
+                                     widthy: 800,
+                                     fromQueue: true,
+                                   ),
+                                 );
 
 
-                                 }),
-                           )
+                               })
 
 
 

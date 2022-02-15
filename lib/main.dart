@@ -52,7 +52,7 @@ const String appTitle = 'Drip';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-    await DesktopWindow.setMinWindowSize(const Size(480, 540));
+    await DesktopWindow.setMinWindowSize(const Size(540, 540));
    // DesktopWindow.setWindowSize(Size(755,545));
 
 
@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const CurrentPlaylist(fromMainPage: true),
 
 
-      Settings(controller: settingsController,)
+      const Settings()
     ];
     _pageController = PageController(initialPage: _selectedIndex);
 
