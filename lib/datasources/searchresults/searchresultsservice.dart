@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 
+import 'package:drip/datasources/searchresults/artistpagedataclass.dart' as artistPage;
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
@@ -170,6 +171,30 @@ class SearchMusic {
 
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  static Future getArtistPage(String channelId) async {
+    final response = await http.get(Uri.parse(serverAddress + 'artist?channelid=' + channelId ));
+
+    try {
+      if(response.statusCode == 200){
+        var rawResponse = response.body.toString();
+
+        print(rawResponse);
+
+        final artistPage.ArtistsPageData artistsPage  = artistPage.ArtistsPageDataFromJson(rawResponse);
+        print(artistsPage.name.toString());
+        return artistsPage;
+
+
+      } else {
+        print(response.statusCode.toString());
+      }
+    } catch (e) {
+      print(e.toString());
+
+
     }
   }
 

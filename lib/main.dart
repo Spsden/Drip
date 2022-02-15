@@ -207,11 +207,11 @@ class _MyHomePageState extends State<MyHomePage> {
     screens = [
       const FirstPageStack(),
       //const YouTubeHomeScreen(),
-      const SecondPageStack(),
+      const SecondPageStack(searchArgs: '',fromFirstPage: false),
 
       //TrackCard(),
 
-      const PlayListMain(),
+      const ArtistsPage(),
       const CurrentPlaylist(fromMainPage: true),
 
 
@@ -227,12 +227,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
+  bool onWillPop(){
+    if(Navigator.of(context).canPop())
+    {
+      return true;
+    } return false;
+  }
+
 
 
   @override
   void dispose() {
     colorsController.dispose();
     settingsController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -240,7 +248,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
-      appBar:   const NavigationAppBar(
+      appBar:   NavigationAppBar(
+        leading: IconButton(
+            onPressed: () {
+             // print('lol');
+
+            //  onWillPop() == true ? Navigator.of(context).pop() : null;
+             // Navigator.
+             // Navigator.of(context).p;
+
+
+              _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
+                  duration: const Duration(milliseconds: 400));
+            },
+            icon: Icon(FluentIcons.back)),
 
         //leading: BackBu
 

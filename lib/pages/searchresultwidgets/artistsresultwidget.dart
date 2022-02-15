@@ -27,42 +27,48 @@ class ArtistsSearch extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             itemBuilder: (context, index) {
-              return Container(
-                color: Colors.transparent,
-                margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                width: 220,
-                height: 250,
-                child: mat.Card(
-                  shadowColor: Colors.transparent,
+              return mat.InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed('artistsPage',
+                      arguments: artists[index].browseId.toString());
+                },
+                child: Container(
                   color: Colors.transparent,
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      CachedNetworkImage(
-                        imageBuilder: (context, imageProvider) => CircleAvatar(
-                          backgroundColor: mat.Colors.transparent,
-                          foregroundColor: Colors.transparent,
-                          radius: 100,
-                          backgroundImage: imageProvider,
-                        ),
-                        fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => const Image(
+                  margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  width: 220,
+                  height: 250,
+                  child: mat.Card(
+                    shadowColor: Colors.transparent,
+                    color: Colors.transparent,
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        CachedNetworkImage(
+                          imageBuilder: (context, imageProvider) => CircleAvatar(
+                            backgroundColor: mat.Colors.transparent,
+                            foregroundColor: Colors.transparent,
+                            radius: 100,
+                            backgroundImage: imageProvider,
+                          ),
                           fit: BoxFit.cover,
-                          image: AssetImage('assets/artist.jpg'),
+                          errorWidget: (context, url, error) => const Image(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/artist.jpg'),
+                          ),
+                          imageUrl: artists[index].thumbnails!.last.url.toString(),
+                          placeholder: (context, url) => const Image(
+                              fit: BoxFit.fill,
+                              image: AssetImage('assets/artist.jpg')),
                         ),
-                        imageUrl: artists[index].thumbnails!.last.url.toString(),
-                        placeholder: (context, url) => const Image(
-                            fit: BoxFit.fill,
-                            image: AssetImage('assets/artist.jpg')),
-                      ),
-                      //const SizedBox(height: 20,),
-                      Text(
-                        artists[index].artist.toString(),
-                        style:
-                        typography.body?.apply(fontSizeFactor: 1.2),
-                      ),
-                    ],
+                        //const SizedBox(height: 20,),
+                        Text(
+                          artists[index].artist.toString(),
+                          style:
+                          typography.body?.apply(fontSizeFactor: 1.2),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

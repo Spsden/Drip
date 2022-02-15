@@ -1,5 +1,3 @@
-
-
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -10,22 +8,31 @@ import 'package:flutter/material.dart' as mat;
 class SearchFunction extends StatefulWidget {
   final bool liveSearch;
   final Widget body;
+
+  //final String ancestor;
   final FloatingSearchBarController controller;
   final Function(String) onSubmitted;
 
-  const SearchFunction({Key? key, required this.liveSearch, required this.body, required this.controller, required this.onSubmitted,}) : super(key: key);
+  const SearchFunction({
+    Key? key,
+    required this.liveSearch,
+    required this.body,
+    required this.controller,
+    required this.onSubmitted,
+    //required this.ancestor,
+  }) : super(key: key);
 
   @override
   _SearchFunctionState createState() => _SearchFunctionState();
 }
 
-class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAliveClientMixin<SearchFunction>{
+class _SearchFunctionState extends State<SearchFunction>
+    with AutomaticKeepAliveClientMixin<SearchFunction> {
   static const _historyLength = 5;
 
   final List<String> _searchHistory = ['Atif', 'Arijit', 'Sonu', 'Prateek'];
   late List<String> filteredSearchHistory;
-   String selectedTerm = '';
-
+  String selectedTerm = '';
 
   List<String> filterSearchTerms({
     required String filter,
@@ -66,10 +73,9 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
 
   late FloatingSearchBarController floatController;
 
-
   @override
   void initState() {
-   // selectedTerm = '';
+    // selectedTerm = '';
     super.initState();
     filteredSearchHistory = filterSearchTerms(filter: '');
     floatController = FloatingSearchBarController();
@@ -86,17 +92,30 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
   Widget build(BuildContext context) {
     super.build(context);
 
-
-
     return mat.Scaffold(
       body: FloatingSearchBar(
+        leadingActions: [
+          Navigator.of(context)
+          .context
+          .findAncestorStateOfType<NavigatorState>()
+          !.canPop()
+              ?
+              IconButton(
+                  icon: Icon(FluentIcons.back),
+                  onPressed: () => Navigator.of(context)
+                      .context
+                      .findAncestorStateOfType<NavigatorState>()
+                      ?.pop()) :SizedBox()
+        ],
 
-        width: MediaQuery.of(context).size.width/2,
-        border: BorderSide(color: context.watch<AppTheme>().color,width: 2,style: BorderStyle.none),
+        width: MediaQuery.of(context).size.width / 2,
+        border: BorderSide(
+            color: context.watch<AppTheme>().color,
+            width: 2,
+            style: BorderStyle.none),
         borderRadius: BorderRadius.circular(10),
         margins: const EdgeInsets.only(top: 10),
         //axisAlignment: -1,
-
 
         // width: MediaQuery.of(context).size.width *1/2,
         // openWidth: MediaQuery.of(context).size.width  ,
@@ -110,9 +129,10 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
         title: Text(selectedTerm),
         hint: "Let's Play.....",
         actions: [
-         // FloatingSearchBarAction.()
+          // FloatingSearchBarAction.()
 
-          FloatingSearchBarAction.searchToClear()],
+          FloatingSearchBarAction.searchToClear()
+        ],
         onQueryChanged: (query) {
           setState(() {
             filteredSearchHistory = filterSearchTerms(filter: query);
@@ -121,8 +141,6 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
         onSubmitted: (query) async {
           // selectedTerm = query;
           // widget.onSubmitted(query);
-
-
 
           setState(() {
             selectedTerm = query;
@@ -133,10 +151,7 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
 
           //addSearchTerm(query);
 
-
           floatController.close();
-
-
         },
         builder: (BuildContext context, Animation<double> transition) {
           return ClipRRect(
@@ -212,7 +227,6 @@ class _SearchFunctionState extends State<SearchFunction> with AutomaticKeepAlive
   }
 
   @override
-
   bool get wantKeepAlive => true;
 }
 
@@ -257,5 +271,3 @@ class SearchResultsListView extends StatelessWidget {
     );
   }
 }
-
-

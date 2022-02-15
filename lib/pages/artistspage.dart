@@ -1,39 +1,68 @@
 import 'dart:ui';
 
+import 'package:drip/datasources/searchresults/artistpagedataclass.dart';
+import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 
-class PlayListMain extends StatefulWidget {
-  const PlayListMain({Key? key}) : super(key: key);
+class ArtistsPage extends StatefulWidget {
+  const ArtistsPage({Key? key}) : super(key: key);
 
   @override
-  _PlayListMainState createState() => _PlayListMainState();
+  _ArtistsPageState createState() => _ArtistsPageState();
 }
 
-class _PlayListMainState extends State<PlayListMain> {
-  //WindowEffect effect = WindowEffect.transparent;
+class _ArtistsPageState extends State<ArtistsPage> {
+   late ArtistsPageData _artistsPage ;
+
+   bool status = false;
+   bool fetched = false;
+
+
+
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+
     super.dispose();
     _scrollController.dispose();
   }
   @override
   Widget build(BuildContext context) {
+    Typography typography = FluentTheme.of(context).typography;
+    const spacer = SizedBox(width: 10.0);
+    const biggerSpacer = SizedBox(width: 40.0);
+    var size = MediaQuery.of(context).size;
     var height = MediaQuery.of(context).size.height;
-    return CustomScrollView(
+
+    if(!status){
+      status = true;
+      SearchMusic.getArtistPage('UC13ToEQgfmTe8_GW19LYtCg').then((value) => {
+        if(mounted){
+          setState(() {
+            _artistsPage = value;
+            fetched = true;
+          })
+        }
+      });
+    }
+    return
+
+    (!fetched) ? SizedBox() :
+   CustomScrollView(
       controller: _scrollController,
 
       slivers: [
         mat.SliverAppBar(
+          //leadingWidth: 0,
+         titleSpacing: 0,
 
 
          toolbarHeight: 90,
@@ -70,9 +99,11 @@ class _PlayListMainState extends State<PlayListMain> {
                       crossAxisAlignment: mat.CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
 
-                      children : [
+                      children :  [
                         Text(
-                            'Sonu Nigam',
+                            //'Sonu Nigam',
+                          _artistsPage.name.toString(),
+
                           style: mat.TextStyle(
                             fontSize: 35
                           ),
@@ -100,22 +131,34 @@ class _PlayListMainState extends State<PlayListMain> {
                 ),
                   Container(
                     margin: EdgeInsets.only(right: 20),
-                  width: 85,
+                 // width: 85,
                   child: FilledButton(
                     autofocus: true,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
+                      children:  [
                         //Icon(FluentIcons.more),
                         // spacer,
+                        Icon(FluentIcons.play_solid),
+                        size.width > 700 ?
                         Text('Shuffle',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w500)),
-                        Icon(FluentIcons.play_solid)
+                                fontWeight: FontWeight.w500)) : SizedBox(),
+
                       ],
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      SearchMusic.getArtistPage('UC13ToEQgfmTe8_GW19LYtCg').then((value) => {
+                        if(mounted){
+                          setState(() {
+                            _artistsPage = value;
+                           // print(artistsPageData.)
+                      })
+                        }
+
+                      });
+                    },
                   ),
                 ),
 

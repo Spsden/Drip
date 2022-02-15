@@ -43,7 +43,7 @@ class CommunityPlaylistSearch extends StatelessWidget {
               return mat.InkWell(
 
                 onTap: () {
-                  Navigator.of(context).pushNamed('playlists',
+                  Navigator.of(context).pushNamed('communityPlaylists',
                       arguments: communityPlaylist[index].browseId.toString()
 
                     // arguments: headList[index]['title'].toString()

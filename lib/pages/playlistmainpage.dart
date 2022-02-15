@@ -32,7 +32,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
   bool status = false;
   bool fetched = false;
-  final myProducts = List<String>.generate(100, (i) => 'Product $i');
+ // final myProducts = List<String>.generate(100, (i) => 'Product $i');
 
   @override
   void initState() {

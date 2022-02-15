@@ -5,6 +5,7 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/navigation/navigationstacks.dart';
 
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/search.dart';
@@ -130,6 +131,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                       primary: false,
 
                       children: [
+                        //mat.RaisedButton(onPressed: () => Navigator.of(context).context.findAncestorStateOfType<NavigatorState>()?.pop()),
                         Text(
                           query == ''
                               ? 'Results for \"${widget.searchQuery}\"'
