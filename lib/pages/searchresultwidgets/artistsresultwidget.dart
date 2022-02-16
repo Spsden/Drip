@@ -56,7 +56,7 @@ class ArtistsSearch extends StatelessWidget {
                             fit: BoxFit.cover,
                             image: AssetImage('assets/artist.jpg'),
                           ),
-                          imageUrl: artists[index].thumbnails!.last.url.toString(),
+                          imageUrl: artists[index].thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
                           placeholder: (context, url) => const Image(
                               fit: BoxFit.fill,
                               image: AssetImage('assets/artist.jpg')),
@@ -79,3 +79,57 @@ class ArtistsSearch extends StatelessWidget {
     );
   }
 }
+
+// class ArtistCard extends StatelessWidget {
+//   const ArtistCard({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return mat.InkWell(
+//       onTap: () {
+//         Navigator.of(context).pushNamed('artistsPage',
+//             arguments: artists[index].browseId.toString());
+//       },
+//       child: Container(
+//         color: Colors.transparent,
+//         margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+//         width: 220,
+//         height: 250,
+//         child: mat.Card(
+//           shadowColor: Colors.transparent,
+//           color: Colors.transparent,
+//           child: Wrap(
+//             crossAxisAlignment: WrapCrossAlignment.center,
+//             alignment: WrapAlignment.center,
+//             children: [
+//               CachedNetworkImage(
+//                 imageBuilder: (context, imageProvider) => CircleAvatar(
+//                   backgroundColor: mat.Colors.transparent,
+//                   foregroundColor: Colors.transparent,
+//                   radius: 100,
+//                   backgroundImage: imageProvider,
+//                 ),
+//                 fit: BoxFit.cover,
+//                 errorWidget: (context, url, error) => const Image(
+//                   fit: BoxFit.cover,
+//                   image: AssetImage('assets/artist.jpg'),
+//                 ),
+//                 imageUrl: artists[index].thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
+//                 placeholder: (context, url) => const Image(
+//                     fit: BoxFit.fill,
+//                     image: AssetImage('assets/artist.jpg')),
+//               ),
+//               //const SizedBox(height: 20,),
+//               Text(
+//                 artists[index].artist.toString(),
+//                 style:
+//                 typography.body?.apply(fontSizeFactor: 1.2),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );;
+//   }
+// }
+

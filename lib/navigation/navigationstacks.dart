@@ -182,7 +182,7 @@ class _SecondPageStackState extends State<SecondPageStack> {
 
           case 'artistsPage':
             final args = settingsforpagetwo.arguments;
-            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) =>   ArtistsPage(),
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) =>   ArtistsPage(channelId: args.toString(),),
                 transitionsBuilder: (context,animation,secondaryAnimation,child) {
                   const begin = Offset(1.0, 0.0);
                   const end = Offset.zero;

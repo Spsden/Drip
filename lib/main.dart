@@ -211,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       //TrackCard(),
 
-      const ArtistsPage(),
+      ArtistsPage(channelId: 'UC13ToEQgfmTe8_GW19LYtCg',),
       const CurrentPlaylist(fromMainPage: true),
 
 
@@ -258,8 +258,9 @@ class _MyHomePageState extends State<MyHomePage> {
              // Navigator.of(context).p;
 
 
-              _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
-                  duration: const Duration(milliseconds: 400));
+              // _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
+              //     duration: const Duration(milliseconds: 400));
+
             },
             icon: Icon(FluentIcons.back)),
 

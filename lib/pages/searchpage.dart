@@ -1,11 +1,13 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/searchresults/albumsdataclass.dart';
 import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/navigation/navigationstacks.dart';
+import 'package:drip/pages/common/commonlistoftracks.dart';
 
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/search.dart';
@@ -43,6 +45,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
   late List<Songs> songs = [];
   late List<CommunityPlaylist> communityPlaylists = [];
   final FloatingSearchBarController _controller = FloatingSearchBarController();
+  var topResult;
 
   @override
   void initState() {
@@ -83,7 +86,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
             songs = listOfSearchResults['songsearch'];
             communityPlaylists = listOfSearchResults['communityplaylistsearch'];
             albums = listOfSearchResults['albumsearch'];
-            // _topresults = listOfSearchResults['topresults'];
+             topResult = listOfSearchResults['topresults'];
             fetched = true;
           });
         }
@@ -141,6 +144,95 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         biggerSpacer,
+                        SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Top result",
+                                style: typography.subtitle
+                                    ?.apply(fontSizeFactor: 1.0),
+                              ),
+                              const SizedBox(height: 15,),
+                              if(topResult.resultType == 'video')
+                                 Container(
+                                   margin: EdgeInsets.only(left: 20,right: 20),
+                                   child: TrackCardLarge(data: TrackCardData(
+                                     duration: topResult.duration,
+                                     album: '',
+                                     title: topResult.title,
+                                     artist: '',
+                                     thumbnail: ''
+                                   ),
+                                       songIndex: 0,
+                                       onTrackTap: ()  {}, color: context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                           context.watch<AppTheme>().mode ==
+                                               ThemeMode.system
+                                           ? Colors.grey[150]
+                                           : Colors.grey[30]
+                                       , SuperSize: MediaQuery.of(context).size, fromQueue: false),
+                                 ),
+                              if(topResult.resultType == 'artist')
+                                Container(
+                                  child: mat.InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed('artistsPage',
+                                          arguments: topResult.browseId.toString());
+                                    },
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                      width: 220,
+                                      height: 250,
+                                      child: mat.Card(
+                                        shadowColor: Colors.transparent,
+                                        color: Colors.transparent,
+                                        child: Wrap(
+                                          crossAxisAlignment: WrapCrossAlignment.center,
+                                          alignment: WrapAlignment.center,
+                                          children: [
+                                            CachedNetworkImage(
+                                              imageBuilder: (context, imageProvider) => CircleAvatar(
+                                                backgroundColor: mat.Colors.transparent,
+                                                foregroundColor: Colors.transparent,
+                                                radius: 100,
+                                                backgroundImage: imageProvider,
+                                              ),
+                                              fit: BoxFit.cover,
+                                              errorWidget: (context, url, error) => const Image(
+                                                fit: BoxFit.cover,
+                                                image: AssetImage('assets/artist.jpg'),
+                                              ),
+                                              imageUrl:  topResult.thumbnails.last.url.toString(),
+                                              placeholder: (context, url) => const Image(
+                                                  fit: BoxFit.fill,
+                                                  image: AssetImage('assets/artist.jpg')),
+                                            ),
+                                            //const SizedBox(height: 20,),
+                                            Text(
+                                              topResult.artist.toString(),
+                                              style:
+                                              typography.body?.apply(fontSizeFactor: 1.2),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+
+
+                              //Text(topResult.resultType)
+
+
+
+
+                            ],
+                          ),
+                        ),
+                        biggerSpacer,
 
                         SizedBox(
                           width: double.infinity,
@@ -181,10 +273,17 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                 alignment: Alignment.centerLeft,
                                 // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
 
-                                child: TrackBars(
+                                child:
+
+                                TrackBars(
                                   songs: songs,
                                   isFromPrimarySearchPage: true,
-                                ))),
+                                )
+
+
+
+
+                            )),
                         biggerSpacer,
                         SizedBox(
                           width: double.infinity,

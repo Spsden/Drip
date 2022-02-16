@@ -97,7 +97,7 @@ class CommunityPlaylistSearch extends StatelessWidget {
                                 image: AssetImage('assets/artist.jpg'),
                               ),
                               imageUrl:
-                              communityPlaylist[index].thumbnails[1].url.toString(),
+                              communityPlaylist[index].thumbnails.first.url.toString(),
                               placeholder: (context, url) => const Image(
                                   fit: BoxFit.fill,
                                   image: AssetImage('assets/artist.jpg')),
