@@ -4,8 +4,8 @@ import 'dart:core';
 
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart' as artistPage;
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/datasources/searchresults/videodataclass.dart';
+import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
+import 'package:drip/datasources/searchresults/videodataclass.dart' as videos;
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:http/http.dart' as http;
 
@@ -64,7 +64,7 @@ class SearchMusic {
             case 'artist' :
 
 
-        
+
 
           topResult = artists.Artists(artist: listMap['artist'] ,
               browseId: listMap['browseId'],
@@ -96,7 +96,7 @@ class SearchMusic {
                 'video' :
 
             // topResult = albumsFromJson(jsonEncode(listMap.toString()));
-              topResult = videoFromJson(jsonEncode(listMap).toString());
+              topResult = videos.videoFromJson(jsonEncode(listMap).toString());
 
               break;
           }
@@ -115,12 +115,12 @@ class SearchMusic {
       // var topresultFiltered = jsonEncode(topresult);
       var communityplaylistFiltered = jsonEncode(communityplaylistlist);
 
-      print(artistFiltered);
+      //print(artistFiltered);
 
 
 
       final List<artists.Artists>? artistsearch = artists.ArtistsFromJson(artistFiltered);
-      final List<Songs>? songsearch = songsFromJson(songsFiltered);
+      final List<songs.Songs>? songsearch = songs.songsFromJson(songsFiltered);
       final List<CommunityPlaylist>? communityplaylistsearch =
           communityPlaylistFromJson(communityplaylistFiltered);
       final List<Albums> albumsearch = albumsFromJson(albumFiltered);
@@ -157,7 +157,7 @@ class SearchMusic {
       var responselist = jsonDecode(response.body) as List;
       var filtered = jsonEncode(responselist);
 
-      final List<Songs> songOnlyResults = songsFromJson(filtered);
+      final List<songs.Songs> songOnlyResults = songs.songsFromJson(filtered);
      // print(responselist.toString());
      // return Songs.fromJson(jsonDecode(response.body));
      // print(songOnlyResults.toString());
@@ -168,7 +168,7 @@ class SearchMusic {
 
 
     } else {
-      return <Songs> [];
+      return <songs.Songs> [];
     }
   }
 
@@ -255,7 +255,7 @@ class SearchMusic {
 
 
     } else {
-      return <Songs> [];
+      return <songs.Songs> [];
     }
   }
 
@@ -290,18 +290,18 @@ class SearchMusic {
 
       // print(tracks.toString());
       final WatchPlaylists watchPlaylists = watchPlaylistsFromJson(rawResponse);
-      print(watchPlaylists.tracks?.length);
+      //print(watchPlaylists.tracks?.length);
       return watchPlaylists;
 
 
 
     } else {
-      print(response.statusCode.toString());
+      //print(response.statusCode.toString());
     }
 
 
   } catch (e) {
-    print(e.toString());
+    //print(e.toString());
 
   }
 
@@ -324,14 +324,14 @@ class SearchMusic {
         return playlists;
 
       } else {
-        print(response.statusCode.toString());
+        //print(response.statusCode.toString());
 
       }
 
 
 
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
     }
   }
 
@@ -342,18 +342,18 @@ class SearchMusic {
       if(response.statusCode == 200){
         var rawResponse = response.body.toString();
 
-        print(rawResponse);
+        //print(rawResponse);
 
         final artistPage.ArtistsPageData artistsPage  = artistPage.artistsPageDataFromJson(rawResponse);
-        print(artistsPage.name.toString());
+        //print(artistsPage.name.toString());
         return artistsPage;
 
 
       } else {
-        print(response.statusCode.toString());
+        //print(response.statusCode.toString());
       }
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
 
 
     }

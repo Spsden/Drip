@@ -23,6 +23,8 @@ import 'package:lottie/lottie.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/src/provider.dart';
 
+import '../datasources/audiofiles/activeaudiodata.dart';
+import '../datasources/audiofiles/audiocontrolcentre.dart';
 import '../theme.dart';
 
 class AllSearchResults extends StatefulWidget {
@@ -158,16 +160,43 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                               const SizedBox(height: 15,),
                               if(topResult.resultType == 'video')
                                  Container(
-                                   margin: EdgeInsets.only(left: 20,right: 20),
+                                   margin: const EdgeInsets.only(left: 20,right: 20),
                                    child: TrackCardLarge(data: TrackCardData(
                                      duration: topResult.duration,
                                      album: '',
                                      title: topResult.title,
-                                     artist: '',
-                                     thumbnail: ''
+                                     artist: '${topResult.artists.first.name}',
+                                     thumbnail: topResult.thumbnails.first.url.toString()
                                    ),
                                        songIndex: 0,
-                                       onTrackTap: ()  {}, color: context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                       onTrackTap: ()
+                                       async {
+                                         var audioUrl =
+                                         await AudioControlClass.getAudioUri(
+                                             topResult.videoId.toString());
+                                         // print(audioUrl.toString());
+
+                                         playerAlerts.buffering = true;
+                                         await context
+                                             .read<ActiveAudioData>()
+                                             .songDetails(
+                                             audioUrl,
+                                             topResult.videoId.toString(),
+                                             topResult.artists![0].name,
+                                             topResult.title.toString(),
+                                             topResult
+                                                 .thumbnails[0]
+                                                 .url
+                                                 .toString());
+                                         currentMediaIndex = 0;
+
+                                         await AudioControlClass.play(
+                                             audioUrl: audioUrl,
+                                             videoId:
+                                             topResult.videoId.toString(),
+                                             context: context);
+                                       },
+                                       color: context.watch<AppTheme>().mode == ThemeMode.dark ||
                                            context.watch<AppTheme>().mode ==
                                                ThemeMode.system
                                            ? Colors.grey[150]
@@ -175,53 +204,15 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                        , SuperSize: MediaQuery.of(context).size, fromQueue: false),
                                  ),
                               if(topResult.resultType == 'artist')
-                                Container(
-                                  child: mat.InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed('artistsPage',
-                                          arguments: topResult.browseId.toString());
-                                    },
-                                    child: Container(
-                                      color: Colors.transparent,
-                                      margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
-                                      width: 220,
-                                      height: 250,
-                                      child: mat.Card(
-                                        shadowColor: Colors.transparent,
-                                        color: Colors.transparent,
-                                        child: Wrap(
-                                          crossAxisAlignment: WrapCrossAlignment.center,
-                                          alignment: WrapAlignment.center,
-                                          children: [
-                                            CachedNetworkImage(
-                                              imageBuilder: (context, imageProvider) => CircleAvatar(
-                                                backgroundColor: mat.Colors.transparent,
-                                                foregroundColor: Colors.transparent,
-                                                radius: 100,
-                                                backgroundImage: imageProvider,
-                                              ),
-                                              fit: BoxFit.cover,
-                                              errorWidget: (context, url, error) => const Image(
-                                                fit: BoxFit.cover,
-                                                image: AssetImage('assets/artist.jpg'),
-                                              ),
-                                              imageUrl:  topResult.thumbnails.last.url.toString(),
-                                              placeholder: (context, url) => const Image(
-                                                  fit: BoxFit.fill,
-                                                  image: AssetImage('assets/artist.jpg')),
-                                            ),
-                                            //const SizedBox(height: 20,),
-                                            Text(
-                                              topResult.artist.toString(),
-                                              style:
-                                              typography.body?.apply(fontSizeFactor: 1.2),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
+                              ArtistCard(artists: Artists(
+                                artist: topResult.artist,
+                                browseId: topResult.browseId,
+                                radioId: topResult.radioId,
+                                category: topResult.category,
+                                resultType: topResult.resultType,
+                                shuffleId: topResult.shuffleId,
+                                thumbnails: topResult.thumbnails
+                              ))
 
 
                               //Text(topResult.resultType)

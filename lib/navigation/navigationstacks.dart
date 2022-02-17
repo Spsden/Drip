@@ -80,12 +80,6 @@ class _FirstPageStackState extends State<FirstPageStack> {
               child: child,
             );
           });
-            //
-            // MaterialPageRoute(
-            //   builder: (context) =>
-            //       AllSearchResults(searchQuery: args.toString()),
-            //   settings: settings);
-          break;
 
 
 
@@ -208,10 +202,15 @@ class _SecondPageStackState extends State<SecondPageStack> {
 
                   var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
+                  return Align(
+                    child:   FadeTransition(
+                      //position: animation.drive(tween),
+                      opacity: animation,
+                      child: child,
+                    )
                   );
+
+
                 });
 
             break;

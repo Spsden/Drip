@@ -67,7 +67,7 @@ class Artist {
     required this.name,
   });
 
-  final String id;
+  final String? id;
   final String name;
 
   factory Artist.fromJson(Map<String, dynamic> json) => Artist(
