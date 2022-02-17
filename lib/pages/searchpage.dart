@@ -297,7 +297,14 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                             fontWeight: FontWeight.w500)),
                                   ],
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+
+                                  Navigator.of(context).pushNamed(
+                                      'artistListPage',
+                                      arguments: query == ''
+                                          ? widget.searchQuery
+                                          : query);
+                                },
                               ),
                             ],
                           ),
@@ -391,6 +398,8 @@ class MyCustomScrollBehavior extends mat.MaterialScrollBehavior {
   Set<PointerDeviceKind> get dragDevices => {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
+   PointerDeviceKind.stylus
+
         // etc.
       };
 }

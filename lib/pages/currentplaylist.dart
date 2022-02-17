@@ -68,6 +68,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //if(size.height >900)
                         Text(
                           'Play queue',
                           style: TextStyle(
@@ -91,7 +92,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                             AlbumArtCard(trck: trck, tracks: tracks),
+                            AlbumArtCard(trck: trck, tracks: tracks),
                                    Expanded(
                                      child: Stack(
                                        children: [
@@ -190,82 +191,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                     ),
                   );
 
-                  //   Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     AlbumArtCard(tracks: currentTracks,trck: trck,),
-                  //     Expanded(
-                  //       child: ListView.builder(
-                  //
-                  //           controller: _scrollController,
-                  //           physics: const BouncingScrollPhysics(),
-                  //           shrinkWrap: true,
-                  //           itemCount: currentTracks.length,
-                  //
-                  //           //controller: _sc,
-                  //           itemBuilder: (context, index) {
-                  //             return  Padding(
-                  //               padding: EdgeInsets.fromLTRB(20, 12, 0, 0),
-                  //               child: TrackCardLarge(
-                  //                 data: TrackCardData(
-                  //                     title: currentTracks[index].title.toString(),
-                  //                     artist: currentTracks[index]
-                  //                         .artists![0]
-                  //                         .name
-                  //                         .toString(),
-                  //                     album: 'Drip',
-                  //                     duration:
-                  //                     currentTracks[index].length.toString(),
-                  //                     thumbnail: currentTracks[index]
-                  //                         .thumbnail![0]
-                  //                         .url
-                  //                         .toString()),
-                  //                 songIndex: index,
-                  //                 onTrackTap: () async {
-                  //                   var audioUrl =
-                  //                   await AudioControlClass.getAudioUri(
-                  //                       currentTracks[index].videoId.toString());
-                  //                    print(audioUrl.toString());
-                  //
-                  //                   playerAlerts.buffering = true;
-                  //                   await context
-                  //                       .read<ActiveAudioData>()
-                  //                       .songDetails(
-                  //                       audioUrl,
-                  //                       currentTracks[index].videoId.toString(),
-                  //                       currentTracks[index].artists![0].name.toString(),
-                  //                       currentTracks[index].title.toString(),
-                  //                       currentTracks[index]
-                  //                           .thumbnail![0]
-                  //                           .url
-                  //                           .toString());
-                  //                   currentMediaIndex = 0;
-                  //
-                  //                   await AudioControlClass.play(
-                  //                       audioUrl: audioUrl,
-                  //                       videoId:
-                  //                       currentTracks[index].videoId.toString(),
-                  //                       context: context);
-                  //                 },
-                  //                 color: index % 2 != 0
-                  //                     ? Colors.transparent
-                  //                     : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                  //                     context.watch<AppTheme>().mode ==
-                  //                         ThemeMode.system
-                  //                     ? Colors.grey[150]
-                  //                     : Colors.grey[30], SuperSize: size,
-                  //                 widthy: 800,
-                  //                 fromQueue: true,
-                  //               ),
-                  //             );
-                  //
-                  //
-                  //           }),
-                  //     )
-                  //
-                  //
-                  //   ],
-                  // );
+
                 } else {
                   return CustomScrollView(
                     controller: _scrollController,
@@ -452,10 +378,17 @@ class AlbumArtCard extends StatelessWidget {
 
         Container(
           padding: const EdgeInsets.all(20),
+          // constraints: BoxConstraints(
+          //   maxHeight: size.width > 1000 ? 500 : size.width / 2.5,
+          //   maxWidth: size.width > 1000 ? 500 : size.width / 2.5,
+          // ),
+
           constraints: BoxConstraints(
-            maxHeight: size.width > 1000 ? 500 : size.width / 2.5,
-            maxWidth: size.width > 1000 ? 500 : size.width / 2.5,
+            maxHeight: 500,
+            maxWidth: 500
           ),
+
+
           // decoration: BoxDecoration(
           //   borderRadius: BorderRadius.circular(8)
           // ),
@@ -481,8 +414,8 @@ class AlbumArtCard extends StatelessWidget {
                                 ]).createShader(bounds);
                           },
                           child: CachedNetworkImage(
-                            height: constraints.maxHeight,
-                            width: constraints.maxWidth,
+                            height: min(constraints.maxHeight,constraints.maxWidth),
+                            width: min(constraints.maxHeight,constraints.maxWidth),
                             fit: BoxFit.cover,
                             errorWidget: (context, url, error) =>
                             const Image(
