@@ -69,30 +69,30 @@ class ArtistCard extends StatelessWidget {
 
     return Hero(
       tag: artists.shuffleId.toString(),
-      child:
-      mat.Card(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.transparent
+        ),
+        width: 200,
+        child: Column(
 
-       margin: EdgeInsets.only(right: 25),
-        clipBehavior: Clip.antiAlias,
-        shadowColor: Colors.transparent,
-        color: Colors.transparent,
-       elevation: 5,
-       child: Column(
-
-         // crossAxisAlignment: WrapCro00Alignment.center,
-          //alignment: WrapAlignment.center,
           children: [
             mat.InkWell(
-  onTap: () {
-  Navigator.of(context).pushNamed('artistsPage',
-  arguments: artists.browseId.toString());},
-              child: ClipOval(
-                //clipper: MyClip(),
+              onTap: () {
+                Navigator.of(context).pushNamed('artistsPage',
+                    arguments: artists.browseId.toString());
+              }
+              ,
+              child: mat.Card(
+                elevation: 5,
+                clipBehavior: Clip.antiAlias,
+                shape: const CircleBorder(),
                 child: CachedNetworkImage(
                   imageBuilder: (context, imageProvider) => CircleAvatar(
                     backgroundColor: mat.Colors.transparent,
                     foregroundColor: Colors.transparent,
-                    radius:98,
+                    radius:84,
                     backgroundImage: imageProvider,
                   ),
                   fit: BoxFit.cover,
@@ -105,22 +105,25 @@ class ArtistCard extends StatelessWidget {
                       fit: BoxFit.fill,
                       image: AssetImage('assets/artist.jpg')),
                 ),
+
               ),
             ),
-
-
-
-            //const SizedBox(height: 20,),
+            SizedBox(height: 10,),
             Text(
-              artists.artist.toString(),
-              style:
-              typography.body?.apply(fontSizeFactor: 1.2),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+                artists.artist.toString(),
+              textAlign: TextAlign.left,
+              softWrap: false,
+                  style:
+                typography.body?.apply(fontSizeFactor: 1.2),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+
+      ),
+
           ],
         ),
-      ),
+      )
+
       );
 
   }

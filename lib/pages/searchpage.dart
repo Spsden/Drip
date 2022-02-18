@@ -152,70 +152,87 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Top result",
-                                style: typography.subtitle
-                                    ?.apply(fontSizeFactor: 1.0),
-                              ),
-                              const SizedBox(height: 15,),
-                              if(topResult.resultType == 'video')
-                                 Container(
-                                   margin: const EdgeInsets.only(left: 20,right: 20),
-                                   child: TrackCardLarge(data: TrackCardData(
-                                     duration: topResult.duration,
-                                     album: '',
-                                     title: topResult.title,
-                                     artist: '${topResult.artists.first.name}',
-                                     thumbnail: topResult.thumbnails.first.url.toString()
-                                   ),
-                                       songIndex: 0,
-                                       onTrackTap: ()
-                                       async {
-                                         var audioUrl =
-                                         await AudioControlClass.getAudioUri(
-                                             topResult.videoId.toString());
-                                         // print(audioUrl.toString());
 
-                                         playerAlerts.buffering = true;
-                                         await context
-                                             .read<ActiveAudioData>()
-                                             .songDetails(
-                                             audioUrl,
-                                             topResult.videoId.toString(),
-                                             topResult.artists![0].name,
-                                             topResult.title.toString(),
-                                             topResult
-                                                 .thumbnails[0]
-                                                 .url
-                                                 .toString());
-                                         currentMediaIndex = 0;
+                              // if(topResult.resultType != null)
+                              //
+                              //   Text(
+                              //     "Top result",
+                              //     style: typography.subtitle
+                              //         ?.apply(fontSizeFactor: 1.0),
+                              //   ),
+                              //   const SizedBox(height: 15,),
+                              //   if(topResult.resultType == 'video')
+                              //
+                              //
+                              //     Container(
+                              //       margin: const EdgeInsets.only(
+                              //           left: 20, right: 20),
+                              //       child: TrackCardLarge(data: TrackCardData(
+                              //           duration: topResult.duration,
+                              //           album: '',
+                              //           title: topResult.title,
+                              //           artist: '${topResult.artists.first
+                              //               .name}',
+                              //           thumbnail: topResult.thumbnails.first
+                              //               .url.toString()
+                              //       ),
+                              //           songIndex: 0,
+                              //           onTrackTap: () async {
+                              //             var audioUrl =
+                              //             await AudioControlClass.getAudioUri(
+                              //                 topResult.videoId.toString());
+                              //             // print(audioUrl.toString());
+                              //
+                              //             playerAlerts.buffering = true;
+                              //             await context
+                              //                 .read<ActiveAudioData>()
+                              //                 .songDetails(
+                              //                 audioUrl,
+                              //                 topResult.videoId.toString(),
+                              //                 topResult.artists[0].name,
+                              //                 topResult.title.toString(),
+                              //                 topResult
+                              //                     .thumbnails[0]
+                              //                     .url
+                              //                     .toString());
+                              //             currentMediaIndex = 0;
+                              //
+                              //             await AudioControlClass.play(
+                              //                 audioUrl: audioUrl,
+                              //                 videoId:
+                              //                 topResult.videoId.toString(),
+                              //                 context: context);
+                              //           },
+                              //           color: context
+                              //               .watch<AppTheme>()
+                              //               .mode == ThemeMode.dark ||
+                              //               context
+                              //                   .watch<AppTheme>()
+                              //                   .mode ==
+                              //                   ThemeMode.system
+                              //               ? Colors.grey[150]
+                              //               : Colors.grey[30]
+                              //           ,
+                              //           SuperSize: MediaQuery
+                              //               .of(context)
+                              //               .size,
+                              //           fromQueue: false),
+                              //     ),
+                              //
+                              //
+                              //   if(topResult.resultType == 'artist')
+                              //     ArtistCard(artists: Artists(
+                              //         artist: topResult.artist,
+                              //         browseId: topResult.browseId,
+                              //         radioId: topResult.radioId,
+                              //         category: topResult.category,
+                              //         resultType: topResult.resultType,
+                              //         shuffleId: topResult.shuffleId,
+                              //         thumbnails: topResult.thumbnails
+                              //     ))
+                              //
 
-                                         await AudioControlClass.play(
-                                             audioUrl: audioUrl,
-                                             videoId:
-                                             topResult.videoId.toString(),
-                                             context: context);
-                                       },
-                                       color: context.watch<AppTheme>().mode == ThemeMode.dark ||
-                                           context.watch<AppTheme>().mode ==
-                                               ThemeMode.system
-                                           ? Colors.grey[150]
-                                           : Colors.grey[30]
-                                       , SuperSize: MediaQuery.of(context).size, fromQueue: false),
-                                 ),
-                              if(topResult.resultType == 'artist')
-                              ArtistCard(artists: Artists(
-                                artist: topResult.artist,
-                                browseId: topResult.browseId,
-                                radioId: topResult.radioId,
-                                category: topResult.category,
-                                resultType: topResult.resultType,
-                                shuffleId: topResult.shuffleId,
-                                thumbnails: topResult.thumbnails
-                              ))
 
-
-                              //Text(topResult.resultType)
 
 
 

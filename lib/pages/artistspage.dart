@@ -3,46 +3,52 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/pages/common/tracklist.dart';
+import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:drip/datasources/searchresults/songsdataclass.dart' as SongDataClass;
 import 'package:provider/provider.dart';
 
+import '../datasources/searchresults/artistsdataclass.dart' as artistD;
 import 'common/backButton.dart';
 
 class ArtistsPage extends StatefulWidget {
   final String channelId;
+
   const ArtistsPage({Key? key, required this.channelId}) : super(key: key);
 
   @override
   _ArtistsPageState createState() => _ArtistsPageState();
 }
 
-class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClientMixin<ArtistsPage>,SingleTickerProviderStateMixin {
-   late ArtistsPageData _artistsPage ;
+class _ArtistsPageState extends State<ArtistsPage>
+    with
+        AutomaticKeepAliveClientMixin<ArtistsPage>,
+        SingleTickerProviderStateMixin {
+  late ArtistsPageData _artistsPage;
 
-   bool status = false;
-   bool fetched = false;
-   late mat.TabController _tabController ;
-
-
+  bool status = false;
+  bool fetched = false;
+  late mat.TabController _tabController;
 
   final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
-
     super.initState();
     _tabController = mat.TabController(length: 5, vsync: this);
   }
 
   @override
   void dispose() {
-
     super.dispose();
     _tabController.dispose();
     _scrollController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
@@ -51,227 +57,223 @@ class _ArtistsPageState extends State<ArtistsPage> with AutomaticKeepAliveClient
     var size = MediaQuery.of(context).size;
     var height = MediaQuery.of(context).size.height;
 
-    if(!status){
+    if (!status) {
       status = true;
       SearchMusic.getArtistPage(widget.channelId).then((value) => {
-        if(mounted){
-          setState(() {
-            _artistsPage = value;
-            fetched = true;
-          })
-        }
-      });
+            if (mounted)
+              {
+                setState(() {
+                  _artistsPage = value;
+                  fetched = true;
+                })
+              }
+          });
     }
     return Stack(
       children: [
+        (!fetched)
+            ? SizedBox()
+            : CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  mat.SliverAppBar(
+                    //leadingWidth: 0,
+                    titleSpacing: 0,
 
-
-        (!fetched) ? SizedBox() :
-        CustomScrollView(
-            controller: _scrollController,
-
-            slivers: [
-              mat.SliverAppBar(
-
-                //leadingWidth: 0,
-                titleSpacing: 0,
-
-
-                toolbarHeight: 90,
-                collapsedHeight: 100,
-                // titleSpacing: 5,
-                pinned: true,
-                //snap: true,
-                // floating: true,
-                actions: <Widget>[
-                  mat.IconButton(
-                    icon: Icon(mat.Icons.more_horiz_rounded),
-                    tooltip: 'Comment Icon',
-                    onPressed: () {},
-                  ), //IconButton
-                  // mat.IconButton(
-                  //   icon: Icon(mat.Icons.settings),
-                  //   tooltip: 'Setting Icon',
-                  //   onPressed: () {},
-                  // ), //IconButton
-                ],
-
-                expandedHeight: height /2,
-                stretch: true,
-                flexibleSpace: mat.FlexibleSpaceBar(
-                  titlePadding: mat.EdgeInsets.only(left: 20,bottom: 60,right: 20),
-                  title: Row(
-
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                        alignment: Alignment.bottomLeft,
-                        width: 200,
-                        child: Column(
-                            crossAxisAlignment: mat.CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-
-                            children :  [
-                              Text(
-                                //'Sonu Nigam',
-                                _artistsPage.name.toString(),
-
-                                style: const mat.TextStyle(
-                                    fontSize: 35
-                                ),
-                              ),
-                              Row(
-
-                                children: [
-                                  mat.Icon(mat.Icons.subscriptions),
-                                  spacer,
-                                  Text(
-                                    _artistsPage.subscribers.toString()
-
-                                    ,
-                                    style: const mat.TextStyle(
-                                        fontSize: 10,
-                                        letterSpacing: 0.2
-                                    ),
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-
-                                ],
-                              )
-
-
-
-
-
-
-                            ]
-
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        // width: 85,
-                        child: mat.ElevatedButton(
-                          style: mat.ButtonStyle(
-                            backgroundColor: mat.MaterialStateProperty.all(context.watch<AppTheme>().color)
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            'Play'
-                          ),
-                        )
-
-
-                        //   onPressed: () {
-                        //     SearchMusic.getArtistPage('UC13ToEQgfmTe8_GW19LYtCg').then((value) => {
-                        //       if(mounted){
-                        //         setState(() {
-                        //           _artistsPage = value;
-                        //           // print(artistsPageData.)
-                        //         })
-                        //       }
-                        //
-                        //     });
-                        //   },
-                        // ),
-                      ),
-
-
+                    toolbarHeight: 90,
+                    collapsedHeight: 100,
+                    // titleSpacing: 5,
+                    // pinned: true,
+                    //snap: true,
+                    // floating: true,
+                    actions: <Widget>[
+                      mat.IconButton(
+                        icon: const Icon(mat.Icons.more_horiz_rounded),
+                        tooltip: 'Comment Icon',
+                        onPressed: () {},
+                      ), //IconButton
+                      // mat.IconButton(
+                      //   icon: Icon(mat.Icons.settings),
+                      //   tooltip: 'Setting Icon',
+                      //   onPressed: () {},
+                      // ), //IconButton
                     ],
 
+                    expandedHeight: height / 2,
+                    stretch: true,
+                    flexibleSpace: mat.FlexibleSpaceBar(
+                      titlePadding: const mat.EdgeInsets.only(
+                          left: 20, bottom: 60, right: 20),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            width: 200,
+                            child: Column(
+                                crossAxisAlignment:
+                                    mat.CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    //'Sonu Nigam',
+                                    _artistsPage.name.toString(),
 
-                  ),
-                  stretchModes: const [
-                    mat.StretchMode.zoomBackground,
-                    mat.StretchMode.blurBackground,
-                  ],
-                  background: ShaderMask(
-                    blendMode: BlendMode.luminosity,
-                    shaderCallback: (bounds) {
-                      return const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black
-                          ]
-                      ).createShader(
-                          bounds
-                      );
-                    },
-                    child:  CachedNetworkImage(
-
-
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => const Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/artist.jpg'),
+                                    style: const mat.TextStyle(fontSize: 35),
+                                  ),
+                                  Row(
+                                    children: [
+                                      mat.Icon(mat.Icons.subscriptions),
+                                      spacer,
+                                      Text(
+                                        _artistsPage.subscribers.toString(),
+                                        style: const mat.TextStyle(
+                                            fontSize: 10, letterSpacing: 0.2),
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(right: 10),
+                              // width: 85,
+                              child: mat.ElevatedButton(
+                                style: mat.ButtonStyle(
+                                    backgroundColor:
+                                        mat.MaterialStateProperty.all(
+                                            context.watch<AppTheme>().color)),
+                                onPressed: () {},
+                                child: Text('Play'),
+                              )),
+                        ],
                       ),
-                      imageUrl: _artistsPage.thumbnails!.last.url.toString(),
-                      placeholder: (context, url) => const Image(
+                      stretchModes: const [
+                        mat.StretchMode.zoomBackground,
+                        mat.StretchMode.blurBackground,
+                      ],
+                      background: ShaderMask(
+                        blendMode: BlendMode.luminosity,
+                        shaderCallback: (bounds) {
+                          return const LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [Colors.transparent, Colors.black])
+                              .createShader(bounds);
+                        },
+                        child: CachedNetworkImage(
                           fit: BoxFit.cover,
-                          image: AssetImage('assets/artist.jpg')),
+                          errorWidget: (context, url, error) => const Image(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/artist.jpg'),
+                          ),
+                          imageUrl:
+                              _artistsPage.thumbnails!.last.url.toString(),
+                          placeholder: (context, url) => const Image(
+                              fit: BoxFit.cover,
+                              image: AssetImage('assets/artist.jpg')),
+                        ),
+                      ),
+                    ),
+
+                    bottom: mat.TabBar(
+                      indicatorWeight: 5,
+                      indicatorSize: mat.TabBarIndicatorSize.label,
+                      automaticIndicatorColorAdjustment: true,
+                      isScrollable: true,
+                      indicator: mat.UnderlineTabIndicator(
+                          borderSide: BorderSide(
+                              width: 4.0,
+                              color: context.watch<AppTheme>().color)),
+                      tabs: const [
+                        mat.Tab(text: 'Albums'),
+                        mat.Tab(text: 'Songs'),
+                        mat.Tab(text: 'Singles'),
+                        mat.Tab(text: 'Videos'),
+                        mat.Tab(text: 'Related'),
+                      ],
+                      controller: _tabController,
                     ),
                   ),
-                ),
+                  SliverFillRemaining(
+                      child: mat.TabBarView(
+                          physics: BouncingScrollPhysics(),
+                          controller: _tabController,
+                          children: [
+                        _artistsPage.related?.results != null
+                            ? GridView(
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 200.0,
+                                  mainAxisSpacing: 5.0,
+                                  crossAxisSpacing: 10.0,
+                                  childAspectRatio: 1 / 1.5,
+                                ),
+                                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                children: List.generate(
+                                    _artistsPage.related!.results!.length,
+                                    (index) {
+                                  //List<artistD.Thumbnail> thumbs = []
 
-                bottom: mat.TabBar(
-                  indicatorWeight: 5,
-                  indicatorSize: mat.TabBarIndicatorSize.label,
-                  automaticIndicatorColorAdjustment: true,
-                  isScrollable: true,
-                  indicator: mat.UnderlineTabIndicator(
-                    borderSide: BorderSide(
-                      width: 4.0,
-                      color: context.watch<AppTheme>().color
+                                  return mat.Material(
+                                    child: ArtistCard(
+                                        artists: artistD.Artists(
+                                            artist: _artistsPage
+                                                .related!.results![index].title,
+                                            browseId: _artistsPage.related!
+                                                .results![index].browseId,
+                                            category: 'null',
+                                            radioId: 'null',
+                                            resultType: 'null',
+                                            shuffleId: 'null',
+                                            thumbnails: _artistsPage.related!
+                                                .results![index].thumbnails
+                                                ?.map((e) => artistD.Thumbnail(
+                                                    width: e.width,
+                                                    height: e.height,
+                                                    url: e.url.toString()))
+                                                .toList())),
+                                  );
+                                }))
+                            : Text('No result'),
 
-                    )
-                  ),
+                        TrackList(songQuery: _artistsPage.name.toString()),
 
 
 
-                  tabs: [
-                    mat.Tab(text: 'Albums'),
-                    mat.Tab(text: 'Songs'),
-                    mat.Tab(text: 'Singles'),
-                    mat.Tab(text: 'Videos'),
-                    mat.Tab(text: 'Related'),
 
-
-                  ],
-                  controller: _tabController,
-                ),
+                        Text('lol2'),
+                        Text('lol2'),
+                        mat.RaisedButton(
+                          onPressed: () {
+                            print(_artistsPage.related?.results?.first.title);
+                            print(_artistsPage
+                                .related?.results?.first.thumbnails?.first.url);
+                          },
+                          child: Text('lol2'),
+                        ),
+                      ]))
+                ],
               ),
-
-              // SliverPersistentHeader(delegate:
-              // MySliverAppBar(expandedHeight: height/2.5),pinned: true,),
-
-
-
-            ],
-          ),
-
         Positioned.fill(
           top: 12,
           left: 10,
           child: Align(
-            alignment: Alignment.topLeft,
-            child: FloatingBackButton(onPressed: () {
-              Navigator.of(context).pop();
-            },)
-          ),
+              alignment: Alignment.topLeft,
+              child: FloatingBackButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )),
         ),
       ],
     );
-
-
   }
 
   @override
-
   bool get wantKeepAlive => true;
 }
 

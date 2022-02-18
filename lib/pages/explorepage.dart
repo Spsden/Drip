@@ -5,6 +5,7 @@ import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
         primary: false,
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
-        padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+        padding: const EdgeInsets.fromLTRB(10, 30, 10, 35),
         child: Column(
           children: [
             // const Align(
@@ -153,7 +154,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                     // );
                   },
                   child: Card(
-                    elevation: 5,
+                    elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -179,7 +180,8 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
               itemCount: searchedList.length,
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
-              padding: const EdgeInsets.only(bottom: 10),
+
+              //padding: const EdgeInsets.only(bottom: 50),
               itemBuilder: (context, index) {
                 return Column(
                   children: [
@@ -188,14 +190,17 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                         Padding(
                           padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
                           child: Text(
+
                             '${searchedList[index]["title"]}',
+
                             style: typography.title,
+                            textAlign: fluent.TextAlign.left,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: boxSize + 10,
+                      height: boxSize + 15,
                       width: double.infinity,
                       child: ListView.builder(
                         shrinkWrap: true,
@@ -262,7 +267,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                                 fluent.ThemeMode.dark ||
                                             context.watch<AppTheme>().mode ==
                                                 fluent.ThemeMode.system
-                                        ? fluent.Colors.grey[150]
+                                        ? fluent.Colors.grey[150].withOpacity(0.4)
                                         : fluent.Colors.grey[30]
 
                                     // if(co)
@@ -272,7 +277,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                     // context.watch<AppTheme>().cardColor
 
                                     ),
-                                margin: EdgeInsets.all(10),
+                                margin: EdgeInsets.only(right: 10),
                                 width: item['type'] != 'playlist'
                                     ? (boxSize - 30) * (16 / 9)
                                     : boxSize - 30,
@@ -314,17 +319,20 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 15.0,
                                     ),
                                     Text(
                                       '${item["title"]}',
-                                      textAlign: TextAlign.center,
+                                      textAlign: TextAlign.left,
                                       softWrap: false,
+                                      style: fluent.TextStyle(
+                                        fontWeight: FontWeight.w700
+                                      ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(bottom: 15),
+                                      margin: const EdgeInsets.only(bottom: 15,left: 5,right: 5),
                                       child: Text(
                                         item['type'] != 'video'
                                             ? '${item["count"]} Tracks | ${item["description"]}'
@@ -349,6 +357,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                         },
                       ),
                     ),
+                    fluent.SizedBox(height: 30,)
                   ],
                 );
               },

@@ -151,7 +151,7 @@ class _SecondPageStackState extends State<SecondPageStack> {
           case 'searchpage':
            // final args =
             return MaterialPageRoute(
-                builder: (context) => AllSearchResults(      searchQuery: widget.fromFirstPage ==  true ?  widget.searchArgs.toString() : ''),
+                builder: (context) => AllSearchResults(searchQuery: widget.fromFirstPage ==  true ?  widget.searchArgs.toString() : ''),
                 settings: settingsforpagetwo);
             break;
 

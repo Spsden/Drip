@@ -267,7 +267,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                           ),
                         ),
                       ),
-                      SliverToBoxAdapter(
+                      const SliverToBoxAdapter(
                         child: SizedBox(
                           height: 20,
                         ),
@@ -383,7 +383,7 @@ class AlbumArtCard extends StatelessWidget {
           //   maxWidth: size.width > 1000 ? 500 : size.width / 2.5,
           // ),
 
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             maxHeight: 500,
             maxWidth: 500
           ),

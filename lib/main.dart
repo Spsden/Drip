@@ -1,9 +1,9 @@
-
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
+import 'package:drip/pages/audioplayer_bar.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/common/commonlistoftracks.dart';
 
@@ -37,7 +37,7 @@ import 'theme.dart';
 
 const String appTitle = 'Drip';
 
- bool darkMode = true;
+bool darkMode = true;
 
 /// Checks if the current environment is a desktop environment.
 // bool get isDesktop {
@@ -52,11 +52,8 @@ const String appTitle = 'Drip';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-    await DesktopWindow.setMinWindowSize(const Size(540, 540));
-   // DesktopWindow.setWindowSize(Size(755,545));
-
-
-
+  await DesktopWindow.setMinWindowSize(const Size(540, 540));
+  // DesktopWindow.setWindowSize(Size(755,545));
 
   setPathUrlStrategy();
 
@@ -78,9 +75,7 @@ void main() async {
   await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
 
-
   runApp(const MyApp());
-
 
   if (defaultTargetPlatform == TargetPlatform.windows ||
       defaultTargetPlatform == TargetPlatform.android ||
@@ -97,8 +92,6 @@ void main() async {
   }
 
   runApp(const MyApp());
-
-
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
@@ -127,53 +120,46 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return MultiProvider(providers: [
-      ChangeNotifierProvider<PlayerNotifiers>(
-        create: (BuildContext context) {
-          return PlayerNotifiers();
-        },
-      ),
-      ChangeNotifierProvider<ActiveAudioData>(
-        create: (BuildContext context) {
-          return ActiveAudioData();
-        },
-      ),
-
-    ]
-    ,
-    child:
-    ChangeNotifierProvider(
-      create: (_) => AppTheme(),
-      builder: (context, _) {
-        final appTheme = context.watch<AppTheme>();
-        return FluentApp(
-          title: appTitle,
-          themeMode: appTheme.mode,
-          debugShowCheckedModeBanner: false,
-          initialRoute: '/',
-          routes: {'/': (_) => const MyHomePage()},
-          theme: ThemeData(
-            accentColor: appTheme.color,
-            brightness: appTheme.mode == ThemeMode.system
-                ? darkMode
-                    ? Brightness.dark
-                    : Brightness.light
-                : appTheme.mode == ThemeMode.dark
-                    ? Brightness.dark
-                    : Brightness.light,
-            visualDensity: VisualDensity.standard,
-            focusTheme: FocusThemeData(
-              glowFactor: is10footScreen() ? 2.0 : 0.0,
-            ),
-          ));
-
-
-  })
-    );}
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<PlayerNotifiers>(
+            create: (BuildContext context) {
+              return PlayerNotifiers();
+            },
+          ),
+          ChangeNotifierProvider<ActiveAudioData>(
+            create: (BuildContext context) {
+              return ActiveAudioData();
+            },
+          ),
+        ],
+        child: ChangeNotifierProvider(
+            create: (_) => AppTheme(),
+            builder: (context, _) {
+              final appTheme = context.watch<AppTheme>();
+              return FluentApp(
+                  title: appTitle,
+                  themeMode: appTheme.mode,
+                  debugShowCheckedModeBanner: false,
+                  initialRoute: '/',
+                  routes: {'/': (_) => const MyHomePage()},
+                  theme: ThemeData(
+                    accentColor: appTheme.color,
+                    brightness: appTheme.mode == ThemeMode.system
+                        ? darkMode
+                            ? Brightness.dark
+                            : Brightness.light
+                        : appTheme.mode == ThemeMode.dark
+                            ? Brightness.dark
+                            : Brightness.light,
+                    visualDensity: VisualDensity.standard,
+                    focusTheme: FocusThemeData(
+                      glowFactor: is10footScreen() ? 2.0 : 0.0,
+                    ),
+                  ));
+            }));
+  }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -183,7 +169,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   bool value = false;
 
   int index = 0;
@@ -207,34 +192,31 @@ class _MyHomePageState extends State<MyHomePage> {
     screens = [
       const FirstPageStack(),
       //const YouTubeHomeScreen(),
-      const SecondPageStack(searchArgs: '',fromFirstPage: false),
+      const SecondPageStack(searchArgs: '', fromFirstPage: false),
 
       //TrackCard(),
 
-      ArtistsPage(channelId: 'UC13ToEQgfmTe8_GW19LYtCg',),
+      ArtistsPage(
+        channelId: 'UC13ToEQgfmTe8_GW19LYtCg',
+      ),
       const CurrentPlaylist(fromMainPage: true),
-
 
       const Settings()
     ];
     _pageController = PageController(initialPage: _selectedIndex);
 
-
     // _audioPlayerControls = AudioPlayerControls();
     _sheetcontroller = SheetController();
 
     // setWindowEffect(flutter_acrylic.WindowEffect.acrylic);
-
   }
 
-  bool onWillPop(){
-    if(Navigator.of(context).canPop())
-    {
+  bool onWillPop() {
+    if (Navigator.of(context).canPop()) {
       return true;
-    } return false;
+    }
+    return false;
   }
-
-
 
   @override
   void dispose() {
@@ -248,35 +230,26 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
-      appBar:   NavigationAppBar(
-        leading: IconButton(
-            onPressed: () {
-             // print('lol');
+      appBar: NavigationAppBar(
+          leading: IconButton(
+              onPressed: () {
+                // print('lol');
 
-            //  onWillPop() == true ? Navigator.of(context).pop() : null;
-             // Navigator.
-             // Navigator.of(context).p;
+                //  onWillPop() == true ? Navigator.of(context).pop() : null;
+                // Navigator.
+                // Navigator.of(context).p;
 
+                // _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
+                //     duration: const Duration(milliseconds: 400));
+              },
+              icon: Icon(FluentIcons.back)),
 
-              // _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
-              //     duration: const Duration(milliseconds: 400));
+          //leading: BackBu
 
-            },
-            icon: Icon(FluentIcons.back)),
-
-        //leading: BackBu
-
-
-        title: TopBar()
-
-      ),
-
+          title: const TopBar()),
       pane: NavigationPane(
-
-
         selected: _selectedIndex,
         onChanged: (i) {
-
           index = i;
           _selectedIndex = i;
           _pageController.animateToPage(index,
@@ -287,11 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
               _sheetcontroller.collapse();
               sheetCollapsed = true;
             }
-
-
           });
-
-        } ,
+        },
         //setState(() => index = i),
         size: const NavigationPaneSize(
           openWidth: 200,
@@ -299,13 +269,12 @@ class _MyHomePageState extends State<MyHomePage> {
           openMaxWidth: 200,
         ),
         header: Container(
-          height: kOneLineTileHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
-          child: const Text('Drip',
-          style:TextStyle(
-            fontSize: 20
-          ) ,)
-        ),
+            height: kOneLineTileHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            child: const Text(
+              'Drip',
+              style: TextStyle(fontSize: 20),
+            )),
         displayMode: PaneDisplayMode.compact,
         indicatorBuilder: () {
           switch (appTheme.indicator) {
@@ -328,15 +297,14 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text('Search'),
           ),
           PaneItem(
-            icon: const Icon(FluentIcons.playlist_music),
-            title: const Text('Song'),
+            icon: const Icon(FluentIcons.personalize),
+            title: const Text('Artists'),
           ),
           PaneItemSeparator(),
           PaneItem(
             icon: const mat.Icon(FluentIcons.playlist_music),
             title: const Text('Play queue'),
           ),
-
         ],
         // autoSuggestBox: AutoSuggestBox(
         //   controller: TextEditingController(),
@@ -360,15 +328,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       content: Stack(
         children: [
-          Positioned.fill(child: PageView(
+          Positioned.fill(
+              child: PageView(
             scrollDirection: Axis.vertical,
             controller: _pageController,
             physics: const NeverScrollableScrollPhysics(),
             children: screens,
           )),
-
           Stack(
             children: [
+
               SlidingSheet(
                 closeOnBackButtonPressed: true,
                 color: Colors.transparent,
@@ -443,12 +412,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottom: 70.5,
                 left: 5,
                 right: 5,
-                child:  ValueListenableBuilder<ProgressBarState>(
+                child: ValueListenableBuilder<ProgressBarState>(
                   valueListenable: progressNotifier,
                   builder: (_, value, __) {
                     return av.ProgressBar(
-                      thumbGlowColor:   Colors.blue,
-                      baseBarColor:  context.watch<AppTheme>().color.withOpacity(0.3 ),
+                      thumbGlowColor: Colors.blue,
+                      baseBarColor:
+                          context.watch<AppTheme>().color.withOpacity(0.3),
                       thumbColor: context.watch<AppTheme>().color,
                       progressBarColor: context.watch<AppTheme>().color,
                       progress: value.current,
@@ -457,37 +427,25 @@ class _MyHomePageState extends State<MyHomePage> {
                       onSeek: (position) => AudioControlClass.seek(position),
                     );
                   },
-                ),),
-
+                ),
+              ),
             ],
-
           ),
-
         ],
-
       ),
     );
   }
 }
 
-
-
 class TopBar extends StatelessWidget {
-
-
-
   const TopBar({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
-    var color =  context.watch<AppTheme>().mode ==
-        ThemeMode.dark ||
-        context.watch<AppTheme>().mode ==
-            ThemeMode.system
+    var color = context.watch<AppTheme>().mode == ThemeMode.dark ||
+            context.watch<AppTheme>().mode == ThemeMode.system
         ? Colors.grey[30]
-        :  Colors.grey[150];
+        : Colors.grey[150];
 
     return SizedBox(
       height: 35.0,
@@ -497,13 +455,14 @@ class TopBar extends StatelessWidget {
           children: [
             Expanded(
                 child: MoveWindow(
-                  child: Padding(
-                    padding: mat.EdgeInsets.only(top: 7),
-                    child: const Text('Drip',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
-                  ),
-                )),
-
+              child: Padding(
+                padding: mat.EdgeInsets.only(top: 7),
+                child: const Text(
+                  'Drip',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+              ),
+            )),
             Expanded(child: MoveWindow()),
             Row(
               children: [
@@ -512,8 +471,7 @@ class TopBar extends StatelessWidget {
                 ),
                 MaximizeWindowButton(
                     colors: WindowButtonColors(iconNormal: color)),
-                CloseWindowButton(
-                    colors: WindowButtonColors(iconNormal: color))
+                CloseWindowButton(colors: WindowButtonColors(iconNormal: color))
               ],
             )
           ],
@@ -522,4 +480,3 @@ class TopBar extends StatelessWidget {
     );
   }
 }
-
