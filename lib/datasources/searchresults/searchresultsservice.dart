@@ -3,10 +3,12 @@ import 'dart:core';
 
 
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart' as artistPage;
+import 'package:drip/datasources/searchresults/moods_data_class.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
 import 'package:drip/datasources/searchresults/videodataclass.dart' as videos;
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+import 'package:drip/pages/moods_page.dart';
 import 'package:http/http.dart' as http;
 
 import 'albumsdataclass.dart';
@@ -255,7 +257,7 @@ class SearchMusic {
 
 
     } else {
-      return <songs.Songs> [];
+      return <CommunityPlaylist> [];
     }
   }
 
@@ -358,6 +360,32 @@ class SearchMusic {
 
     }
   }
+
+  static Future getMoods() async {
+    final response = await http.get(Uri.parse(serverAddress + 'moodcat' ));
+
+    try {
+      if(response.statusCode == 200){
+        var rawResponse = response.body.toString();
+
+        print(rawResponse);
+
+        final MoodsCategories moodsCategories  = moodsCategoriesFromJson(rawResponse);
+        //print(artistsPage.name.toString());
+        return moodsCategories;
+
+
+      } else {
+        //print(response.statusCode.toString());
+      }
+    } catch (e) {
+      //print(e.toString());
+
+
+    }
+  }
+
+
 
 
 

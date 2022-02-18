@@ -11,6 +11,7 @@ import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/artistspage.dart';
+import 'package:drip/pages/moods_page.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -196,9 +197,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
       //TrackCard(),
 
-      ArtistsPage(
-        channelId: 'UC13ToEQgfmTe8_GW19LYtCg',
-      ),
+      // ArtistsPage(
+      //   channelId: 'UC13ToEQgfmTe8_GW19LYtCg',
+      // ),
+      MoodsAndCategories(),
       const CurrentPlaylist(fromMainPage: true),
 
       const Settings()
@@ -233,11 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: NavigationAppBar(
           leading: IconButton(
               onPressed: () {
-                // print('lol');
 
-                //  onWillPop() == true ? Navigator.of(context).pop() : null;
-                // Navigator.
-                // Navigator.of(context).p;
 
                 // _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
                 //     duration: const Duration(milliseconds: 400));
@@ -306,11 +304,11 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text('Play queue'),
           ),
         ],
-        // autoSuggestBox: AutoSuggestBox(
-        //   controller: TextEditingController(),
-        //   items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-        // ),
-        // autoSuggestBoxReplacement: const Icon(FluentIcons.search),
+        autoSuggestBox: AutoSuggestBox(
+          controller: TextEditingController(),
+          items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
+        ),
+        autoSuggestBoxReplacement: const Icon(FluentIcons.search),
         footerItems: [
           PaneItemSeparator(),
           PaneItem(

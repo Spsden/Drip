@@ -10,6 +10,7 @@ import 'package:drip/navigation/navigationstacks.dart';
 import 'package:drip/pages/common/commonlistoftracks.dart';
 
 import 'package:drip/pages/common/tracklist.dart';
+import 'package:drip/pages/moods_page.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
@@ -95,7 +96,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
       });
     }
     return SearchFunction(
-      liveSearch: false,
+      liveSearch: true,
       controller: _controller,
       onSubmitted: (searchQuery) async {
         setState(() {
@@ -103,6 +104,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
           query = searchQuery;
           status = false;
           listOfSearchResults = {};
+
         });
       },
       body:
@@ -117,12 +119,15 @@ class _AllSearchResultsState extends State<AllSearchResults> {
           //   ),
           // ) :
 
-          (!fetched)
+          (!fetched || _controller.query.isEmpty)
               ? Center(
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: context.watch<AppTheme>().color, size: 300),
+                  child: MoodsAndCategories()
+
+                  // LoadingAnimationWidget.staggeredDotsWave(
+                  //     color: context.watch<AppTheme>().color, size: 300),
                 )
-              : Padding(
+              :
+          Padding(
                   padding:
                       const EdgeInsets.only(left: 10.0, right: 10.0, top: 90),
                   child: ScrollConfiguration(

@@ -94,6 +94,16 @@ class _SearchFunctionState extends State<SearchFunction>
 
     return mat.Scaffold(
       body: FloatingSearchBar(
+        accentColor: context.watch<AppTheme>().color.withOpacity(0.2),
+        debounceDelay: Duration(milliseconds: 500),
+        clearQueryOnClose: false,
+       // progress: true,
+
+
+
+
+
+
         leadingActions: [
           Navigator.of(context)
           .context
@@ -129,12 +139,23 @@ class _SearchFunctionState extends State<SearchFunction>
         title: Text(selectedTerm),
         hint: "Let's Play.....",
         actions: [
+
           // FloatingSearchBarAction.()
 
-          FloatingSearchBarAction.searchToClear()
+
+          FloatingSearchBarAction.searchToClear(
+
+
+          )
         ],
         onQueryChanged: (query) {
           setState(() {
+           //for liveSearch//
+            selectedTerm = query;
+            widget.onSubmitted(query);
+
+
+
             filteredSearchHistory = filterSearchTerms(filter: query);
           });
         },
