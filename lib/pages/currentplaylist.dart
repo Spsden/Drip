@@ -5,11 +5,9 @@ import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/pages/common/commonlistoftracks.dart';
 
-import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../datasources/audiofiles/activeaudiodata.dart';
@@ -30,7 +28,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
 
   //late List<Track> currentTracks = [];
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -53,7 +51,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
     var size = MediaQuery.of(context).size;
 
     return ValueListenableBuilder<int>(
-        valueListenable: currentTrackIndex,
+        valueListenable: currentTrackValueNotifier,
         builder: (_, trck, __) {
           return ValueListenableBuilder<List<Track>>(
               valueListenable: tracklist,
@@ -61,7 +59,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                 // return CommonPlaylist(currentTracks: currentTracks, trck: trck,);
 
                 if (currentTracks.isEmpty) {
-                  return Text('Oops no playlist loaded');
+                  return const Text('Oops no playlist loaded');
                 } else if (size.width > 900) {
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -69,14 +67,14 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //if(size.height >900)
-                        Text(
+                        const Text(
                           'Play queue',
                           style: TextStyle(
                               fontSize: 40, fontWeight: mat.FontWeight.w600),
                         ),
 
                         Container(
-                          margin: EdgeInsets.only(top: 10),
+                          margin: const EdgeInsets.only(top: 10),
                           height: size.height *70/100,
                           // margin: Edge,
                           decoration: BoxDecoration(
@@ -98,7 +96,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                        children: [
 
                                          Container(
-                                           margin : EdgeInsets.only(top : 40,),
+                                           margin : const EdgeInsets.only(top : 40,),
                                            child: ListView.builder(
 
                                                controller: _scrollController,
@@ -110,7 +108,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                                itemBuilder: (context, index) {
                                                  return  Padding(
 
-                                                   padding: EdgeInsets.fromLTRB(10, 8, 10, 0),
+                                                   padding: const EdgeInsets.fromLTRB(10, 8, 10, 0),
                                                    child: TrackCardLarge(
                                                      data: TrackCardData(
                                                          title: currentTracks[index].title.toString(),
@@ -130,7 +128,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                                        var audioUrl =
                                                        await AudioControlClass.getAudioUri(
                                                            currentTracks[index].videoId.toString());
-                                                       print(audioUrl.toString());
+                                                     //  print(audioUrl.toString());
 
                                                        playerAlerts.buffering = true;
                                                        await context
@@ -170,7 +168,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                          LayoutBuilder(
                                            builder: (context, constraints) =>
                                             Container(
-                                              padding: EdgeInsets.all(5),
+                                              padding: const EdgeInsets.all(5),
                                              width:constraints.maxWidth,
                                              color: Colors.transparent,
                                                child: Text('Up Next',
@@ -281,7 +279,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                               //controller: _sc,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                                   child: TrackCardLarge(
                                     data: TrackCardData(
                                         title: currentTracks[index]
@@ -306,7 +304,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                               currentTracks[index]
                                                   .videoId
                                                   .toString());
-                                      print(audioUrl.toString());
+                                     // print(audioUrl.toString());
 
                                       playerAlerts.buffering = true;
                                       await context
@@ -432,7 +430,7 @@ class AlbumArtCard extends StatelessWidget {
                                 image: AssetImage('assets/artist.jpg')),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           height:
                               min(constraints.maxHeight, constraints.maxWidth),
                           width:

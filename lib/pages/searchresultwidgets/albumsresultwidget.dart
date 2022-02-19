@@ -1,5 +1,4 @@
 import 'package:drip/datasources/searchresults/albumsdataclass.dart';
-import 'package:drip/pages/currentplaylist.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -176,13 +175,13 @@ class AlbumCard extends StatelessWidget {
                   : Colors.grey[30]
 
           ),
-          margin: EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
           width: boxSize - 30,
           child: Column(
             children: [
               Expanded(
                 child: mat.Card(
-                  margin: EdgeInsets.only(top: 15.0),
+                  margin: const EdgeInsets.only(top: 15.0),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),

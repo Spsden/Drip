@@ -110,5 +110,5 @@ msix_config:
   publisher_display_name: SurajPratapSingh
   identity_name: spden.app.drip
   msix_version: 1.0.0.0
-  #logo_path: C:\<PathToIcon>\<Logo.png>
+  logo_path: D:\beep\version2\fluentUiRewrite\dripfluentnew\Drip\assets\driplogocircle.png
   capabilities: "internetClient"

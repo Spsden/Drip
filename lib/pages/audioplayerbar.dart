@@ -6,13 +6,10 @@ import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 
-import 'package:flutter_acrylic/flutter_acrylic.dart';
 
 import 'package:provider/provider.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart' as fluent;
 
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -61,7 +58,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     super.dispose();
   }
 
-  double _sliderval = 20;
+  final double _sliderval = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +75,15 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-               TrackInfo(),
+               const TrackInfo(),
                MediaQuery.of(context).size.width > 500 ?
               const Spacer() : const SizedBox(width: 5,),
-             PlayBackControls(),
+             const PlayBackControls(),
               const Spacer(),
              //if (MediaQuery.of(context).size.width > 800)
               if(constraints.maxWidth >800)
 
-               MoreControls(),
+               const MoreControls(),
 
             ],
           ),
@@ -174,8 +171,8 @@ class _PlayBackControlsState extends State<PlayBackControls> {
     if(playerAlerts.playbackComplete){
 
       Timer.run(() {
-        AudioControlClass.nextMusic(context,1);
-        print('tap');
+        AudioControlClass.nextMusic(context,1,true);
+        //print('next play');
 
       });
 
@@ -229,7 +226,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
               decoration: BoxDecoration(
                 border: Border.all(
                   color: context.watch<AppTheme>().color,
-                  width: 2.0,
+                  width: 3.0,
                 ),
                 borderRadius: BorderRadius.circular(largeIcons),
               ),
@@ -251,20 +248,23 @@ class _PlayBackControlsState extends State<PlayBackControls> {
 
                       if (playing != true) {
                         return mat.IconButton(
+                          splashRadius:30 ,
                           hoverColor: context.watch<AppTheme>().color,
                           icon: const Icon(mat.Icons.play_arrow),
                           iconSize: largeIcons,
                           onPressed: player.play,
                         );
                       }
-                      else if(playerAlerts.playbackComplete){
+                      else if(playerState!.isCompleted){
                         // AudioControlClass.nextMusic(context,1);
+                        print('complll');
                         autoPress(context);
 
 
 
                         return mat.IconButton(
                           hoverColor: context.watch<AppTheme>().color,
+                            splashRadius:30,
                           icon: const Icon(mat.Icons.play_arrow),
                           iconSize: largeIcons,
                           onPressed: (){},
@@ -274,6 +274,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
 
                       else if (playing == true) {
                         return mat.IconButton(
+                            splashRadius:30,
                           hoverColor: context.watch<AppTheme>().color,
                           icon: const Icon(mat.Icons.pause),
                           iconSize: largeIcons,
@@ -317,7 +318,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
               icon: const Icon(mat.Icons.skip_next),
               iconSize: smallIcons,
               onPressed: () {
-                AudioControlClass.nextMusic(context,2);
+                AudioControlClass.nextMusic(context,2,false);
                 //AudioControlClass.nex();
                 //player.next();
                 print(medias.length.toString());

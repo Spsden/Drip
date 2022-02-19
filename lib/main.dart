@@ -3,29 +3,17 @@ import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
-import 'package:drip/pages/audioplayer_bar.dart';
 import 'package:drip/pages/audioplayerbar.dart';
-import 'package:drip/pages/common/commonlistoftracks.dart';
 
-import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/currentplaylist.dart';
-import 'package:drip/pages/explorepage.dart';
-import 'package:drip/pages/artistspage.dart';
-import 'package:drip/pages/moods_page.dart';
-import 'package:drip/pages/search.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
-import 'package:hive/hive.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:desktop_window/desktop_window.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -49,8 +37,8 @@ void main() async {
 
   if(Platform.isWindows){
     doWhenWindowReady((){
-      appWindow.minSize = Size(540,540);
-      appWindow.size = Size(900,640);
+      appWindow.minSize = const Size(540,540);
+      appWindow.size = const Size(900,640);
       appWindow.alignment = Alignment.center;
       appWindow.show();
       appWindow.title = 'Drip';
@@ -247,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
                       duration: const Duration(milliseconds: 400));
                 },
-                icon: Icon(FluentIcons.back)),
+                icon: const Icon(FluentIcons.back)),
           ),
 
           //leading: BackBu
@@ -371,7 +359,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Container(
                         height: MediaQuery.of(context).size.height -155,
                         color: Colors.transparent,
-                        child:    CurrentPlaylist(fromMainPage: false),
+                        child:    const CurrentPlaylist(fromMainPage: false),
                       ),
                     ),
                   );
@@ -464,14 +452,36 @@ class TopBar extends StatelessWidget {
       child: WindowTitleBarBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
             Expanded(
                 child: MoveWindow(
-              child: Padding(
-                padding: mat.EdgeInsets.only(top: 7),
-                child: const Text(
-                  'Drip',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              child: Container(
+                margin: const mat.EdgeInsets.only(top: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                  children: [
+                    Image.asset(
+
+                      'assets/driplogocircle.png',
+                      filterQuality: FilterQuality.high,
+                      alignment: Alignment.center,
+                      height: 30,
+                      width: 30,
+
+                      //height: 10,
+                      //width: 10,
+                    ),
+                    const SizedBox(width: 10,),
+                    const Text(
+                      'Drip',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+
+                  ],
+
                 ),
               ),
             )),

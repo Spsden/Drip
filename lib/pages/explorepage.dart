@@ -5,9 +5,7 @@ import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -16,7 +14,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../datasources/audiofiles/activeaudiodata.dart';
 
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
@@ -277,7 +274,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                     // context.watch<AppTheme>().cardColor
 
                                     ),
-                                margin: EdgeInsets.only(right: 10),
+                                margin: const EdgeInsets.only(right: 10),
                                 width: item['type'] != 'playlist'
                                     ? (boxSize - 30) * (16 / 9)
                                     : boxSize - 30,
@@ -285,7 +282,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                   children: [
                                     Expanded(
                                       child: Card(
-                                        margin: EdgeInsets.only(top: 15.0),
+                                        margin: const EdgeInsets.only(top: 15.0),
                                         elevation: 5,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -326,7 +323,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                       '${item["title"]}',
                                       textAlign: TextAlign.left,
                                       softWrap: false,
-                                      style: fluent.TextStyle(
+                                      style: const fluent.TextStyle(
                                         fontWeight: FontWeight.w700
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -357,12 +354,12 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                         },
                       ),
                     ),
-                    fluent.SizedBox(height: 30,)
+                    const fluent.SizedBox(height: 30,)
                   ],
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 65,
             )
           ],

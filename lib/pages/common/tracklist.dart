@@ -25,7 +25,6 @@ class TrackBars extends StatefulWidget {
   final VoidCallback? onScroll;
   final bool? isLoading;
 
-
   const TrackBars(
       {Key? key,
       required this.isFromPrimarySearchPage,
@@ -44,11 +43,10 @@ class _TrackBarsState extends State<TrackBars> {
 
   late WatchPlaylists watchPlaylists;
 
-  void printing() async{
-    watchPlaylists.tracks?.forEach((track){
+  void printing() async {
+    watchPlaylists.tracks?.forEach((track) {
       print(track.title.toString());
     });
-
   }
 
   @override
@@ -96,57 +94,43 @@ class _TrackBarsState extends State<TrackBars> {
                   child: LoadingAnimationWidget.staggeredDotsWave(
                       color: context.watch<AppTheme>().color, size: 100));
             } else {
-              return  Padding(
+              return Padding(
                 padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
                 child: TrackCardLarge(
                   data: TrackCardData(
                       title: widget.songs[index].title.toString(),
-                      artist: widget.songs[index]
-                          .artists![0]
-                          .name
-                          .toString(),
+                      artist: widget.songs[index].artists![0].name.toString(),
                       album: 'Drip',
-                      duration:
-                      widget.songs[index].duration.toString(),
-                      thumbnail: widget.songs[index]
-                          .thumbnails[0]
-                          .url
-                          .toString()),
+                      duration: widget.songs[index].duration.toString(),
+                      thumbnail:
+                          widget.songs[index].thumbnails[0].url.toString()),
                   songIndex: index,
                   onTrackTap: () async {
-                    var audioUrl =
-                    await AudioControlClass.getAudioUri(
+                    var audioUrl = await AudioControlClass.getAudioUri(
                         widget.songs[index].videoId.toString());
                     print(audioUrl.toString());
 
                     playerAlerts.buffering = true;
-                    await context
-                        .read<ActiveAudioData>()
-                        .songDetails(
+                    await context.read<ActiveAudioData>().songDetails(
                         audioUrl,
                         widget.songs[index].videoId.toString(),
                         widget.songs[index].artists![0].name.toString(),
                         widget.songs[index].title.toString(),
-                        widget.songs[index]
-                            .thumbnails[0]
-                            .url
-                            .toString());
+                        widget.songs[index].thumbnails[0].url.toString());
                     currentMediaIndex = 0;
 
                     await AudioControlClass.play(
                         audioUrl: audioUrl,
-                        videoId:
-                        widget.songs[index].videoId.toString(),
+                        videoId: widget.songs[index].videoId.toString(),
                         context: context);
                   },
                   color: index % 2 != 0
                       ? Colors.transparent
                       : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                      context.watch<AppTheme>().mode ==
-                          ThemeMode.system
-                      ? Colors.grey[150]
-                      : Colors.grey[30], SuperSize:
-                  MediaQuery.of(context).size,
+                              context.watch<AppTheme>().mode == ThemeMode.system
+                          ? Colors.grey[150]
+                          : Colors.grey[30],
+                  SuperSize: MediaQuery.of(context).size,
                   widthy: 800,
                   fromQueue: true,
                 ),
@@ -156,10 +140,6 @@ class _TrackBarsState extends State<TrackBars> {
     );
   }
 }
-
-
-
-
 
 //Track list for infinite Pagination with search
 
@@ -202,8 +182,7 @@ class _TrackListState extends State<TrackList> {
   Future<void> fetchSongs(int pageKey) async {
     try {
       final List<Songs> newItems = await SearchMusic.getOnlySongs(
-        query == '' ? widget.songQuery : query,
-          _pageSize);
+          query == '' ? widget.songQuery : query, _pageSize);
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -223,9 +202,7 @@ class _TrackListState extends State<TrackList> {
         liveSearch: false,
         controller: _controller,
         onSubmitted: (searchQuery) async {
-
-            query = searchQuery;
-
+          query = searchQuery;
 
           _pagingController.refresh();
           // setState(() {
@@ -242,24 +219,26 @@ class _TrackListState extends State<TrackList> {
               slivers: [
                 const SliverToBoxAdapter(child: SizedBox(height: 80)),
                 SliverToBoxAdapter(
+                    child: Text(
+                  query,
 
-                 child: Text(query,
-
-                   // widget.songQuery == ''
-                   //   ? '  Results for \"${query}\"'
-                   //   : '  Results for \"${widget.songQuery}\"',
-                 style:  typography.display?.apply(fontSizeFactor: 1.0),
-                 maxLines: 1,
-                 overflow: TextOverflow.ellipsis,)
-                ),
+                  // widget.songQuery == ''
+                  //   ? '  Results for \"${query}\"'
+                  //   : '  Results for \"${widget.songQuery}\"',
+                  style: typography.display?.apply(fontSizeFactor: 1.0),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )),
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 15,),
+                  child: SizedBox(
+                    height: 15,
+                  ),
                 ),
                 PagedSliverList.separated(
                   //physics: BouncingScrollPhysics(),
 
                   pagingController: _pagingController,
-                 // padding: const EdgeInsets.all(10),
+                  // padding: const EdgeInsets.all(10),
                   separatorBuilder: (context, index) => const SizedBox(
                     height: 0,
                   ),
@@ -280,9 +259,7 @@ class _TrackListState extends State<TrackList> {
                     // firstPageErrorIndicatorBuilder: (context) =>
                   ),
                 ),
-
               ],
-
             ),
           ),
         ));
@@ -311,7 +288,7 @@ class _TrackListItemState extends State<TrackListItem> {
       onPressed: () async {
         var audioUrl =
             await AudioControlClass.getAudioUri(widget.songs.videoId);
-        print(audioUrl.toString());
+        // print(audioUrl.toString());
 
         playerAlerts.buffering = true;
         await context.read<ActiveAudioData>().songDetails(
@@ -321,27 +298,29 @@ class _TrackListItemState extends State<TrackListItem> {
             widget.songs.title,
             widget.songs.thumbnails[0].url);
 
-        await AudioControlClass.play(audioUrl: audioUrl, videoId: widget.songs.videoId.toString(), context: context);
+        await AudioControlClass.play(
+            audioUrl: audioUrl,
+            videoId: widget.songs.videoId.toString(),
+            context: context);
       },
       builder: (BuildContext, states) {
         return AnimatedContainer(
           margin: const EdgeInsets.only(left: 10, right: 20, bottom: 15),
           padding: const EdgeInsets.only(top: 5, bottom: 5),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color:  context.watch<AppTheme>().mode == ThemeMode.dark ||
-                context.watch<AppTheme>().mode ==
-                    ThemeMode.system
-                ? Colors.grey[150]
-                : Colors.grey[30]
+              borderRadius: BorderRadius.circular(8),
+              color: context.watch<AppTheme>().mode == ThemeMode.dark ||
+                      context.watch<AppTheme>().mode == ThemeMode.system
+                  ? Colors.grey[150]
+                  : Colors.grey[30]
 
-            //
-            // ButtonThemeData.buttonColor(Brightness.dark, states
-            //     // FluentTheme.of(context),
-            //     // states,
-            //
-            //     ),
-          ),
+              //
+              // ButtonThemeData.buttonColor(Brightness.dark, states
+              //     // FluentTheme.of(context),
+              //     // states,
+              //
+              //     ),
+              ),
           duration: FluentTheme.of(context).fastAnimationDuration,
           child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
@@ -363,8 +342,6 @@ class _TrackListItemState extends State<TrackListItem> {
                       image: AssetImage('assets/cover.jpg'),
                     ),
                     imageUrl: widget.songs.thumbnails.first.url.toString(),
-
-
                     placeholder: (context, url) => const Image(
                         fit: BoxFit.cover,
                         image: AssetImage('assets/cover.jpg')),
@@ -389,15 +366,15 @@ class _TrackListItemState extends State<TrackListItem> {
                     ),
                   ),
                   spacer,
-                  if( MediaQuery.of(context).size.width > 500)
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 1 / 8,
-                    child: Text(
-                      widget.songs.album!.name.toString(),
-                      //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
-                      overflow: TextOverflow.ellipsis,
+                  if (MediaQuery.of(context).size.width > 500)
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 1 / 8,
+                      child: Text(
+                        widget.songs.album!.name.toString(),
+                        //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 1 / 15,
                     child: Text(
@@ -407,7 +384,7 @@ class _TrackListItemState extends State<TrackListItem> {
                     ),
                   ),
                   biggerSpacer,
-                  const Icon(FluentIcons.play)
+                  const Icon(FluentIcons.more_vertical)
                   // mat.IconButton(
                   //     iconSize : 10,
                   //     onPressed: () {}, icon: Icon(FluentIcons.play))

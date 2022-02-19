@@ -80,7 +80,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                   itemBuilder: (context, index) => Container(
                     height: 30,
                     width: 60,
-                    decoration: BoxDecoration(color: Colors.transparent),
+                    decoration: const BoxDecoration(color: Colors.transparent),
                     child: mat.Card(
                       semanticContainer: true,
                       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -120,7 +120,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                     itemBuilder: (context, index) => Container(
                           height: 30,
                           width: 60,
-                          decoration: BoxDecoration(color: Colors.transparent),
+                          decoration: const BoxDecoration(color: Colors.transparent),
                           child: mat.Card(
                             semanticContainer: true,
                             clipBehavior: Clip.antiAliasWithSaveLayer,

@@ -108,7 +108,7 @@ class ArtistCard extends StatelessWidget {
 
               ),
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Text(
                 artists.artist.toString(),
               textAlign: TextAlign.left,
@@ -272,7 +272,7 @@ class _ArtistsSearchResultsState extends State<ArtistsSearchResults> {
 
 class MyClip extends CustomClipper<Rect> {
   Rect getClip(Size size) {
-    return Rect.fromCircle(center: Offset(0,0),radius: 80);
+    return Rect.fromCircle(center: const Offset(0,0),radius: 80);
   }
 
   bool shouldReclip(oldClipper) {

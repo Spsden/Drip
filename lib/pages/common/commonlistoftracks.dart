@@ -67,7 +67,7 @@ class TrackCardLarge extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(8),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               //mainAxisSize: MainAxisSize.min,
@@ -153,7 +153,6 @@ class TrackCardSmall extends StatelessWidget {
     var size = MediaQuery.of(context).size.width;
 
     var spacer = SizedBox(width: size/80);
-    var  biggerSpacer = SizedBox(width: size/40);
     return  mat.Material(
       borderRadius: mat.BorderRadius.circular(10),
       color: color,
@@ -162,7 +161,7 @@ class TrackCardSmall extends StatelessWidget {
           onTrackTap();
         },
         child: Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               Row(

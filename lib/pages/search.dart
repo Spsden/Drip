@@ -1,4 +1,3 @@
-import 'package:drip/pages/searchpage.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -98,7 +97,7 @@ class _SearchFunctionState extends State<SearchFunction>
         height: 45,
         axisAlignment: -0.9,
         accentColor: context.watch<AppTheme>().color.withOpacity(0.2),
-        debounceDelay: Duration(milliseconds: 500),
+        debounceDelay: const Duration(milliseconds: 500),
         clearQueryOnClose: false,
        // progress: true,
 
@@ -114,11 +113,11 @@ class _SearchFunctionState extends State<SearchFunction>
           !.canPop()
               ?
               IconButton(
-                  icon: Icon(FluentIcons.back),
+                  icon: const Icon(FluentIcons.back),
                   onPressed: () => Navigator.of(context)
                       .context
                       .findAncestorStateOfType<NavigatorState>()
-                      ?.pop()) :SizedBox()
+                      ?.pop()) :const SizedBox()
         ],
 
         width: MediaQuery.of(context).size.width / 2,
@@ -191,6 +190,9 @@ class _SearchFunctionState extends State<SearchFunction>
                     return mat.Container(
                       //height: 50,
                       width: double.infinity,
+                      decoration: mat.BoxDecoration(
+                        borderRadius: BorderRadius.circular(8)
+                      ),
                       alignment: Alignment.center,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -240,7 +242,7 @@ class _SearchFunctionState extends State<SearchFunction>
                       },
                     );
                   } else {
-                    return SizedBox();
+                    return const SizedBox();
                     // return Column(
                     //   mainAxisSize: MainAxisSize.min,
                     //   children: filteredSearchHistory
@@ -300,7 +302,7 @@ class SearchResultsListView extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: const [
               mat.Icon(
                 mat.Icons.search,
                 size: 64,

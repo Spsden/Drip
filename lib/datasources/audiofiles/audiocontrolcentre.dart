@@ -32,7 +32,7 @@ final progressNotifier = ValueNotifier<ProgressBarState>(
 
 final ValueNotifier<List<Track>> tracklist = ValueNotifier<List<Track>>(tracks);
 final ValueNotifier<double> bufferProgress = ValueNotifier<double>(0.0);
-final ValueNotifier<int> currentTrackIndex = ValueNotifier<int>(currentMediaIndex = 0);
+final ValueNotifier<int> currentTrackValueNotifier = ValueNotifier<int>(currentMediaIndex = 0);
 
 
 
@@ -51,6 +51,10 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
     final isPlaying = state.isPlaying;
     final processing = state.isSeekable;
     final isCompleted = state.isCompleted;
+
+    // if(state.isCompleted){
+    //  AudioControlClass.nextMusic(, nIndex);
+    // }
 
 
 
@@ -196,10 +200,11 @@ abstract class AudioControlClass with ChangeNotifier{
 
 
 
-  static Future<void> nextMusic(BuildContext context,int nIndex) async {
+  static Future<void> nextMusic(BuildContext context,int nIndex,bool gapLess) async {
     // player.next();
     // player.jump(3);
-    currentTrackIndex.value = currentMediaIndex;
+
+    currentTrackValueNotifier.value = currentMediaIndex;
     if(currentMediaIndex == 0)
       {
         currentMediaIndex +=2;
@@ -222,12 +227,12 @@ abstract class AudioControlClass with ChangeNotifier{
     // player.jump(3);
 
 
-   currentTrackIndex.value = currentMediaIndex;
+   currentTrackValueNotifier.value = currentMediaIndex;
 
    if(currentMediaIndex > 0){
      currentMediaIndex--;
 
-     currentTrackIndex.value = currentMediaIndex;
+     currentTrackValueNotifier.value = currentMediaIndex;
 
      print(currentMediaIndex);
      await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
@@ -263,17 +268,6 @@ class PlayerNotifiers extends ChangeNotifier {
   String get searchVal => _searchValue;
 
 
-  //
-  // set setSearchValue(String searchValue) {
-  //   _searchValue = searchValue;
-  //   notifyListeners();
-  // }
-  //
-  // void setValue(String query){
-  //   _searchValue = query;
-  //   notifyListeners();
-  //
-  // }
 
 
 

@@ -13,7 +13,6 @@ import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -136,7 +135,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                              children: const [
 
                                 // if(topResult.resultType != null)
                                 //
@@ -388,7 +387,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                           communityPlaylists.isNotEmpty
                               ? CommunityPlaylistSearch(
                                   communityPlaylist: communityPlaylists)
-                              : Text('No Playlists available'),
+                              : const Text('No Playlists available'),
 
                           biggerSpacer,
                           biggerSpacer,
