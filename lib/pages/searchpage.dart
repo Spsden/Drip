@@ -337,7 +337,14 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                               fontWeight: FontWeight.w500)),
                                     ],
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed(
+                                        'albumsListPage',
+                                        arguments: _controller.query == ''
+                                            ? widget.searchQuery
+                                            : _controller.query);
+
+                                  },
                                 ),
                               ],
                             ),

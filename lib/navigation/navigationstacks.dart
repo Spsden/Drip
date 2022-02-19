@@ -6,6 +6,7 @@ import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchpage.dart';
+import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 
 import 'package:flutter/material.dart';
@@ -177,6 +178,26 @@ class _SecondPageStackState extends State<SecondPageStack> {
           case 'artistListPage':
             final args = settingsforpagetwo.arguments;
             return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => ArtistsSearchResults(artistQuery: args.toString()),
+                transitionsBuilder: (context,animation,secondaryAnimation,child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.fastLinearToSlowEaseIn;
+
+                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                });
+
+
+            break;
+
+
+          case 'albumsListPage':
+            final args = settingsforpagetwo.arguments;
+            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => AlbumsSearchResults(albumsQuery: args.toString()),
                 transitionsBuilder: (context,animation,secondaryAnimation,child) {
                   const begin = Offset(1.0, 0.0);
                   const end = Offset.zero;
