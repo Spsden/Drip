@@ -2,13 +2,17 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
+import 'package:drip/datasources/searchresults/albumsdataclass.dart';
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/tracklist.dart';
+import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:drip/datasources/searchresults/albumsdataclass.dart' as albumD;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart' as SongDataClass;
 import 'package:provider/provider.dart';
@@ -74,9 +78,10 @@ class _ArtistsPageState extends State<ArtistsPage>
     return Stack(
       children: [
         (!fetched)
-            ? SizedBox()
+            ? const SizedBox()
             : CustomScrollView(
-                controller: _scrollController,
+          scrollBehavior: const CupertinoScrollBehavior(),
+                controller: ScrollController(),
                 slivers: [
                   mat.SliverAppBar(
                     //leadingWidth: 0,
@@ -141,7 +146,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                 ]),
                           ),
                           Container(
-                              margin: EdgeInsets.only(right: 10),
+                              margin: const EdgeInsets.only(right: 10),
                               // width: 85,
                               child: mat.ElevatedButton(
                                 style: mat.ButtonStyle(
@@ -149,7 +154,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                         mat.MaterialStateProperty.all(
                                             context.watch<AppTheme>().color)),
                                 onPressed: () {},
-                                child: Text('Play'),
+                                child: const Text('Play'),
                               )),
                         ],
                       ),
@@ -182,35 +187,87 @@ class _ArtistsPageState extends State<ArtistsPage>
                     ),
 
                     bottom: mat.TabBar(
+
+
                       indicatorWeight: 5,
                       indicatorSize: mat.TabBarIndicatorSize.label,
                       automaticIndicatorColorAdjustment: true,
-                      isScrollable: true,
+                     isScrollable: true,
                       indicator: mat.UnderlineTabIndicator(
                           borderSide: BorderSide(
                               width: 4.0,
                               color: context.watch<AppTheme>().color)),
                       tabs: const [
                         mat.Tab(text: 'Albums'),
-                        mat.Tab(text: 'Songs'),
-                        mat.Tab(text: 'Singles'),
+                         mat.Tab(text: 'Songs'),
+                         mat.Tab(text: 'Related'),
+                          mat.Tab(text: 'Singles'),
                         mat.Tab(text: 'Videos'),
-                        mat.Tab(text: 'Related'),
+
                       ],
                       controller: _tabController,
                     ),
                   ),
                   SliverFillRemaining(
                       child: mat.TabBarView(
+
                           physics: BouncingScrollPhysics(),
                           controller: _tabController,
                           children: [
+                            _artistsPage.albums?.results != null
+                                ? GridView(
+
+                                gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 200.0,
+                                  mainAxisSpacing: 5.0,
+                                  crossAxisSpacing: 10.0,
+                                  childAspectRatio: 1 / 1.3,
+                                ),
+                                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                children: List.generate(
+                                    _artistsPage.albums!.results!.length,
+                                        (index) {
+
+                                      List<albumD.Artist> _artistListForAlbum = [albumD.Artist(id: 'lol',name: _artistsPage.name.toString())];
+                                      //List<artistD.Thumbnail> thumbs = []
+
+                                      return mat.Material(
+                                        child: AlbumCard(
+                                          albums: albumD.Albums(
+                                            title: _artistsPage.albums!.results![index].title.toString(),
+                                            year: _artistsPage.albums!.results![index].year.toString(),
+                                            type: '',
+                                            isExplicit: false,
+                                            category: 'artist',
+                                            artists: _artistListForAlbum,
+                                            resultType: 'albums',
+                                            duration: Duration.zero,
+                                            browseId: _artistsPage.albums!.results![index].browseId.toString(),
+                                            thumbnails: _artistsPage.albums!
+                                                .results![index].thumbnails
+                                                ?.map((e) => albumD.Thumbnail(
+                                                width: e.width,
+                                                height: e.height,
+                                                url: e.url.toString()))
+                                                .toList()
+
+                                          )
+                                        )
+                                      );
+                                    }))
+                                : Text('No result'),
+
+
+                            TrackList(songQuery: _artistsPage.name.toString()),
+
+
                         _artistsPage.related?.results != null
                             ? GridView(
                                 gridDelegate:
                                     const SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent: 200.0,
-                                  mainAxisSpacing: 5.0,
+                                  mainAxisSpacing: 10.0,
                                   crossAxisSpacing: 10.0,
                                   childAspectRatio: 1 / 1.5,
                                 ),
@@ -242,13 +299,14 @@ class _ArtistsPageState extends State<ArtistsPage>
                                 }))
                             : Text('No result'),
 
-                        TrackList(songQuery: _artistsPage.name.toString()),
+
+
+                        Text('lol'),
 
 
 
 
-                        Text('lol2'),
-                        Text('lol2'),
+
                         mat.RaisedButton(
                           onPressed: () {
                             print(context.watch<PlayerNotifiers>().searchVal);
@@ -257,7 +315,9 @@ class _ArtistsPageState extends State<ArtistsPage>
                           },
                           child: Text('lol2'),
                         ),
-                      ]))
+                       ]
+
+                      ))
                 ],
               ),
         Positioned.fill(

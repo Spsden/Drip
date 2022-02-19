@@ -31,7 +31,7 @@ class Albums {
   dynamic duration;
   bool isExplicit;
   String resultType;
-  List<Thumbnail> thumbnails;
+  List<Thumbnail>? thumbnails;
   String title;
   String type;
   String year;
@@ -58,7 +58,7 @@ class Albums {
         "duration": duration,
         "isExplicit": isExplicit,
         "resultType": resultType,
-        "thumbnails": List<dynamic>.from(thumbnails.map((x) => x.toJson())),
+        "thumbnails": List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
         "title": title,
         "type": type,
         "year": year,

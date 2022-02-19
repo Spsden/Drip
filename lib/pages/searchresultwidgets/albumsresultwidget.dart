@@ -202,7 +202,7 @@ class AlbumCard extends StatelessWidget {
                       image: AssetImage('assets/artist.jpg'),
                     ),
                     imageUrl:
-                    albums.thumbnails[1].url.toString(),
+                    albums.thumbnails![1].url.toString(),
                     placeholder: (context, url) => const Image(
                         fit: BoxFit.fill,
                         image: AssetImage('assets/artist.jpg')),
