@@ -96,7 +96,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                                   overflow: TextOverflow.ellipsis),
                             ),
                           )),
-                      color: _randomColor.randomColor(),
+                      color: _randomColor.randomMaterialColor(),
 
                     ),
                   )),

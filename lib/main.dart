@@ -12,6 +12,7 @@ import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/moods_page.dart';
+import 'package:drip/pages/search.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -21,6 +22,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive/hive.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:desktop_window/desktop_window.dart';
@@ -40,21 +42,20 @@ const String appTitle = 'Drip';
 
 bool darkMode = true;
 
-/// Checks if the current environment is a desktop environment.
-// bool get isDesktop {
-//   if (kIsWeb) return false;
-//   return [
-//     TargetPlatform.windows,
-//     TargetPlatform.linux,
-//     TargetPlatform.macOS,
-//   ].contains(defaultTargetPlatform);
-// }
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await DesktopWindow.setMinWindowSize(const Size(540, 540));
-  // DesktopWindow.setWindowSize(Size(755,545));
+  if(Platform.isWindows){
+    doWhenWindowReady((){
+      appWindow.minSize = Size(540,540);
+      appWindow.size = Size(900,640);
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+      appWindow.title = 'Drip';
+    });
+  }
 
   setPathUrlStrategy();
 
@@ -119,6 +120,7 @@ Future<void> openHiveBox(String boxName, {bool limit = false}) async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -170,6 +172,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+ // GlobalKey<FormState> _globalKeyF = GlobalKey();
+
+
   bool value = false;
 
   int index = 0;
@@ -179,10 +185,11 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<Widget> screens;
 
   bool sheetCollapsed = true;
-  late SheetController _sheetcontroller;
+  late SheetController _sheetController;
 
   final colorsController = ScrollController();
   final settingsController = ScrollController();
+
 
   @override
   void initState() {
@@ -192,15 +199,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _selectedIndex = 0;
     screens = [
       const FirstPageStack(),
-      //const YouTubeHomeScreen(),
+
       const SecondPageStack(searchArgs: '', fromFirstPage: false),
 
-      //TrackCard(),
-
-      // ArtistsPage(
-      //   channelId: 'UC13ToEQgfmTe8_GW19LYtCg',
-      // ),
-      MoodsAndCategories(),
+      //MoodsAndCategories(),
       const CurrentPlaylist(fromMainPage: true),
 
       const Settings()
@@ -208,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _pageController = PageController(initialPage: _selectedIndex);
 
     // _audioPlayerControls = AudioPlayerControls();
-    _sheetcontroller = SheetController();
+    _sheetController = SheetController();
 
     // setWindowEffect(flutter_acrylic.WindowEffect.acrylic);
   }
@@ -233,14 +235,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final appTheme = context.watch<AppTheme>();
     return NavigationView(
       appBar: NavigationAppBar(
-          leading: IconButton(
-              onPressed: () {
 
 
-                // _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
-                //     duration: const Duration(milliseconds: 400));
-              },
-              icon: Icon(FluentIcons.back)),
+          leading: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: IconButton(
+
+                onPressed: () {
+
+
+                  _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
+                      duration: const Duration(milliseconds: 400));
+                },
+                icon: Icon(FluentIcons.back)),
+          ),
 
           //leading: BackBu
 
@@ -255,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
               duration: const Duration(milliseconds: 400));
           setState(() {
             if (!sheetCollapsed) {
-              _sheetcontroller.collapse();
+              _sheetController.collapse();
               sheetCollapsed = true;
             }
           });
@@ -304,10 +312,16 @@ class _MyHomePageState extends State<MyHomePage> {
             title: const Text('Play queue'),
           ),
         ],
-        autoSuggestBox: AutoSuggestBox(
-          controller: TextEditingController(),
-          items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-        ),
+        // autoSuggestBox: AutoSuggestBox(
+        //   controller: TextEditingController(),
+        //   onChanged: (String searchQuery,TextChangedReason) async{
+        //     playerAlerts.searchVal = 'isdhvvhisd';
+        //
+        //    await  _pageController.animateToPage(1, duration:  const Duration(milliseconds: 400), curve: Curves.fastLinearToSlowEaseIn,);
+        //
+        //   },
+        //   items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
+        // ),
         autoSuggestBoxReplacement: const Icon(FluentIcons.search),
         footerItems: [
           PaneItemSeparator(),
@@ -342,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 closeOnBackdropTap: true,
                 duration: const Duration(milliseconds: 200),
-                controller: _sheetcontroller,
+                controller: _sheetController,
                 //elevation: 8,
                 cornerRadius: 3,
                 snapSpec: SnapSpec(
@@ -389,11 +403,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           onPressed: () {
                             setState(() {
                               if (sheetCollapsed) {
-                                _sheetcontroller.expand();
+                                _sheetController.expand();
                                 sheetCollapsed = false;
 
                               } else {
-                                _sheetcontroller.collapse();
+                                _sheetController.collapse();
                                 sheetCollapsed = true;
                               }
                             });

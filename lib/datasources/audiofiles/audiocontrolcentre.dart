@@ -90,15 +90,15 @@ abstract class AudioControlClass with ChangeNotifier{
     return audioUrl;
   }
 
-  static Future playlistFetch(String playlistId) async {
-    late WatchPlaylists watchPlaylists;
-    await SearchMusic.getWatchPlaylist(playlistId, 10).then((value) => {
-      watchPlaylists = value
-    });
-
-    return watchPlaylists;
-
-  }
+  // static Future playlistFetch(String playlistId) async {
+  //   late WatchPlaylists watchPlaylists;
+  //   await SearchMusic.getWatchPlaylist(playlistId, 10).then((value) => {
+  //     watchPlaylists = value
+  //   });
+  //
+  //   return watchPlaylists;
+  //
+  // }
 
   static Future<void> addMusic(String playlistVideoId) async {
     late WatchPlaylists watchPlaylists;
@@ -156,6 +156,7 @@ abstract class AudioControlClass with ChangeNotifier{
 
 
     // player.open(mediaplayer.Playlist(medias: medias,playlistMode: PlaylistMode.single));
+
     player.open(playlist, autoStart: true);
 
 
@@ -251,6 +252,33 @@ abstract class AudioControlClass with ChangeNotifier{
 var playerAlerts = PlayerNotifiers();
 
 class PlayerNotifiers extends ChangeNotifier {
+
+
+  //AutoSuggestBox experiment//
+  String _searchValue = '';
+  set searchVal(String query) {
+    _searchValue = query;
+    notifyListeners();
+  }
+  String get searchVal => _searchValue;
+
+
+  //
+  // set setSearchValue(String searchValue) {
+  //   _searchValue = searchValue;
+  //   notifyListeners();
+  // }
+  //
+  // void setValue(String query){
+  //   _searchValue = query;
+  //   notifyListeners();
+  //
+  // }
+
+
+
+
+
   bool _playStatus = false;
   bool _playbackComplete = false;
   Duration _position = Duration.zero;
@@ -273,10 +301,6 @@ class PlayerNotifiers extends ChangeNotifier {
   List<Track> get track => _track;
 
 
-  // set music(List<Music> songs) {
-  //   _music = songs;
-  //   notifyListeners();
-  // }
   set setTrack(List<Track> track) {
     _track = track;
     notifyListeners();
@@ -315,7 +339,11 @@ class PlayerNotifiers extends ChangeNotifier {
   }
 
 
+
+
 }
+
+
 
 
 class ProgressBarState {

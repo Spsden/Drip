@@ -40,6 +40,22 @@ class ActiveAudioData extends ChangeNotifier {
 
   }
 
+  Map<String, dynamic> toJson() => {
+    //"album": album?.toJson(),
+    "artists": _artists,
+
+   // "category": category,
+   // "duration": duration,
+    //"duration_seconds": durationSeconds,
+   // "feedbackTokens": feedbackTokens.toJson(),
+   // "isExplicit": isExplicit,
+   // "resultType": resultType,
+    "thumbnails": _thumbnail,
+    "title": _title,
+    "videoId": _videoId,
+   // "year": year,
+  };
+
 
 
 

@@ -1,3 +1,4 @@
+import 'package:drip/pages/searchpage.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -94,6 +95,8 @@ class _SearchFunctionState extends State<SearchFunction>
 
     return mat.Scaffold(
       body: FloatingSearchBar(
+        height: 45,
+        axisAlignment: -0.9,
         accentColor: context.watch<AppTheme>().color.withOpacity(0.2),
         debounceDelay: Duration(milliseconds: 500),
         clearQueryOnClose: false,
@@ -123,7 +126,7 @@ class _SearchFunctionState extends State<SearchFunction>
             color: context.watch<AppTheme>().color,
             width: 2,
             style: BorderStyle.none),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
         margins: const EdgeInsets.only(top: 10),
         //axisAlignment: -1,
 
@@ -172,6 +175,7 @@ class _SearchFunctionState extends State<SearchFunction>
 
           //addSearchTerm(query);
 
+
           floatController.close();
         },
         builder: (BuildContext context, Animation<double> transition) {
@@ -185,14 +189,43 @@ class _SearchFunctionState extends State<SearchFunction>
                   if (filteredSearchHistory.isNotEmpty &&
                       floatController.query.isEmpty) {
                     return mat.Container(
-                      height: 50,
+                      //height: 50,
                       width: double.infinity,
                       alignment: Alignment.center,
-                      child: const Text(
-                        'Start searching',
-                        maxLines: 1,
-                        overflow: mat.TextOverflow.ellipsis,
-                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: filteredSearchHistory
+                            .map(
+                              (term) => mat.ListTile(
+                            title: Text(
+                              term,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            leading: const Icon(mat.Icons.history),
+                            trailing: IconButton(
+                              icon: const Icon(mat.Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  deleteSearchTerm(term);
+                                });
+                              },
+                            ),
+                            onTap: () async {
+                              setState(() {
+                                widget.controller.query = term;
+
+
+                                putSearchTermFirst(term);
+                               // selectedTerm = term;
+
+                              });
+                              floatController.close();
+                            },
+                          ),
+                        )
+                            .toList(),
+                      )
                     );
                   } else if (filteredSearchHistory.isEmpty) {
                     return mat.ListTile(
@@ -207,36 +240,37 @@ class _SearchFunctionState extends State<SearchFunction>
                       },
                     );
                   } else {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: filteredSearchHistory
-                          .map(
-                            (term) => mat.ListTile(
-                              title: Text(
-                                term,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              leading: Icon(mat.Icons.history),
-                              trailing: IconButton(
-                                icon: const Icon(mat.Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    deleteSearchTerm(term);
-                                  });
-                                },
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  putSearchTermFirst(term);
-                                  selectedTerm = term;
-                                });
-                                floatController.close();
-                              },
-                            ),
-                          )
-                          .toList(),
-                    );
+                    return SizedBox();
+                    // return Column(
+                    //   mainAxisSize: MainAxisSize.min,
+                    //   children: filteredSearchHistory
+                    //       .map(
+                    //         (term) => mat.ListTile(
+                    //           title: Text(
+                    //             term,
+                    //             maxLines: 1,
+                    //             overflow: TextOverflow.ellipsis,
+                    //           ),
+                    //           leading: Icon(mat.Icons.history),
+                    //           trailing: IconButton(
+                    //             icon: const Icon(mat.Icons.clear),
+                    //             onPressed: () {
+                    //               setState(() {
+                    //                 deleteSearchTerm(term);
+                    //               });
+                    //             },
+                    //           ),
+                    //           onTap: () {
+                    //             setState(() {
+                    //               putSearchTermFirst(term);
+                    //               selectedTerm = term;
+                    //             });
+                    //             floatController.close();
+                    //           },
+                    //         ),
+                    //       )
+                    //       .toList(),
+                    // );
                   }
                 },
               ),

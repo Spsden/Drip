@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/tracklist.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart' as SongDataClass;
 import 'package:provider/provider.dart';
 
+import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/artistsdataclass.dart' as artistD;
 import 'common/backButton.dart';
 
@@ -249,7 +251,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                         Text('lol2'),
                         mat.RaisedButton(
                           onPressed: () {
-                            print(_artistsPage.related?.results?.first.title);
+                            print(context.watch<PlayerNotifiers>().searchVal);
                             print(_artistsPage
                                 .related?.results?.first.thumbnails?.first.url);
                           },

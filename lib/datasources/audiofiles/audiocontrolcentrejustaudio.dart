@@ -1,12 +1,11 @@
 import 'package:dart_vlc/dart_vlc.dart';
+import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 
 
-// class Playlist extends Media{
-//   Playlist.asset(String asset) : super.asset(asset);
-//
-// }
+
+////in works////
 
 class AudioControls extends ChangeNotifier{
   static late AudioControls instance = AudioControls();
@@ -15,6 +14,7 @@ class AudioControls extends ChangeNotifier{
   final Player audioPlayer = Player(id: 25,commandlineArguments: [' --no-video']);
 
   List<Media> medias  = <Media>[];
+  List<ActiveAudioData> _list = [];
   //Playlist newPlaylist = new Playlist(medias:medias);
 bool mute = false;
   bool playing = false;
@@ -24,7 +24,27 @@ bool mute = false;
   Duration total = Duration.zero;
   int currentIndex = 0;
   double vol = 50.0;
+
   double _volume = 50.0;
+
+  // AudioControls() {
+  //   audioPlayer.playbackStream.
+  // }
+
+
+  void open(List<ActiveAudioData> list, {int currentIndex = 0}) {
+    audioPlayer.open(
+    Playlist(medias: list.map((e) => Media.network(
+      e.audioUrl,
+          extras: e.toJson(),
+
+    )).toList()
+    )
+
+    );
+    audioPlayer.jump(currentIndex);
+    audioPlayer.play();
+  }
 
 
 
@@ -82,4 +102,11 @@ bool mute = false;
   void seek(Duration position){
     audioPlayer.seek(position);
   }
+
+  void addTracks(){
+
+  }
+
+
+
 }
