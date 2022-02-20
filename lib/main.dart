@@ -251,7 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 //leading: BackBu
 
-                title: Platform.isWindows ? TopBar() : SizedBox.shrink()),
+                title: Platform.isWindows ? const TopBar() : const SizedBox.shrink()),
             pane: NavigationPane(
 
               selected: _selectedIndex,

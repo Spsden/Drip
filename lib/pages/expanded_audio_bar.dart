@@ -50,7 +50,7 @@ class _ExpandedAudioBarState extends State<ExpandedAudioBar> {
               ),
             )
         ),
-        TopBar()
+        const TopBar()
       ],
     );
   }
