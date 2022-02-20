@@ -30,9 +30,37 @@ A simple YouTube Music Client written in Dart using Flutter Framework with  [@mi
 <!--    <img width="700" alt="artist page light" src="https://github.com/Spsden/Drip/blob/master/readme_assets/artist%20page.png"> -->
 
 
-## kinda Widget
+## kinda Widget Mode
 ![ScreenShot](https://github.com/Spsden/Drip/blob/master/readme_assets/widget.png)
 <!--     <img width="700" alt="widget" src="https://github.com/Spsden/Drip/blob/master/readme_assets/widget.png">  -->
+
+## What works now.. ?
+
+
+
+### Search
+- Artists
+- Music
+- Albums
+- Community PLaylists
+
+### Features
+- Related tracks when you play a track
+- Youtube Music Home Page
+- Gapless Playback
+- Follows Fluent design by Microsoft
+- Looks native to windows
+
+## Planned Features
+- Genres and Moods
+- Albums Search
+- Updates to Widget Mode
+- Linux support
+- Android support
+- Lyrics
+- Playlist Import
+- Much more..
+
 
 
 
@@ -54,3 +82,5 @@ Learnt a lot from their projects. Really great work.
 - [@sigma67](https://github.com/sigma67)
 - [@bdlukaa](https://github.com/bdlukaa/fluent_ui)
 - [@alexmercerind](https://github.com/alexmercerind/dart_vlc)
+- [@wantedbear007](https://github.com/wantedbear007)
+- 
