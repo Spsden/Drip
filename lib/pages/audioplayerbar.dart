@@ -319,6 +319,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
               iconSize: smallIcons,
               onPressed: () {
                 AudioControlClass.nextMusic(context,2,false);
+                //player.next();
                 //AudioControlClass.nex();
                 //player.next();
                 print(medias.length.toString());

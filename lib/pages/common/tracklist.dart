@@ -5,6 +5,7 @@ import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+import 'package:drip/pages/common/track_cards.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../theme.dart';
-import 'commonlistoftracks.dart';
+
 
 ///Trackbars for main Search Page
 
@@ -116,7 +117,9 @@ class _TrackBarsState extends State<TrackBars> {
                         widget.songs[index].videoId.toString(),
                         widget.songs[index].artists![0].name.toString(),
                         widget.songs[index].title.toString(),
-                        widget.songs[index].thumbnails[0].url.toString());
+                        widget.songs[index].thumbnails[0].url.toString(),
+                        widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                      widget.songs[index].thumbnails.last.url.toString(),);
                     currentMediaIndex = 0;
 
                     await AudioControlClass.play(
@@ -214,52 +217,63 @@ class _TrackListState extends State<TrackList> {
             onRefresh: () => Future.sync(
               () => _pagingController.refresh(),
             ),
-            child: CustomScrollView(
-              scrollBehavior: const FluentScrollBehavior(),
-              slivers: [
-                const SliverToBoxAdapter(child: SizedBox(height: 80)),
-                SliverToBoxAdapter(
-                    child: Text(
-                  query,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomScrollView(
+                scrollBehavior: const FluentScrollBehavior(),
+                slivers: [
+                  const SliverToBoxAdapter(child: SizedBox(height: 50)),
+                  SliverToBoxAdapter(
+                      child: Text(
+                    query,
 
-                  // widget.songQuery == ''
-                  //   ? '  Results for \"${query}\"'
-                  //   : '  Results for \"${widget.songQuery}\"',
-                  style: typography.display?.apply(fontSizeFactor: 1.0),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )),
-                const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 15,
+                    // widget.songQuery == ''
+                    //   ? '  Results for \"${query}\"'
+                    //   : '  Results for \"${widget.songQuery}\"',
+                    style: typography.display?.apply(fontSizeFactor: 1.0),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 15,
+                    ),
                   ),
-                ),
-                PagedSliverList.separated(
-                  //physics: BouncingScrollPhysics(),
+                  PagedSliverList.separated(
 
-                  pagingController: _pagingController,
-                  // padding: const EdgeInsets.all(10),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 0,
+                    //physics: BouncingScrollPhysics(),
+
+                    pagingController: _pagingController,
+                    // padding: const EdgeInsets.all(10),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 10,
+                    ),
+                    builderDelegate: PagedChildBuilderDelegate<Songs>(
+                      animateTransitions: true,
+                      transitionDuration: const Duration(milliseconds: 200),
+                      firstPageProgressIndicatorBuilder: (_) => Center(
+                        child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: context.watch<AppTheme>().color, size: 300),
+                      ),
+                      newPageProgressIndicatorBuilder: (_) => Center(
+                        child: LoadingAnimationWidget.staggeredDotsWave(
+                            color: context.watch<AppTheme>().color, size: 100),
+                      ),
+                      itemBuilder: (context, songs, index) => TrackListItem(
+                        songs: songs,
+                        color:  index % 2 != 0
+                            ? Colors.transparent
+                            : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                            context.watch<AppTheme>().mode ==
+                                ThemeMode.system
+                            ? Colors.grey[150]
+                            : Colors.grey[40],
+                      ),
+                      // firstPageErrorIndicatorBuilder: (context) =>
+                    ),
                   ),
-                  builderDelegate: PagedChildBuilderDelegate<Songs>(
-                    animateTransitions: true,
-                    transitionDuration: const Duration(milliseconds: 200),
-                    firstPageProgressIndicatorBuilder: (_) => Center(
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: context.watch<AppTheme>().color, size: 300),
-                    ),
-                    newPageProgressIndicatorBuilder: (_) => Center(
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: context.watch<AppTheme>().color, size: 100),
-                    ),
-                    itemBuilder: (context, songs, index) => TrackListItem(
-                      songs: songs,
-                    ),
-                    // firstPageErrorIndicatorBuilder: (context) =>
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ));
@@ -268,8 +282,9 @@ class _TrackListState extends State<TrackList> {
 
 class TrackListItem extends StatefulWidget {
   final Songs songs;
+  final Color color;
 
-  const TrackListItem({Key? key, required this.songs}) : super(key: key);
+  const TrackListItem({Key? key, required this.songs, required this.color}) : super(key: key);
 
   @override
   _TrackListItemState createState() => _TrackListItemState();
@@ -280,50 +295,36 @@ class _TrackListItemState extends State<TrackListItem> {
   Widget build(BuildContext context) {
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
-    return HoverButton(
-      cursor: SystemMouseCursors.copy,
-      // splashColor: Colors.grey[130],
-      // customBorder: mat.ShapeBorder(),
-      //hoverColor: Colors.grey[130],
-      onPressed: () async {
-        var audioUrl =
-            await AudioControlClass.getAudioUri(widget.songs.videoId);
-        // print(audioUrl.toString());
+    return
+         mat.Material(
+           borderRadius: mat.BorderRadius.circular(10),
+           color: widget.color,
+           child: mat.InkWell(
 
-        playerAlerts.buffering = true;
-        await context.read<ActiveAudioData>().songDetails(
-            audioUrl,
-            widget.songs.videoId,
-            widget.songs.artists![0].name,
-            widget.songs.title,
-            widget.songs.thumbnails[0].url);
+            onTap: () async{ var audioUrl =
+                await AudioControlClass.getAudioUri(widget.songs.videoId);
+            // print(audioUrl.toString());
 
-        await AudioControlClass.play(
-            audioUrl: audioUrl,
-            videoId: widget.songs.videoId.toString(),
-            context: context);
-      },
-      builder: (BuildContext, states) {
-        return AnimatedContainer(
-          margin: const EdgeInsets.only(left: 10, right: 20, bottom: 15),
-          padding: const EdgeInsets.only(top: 5, bottom: 5),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: context.watch<AppTheme>().mode == ThemeMode.dark ||
-                      context.watch<AppTheme>().mode == ThemeMode.system
-                  ? Colors.grey[150]
-                  : Colors.grey[30]
+            playerAlerts.buffering = true;
+            await context.read<ActiveAudioData>().songDetails(
+                audioUrl,
+                widget.songs.videoId,
+                widget.songs.artists![0].name,
+                widget.songs.title,
+                widget.songs.thumbnails[0].url,
+            widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                widget.songs.thumbnails.last.url.toString());
 
-              //
-              // ButtonThemeData.buttonColor(Brightness.dark, states
-              //     // FluentTheme.of(context),
-              //     // states,
-              //
-              //     ),
-              ),
-          duration: FluentTheme.of(context).fastAnimationDuration,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+            await AudioControlClass.play(
+                audioUrl: audioUrl,
+                videoId: widget.songs.videoId.toString(),
+                context: context);
+
+
+            },
+             borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -389,9 +390,10 @@ class _TrackListItemState extends State<TrackListItem> {
                   //     iconSize : 10,
                   //     onPressed: () {}, icon: Icon(FluentIcons.play))
                 ],
-              )),
-        );
-      },
-    );
+              ),
+            ),
+        ),
+         );
+
   }
 }

@@ -39,6 +39,8 @@ final ValueNotifier<int> currentTrackValueNotifier = ValueNotifier<int>(currentM
 
 
 final YoutubeExplode _youtubeExplode = YoutubeExplode();
+
+
 late final mediaplayer.Player player = mediaplayer.Player(id: 12)
   ..
   positionStream.listen((mediaplayer.PositionState state) {
@@ -52,20 +54,15 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
     final processing = state.isSeekable;
     final isCompleted = state.isCompleted;
 
-    // if(state.isCompleted){
-    //  AudioControlClass.nextMusic(, nIndex);
-    // }
-
-
-
-
-    //
-    // playerAlerts.playStatus = state.isPlaying;
      playerAlerts.playbackComplete = state.isCompleted;
   })
   ..bufferingProgressStream.listen((bufferingProgress) {
     bufferProgress.value = bufferingProgress;
   })
+..currentStream.listen((CurrentState state) {
+  currentTrackValueNotifier.value = state.index!;
+
+})
 ;
 
 
@@ -115,11 +112,12 @@ abstract class AudioControlClass with ChangeNotifier{
 
     });
 
-    for (int i = 0; i < watchPlaylists.tracks!.length; i++) {
+    for (int i = 1; i < watchPlaylists.tracks!.length; i++) {
       String videoIdOf = watchPlaylists.tracks![i].videoId.toString();
       var audioUri = await getAudioUri(videoIdOf);
       print(watchPlaylists.tracks![i].title);
       medias.add(mediaplayer.Media.network(audioUri));
+      player.add(Media.network(audioUri));
     }
   }
 
@@ -204,6 +202,10 @@ abstract class AudioControlClass with ChangeNotifier{
     // player.next();
     // player.jump(3);
 
+    player.next();
+
+
+
     currentTrackValueNotifier.value = currentMediaIndex;
     if(currentMediaIndex == 0)
       {
@@ -212,19 +214,35 @@ abstract class AudioControlClass with ChangeNotifier{
       currentMediaIndex++;
     }
     // currentMediaIndex +=nIndex;
-    print(currentMediaIndex);
+   // print(currentMediaIndex);
+
+    tracks[currentMediaIndex-1].thumbnail?.forEach((element) {print(element.url.toString());});
+
+
+
+
+
    await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
         tracks[currentMediaIndex-1].videoId.toString(),
         tracks[currentMediaIndex-1].artists![0].name.toString(),
     tracks[currentMediaIndex-1].title.toString(),
-    tracks[currentMediaIndex-1].thumbnail![0].url.toString());
+    tracks[currentMediaIndex-1].thumbnail![0].url.toString(),
+       tracks[currentMediaIndex-1].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+   tracks[currentMediaIndex-1].thumbnail!.last.url.toString());
 
-    player.open(medias[currentMediaIndex], autoStart: true);
+   // print(context.watch<ActiveAudioData>().activeThumbnail?.last.url.toString());
+
+    // player.open(medias[currentMediaIndex], autoStart: true);
   }
+
+
 
   static Future<void> previousMusic(BuildContext context) async {
     // player.next();
     // player.jump(3);
+
+    player.back();
+
 
 
    currentTrackValueNotifier.value = currentMediaIndex;
@@ -234,14 +252,16 @@ abstract class AudioControlClass with ChangeNotifier{
 
      currentTrackValueNotifier.value = currentMediaIndex;
 
-     print(currentMediaIndex);
+   //  print(currentMediaIndex);
      await  context.read<ActiveAudioData>().songDetails(tracks[currentMediaIndex-1].videoId.toString(),
          tracks[currentMediaIndex-1].videoId.toString(),
          tracks[currentMediaIndex-1].artists![0].name.toString(),
          tracks[currentMediaIndex-1].title.toString(),
-         tracks[currentMediaIndex-1].thumbnail![0].url.toString());
+         tracks[currentMediaIndex-1].thumbnail![0].url.toString(),
+         tracks[currentMediaIndex-1].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+         tracks[currentMediaIndex-1].thumbnail!.last.url.toString());
 
-     player.open(medias[currentMediaIndex], autoStart: true);
+   //  player.open(medias[currentMediaIndex], autoStart: true);
 
    }
 

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/pages/common/commonlistoftracks.dart';
+
 
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -11,7 +11,9 @@ import 'package:flutter/material.dart' as mat;
 import 'package:provider/provider.dart';
 
 import '../datasources/audiofiles/activeaudiodata.dart';
+import '../datasources/searchresults/searchresultsservice.dart';
 import '../datasources/searchresults/watchplaylistdataclass.dart';
+import 'common/track_cards.dart';
 
 class CurrentPlaylist extends StatefulWidget {
   final bool fromMainPage;
@@ -108,7 +110,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                                itemBuilder: (context, index) {
                                                  return  Padding(
 
-                                                   padding: const EdgeInsets.fromLTRB(10, 8, 10, 0),
+                                                   padding: const EdgeInsets.all(8),
                                                    child: TrackCardLarge(
                                                      data: TrackCardData(
                                                          title: currentTracks[index].title.toString(),
@@ -141,7 +143,9 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                                            currentTracks[index]
                                                                .thumbnail![0]
                                                                .url
-                                                               .toString());
+                                                               .toString(),
+                                                           currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                                                       currentTracks[index].thumbnail!.last.url.toString());
                                                        currentMediaIndex = 0;
 
                                                        await AudioControlClass.play(
@@ -249,11 +253,9 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                       fit: BoxFit.cover,
                                       image: AssetImage('assets/cover.jpg'),
                                     ),
-                                    imageUrl: currentTracks[trck]
-                                            .thumbnail!
-                                            .last
-                                            .url
-                                            .toString() ??
+                                    imageUrl:
+                                    context.watch<ActiveAudioData>().thumbnailLarge ??
+
                                         'https://rukminim1.flixcart.com/image/416/416/poster/3/r/d/cute-cats-hd-poster-art-bshi4736-bshil4736-large-original-imaehwdptnnqz2sp.jpeg?q=70',
                                     placeholder: (context, url) => const Image(
                                         fit: BoxFit.cover,
@@ -279,7 +281,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                               //controller: _sc,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                                  padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
                                   child: TrackCardLarge(
                                     data: TrackCardData(
                                         title: currentTracks[index]
@@ -324,7 +326,9 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                               currentTracks[index]
                                                   .thumbnail![0]
                                                   .url
-                                                  .toString());
+                                                  .toString(),
+                                         currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                                          currentTracks[index].thumbnail!.last.url.toString());
                                       currentMediaIndex = 0;
 
                                       await AudioControlClass.play(
@@ -420,11 +424,8 @@ class AlbumArtCard extends StatelessWidget {
                               fit: BoxFit.cover,
                               image: AssetImage('assets/artist.jpg'),
                             ),
-                            imageUrl: tracks[trck]
-                                .thumbnail!
-                                .last
-                                .url
-                                .toString(),
+                            imageUrl: context.watch<ActiveAudioData>().activeThumbnail!.last.toString(),
+
                             placeholder: (context, url) => const Image(
                                 fit: BoxFit.cover,
                                 image: AssetImage('assets/artist.jpg')),

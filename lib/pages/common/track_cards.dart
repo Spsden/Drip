@@ -11,6 +11,7 @@ class TrackCardData {
   final String album;
   final String duration;
 
+
   TrackCardData({
     required this.title,
     required this.thumbnail,
@@ -161,7 +162,7 @@ class TrackCardSmall extends StatelessWidget {
           onTrackTap();
         },
         child: Padding(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(0),
           child: Column(
             children: [
               Row(

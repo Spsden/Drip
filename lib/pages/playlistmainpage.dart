@@ -3,7 +3,6 @@ import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/backButton.dart';
-import 'package:drip/pages/common/commonlistoftracks.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +14,7 @@ import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../theme.dart';
+import 'common/track_cards.dart';
 
 class PlaylistMain extends StatefulWidget {
   final String playlistId;
@@ -257,7 +257,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                         _tracks[index]
                                             .thumbnails[0]
                                             .url
-                                            .toString());
+                                            .toString(),
+                                    _tracks[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                                _tracks[index].thumbnails.last.url.toString());
                                 currentMediaIndex = 0;
 
                                 await AudioControlClass.play(

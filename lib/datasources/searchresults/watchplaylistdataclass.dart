@@ -111,9 +111,9 @@ class Thumbnail {
      required this.width,
   });
 
-  final int? height;
-  final String? url;
-  final int? width;
+  final int height;
+  final String url;
+  final int width;
 
   factory Thumbnail.fromJson(Map<String, dynamic> json) => Thumbnail(
     height: json["height"] == null ? null : json["height"],
