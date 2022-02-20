@@ -6,6 +6,7 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
+import 'package:drip/pages/expanded_audio_bar.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -385,13 +386,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             builder: (context, state) {
               return ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height -155,
-                    color: Colors.transparent,
-                    child:    const CurrentPlaylist(fromMainPage: false),
-                  ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height-100,
+                  color: Colors.transparent,
+                  child:  const ExpandedAudioBar(),
                 ),
               );
             },
@@ -488,7 +486,7 @@ class TopBar extends StatelessWidget {
             Expanded(
                 child: MoveWindow(
               child: Container(
-                margin: const mat.EdgeInsets.only(top: 8),
+                margin: const mat.EdgeInsets.only(top: 8,left: 8),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
 
