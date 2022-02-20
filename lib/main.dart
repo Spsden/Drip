@@ -43,7 +43,11 @@ void main() async {
       appWindow.show();
       appWindow.title = 'Drip';
     });
+
+   // SystemTheme.accentInstance;
   }
+
+
 
   setPathUrlStrategy();
 
@@ -57,12 +61,12 @@ void main() async {
   await openHiveBox('Favorite Songs');
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
-  WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsFlutterBinding.ensureInitialized();
   // if(Platform.isWindows){
   //   await Window.initialize();
   //
   // }
-  await Window.initialize();
+  //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
@@ -221,217 +225,243 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final appTheme = context.watch<AppTheme>();
-    return NavigationView(
-      appBar: NavigationAppBar(
-
-
-          leading: Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: IconButton(
-
-                onPressed: () {
-
-
-                  _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
-                      duration: const Duration(milliseconds: 400));
-                },
-                icon: const Icon(FluentIcons.back)),
-          ),
-
-          //leading: BackBu
-
-          title: const TopBar()),
-      pane: NavigationPane(
-        selected: _selectedIndex,
-        onChanged: (i) {
-          index = i;
-          _selectedIndex = i;
-          _pageController.animateToPage(index,
-              curve: Curves.fastLinearToSlowEaseIn,
-              duration: const Duration(milliseconds: 400));
-          setState(() {
-            if (!sheetCollapsed) {
-              _sheetController.collapse();
-              sheetCollapsed = true;
-            }
-          });
-        },
-        //setState(() => index = i),
-        size: const NavigationPaneSize(
-          openWidth: 200,
-          openMinWidth: 200,
-          openMaxWidth: 200,
-        ),
-        header: Container(
-            height: kOneLineTileHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-            child: const Text(
-              'Drip',
-              style: TextStyle(fontSize: 20),
-            )),
-        displayMode: PaneDisplayMode.compact,
-        indicatorBuilder: () {
-          switch (appTheme.indicator) {
-            case NavigationIndicators.end:
-              return NavigationIndicator.end;
-            case NavigationIndicators.sticky:
-            default:
-              return NavigationIndicator.sticky;
-          }
-        }(),
-        items: [
-          // It doesn't look good when resizing from compact to open
-          // PaneItemHeader(header: Text('User Interaction')),
-          PaneItem(
-            icon: const Icon(FluentIcons.home),
-            title: const Text('Home'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.search),
-            title: const Text('Search'),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.personalize),
-            title: const Text('Artists'),
-          ),
-          PaneItemSeparator(),
-          PaneItem(
-            icon: const mat.Icon(FluentIcons.playlist_music),
-            title: const Text('Play queue'),
-          ),
-        ],
-        // autoSuggestBox: AutoSuggestBox(
-        //   controller: TextEditingController(),
-        //   onChanged: (String searchQuery,TextChangedReason) async{
-        //     playerAlerts.searchVal = 'isdhvvhisd';
-        //
-        //    await  _pageController.animateToPage(1, duration:  const Duration(milliseconds: 400), curve: Curves.fastLinearToSlowEaseIn,);
-        //
-        //   },
-        //   items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-        // ),
-        autoSuggestBoxReplacement: const Icon(FluentIcons.search),
-        footerItems: [
-          PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.settings),
-            title: const Text('Settings'),
-          ),
-          PaneItemAction(
-            icon: const Icon(FluentIcons.open_source),
-            title: const Text('Source code'),
-            onTap: () {
-              launch('https://github.com/Spsden/Drip.git');
-            },
-          ),
-        ],
-      ),
-      content: Stack(
+    return SafeArea(
+      child: Stack(
         children: [
-          Positioned.fill(
-              child: PageView(
-            scrollDirection: Axis.vertical,
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: screens,
-          )),
-          Stack(
-            children: [
+          NavigationView(
+            appBar:
 
-              SlidingSheet(
-                closeOnBackButtonPressed: true,
-                color: Colors.transparent,
+            NavigationAppBar(
+              automaticallyImplyLeading: true,
 
-                closeOnBackdropTap: true,
-                duration: const Duration(milliseconds: 200),
-                controller: _sheetController,
-                //elevation: 8,
-                cornerRadius: 3,
-                snapSpec: SnapSpec(
-                  snap: sheetCollapsed,
-                  snappings: [100, 200, double.infinity],
-                  positioning: SnapPositioning.pixelOffset,
+
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: IconButton(
+
+                      onPressed: () {
+
+
+                        _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
+                            duration: const Duration(milliseconds: 400));
+                      },
+                      icon: const Icon(FluentIcons.back)),
                 ),
-                builder: (context, state) {
-                  return ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height -155,
-                        color: Colors.transparent,
-                        child:    const CurrentPlaylist(fromMainPage: false),
-                      ),
-                    ),
-                  );
-                },
-                footerBuilder: (context, state) {
-                  return Container(
-                    alignment: Alignment.center,
-                    height: 100,
-                    child: Stack(children: [
-                      ClipRect(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                          child: const SizedBox(
-                            child: AudioPlayerBar(),
-                            width: double.infinity,
-                            height: 100,
-                            //: 100.0,
-                          ),
-                        ),
-                      ),
+
+                //leading: BackBu
+
+                title: Platform.isWindows ? TopBar() : SizedBox.shrink()),
+            pane: NavigationPane(
+
+              selected: _selectedIndex,
+              onChanged: (i) {
+                index = i;
+                _selectedIndex = i;
+                _pageController.animateToPage(index,
+                    curve: Curves.fastLinearToSlowEaseIn,
+                    duration: const Duration(milliseconds: 400));
+                setState(() {
+                  if (!sheetCollapsed) {
+                    _sheetController.collapse();
+                    sheetCollapsed = true;
+                  }
+                });
+              },
+              //setState(() => index = i),
+              size: const NavigationPaneSize(
 
 
-                      Positioned(
-                        bottom: 20,
-                        right : 3,
-                        child: IconButton(
-
-                          icon: const Icon(FluentIcons.playlist_music),
-                          onPressed: () {
-                            setState(() {
-                              if (sheetCollapsed) {
-                                _sheetController.expand();
-                                sheetCollapsed = false;
-
-                              } else {
-                                _sheetController.collapse();
-                                sheetCollapsed = true;
-                              }
-                            });
-                          },
-
-                         // hoverColor: Colors.red.shade400,
-                        ),
-                      )
-                    ]),
-                  );
-                },
+                openWidth: 200,
+                openMinWidth: 200,
+                openMaxWidth: 200,
               ),
-              Positioned(
-                bottom: 70.5,
-                left: 5,
-                right: 5,
-                child: ValueListenableBuilder<ProgressBarState>(
-                  valueListenable: progressNotifier,
-                  builder: (_, value, __) {
-                    return av.ProgressBar(
-                      thumbGlowColor: Colors.blue,
-                      baseBarColor:
-                          context.watch<AppTheme>().color.withOpacity(0.3),
-                      thumbColor: context.watch<AppTheme>().color,
-                      progressBarColor: context.watch<AppTheme>().color,
-                      progress: value.current,
-                      // buffered: value.buffered,
-                      total: value.total,
-                      onSeek: (position) => AudioControlClass.seek(position),
-                    );
+              header: Container(
+                  height: kOneLineTileHeight,
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  child: const Text(
+                    'Drip',
+                    style: TextStyle(fontSize: 20),
+                  )),
+              displayMode: Platform.isWindows ? PaneDisplayMode.compact : PaneDisplayMode.top,
+              indicatorBuilder: () {
+                switch (appTheme.indicator) {
+                  case NavigationIndicators.end:
+                    return NavigationIndicator.end;
+                  case NavigationIndicators.sticky:
+                  default:
+                    return NavigationIndicator.sticky;
+                }
+              }(),
+              items: [
+                // It doesn't look good when resizing from compact to open
+                // PaneItemHeader(header: Text('User Interaction')),
+                PaneItem(
+                  icon: const Icon(FluentIcons.home),
+                  title: const Text('Home'),
+                ),
+                PaneItem(
+                  icon: const Icon(FluentIcons.search),
+                  title: const Text('Search'),
+                ),
+                // PaneItem(
+                //   icon: const Icon(FluentIcons.personalize),
+                //   title: const Text('Artists'),
+                // ),
+                PaneItemSeparator(),
+                PaneItem(
+                  icon: const mat.Icon(FluentIcons.playlist_music),
+                  title: const Text('Play queue'),
+                ),
+                PaneItemSeparator(),
+                PaneItem(
+                  icon: const Icon(FluentIcons.settings),
+                  title: const Text('Settings'),
+                ),
+                PaneItemAction(
+                  icon: const Icon(FluentIcons.open_source),
+                  title: const Text('Source code'),
+                  onTap: () {
+                    launch('https://github.com/Spsden/Drip.git');
                   },
                 ),
-              ),
-            ],
+
+              ],
+              // autoSuggestBox: AutoSuggestBox(
+              //   controller: TextEditingController(),
+              //   onChanged: (String searchQuery,TextChangedReason) async{
+              //     playerAlerts.searchVal = 'isdhvvhisd';
+              //
+              //    await  _pageController.animateToPage(1, duration:  const Duration(milliseconds: 400), curve: Curves.fastLinearToSlowEaseIn,);
+              //
+              //   },
+              //   items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
+              // ),
+              autoSuggestBoxReplacement: const Icon(FluentIcons.search),
+
+              // footerItems: [
+              //   PaneItemSeparator(),
+              //   PaneItem(
+              //     icon: const Icon(FluentIcons.settings),
+              //     title: const Text('Settings'),
+              //   ),
+              //   PaneItemAction(
+              //     icon: const Icon(FluentIcons.open_source),
+              //     title: const Text('Source code'),
+              //     onTap: () {
+              //       launch('https://github.com/Spsden/Drip.git');
+              //     },
+              //   ),
+              //   // PaneItem(icon: Icon(FluentIcons.settings),
+              //   // title: mat.SizedBox(height: 200,))
+              //   // ,
+              //   // PaneItem(icon: Icon(FluentIcons.settings),
+              //   //     title: mat.SizedBox(height: 200,)),
+              //   // PaneItem(icon: Icon(FluentIcons.settings),
+              //   //     title: mat.SizedBox(height: 200,)),
+              //
+              //
+              // ],
+            ),
+            content: PageView(
+              scrollDirection: Axis.vertical,
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: screens,
+            ),
+          ),
+          SlidingSheet(
+            closeOnBackButtonPressed: true,
+            color: Colors.transparent,
+
+            closeOnBackdropTap: true,
+            duration: const Duration(milliseconds: 200),
+            controller: _sheetController,
+            //elevation: 8,
+            cornerRadius: 3,
+            snapSpec: SnapSpec(
+              snap: sheetCollapsed,
+              snappings: [100, 200, double.infinity],
+              positioning: SnapPositioning.pixelOffset,
+            ),
+            builder: (context, state) {
+              return ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height -155,
+                    color: Colors.transparent,
+                    child:    const CurrentPlaylist(fromMainPage: false),
+                  ),
+                ),
+              );
+            },
+            footerBuilder: (context, state) {
+              return Container(
+                alignment: Alignment.center,
+                height: 100,
+                child: Stack(children: [
+                  ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                      child: const SizedBox(
+                        child: AudioPlayerBar(),
+                        width: double.infinity,
+                        height: 100,
+                        //: 100.0,
+                      ),
+                    ),
+                  ),
+
+
+                  Positioned(
+                    bottom: 20,
+                    right : 3,
+                    child: IconButton(
+
+                      icon: const Icon(FluentIcons.playlist_music),
+                      onPressed: () {
+                        setState(() {
+                          if (sheetCollapsed) {
+                            _sheetController.expand();
+                            sheetCollapsed = false;
+
+                          } else {
+                            _sheetController.collapse();
+                            sheetCollapsed = true;
+                          }
+                        });
+                      },
+
+                      // hoverColor: Colors.red.shade400,
+                    ),
+                  )
+                ]),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 70.5,
+            left: 5,
+            right: 5,
+            child: ValueListenableBuilder<ProgressBarState>(
+              valueListenable: progressNotifier,
+              builder: (_, value, __) {
+                return av.ProgressBar(
+                  thumbGlowColor: Colors.blue,
+                  baseBarColor:
+                  context.watch<AppTheme>().color.withOpacity(0.3),
+                  thumbColor: context.watch<AppTheme>().color,
+                  progressBarColor: context.watch<AppTheme>().color,
+                  progress: value.current,
+                  // buffered: value.buffered,
+                  total: value.total,
+                  onSeek: (position) => AudioControlClass.seek(position),
+                );
+              },
+            ),
           ),
         ],
+
       ),
     );
   }
