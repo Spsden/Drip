@@ -32,6 +32,8 @@ class _ExpandedAudioBarState extends State<ExpandedAudioBar> {
                       .createShader(bounds);
                 },
                 child: CachedNetworkImage(
+                  memCacheHeight: 300,
+                  memCacheWidth: 300,
 
                   fit: BoxFit.cover,
                   errorWidget: (context, _, __) =>
@@ -40,9 +42,9 @@ class _ExpandedAudioBarState extends State<ExpandedAudioBar> {
                     image: AssetImage('assets/cover.jpg'),
                   ),
                   imageUrl:
-                  context.watch<ActiveAudioData>().thumbnailLarge ??
+                  context.watch<ActiveAudioData>().thumbnailLarge ,
 
-                      'https://rukminim1.flixcart.com/image/416/416/poster/3/r/d/cute-cats-hd-poster-art-bshi4736-bshil4736-large-original-imaehwdptnnqz2sp.jpeg?q=70',
+
                   placeholder: (context, url) => const Image(
                       fit: BoxFit.cover,
                       image: AssetImage('assets/cover.jpg')),

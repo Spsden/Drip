@@ -156,8 +156,19 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: CachedNetworkImage(
-                     // memCacheHeight: boxSize + 20 ,
+                    child: //FadeInImage(placeholder:
+                    // const AssetImage('assets/cover.jpg'),
+                    //     width: 37,
+                    //     height: 37,
+                    //     fit: BoxFit.cover,
+                    //
+                    //     image:  NetworkImage(
+                    //       headList[index]['image'].toString(),
+                    //     )),
+
+                    CachedNetworkImage(
+                      // memCacheHeight: 80,
+                      // memCacheWidth: 80,
                       fit: BoxFit.cover,
                       errorWidget: (context, _, __) => const Image(
                         fit: BoxFit.cover,
@@ -290,10 +301,23 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                               BorderRadius.circular(10.0),
                                         ),
                                         clipBehavior: Clip.antiAlias,
-                                        child: CachedNetworkImage(
-                                          memCacheWidth: (item['type'] != 'playlist'
-                                              ? (boxSize - 30) * (16 / 9)
-                                              : boxSize - 30).toInt(),
+                                        child:
+
+                                        // FadeInImage(placeholder:
+                                        // const AssetImage('assets/cover.jpg'),
+                                        //     width: 37,
+                                        //     height: 37,
+                                        //     fit: BoxFit.cover,
+                                        //
+                                        //     image:  NetworkImage(
+                                        //         item['image'].toString(),
+                                        //     )),
+
+                                        CachedNetworkImage(
+                                          // memCacheHeight: 80,
+                                          // memCacheWidth: (item['type'] != 'playlist'
+                                          //     ? (boxSize - 30) * (16 / 9)
+                                          //     : boxSize - 30).toInt(),
                                           fit: BoxFit.cover,
                                           errorWidget: (context, _, __) =>
                                               Image(
@@ -318,6 +342,8 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                                   ),
                                           ),
                                         ),
+
+
                                       ),
                                     ),
                                     const SizedBox(

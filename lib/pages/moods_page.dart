@@ -18,9 +18,11 @@ class MoodsAndCategories extends StatefulWidget {
 class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
   late MoodsCategories _moodsCategories;
 
+  final ScrollController _scrollController = ScrollController();
+
   bool fetched = false;
   bool status = false;
-  RandomColor _randomColor = RandomColor();
+  final RandomColor _randomColor = RandomColor();
 
   @override
   void initState() {
@@ -30,6 +32,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -56,7 +59,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                 color: context.watch<AppTheme>().color, size: 150),
           )
         : mat.ListView(
-            // controller: _scrollController,
+             controller: _scrollController,
             clipBehavior: Clip.hardEdge,
             primary: false,
             physics: const BouncingScrollPhysics(
@@ -70,6 +73,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                 spacer,
                 GridView.builder(
                     shrinkWrap: true,
+                    controller: _scrollController,
                     itemCount: _moodsCategories.moodsMoments?.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -108,6 +112,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                 spacer,
                 GridView.builder(
                     shrinkWrap: true,
+                    controller: _scrollController,
                     itemCount: _moodsCategories.genres?.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(

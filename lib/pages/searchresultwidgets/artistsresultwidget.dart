@@ -88,7 +88,12 @@ class ArtistCard extends StatelessWidget {
                 elevation: 5,
                 clipBehavior: Clip.antiAlias,
                 shape: const CircleBorder(),
-                child: CachedNetworkImage(
+                child:
+
+
+
+
+                CachedNetworkImage(
                   imageBuilder: (context, imageProvider) => CircleAvatar(
                     backgroundColor: mat.Colors.transparent,
                     foregroundColor: Colors.transparent,

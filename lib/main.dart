@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
     index = 0;
     _selectedIndex = 0;
     screens = [
-       const FirstPageStack(),
+        const FirstPageStack(),
 
       const SecondPageStack(searchArgs: '', fromFirstPage: false),
 

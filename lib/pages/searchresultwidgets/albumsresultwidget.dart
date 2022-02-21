@@ -126,27 +126,42 @@ class AlbumCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   clipBehavior: Clip.antiAlias,
-                  child: CachedNetworkImage(
-                    width: 150,
-                    height: 150,
-                    memCacheHeight: 150,
-                    memCacheWidth: 150,
-                    // imageBuilder: (context, imageProvider) =>
-                    //     CircleAvatar(
-                    //   radius: 80,
-                    //   backgroundImage: imageProvider,
-                    // ),
-                    fit: BoxFit.cover,
-                    errorWidget: (context, _, __) => const Image(
+                  child:
+                  FadeInImage(placeholder:
+                  const AssetImage('assets/cover.jpg'),
+                      width: 150,
+                      height: 150,
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/artist.jpg'),
-                    ),
-                    imageUrl:
-                    albums.thumbnails![1].url.toString(),
-                    placeholder: (context, url) => const Image(
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/artist.jpg')),
+
+                      image:  NetworkImage(
+                        albums.thumbnails![1].url.toString(),
+                      ),
+
+
                   ),
+
+
+                  // CachedNetworkImage(
+                  //   width: 150,
+                  //   height: 150,
+                  //   memCacheHeight: 150,
+                  //   memCacheWidth: 150,
+                  //   // imageBuilder: (context, imageProvider) =>
+                  //   //     CircleAvatar(
+                  //   //   radius: 80,
+                  //   //   backgroundImage: imageProvider,
+                  //   // ),
+                  //   fit: BoxFit.cover,
+                  //   errorWidget: (context, _, __) => const Image(
+                  //     fit: BoxFit.cover,
+                  //     image: AssetImage('assets/artist.jpg'),
+                  //   ),
+                  //   imageUrl:
+                  //   albums.thumbnails![1].url.toString(),
+                  //   placeholder: (context, url) => const Image(
+                  //       fit: BoxFit.fill,
+                  //       image: AssetImage('assets/artist.jpg')),
+                  // ),
                 ),
               ),
               const SizedBox(

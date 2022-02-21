@@ -163,6 +163,7 @@ abstract class AudioControlClass with ChangeNotifier{
     // required List<Music> music,
   }) async {
     medias.clear();
+    player.stop();
     medias.add(Media.network(audioUrl));
     currentMediaIndex = 0;
     mediaplayer.Playlist playlist = mediaplayer.Playlist(
