@@ -134,6 +134,7 @@ class MyApp extends StatelessWidget {
             builder: (context, _) {
               final appTheme = context.watch<AppTheme>();
               return FluentApp(
+
                   title: appTitle,
                   themeMode: appTheme.mode,
                   debugShowCheckedModeBanner: false,
@@ -191,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
     index = 0;
     _selectedIndex = 0;
     screens = [
-      const FirstPageStack(),
+       const FirstPageStack(),
 
       const SecondPageStack(searchArgs: '', fromFirstPage: false),
 
@@ -389,7 +390,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Container(
                   height: MediaQuery.of(context).size.height-100,
                   color: Colors.transparent,
-                  child:  const ExpandedAudioBar(),
+                  child:
+
+                  const ExpandedAudioBar(),
                 ),
               );
             },
@@ -492,6 +495,7 @@ class TopBar extends StatelessWidget {
 
                   children: [
                     Image.asset(
+
 
                       'assets/driplogocircle.png',
                       filterQuality: FilterQuality.high,

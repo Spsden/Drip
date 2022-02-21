@@ -80,15 +80,35 @@ abstract class AudioControlClass with ChangeNotifier{
 
 
   static Future<String> getAudioUri(String videoId) async {
-    final StreamManifest manifest =
-    await _youtubeExplode.videos.streamsClient.getManifest(videoId);
 
-    var audioUrl = manifest.audioOnly
-        .withHighestBitrate()
-        .url
-        .toString();
+    String audioUrl = '';
+
+    try{
+      final StreamManifest manifest =
+      await _youtubeExplode.videos.streamsClient.getManifest(videoId);
+
+       audioUrl = manifest.audioOnly
+          .withHighestBitrate()
+          .url
+          .toString();
+
+      print(audioUrl);
+      return audioUrl;
+
+
+    } catch (e) {
+      print('explode error' + e.toString());
+
+    }
 
     return audioUrl;
+
+
+
+
+
+
+
   }
 
   // static Future playlistFetch(String playlistId) async {

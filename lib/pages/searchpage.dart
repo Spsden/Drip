@@ -378,7 +378,18 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                       spacer
                                     ],
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showSnackbar(
+                                        context,
+                                        const Snackbar(
+                                          content: Text(
+                                            'Coming Soon',
+                                            style: TextStyle(fontSize: 30),
+                                          ),
+                                        ),
+                                        alignment: Alignment.center,
+                                        duration: const Duration(milliseconds: 200));
+                                  },
                                 ),
                               ],
                             ),

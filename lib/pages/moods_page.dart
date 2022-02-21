@@ -63,47 +63,45 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                 parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.fromLTRB(10, 70, 10, 125),
             children: [
-              Text(
-                'Moods & moments',
-                style: typography.title,
-              ),
-              spacer,
-              GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: _moodsCategories.moodsMoments?.length,
-                  gridDelegate:
-                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 150.0,
-                      mainAxisSpacing: 15.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 1.5 / 1),
-                  itemBuilder: (context, index) => Container(
-                    height: 30,
-                    width: 60,
-                    decoration: const BoxDecoration(color: Colors.transparent),
-                    child: mat.Card(
-                      semanticContainer: true,
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: mat.Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              _moodsCategories.moodsMoments![index].title
-                                  .toString(),
-                              style: typography.subtitle?.copyWith(
-                                  fontSize: 25,
-                                  overflow: TextOverflow.ellipsis),
-                            ),
-                          )),
-                      color: _randomColor.randomMaterialColor(),
-
-                    ),
-                  )),
-              biggerSpacer,
-
-
-              Text(
+                Text(
+                  'Moods & moments',
+                  style: typography.title,
+                ),
+                spacer,
+                GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: _moodsCategories.moodsMoments?.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 150.0,
+                            mainAxisSpacing: 15.0,
+                            crossAxisSpacing: 10.0,
+                            childAspectRatio: 1.5 / 1),
+                    itemBuilder: (context, index) => Container(
+                          height: 30,
+                          width: 60,
+                          decoration:
+                              const BoxDecoration(color: Colors.transparent),
+                          child: mat.Card(
+                            semanticContainer: true,
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: mat.Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    _moodsCategories.moodsMoments![index].title
+                                        .toString(),
+                                    style: typography.subtitle?.copyWith(
+                                        fontSize: 25,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                )),
+                            color: _randomColor.randomMaterialColor(),
+                          ),
+                        )),
+                biggerSpacer,
+                Text(
                   'Genres',
                   style: typography.title,
                 ),
@@ -120,30 +118,40 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                     itemBuilder: (context, index) => Container(
                           height: 30,
                           width: 60,
-                          decoration: const BoxDecoration(color: Colors.transparent),
-                          child: mat.Card(
-                            semanticContainer: true,
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: mat.Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    _moodsCategories.genres![index].title
-                                        .toString(),
-                                    style: typography.subtitle?.copyWith(
-                                        fontSize: 25,
-                                        overflow: TextOverflow.ellipsis),
+                          decoration:
+                              const BoxDecoration(color: Colors.transparent),
+                          child: mat.InkWell(
+                            onTap: () {
+                              showSnackbar(
+                                  context,
+                                  const Snackbar(
+                                    content: Text(
+                                      'Coming Soon',
+                                      style: TextStyle(fontSize: 30),
+                                    ),
                                   ),
-                                )),
-                            color: _randomColor.randomColor(),
-
+                                  alignment: Alignment.center,
+                                  duration: const Duration(milliseconds: 200));
+                            },
+                            child: mat.Card(
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              child: mat.Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      _moodsCategories.genres![index].title
+                                          .toString(),
+                                      style: typography.subtitle?.copyWith(
+                                          fontSize: 25,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                  )),
+                              color: _randomColor.randomColor(),
+                            ),
                           ),
                         )),
-
-
-
-
               ]);
   }
 }

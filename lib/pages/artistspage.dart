@@ -171,18 +171,34 @@ class _ArtistsPageState extends State<ArtistsPage>
                                   colors: [Colors.transparent, Colors.black])
                               .createShader(bounds);
                         },
-                        child: CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) => const Image(
+                        child:
+
+                        FadeInImage(placeholder:
+                        const AssetImage('assets/artist.jpg'),
+                            width:size.width,
+                            height: size.height,
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/artist.jpg'),
-                          ),
-                          imageUrl:
+
+                            image:  NetworkImage(
                               _artistsPage.thumbnails!.last.url.toString(),
-                          placeholder: (context, url) => const Image(
-                              fit: BoxFit.cover,
-                              image: AssetImage('assets/artist.jpg')),
-                        ),
+                            )),
+
+
+
+
+
+                        // CachedNetworkImage(
+                        //   fit: BoxFit.cover,
+                        //   errorWidget: (context, url, error) => const Image(
+                        //     fit: BoxFit.cover,
+                        //     image: AssetImage('assets/artist.jpg'),
+                        //   ),
+                        //   imageUrl:
+                        //       _artistsPage.thumbnails!.last.url.toString(),
+                        //   placeholder: (context, url) => const Image(
+                        //       fit: BoxFit.cover,
+                        //       image: AssetImage('assets/artist.jpg')),
+                        // ),
                       ),
                     ),
 

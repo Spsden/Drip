@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(drip LANGUAGES CXX)
 
-set(BINARY_NAME "drip")
+set(BINARY_NAME "Drip")
 
 cmake_policy(SET CMP0063 NEW)
 

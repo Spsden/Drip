@@ -157,6 +157,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                     ),
                     clipBehavior: Clip.antiAlias,
                     child: CachedNetworkImage(
+                     // memCacheHeight: boxSize + 20 ,
                       fit: BoxFit.cover,
                       errorWidget: (context, _, __) => const Image(
                         fit: BoxFit.cover,
@@ -290,6 +291,9 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                         ),
                                         clipBehavior: Clip.antiAlias,
                                         child: CachedNetworkImage(
+                                          memCacheWidth: (item['type'] != 'playlist'
+                                              ? (boxSize - 30) * (16 / 9)
+                                              : boxSize - 30).toInt(),
                                           fit: BoxFit.cover,
                                           errorWidget: (context, _, __) =>
                                               Image(

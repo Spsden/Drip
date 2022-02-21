@@ -328,25 +328,37 @@ class _TrackListItemState extends State<TrackListItem> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CachedNetworkImage(
-                    width: 40,
-                    height: 40,
-                    imageBuilder: (context, imageProvider) => CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.transparent,
-                      radius: 100,
-                      backgroundImage: imageProvider,
-                    ),
-                    fit: BoxFit.cover,
-                    errorWidget: (context, _, __) => const Image(
+
+                  FadeInImage(placeholder:
+                     const AssetImage('assets/cover.jpg'),
+                      width: 40,
+                      height: 40,
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/cover.jpg'),
-                    ),
-                    imageUrl: widget.songs.thumbnails.first.url.toString(),
-                    placeholder: (context, url) => const Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/cover.jpg')),
-                  ),
+
+                      image:  NetworkImage(
+                        widget.songs.thumbnails.first.url.toString(),
+                      )),
+                  // CachedNetworkImage(
+                  //   memCacheHeight: 40,
+                  //   memCacheWidth: 40,
+                  //   width: 40,
+                  //   height: 40,
+                  //   imageBuilder: (context, imageProvider) => CircleAvatar(
+                  //     backgroundColor: Colors.transparent,
+                  //     foregroundColor: Colors.transparent,
+                  //     radius: 100,
+                  //     backgroundImage: imageProvider,
+                  //   ),
+                  //   fit: BoxFit.cover,
+                  //   errorWidget: (context, _, __) => const Image(
+                  //     fit: BoxFit.cover,
+                  //     image: AssetImage('assets/cover.jpg'),
+                  //   ),
+                  //   imageUrl: widget.songs.thumbnails.first.url.toString(),
+                  //   placeholder: (context, url) => const Image(
+                  //       fit: BoxFit.cover,
+                  //       image: AssetImage('assets/cover.jpg')),
+                  // ),
                   spacer,
 
                   SizedBox(

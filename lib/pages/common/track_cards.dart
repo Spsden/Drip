@@ -74,6 +74,9 @@ class TrackCardLarge extends StatelessWidget {
               //mainAxisSize: MainAxisSize.min,
               children: [
                 CachedNetworkImage(
+
+                  memCacheHeight: 40,
+                  memCacheWidth: 40,
                   width: 40,
                   height: 40,
                   imageBuilder: (context, imageProvider) =>
@@ -162,30 +165,41 @@ class TrackCardSmall extends StatelessWidget {
           onTrackTap();
         },
         child: Padding(
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(5),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CachedNetworkImage(
-                    width: 50,
-                    height: 50,
-                    imageBuilder: (context, imageProvider) => CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.transparent,
-                      radius: 100,
-                      backgroundImage: imageProvider,
-                    ),
-                    fit: BoxFit.cover,
-                    errorWidget: (context, _, __) => const Image(
+                  FadeInImage(placeholder:
+                  const AssetImage('assets/cover.jpg'),
+                      width: 37,
+                      height: 37,
                       fit: BoxFit.cover,
-                      image: AssetImage('assets/cover.jpg'),
-                    ),
-                    imageUrl: data.thumbnail,
-                    placeholder: (context, url) => const Image(
-                        fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
-                  ),
+
+                      image:  NetworkImage(
+                        data.thumbnail,
+                      )),
+                  // CachedNetworkImage(
+                  //   memCacheWidth: 40,
+                  //   memCacheHeight: 40,
+                  //   width: 50,
+                  //   height: 50,
+                  //   imageBuilder: (context, imageProvider) => CircleAvatar(
+                  //     backgroundColor: Colors.transparent,
+                  //     foregroundColor: Colors.transparent,
+                  //     radius: 100,
+                  //     backgroundImage: imageProvider,
+                  //   ),
+                  //   fit: BoxFit.cover,
+                  //   errorWidget: (context, _, __) => const Image(
+                  //     fit: BoxFit.cover,
+                  //     image: AssetImage('assets/cover.jpg'),
+                  //   ),
+                  //   imageUrl: data.thumbnail,
+                  //   placeholder: (context, url) => const Image(
+                  //       fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
+                  // ),
                   spacer,
                   mat.Column(
                     mainAxisAlignment: MainAxisAlignment.start,

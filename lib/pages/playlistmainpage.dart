@@ -5,7 +5,6 @@ import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/backButton.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -33,19 +32,16 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
   bool status = false;
   bool fetched = false;
- // final myProducts = List<String>.generate(100, (i) => 'Product $i');
+
+  // final myProducts = List<String>.generate(100, (i) => 'Product $i');
 
   @override
   void initState() {
-
     super.initState();
-
-
   }
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -63,10 +59,6 @@ class _PlaylistMainState extends State<PlaylistMain> {
                 setState(() {
                   _playlists = value;
                   _tracks = _playlists.tracks;
-
-                  // _playlists = value;
-                  // _tracks = _playlists.tracks;
-                  //
                   fetched = true;
                 })
               }
@@ -75,22 +67,6 @@ class _PlaylistMainState extends State<PlaylistMain> {
 
     return Stack(
       children: [
-        // Align(
-        //   alignment: Alignment.topLeft,
-        //   child: FloatingBackButton(onPressed: () {
-        //     Navigator.of(context).pop();
-        //   },)
-        //
-        //
-        //   // mat.FloatingActionButton.small(
-        //   //     child: Icon(FluentIcons.back),
-        //   //     onPressed: () {
-        //   //
-        //   //     }),
-        // ),
-
-
-
         (!fetched)
             ? Center(
                 child: LoadingAnimationWidget.staggeredDotsWave(
@@ -109,8 +85,8 @@ class _PlaylistMainState extends State<PlaylistMain> {
                 child: Column(
                   children: [
                     Container(
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(15),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(08),
                           color: context.watch<AppTheme>().mode ==
@@ -125,26 +101,26 @@ class _PlaylistMainState extends State<PlaylistMain> {
                           : size.height * 0.23,
                       child: LayoutBuilder(
                         builder: (context, constraints) => Row(
+                          //  mainAxisSize: MainAxisSize.min,
                           children: [
                             CachedNetworkImage(
+                              memCacheWidth: 100,
+                              memCacheHeight: 100,
                               imageBuilder: (context, imageProvider) =>
                                   Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   // shape: BoxShape.circle,
                                   image: DecorationImage(
-                                      image: imageProvider,
-                                      fit: BoxFit.cover),
+                                      image: imageProvider, fit: BoxFit.cover),
                                 ),
                               ),
-
                               width: size.width > 500
                                   ? size.height / 4.4
                                   : constraints.maxWidth / 2.8,
                               height: size.width > 500
                                   ? size.height / 4.4
                                   : constraints.maxWidth / 2.8,
-
                               fit: BoxFit.cover,
                               errorWidget: (context, _, __) => const Image(
                                 fit: BoxFit.cover,
@@ -152,7 +128,6 @@ class _PlaylistMainState extends State<PlaylistMain> {
                               ),
                               imageUrl:
                                   _playlists.thumbnails.last.url.toString(),
-
                               placeholder: (context, url) => const Image(
                                   // width: size.width,
                                   //   height: size.width,
@@ -161,8 +136,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
                             ),
                             spacer,
                             Column(
-                              crossAxisAlignment:
-                                  mat.CrossAxisAlignment.start,
+                              crossAxisAlignment: mat.CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
                                   width: constraints.maxWidth / 1.7,
@@ -186,7 +160,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                   child: Text(
                                     _playlists.description.toString(),
                                     softWrap: true,
-                                    maxLines: 1,
+                                    maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                   ),
@@ -199,12 +173,10 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     children: const [
                                       Icon(FluentIcons.play),
                                       spacer,
-                                      Text(
-                                        'Shuffle',
+                                      Text('Shuffle',
                                           style: TextStyle(
-                                              color: Colors.white,fontWeight: FontWeight.w500
-                                          )
-                                      ),
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500)),
                                     ],
                                   ),
                                   onPressed: () {},
@@ -220,10 +192,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                         shrinkWrap: true,
                         padding: const EdgeInsets.all(15),
                         itemCount: _tracks.length,
-
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                             child: TrackCardLarge(
                               data: TrackCardData(
                                   title: _tracks[index].title.toString(),
@@ -233,10 +204,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                       .name
                                       .toString(),
                                   album: 'Drip',
-                                  duration:
-                                      _tracks[index].duration.toString(),
+                                  duration: _tracks[index].duration.toString(),
                                   thumbnail: _tracks[index]
-                                      .thumbnails![0]
+                                      .thumbnails[0]
                                       .url
                                       .toString()),
                               songIndex: index,
@@ -252,35 +222,47 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     .songDetails(
                                         audioUrl,
                                         _tracks[index].videoId.toString(),
-                                        _tracks[index].artists![0].name,
+                                        _tracks[index].artists[0].name,
                                         _tracks[index].title.toString(),
                                         _tracks[index]
                                             .thumbnails[0]
                                             .url
                                             .toString(),
-                                    _tracks[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                                _tracks[index].thumbnails.last.url.toString());
+                                        _tracks[index]
+                                            .thumbnails
+                                            .map((e) => ThumbnailLocal(
+                                                height: e.height,
+                                                url: e.url.toString(),
+                                                width: e.width))
+                                            .toList(),
+                                        _tracks[index]
+                                            .thumbnails
+                                            .last
+                                            .url
+                                            .toString());
                                 currentMediaIndex = 0;
 
                                 await AudioControlClass.play(
                                     audioUrl: audioUrl,
-                                    videoId:
-                                        _tracks[index].videoId.toString(),
+                                    videoId: _tracks[index].videoId.toString(),
                                     context: context);
                               },
                               color: index % 2 != 0
                                   ? Colors.transparent
-                                  : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                                  context.watch<AppTheme>().mode ==
-                                      ThemeMode.system
-                                  ? Colors.grey[150]
-                                  : Colors.grey[30] , fromQueue: false, SuperSize: size,
+                                  : context.watch<AppTheme>().mode ==
+                                              ThemeMode.dark ||
+                                          context.watch<AppTheme>().mode ==
+                                              ThemeMode.system
+                                      ? Colors.grey[150]
+                                      : Colors.grey[30],
+                              fromQueue: false,
+                              SuperSize: size,
                             ),
                           );
-
-
                         }),
-                    SizedBox(height: 120,)
+                    const SizedBox(
+                      height: 120,
+                    )
                   ],
                 ),
               ),
@@ -289,10 +271,11 @@ class _PlaylistMainState extends State<PlaylistMain> {
           left: 10,
           child: Align(
               alignment: Alignment.topLeft,
-              child: FloatingBackButton(onPressed: () {
-                Navigator.of(context).pop();
-              },)
-          ),
+              child: FloatingBackButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )),
         ),
       ],
     );
