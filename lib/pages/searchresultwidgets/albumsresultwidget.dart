@@ -35,7 +35,8 @@ class AlbumSearch extends StatelessWidget {
           alignment: Alignment.centerLeft,
           //padding: EdgeInsets.only(top: 20),
           // margin: const EdgeInsets.symmetric(vertical: 20.0),
-          height: 270,
+          height: boxSize + 15,
+
           //width: double.infinity,
           child: ListView.builder(
             shrinkWrap: true,
@@ -102,7 +103,7 @@ class AlbumCard extends StatelessWidget {
 
       },
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -115,7 +116,7 @@ class AlbumCard extends StatelessWidget {
 
           ),
           margin: const EdgeInsets.all(10),
-          width: boxSize - 30,
+         // width: boxSize - 30,
           child: Column(
             children: [
               Expanded(
@@ -129,8 +130,7 @@ class AlbumCard extends StatelessWidget {
                   child:
                   FadeInImage(placeholder:
                   const AssetImage('assets/cover.jpg'),
-                      width: 150,
-                      height: 150,
+
                       fit: BoxFit.cover,
 
                       image:  NetworkImage(
@@ -165,7 +165,7 @@ class AlbumCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 15.0,
+                height: 5.0,
               ),
               Text(
                 albums.title.toString(),
@@ -176,7 +176,8 @@ class AlbumCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 15),
+                width: boxSize * 3/4,
+             //   margin: const EdgeInsets.only(bottom: 15,left: 5,right: 5),
                 child: Text(
                   albums.artists[0].name.toString() +
                       '\n' +
@@ -315,9 +316,9 @@ class _AlbumsSearchResultsState extends State<AlbumsSearchResults> {
                     ),),
                   gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 200.0,
-                    mainAxisSpacing: 5.0,
-                    crossAxisSpacing: 10.0,
-                    childAspectRatio: 1/1.3,
+                    mainAxisSpacing: 15.0,
+                    crossAxisSpacing: 15.0,
+                    childAspectRatio: 1/1.2,
                   ),
 
                 )
