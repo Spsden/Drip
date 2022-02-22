@@ -45,27 +45,7 @@ class _FirstPageStackState extends State<FirstPageStack> {
                 builder: (context) => YouTubeHomeScreen(), settings: settings);
             break;
 
-          // case 'searchpage':
-          //   final args = settings.arguments;
-          //   return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => AllSearchResults(searchQuery: args.toString()),
-          //   transitionsBuilder: (context,animation,secondaryAnimation,child) {
-          //     const begin = Offset(1.0, 0.0);
-          //     const end = Offset.zero;
-          //     const curve = Curves.fastLinearToSlowEaseIn;
-          //
-          //     var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          //
-          //     return SlideTransition(
-          //       position: animation.drive(tween),
-          //       child: child,
-          //     );
-          //   });
-          //     //
-          //     // MaterialPageRoute(
-          //     //   builder: (context) =>
-          //     //       AllSearchResults(searchQuery: args.toString()),
-          //     //   settings: settings);
-          //   break;
+
 
         case 'searchpage':
           final args = settings.arguments;
@@ -104,27 +84,27 @@ class _FirstPageStackState extends State<FirstPageStack> {
 
             break;
 
-          case 'playlists':
-            final args = settings.arguments;
-            return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) =>   PlaylistMain(playlistId: args.toString(),),
-                transitionsBuilder: (context,animation,secondaryAnimation,child) {
-                  const begin = Offset(1.0, 0.0);
-                  const end = Offset.zero;
-                  const curve = Curves.fastLinearToSlowEaseIn;
-
-                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                });
-
-
-            break;
-
-          default:
-            throw Exception("Invalid route");
+          // case 'playlists':
+          //   final args = settings.arguments;
+          //   return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) =>   PlaylistMain(playlistId: args.toString(),),
+          //       transitionsBuilder: (context,animation,secondaryAnimation,child) {
+          //         const begin = Offset(1.0, 0.0);
+          //         const end = Offset.zero;
+          //         const curve = Curves.fastLinearToSlowEaseIn;
+          //
+          //         var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          //
+          //         return SlideTransition(
+          //           position: animation.drive(tween),
+          //           child: child,
+          //         );
+          //       });
+          //
+          //
+          //   break;
+          //
+          // default:
+          //   throw Exception("Invalid route");
         }
       },
     );

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/youtubehomedata.dart';
+import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:fluent_ui/fluent_ui.dart';
@@ -227,12 +228,17 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                 var query = item['title'].toString();
                                 launch('https://www.youtube.com/results?search_query=$query');
                               } else {
-                                Navigator.of(context).pushNamed('playlists',
-                                    arguments: item['playlistId'].toString()
+
+                                Navigator.push(context,
+                                   MaterialPageRoute(builder: (context) => PlaylistMain(playlistId: item['playlistId'].toString())));
+
+
+
+                                // Navigator.of(context).pushNamed('playlists',
+                                //     arguments: item['playlistId'].toString()
 
                                   // arguments: headList[index]['title'].toString()
 
-                                );
                               }
 
                               // Navigator.of(context).pushNamed('searchpage',

@@ -7,6 +7,7 @@ import 'package:drip/pages/audioplayerbar.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
+import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -196,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       const SecondPageStack(searchArgs: '', fromFirstPage: false),
 
-      //MoodsAndCategories(),
+
       const CurrentPlaylist(fromMainPage: true),
 
       const Settings()

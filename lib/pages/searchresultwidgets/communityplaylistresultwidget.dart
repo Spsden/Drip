@@ -2,9 +2,11 @@ import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../theme.dart';
+import '../playlistmainpage.dart';
 
 
 class CommunityPlaylistSearch extends StatelessWidget {
@@ -14,7 +16,6 @@ class CommunityPlaylistSearch extends StatelessWidget {
     required this.communityPlaylist,
   }) : super(key: key);
 
-  // int thmbnailindex = communityPlaylist[]
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +44,13 @@ class CommunityPlaylistSearch extends StatelessWidget {
               return mat.InkWell(
 
                 onTap: () {
-                  Navigator.of(context).pushNamed('communityPlaylists',
-                      arguments: communityPlaylist[index].browseId.toString()
+                  // Navigator.of(context).pushNamed('communityPlaylists',
+                  //     arguments: communityPlaylist[index].browseId.toString()
 
-                    // arguments: headList[index]['title'].toString()
+                  Navigator.push(context,
+                      mat.MaterialPageRoute(builder: (context) => PlaylistMain(playlistId: communityPlaylist[index].browseId.toString())));
 
-                  );
-                 // Navigator.
+
 
                 },
                 child:  Padding(

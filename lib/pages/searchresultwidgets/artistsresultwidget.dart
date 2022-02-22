@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
@@ -80,10 +81,17 @@ class ArtistCard extends StatelessWidget {
           children: [
             mat.InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('artistsPage',
-                    arguments: artists.browseId.toString());
-              }
-              ,
+              //   Navigator.of(context).pushNamed('artistsPage',
+              //       arguments: artists.browseId.toString());
+              // }
+              // ,
+
+          Navigator.push(context,
+         mat.MaterialPageRoute(builder: (context) => ArtistsPage(channelId: artists.browseId.toString())));
+
+        },
+
+
               child: mat.Card(
                 elevation: 5,
                 clipBehavior: Clip.antiAlias,

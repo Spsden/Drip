@@ -17,3 +17,17 @@ class FloatingBackButton extends StatelessWidget {
         });
   }
 }
+
+
+class CustomBack extends StatelessWidget {
+  const CustomBack({Key? key, required this.thisContext}) : super(key: key);
+  final BuildContext thisContext;
+
+  @override
+  Widget build(BuildContext context) {
+    return mat.BackButton(
+      onPressed: () {Navigator.maybePop(thisContext);},
+    );
+  }
+}
+

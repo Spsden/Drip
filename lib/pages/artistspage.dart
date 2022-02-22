@@ -131,7 +131,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                   ),
                                   Row(
                                     children: [
-                                      mat.Icon(mat.Icons.subscriptions),
+                                      const mat.Icon(mat.Icons.subscriptions),
                                       spacer,
                                       Text(
                                         _artistsPage.subscribers.toString(),
@@ -227,7 +227,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                   SliverFillRemaining(
                       child: mat.TabBarView(
 
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           controller: _tabController,
                           children: [
                             _artistsPage.albums?.results != null
@@ -240,7 +240,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                   crossAxisSpacing: 10.0,
                                   childAspectRatio: 1 / 1.3,
                                 ),
-                                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                                 children: List.generate(
                                     _artistsPage.albums!.results!.length,
                                         (index) {

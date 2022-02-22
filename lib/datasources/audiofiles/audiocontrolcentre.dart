@@ -111,15 +111,7 @@ abstract class AudioControlClass with ChangeNotifier{
 
   }
 
-  // static Future playlistFetch(String playlistId) async {
-  //   late WatchPlaylists watchPlaylists;
-  //   await SearchMusic.getWatchPlaylist(playlistId, 10).then((value) => {
-  //     watchPlaylists = value
-  //   });
-  //
-  //   return watchPlaylists;
-  //
-  // }
+
 
   static Future<void> addMusic(String playlistVideoId) async {
     late WatchPlaylists watchPlaylists;

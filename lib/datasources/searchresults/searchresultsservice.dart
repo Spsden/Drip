@@ -4,6 +4,7 @@ import 'dart:core';
 
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart' as artistPage;
 import 'package:drip/datasources/searchresults/moods_data_class.dart';
+import 'package:drip/datasources/searchresults/playlist_data_class.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
 import 'package:drip/datasources/searchresults/videodataclass.dart' as videos;
@@ -368,11 +369,37 @@ class SearchMusic {
       if(response.statusCode == 200){
         var rawResponse = response.body.toString();
 
-        print(rawResponse);
+      //  print(rawResponse);
 
         final MoodsCategories moodsCategories  = moodsCategoriesFromJson(rawResponse);
         //print(artistsPage.name.toString());
         return moodsCategories;
+
+
+      } else {
+        //print(response.statusCode.toString());
+      }
+    } catch (e) {
+      //print(e.toString());
+
+
+    }
+  }
+
+
+  static Future getMoodPlaylists(String params) async {
+    final response = await http.get(Uri.parse(serverAddress + 'moodplaylist?params=' + params ));
+
+    try {
+      if(response.statusCode == 200){
+        var rawResponse = response.body.toString();
+
+        print(rawResponse);
+
+        final List<PlaylistDataClass>? moodPlaylists  = playlistDataClassFromJson(rawResponse);
+
+        //print(artistsPage.name.toString());
+        return moodPlaylists;
 
 
       } else {

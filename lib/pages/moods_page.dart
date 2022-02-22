@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/moods_data_class.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -86,22 +87,30 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                           width: 60,
                           decoration:
                               const BoxDecoration(color: Colors.transparent),
-                          child: mat.Card(
-                            semanticContainer: true,
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: mat.Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    _moodsCategories.moodsMoments![index].title
-                                        .toString(),
-                                    style: typography.subtitle?.copyWith(
-                                        fontSize: 25,
-                                        overflow: TextOverflow.ellipsis),
-                                  ),
-                                )),
-                            color: _randomColor.randomMaterialColor(),
+                          child: mat.InkWell(
+                            onTap: () {
+
+                              Navigator.push(context,
+                                  mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.moodsMoments![index].params.toString())));
+
+                            },
+                            child: mat.Card(
+                              semanticContainer: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              child: mat.Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      _moodsCategories.moodsMoments![index].title
+                                          .toString(),
+                                      style: typography.subtitle?.copyWith(
+                                          fontSize: 25,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                  )),
+                              color: _randomColor.randomMaterialColor(),
+                            ),
                           ),
                         )),
                 biggerSpacer,
@@ -127,16 +136,34 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                               const BoxDecoration(color: Colors.transparent),
                           child: mat.InkWell(
                             onTap: () {
-                              showSnackbar(
-                                  context,
-                                  const Snackbar(
-                                    content: Text(
-                                      'Coming Soon',
-                                      style: TextStyle(fontSize: 30),
-                                    ),
-                                  ),
-                                  alignment: Alignment.center,
-                                  duration: const Duration(milliseconds: 200));
+                              // print(_moodsCategories.genres![index].params.toString());
+                              // //var result;
+                              //
+                              //
+                              // SearchMusic.getMoodPlaylists(_moodsCategories.genres![index].params.toString()).then((value) => {
+                              //    print(value.length)
+                              // });
+
+                              Navigator.push(context,
+                              mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.genres![index].params.toString())));
+
+                             // print(result.toString());
+
+
+
+
+
+
+                              // showSnackbar(
+                              //     context,
+                              //     const Snackbar(
+                              //       content: Text(
+                              //         'Coming Soon',
+                              //         style: TextStyle(fontSize: 30),
+                              //       ),
+                              //     ),
+                              //     alignment: Alignment.center,
+                              //     duration: const Duration(milliseconds: 200));
                             },
                             child: mat.Card(
                               semanticContainer: true,
