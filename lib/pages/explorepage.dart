@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/pages/playlistmainpage.dart';
+import 'package:drip/pages/searchpage.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:fluent_ui/fluent_ui.dart';
@@ -139,8 +140,12 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                     GestureDetector(
                   onTap: () {
                     //onPushSearch?.call(headList[index]['title'].toString());
-                    Navigator.of(context).pushNamed('searchpage',
-                        arguments: headList[index]['title'].toString());
+                    // Navigator.of(context).pushNamed('searchpage',
+                    //     arguments: headList[index]['title'].toString());
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery:  headList[index]['title'].toString())));
+
                     // Navigator.push(
                     //   context,
                     //   PageRouteBuilder(

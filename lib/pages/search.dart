@@ -92,195 +92,207 @@ class _SearchFunctionState extends State<SearchFunction>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return mat.Scaffold(
-      body: FloatingSearchBar(
-        height: 45,
-        axisAlignment: -0.9,
-        accentColor: context.watch<AppTheme>().color.withOpacity(0.2),
-        debounceDelay: const Duration(milliseconds: 500),
-        clearQueryOnClose: false,
-       // progress: true,
+    return
+
+      mat.Material(
+        color: Colors.transparent,
+        child: mat.Scaffold(
+          backgroundColor:  Colors.transparent,
+          body: FloatingSearchBar(
+            scrollController: mat.ScrollController(),
+            elevation: 3,
+            shadowColor: Colors.red,
+            //backgroundColor: Colors.transparent,
+            //backdropColor: Colors.transparent,
+            height: 45,
+            axisAlignment: -0.9,
+            accentColor: context.watch<AppTheme>().color.withOpacity(0.2),
+            debounceDelay: const Duration(milliseconds: 500),
+            clearQueryOnClose: false,
+           // progress: true,
 
 
 
 
 
 
-        leadingActions: [
-          Navigator.of(context)
-          .context
-          .findAncestorStateOfType<NavigatorState>()
-          !.canPop()
-              ?
-              IconButton(
-                  icon: const Icon(FluentIcons.back),
-                  onPressed: () => Navigator.of(context)
-                      .context
-                      .findAncestorStateOfType<NavigatorState>()
-                      ?.pop()) :const SizedBox()
-        ],
+            // leadingActions: [
+            //   Navigator.of(context)
+            //   .context
+            //   .findAncestorStateOfType<NavigatorState>()
+            //   !.canPop()
+            //       ?
+            //       IconButton(
+            //           icon: const Icon(FluentIcons.back),
+            //           onPressed: () => Navigator.of(context)
+            //               .context
+            //               .findAncestorStateOfType<NavigatorState>()
+            //               ?.pop()) :const SizedBox()
+            // ],
 
-        width: MediaQuery.of(context).size.width / 2,
-        border: BorderSide(
-            color: context.watch<AppTheme>().color,
-            width: 2,
-            style: BorderStyle.none),
-        borderRadius: BorderRadius.circular(8),
-        margins: const EdgeInsets.only(top: 10),
-        //axisAlignment: -1,
-
-        // width: MediaQuery.of(context).size.width *1/2,
-        // openWidth: MediaQuery.of(context).size.width  ,
-        transitionCurve: Curves.easeInOutCubic,
-        transitionDuration: const Duration(milliseconds: 200),
-        controller: widget.controller,
-        body: widget.body,
-
-        transition: CircularFloatingSearchBarTransition(),
-        physics: const BouncingScrollPhysics(),
-        title: Text(selectedTerm),
-        hint: "Let's Play.....",
-        actions: [
-
-          // FloatingSearchBarAction.()
-
-
-          FloatingSearchBarAction.searchToClear(
-
-
-          )
-        ],
-        onQueryChanged: (query) {
-          setState(() {
-           //for liveSearch//
-            selectedTerm = query;
-            widget.onSubmitted(query);
-
-
-
-            filteredSearchHistory = filterSearchTerms(filter: query);
-          });
-        },
-        onSubmitted: (query) async {
-          // selectedTerm = query;
-          // widget.onSubmitted(query);
-
-          setState(() {
-            selectedTerm = query;
-            widget.onSubmitted(query);
-            addSearchTerm(query);
-          });
-          //await getPrimarySearchResults(selectedTerm);
-
-          //addSearchTerm(query);
-
-
-          floatController.close();
-        },
-        builder: (BuildContext context, Animation<double> transition) {
-          return ClipRRect(
+            width: MediaQuery.of(context).size.width / 2,
+            border: BorderSide(
+                color: context.watch<AppTheme>().color,
+                width: 2,
+                style: BorderStyle.none),
             borderRadius: BorderRadius.circular(8),
-            child: mat.Material(
-              // color: Colors.white,
-              elevation: 4,
-              child: mat.Builder(
-                builder: (context) {
-                  if (filteredSearchHistory.isNotEmpty &&
-                      floatController.query.isEmpty) {
-                    return mat.Container(
-                      //height: 50,
-                      width: double.infinity,
-                      decoration: mat.BoxDecoration(
-                        borderRadius: BorderRadius.circular(8)
-                      ),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: filteredSearchHistory
-                            .map(
-                              (term) => mat.ListTile(
-                            title: Text(
-                              term,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            leading: const Icon(mat.Icons.history),
-                            trailing: IconButton(
-                              icon: const Icon(mat.Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  deleteSearchTerm(term);
-                                });
-                              },
-                            ),
-                            onTap: () async {
-                              setState(() {
-                                widget.controller.query = term;
+            margins: const EdgeInsets.only(top: 10),
+            //axisAlignment: -1,
+
+            // width: MediaQuery.of(context).size.width *1/2,
+            // openWidth: MediaQuery.of(context).size.width  ,
+            transitionCurve: Curves.easeInOutCubic,
+            transitionDuration: const Duration(milliseconds: 200),
+            controller: widget.controller,
+            body: widget.body,
+
+            transition: CircularFloatingSearchBarTransition(),
+            physics: const BouncingScrollPhysics(),
+            title: Text(selectedTerm),
+            hint: "Let's Play.....",
+            actions: [
+
+              // FloatingSearchBarAction.()
 
 
-                                putSearchTermFirst(term);
-                               // selectedTerm = term;
+              FloatingSearchBarAction.searchToClear(
 
-                              });
-                              floatController.close();
-                            },
+
+              )
+            ],
+            onQueryChanged: (query) {
+              setState(() {
+               //for liveSearch//
+                selectedTerm = query;
+                widget.onSubmitted(query);
+
+
+
+                filteredSearchHistory = filterSearchTerms(filter: query);
+              });
+            },
+            onSubmitted: (query) async {
+              // selectedTerm = query;
+              // widget.onSubmitted(query);
+
+              setState(() {
+                selectedTerm = query;
+                widget.onSubmitted(query);
+                addSearchTerm(query);
+              });
+              //await getPrimarySearchResults(selectedTerm);
+
+              //addSearchTerm(query);
+
+
+              floatController.close();
+            },
+            builder: (BuildContext context, Animation<double> transition) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: mat.Material(
+                  // color: Colors.white,
+                  elevation: 4,
+                  child: mat.Builder(
+                    builder: (context) {
+                      if (filteredSearchHistory.isNotEmpty &&
+                          floatController.query.isEmpty) {
+                        return mat.Container(
+                          //height: 50,
+                          width: double.infinity,
+                          decoration: mat.BoxDecoration(
+                            borderRadius: BorderRadius.circular(8)
                           ),
-                        )
-                            .toList(),
-                      )
-                    );
-                  } else if (filteredSearchHistory.isEmpty) {
-                    return mat.ListTile(
-                      title: Text(floatController.query),
-                      leading: const Icon(FluentIcons.search),
-                      onTap: () {
-                        setState(() {
-                          addSearchTerm(floatController.query);
-                          selectedTerm = floatController.query;
-                        });
-                        floatController.close();
-                      },
-                    );
-                  } else {
-                    return const SizedBox();
-                    // return Column(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: filteredSearchHistory
-                    //       .map(
-                    //         (term) => mat.ListTile(
-                    //           title: Text(
-                    //             term,
-                    //             maxLines: 1,
-                    //             overflow: TextOverflow.ellipsis,
-                    //           ),
-                    //           leading: Icon(mat.Icons.history),
-                    //           trailing: IconButton(
-                    //             icon: const Icon(mat.Icons.clear),
-                    //             onPressed: () {
-                    //               setState(() {
-                    //                 deleteSearchTerm(term);
-                    //               });
-                    //             },
-                    //           ),
-                    //           onTap: () {
-                    //             setState(() {
-                    //               putSearchTermFirst(term);
-                    //               selectedTerm = term;
-                    //             });
-                    //             floatController.close();
-                    //           },
-                    //         ),
-                    //       )
-                    //       .toList(),
-                    // );
-                  }
-                },
-              ),
-            ),
-          );
-        },
-      ),
-    );
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: filteredSearchHistory
+                                .map(
+                                  (term) => mat.ListTile(
+                                title: Text(
+                                  term,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                leading: const Icon(mat.Icons.history),
+                                trailing: IconButton(
+                                  icon: const Icon(mat.Icons.clear),
+                                  onPressed: () {
+                                    setState(() {
+                                      deleteSearchTerm(term);
+                                    });
+                                  },
+                                ),
+                                onTap: () async {
+                                  setState(() {
+                                    widget.controller.query = term;
+
+
+                                    putSearchTermFirst(term);
+                                   // selectedTerm = term;
+
+                                  });
+                                  floatController.close();
+                                },
+                              ),
+                            )
+                                .toList(),
+                          )
+                        );
+                      } else if (filteredSearchHistory.isEmpty) {
+                        return mat.ListTile(
+                          title: Text(floatController.query),
+                          leading: const Icon(FluentIcons.search),
+                          onTap: () {
+                            setState(() {
+                              addSearchTerm(floatController.query);
+                              selectedTerm = floatController.query;
+                            });
+                            floatController.close();
+                          },
+                        );
+                      } else {
+                        return const SizedBox();
+                        // return Column(
+                        //   mainAxisSize: MainAxisSize.min,
+                        //   children: filteredSearchHistory
+                        //       .map(
+                        //         (term) => mat.ListTile(
+                        //           title: Text(
+                        //             term,
+                        //             maxLines: 1,
+                        //             overflow: TextOverflow.ellipsis,
+                        //           ),
+                        //           leading: Icon(mat.Icons.history),
+                        //           trailing: IconButton(
+                        //             icon: const Icon(mat.Icons.clear),
+                        //             onPressed: () {
+                        //               setState(() {
+                        //                 deleteSearchTerm(term);
+                        //               });
+                        //             },
+                        //           ),
+                        //           onTap: () {
+                        //             setState(() {
+                        //               putSearchTermFirst(term);
+                        //               selectedTerm = term;
+                        //             });
+                        //             floatController.close();
+                        //           },
+                        //         ),
+                        //       )
+                        //       .toList(),
+                        // );
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
   }
 
   @override

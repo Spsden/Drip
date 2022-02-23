@@ -177,44 +177,51 @@ class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
       });
     }
    return
-     (!fetched) ?
+   Stack(
+     children: [
+       (!fetched) ?
 
 
-     Center(
-       child: LoadingAnimationWidget.staggeredDotsWave(
-           color: context.watch<AppTheme>().color, size: 150),
-     ) :
+   Center(
+     child: LoadingAnimationWidget.staggeredDotsWave(
+         color: context.watch<AppTheme>().color, size: 150),
+   ) :
 
 
-      Stack(
-        children: [
+   Stack(
+     children: [
 
 
-          GridView.builder(gridDelegate:
+       GridView.builder(gridDelegate:
 
 
 
-          const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200.0,
-            mainAxisSpacing: 15.0,
-            crossAxisSpacing: 15.0,
-            childAspectRatio: 1 / 1,
-          ),
-              itemCount: list.length,
+       const SliverGridDelegateWithMaxCrossAxisExtent(
+         maxCrossAxisExtent: 200.0,
+         mainAxisSpacing: 15.0,
+         crossAxisSpacing: 15.0,
+         childAspectRatio: 1 / 1,
+       ),
+           itemCount: list.length,
 
-              itemBuilder: (context,index) {
-                return PlaylistCard(playlistDataClass: list[index]);
-              }
-          ),
+           itemBuilder: (context,index) {
+             return PlaylistCard(playlistDataClass: list[index]);
+           }
+       ),
 
-          FloatingBackButton(
-            onPressed: () => Navigator.pop(context),
 
-          ),
 
-        ],
+     ],
 
-     );
+   ),
+       FloatingBackButton(
+         onPressed: () => Navigator.pop(context),
+
+       ),
+
+     ],
+   );
+
 
   }
 }

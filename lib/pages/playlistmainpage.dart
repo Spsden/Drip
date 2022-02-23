@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/main.dart';
 import 'package:drip/pages/common/backButton.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -38,6 +39,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
   @override
   void initState() {
     super.initState();
+
   }
 
   @override
@@ -165,10 +167,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: constraints.maxHeight / 12,
-                                ),
+                               const mat.Spacer(),
                                 FilledButton(
+
                                   child: Row(
                                     children: const [
                                       Icon(FluentIcons.play),

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
+import 'package:drip/pages/common/backButton.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
@@ -13,7 +14,8 @@ import 'package:drip/pages/settings.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
+import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -32,24 +34,21 @@ const String appTitle = 'Drip';
 
 bool darkMode = true;
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if(Platform.isWindows){
-    doWhenWindowReady((){
-      appWindow.minSize = const Size(540,540);
-      appWindow.size = const Size(900,640);
+  if (Platform.isWindows) {
+    doWhenWindowReady(() {
+      appWindow.minSize = const Size(540, 540);
+      appWindow.size = const Size(900, 640);
       appWindow.alignment = Alignment.center;
       appWindow.show();
       appWindow.title = 'Drip';
+
     });
 
-   // SystemTheme.accentInstance;
+    // SystemTheme.accentInstance;
   }
-
-
 
   setPathUrlStrategy();
 
@@ -64,10 +63,11 @@ void main() async {
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
-  // if(Platform.isWindows){
-  //   await Window.initialize();
-  //
-  // }
+  if(Platform.isWindows){
+    await acrylic.Window.initialize();
+
+
+  }
   //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
 
@@ -114,7 +114,6 @@ Future<void> openHiveBox(String boxName, {bool limit = false}) async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -135,14 +134,42 @@ class MyApp extends StatelessWidget {
             builder: (context, _) {
               final appTheme = context.watch<AppTheme>();
               return FluentApp(
-
                   title: appTitle,
+
+
+
                   themeMode: appTheme.mode,
                   debugShowCheckedModeBanner: false,
                   initialRoute: '/',
                   routes: {'/': (_) => const MyHomePage()},
                   theme: ThemeData(
                     accentColor: appTheme.color,
+                    // navigationPaneTheme: NavigationPaneThemeData(
+                    //   backgroundColor: appTheme.mode == ThemeMode.system
+                    //       ? darkMode
+                    //       ? Colors.transparent
+                    //       : null
+                    //       : appTheme.mode == ThemeMode.dark
+                    //       ? Colors.transparent
+                    //       : null,
+                    //   animationDuration: Duration(milliseconds: 200),
+                    //
+                    // ),
+                    acrylicBackgroundColor: appTheme.mode == ThemeMode.system
+                        ? darkMode
+                        ? Colors.transparent
+                        : null
+                        : appTheme.mode == ThemeMode.dark
+                        ? Colors.transparent
+                        : null,
+
+
+                    // acrylicBackgroundColor: Colors.transparent ,
+                    // navigationPaneTheme: const NavigationPaneThemeData(
+                    //   backgroundColor: Colors.transparent,
+                    //
+                    //
+                    // ) ,
                     brightness: appTheme.mode == ThemeMode.system
                         ? darkMode
                             ? Brightness.dark
@@ -167,10 +194,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
- // GlobalKey<FormState> _globalKeyF = GlobalKey();
-
-
   bool value = false;
 
   int index = 0;
@@ -185,21 +208,15 @@ class _MyHomePageState extends State<MyHomePage> {
   final colorsController = ScrollController();
   final settingsController = ScrollController();
 
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     index = 0;
     _selectedIndex = 0;
     screens = [
-        const FirstPageStack(),
-
+      const FirstPageStack(),
       const SecondPageStack(searchArgs: '', fromFirstPage: false),
-
-
       const CurrentPlaylist(fromMainPage: true),
-
       const Settings()
     ];
     _pageController = PageController(initialPage: _selectedIndex);
@@ -230,33 +247,33 @@ class _MyHomePageState extends State<MyHomePage> {
     final appTheme = context.watch<AppTheme>();
     return SafeArea(
       child: Stack(
+
         children: [
           NavigationView(
-            appBar:
-
-            NavigationAppBar(
-              automaticallyImplyLeading: true,
-
+            appBar: NavigationAppBar(
+                automaticallyImplyLeading: true,
 
                 leading: Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IconButton(
-
                       onPressed: () {
 
 
-                        _pageController.previousPage(curve: Curves.fastLinearToSlowEaseIn,
-                            duration: const Duration(milliseconds: 400));
+                        // _pageController.previousPage(
+                        //     curve: Curves.fastLinearToSlowEaseIn,
+                        //     duration: const Duration(milliseconds: 400));
                       },
                       icon: const Icon(FluentIcons.back)),
                 ),
 
-                //leading: BackBu
 
-                title: Platform.isWindows ? const TopBar() : const SizedBox.shrink()),
+                title: Platform.isWindows
+                    ? const TopBar()
+                    : const SizedBox.shrink()),
             pane: NavigationPane(
-
               selected: _selectedIndex,
+              scrollController: mat.ScrollController(),
+
               onChanged: (i) {
                 index = i;
                 _selectedIndex = i;
@@ -270,22 +287,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 });
               },
-              //setState(() => index = i),
+
               size: const NavigationPaneSize(
-
-
                 openWidth: 200,
                 openMinWidth: 200,
                 openMaxWidth: 200,
               ),
+
               header: Container(
                   height: kOneLineTileHeight,
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
                   child: const Text(
                     'Drip',
                     style: TextStyle(fontSize: 20),
                   )),
-              displayMode: Platform.isWindows ? PaneDisplayMode.compact : PaneDisplayMode.top,
+              displayMode: Platform.isWindows
+                  ? PaneDisplayMode.compact
+                  : PaneDisplayMode.top,
               indicatorBuilder: () {
                 switch (appTheme.indicator) {
                   case NavigationIndicators.end:
@@ -327,43 +346,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     launch('https://github.com/Spsden/Drip.git');
                   },
                 ),
-
               ],
-              // autoSuggestBox: AutoSuggestBox(
-              //   controller: TextEditingController(),
-              //   onChanged: (String searchQuery,TextChangedReason) async{
-              //     playerAlerts.searchVal = 'isdhvvhisd';
-              //
-              //    await  _pageController.animateToPage(1, duration:  const Duration(milliseconds: 400), curve: Curves.fastLinearToSlowEaseIn,);
-              //
-              //   },
-              //   items: const ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-              // ),
+
               autoSuggestBoxReplacement: const Icon(FluentIcons.search),
 
-              // footerItems: [
-              //   PaneItemSeparator(),
-              //   PaneItem(
-              //     icon: const Icon(FluentIcons.settings),
-              //     title: const Text('Settings'),
-              //   ),
-              //   PaneItemAction(
-              //     icon: const Icon(FluentIcons.open_source),
-              //     title: const Text('Source code'),
-              //     onTap: () {
-              //       launch('https://github.com/Spsden/Drip.git');
-              //     },
-              //   ),
-              //   // PaneItem(icon: Icon(FluentIcons.settings),
-              //   // title: mat.SizedBox(height: 200,))
-              //   // ,
-              //   // PaneItem(icon: Icon(FluentIcons.settings),
-              //   //     title: mat.SizedBox(height: 200,)),
-              //   // PaneItem(icon: Icon(FluentIcons.settings),
-              //   //     title: mat.SizedBox(height: 200,)),
-              //
-              //
-              // ],
             ),
             content: PageView(
               scrollDirection: Axis.vertical,
@@ -389,11 +375,9 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, state) {
               return ClipRect(
                 child: Container(
-                  height: MediaQuery.of(context).size.height-100,
+                  height: MediaQuery.of(context).size.height - 100,
                   color: Colors.transparent,
-                  child:
-
-                  const ExpandedAudioBar(),
+                  child: const ExpandedAudioBar(),
                 ),
               );
             },
@@ -402,10 +386,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.center,
                 height: 100,
                 child: Stack(children: [
-                  ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
-                      child: const SizedBox(
+                  const ClipRect(
+                    child: Acrylic(
+                      child: SizedBox(
                         child: AudioPlayerBar(),
                         width: double.infinity,
                         height: 100,
@@ -413,20 +396,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-
-
                   Positioned(
                     bottom: 20,
-                    right : 3,
+                    right: 3,
                     child: IconButton(
-
                       icon: const Icon(FluentIcons.playlist_music),
                       onPressed: () {
                         setState(() {
                           if (sheetCollapsed) {
                             _sheetController.expand();
                             sheetCollapsed = false;
-
                           } else {
                             _sheetController.collapse();
                             sheetCollapsed = true;
@@ -451,7 +430,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return av.ProgressBar(
                   thumbGlowColor: Colors.blue,
                   baseBarColor:
-                  context.watch<AppTheme>().color.withOpacity(0.3),
+                      context.watch<AppTheme>().color.withOpacity(0.3),
                   thumbColor: context.watch<AppTheme>().color,
                   progressBarColor: context.watch<AppTheme>().color,
                   progress: value.current,
@@ -463,7 +442,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ],
-
       ),
     );
   }
@@ -486,18 +464,14 @@ class TopBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
             Expanded(
                 child: MoveWindow(
               child: Container(
-                margin: const mat.EdgeInsets.only(top: 8,left: 8),
+                margin: const mat.EdgeInsets.only(top: 8, left: 8),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-
                   children: [
                     Image.asset(
-
-
                       'assets/driplogocircle.png',
                       filterQuality: FilterQuality.high,
                       alignment: Alignment.center,
@@ -507,14 +481,15 @@ class TopBar extends StatelessWidget {
                       //height: 10,
                       //width: 10,
                     ),
-                    const SizedBox(width: 10,),
+                    const SizedBox(
+                      width: 10,
+                    ),
                     const Text(
                       'Drip',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     ),
-
                   ],
-
                 ),
               ),
             )),
@@ -535,3 +510,9 @@ class TopBar extends StatelessWidget {
     );
   }
 }
+//
+// GetIt locator = GetIt.instance;
+//
+// void setupLocator() {
+//   locator.registerLazySingleton(() => PopNavigationService());
+// }

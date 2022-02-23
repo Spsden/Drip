@@ -6,12 +6,14 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/moods_page.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
+import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as mat;
@@ -77,9 +79,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
         }
       });
     }
-    return mat.Material(
-      color: Colors.black,
-      child: SearchFunction(
+    return SearchFunction(
         liveSearch: true,
         controller: _controller,
         onSubmitted: (searchQuery) async {
@@ -300,11 +300,16 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                   ),
                                   onPressed: () {
 
-                                    Navigator.of(context).pushNamed(
-                                        'artistListPage',
-                                        arguments: _controller.query == ''
-                                            ? widget.searchQuery
-                                            : _controller.query);
+                                    // Navigator.of(context).pushNamed(
+                                    //     'artistListPage',
+                                    //     arguments: _controller.query == ''
+                                    //         ? widget.searchQuery
+                                    //         : _controller.query);
+
+                                    Navigator.push(context,
+                                        mat.MaterialPageRoute(builder: (context) => ArtistsSearchResults(artistQuery: _controller.query == ''
+                                                 ? widget.searchQuery
+                                                 : _controller.query,)));
                                   },
                                 ),
                               ],
@@ -337,11 +342,16 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                     ],
                                   ),
                                   onPressed: () {
-                                    Navigator.of(context).pushNamed(
-                                        'albumsListPage',
-                                        arguments: _controller.query == ''
-                                            ? widget.searchQuery
-                                            : _controller.query);
+                                    // Navigator.of(context).pushNamed(
+                                    //     'albumsListPage',
+                                    //     arguments: _controller.query == ''
+                                    //         ? widget.searchQuery
+                                    //         : _controller.query);
+
+                                    Navigator.push(context,
+                                        mat.MaterialPageRoute(builder: (context) => AlbumsSearchResults(albumsQuery: _controller.query == ''
+                                          ? widget.searchQuery
+                                                 : _controller.query)));
 
                                   },
                                 ),
@@ -379,6 +389,17 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                     ],
                                   ),
                                   onPressed: () {
+                                    
+                                    
+                                    // Navigator.push(context,
+                                    // mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: communityPlaylists.) ))
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     showSnackbar(
                                         context,
                                         const Snackbar(
@@ -407,8 +428,8 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                       ),
                     ),
                   ),
-      ),
-    );
+      );
+
   }
 }
 

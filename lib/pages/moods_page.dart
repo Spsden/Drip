@@ -60,7 +60,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                 color: context.watch<AppTheme>().color, size: 150),
           )
         : mat.ListView(
-             controller: _scrollController,
+             controller: ScrollController(),
             clipBehavior: Clip.hardEdge,
             primary: false,
             physics: const BouncingScrollPhysics(
@@ -74,7 +74,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                 spacer,
                 GridView.builder(
                     shrinkWrap: true,
-                    controller: _scrollController,
+                    controller: ScrollController(),
                     itemCount: _moodsCategories.moodsMoments?.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
