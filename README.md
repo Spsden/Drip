@@ -43,6 +43,7 @@ A simple YouTube Music Client written in Dart using Flutter Framework with  [@mi
 - Music
 - Albums
 - Community PLaylists
+- Moods & Genre Playlists
 
 ### Features
 - Related tracks when you play a track
@@ -52,7 +53,7 @@ A simple YouTube Music Client written in Dart using Flutter Framework with  [@mi
 - Looks native to windows
 
 ## Planned Features
-- Genres and Moods
+- ~~Genres and Moods~~ Added ✅
 - Albums Search
 - Updates to Widget Mode
 - Linux support
