@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
+import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/common/backButton.dart';
 
@@ -257,6 +258,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IconButton(
                       onPressed: () {
+
+
+                   ApiYouTube().searchSuggestions(searchQuery: 'jai hind');
+
+
 
 
                         // _pageController.previousPage(

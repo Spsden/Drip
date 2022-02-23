@@ -24,10 +24,40 @@ class ApiYouTube {
     return metadata;
   }
 
-  //   Future<Playlist> artistresults(String id) async {
-  //   final Playlist metadata = await yt.playlists.get(id);
-  //   return metadata;
-  // }
+  Future<List> searchSuggestions({required String searchQuery}) async {
+    const searchUrl = 'https://suggestqueries-clients6.youtube.com/complete/search?client=firefox&q=';
+    final Uri link = Uri.parse(searchUrl + searchQuery);
+
+    const headers = {
+      'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; rv:96.0) Gecko/20100101 Firefox/96.0'
+    };
+
+    try {
+      final response = await get(link,headers: headers);
+
+      if(response.statusCode == 200) {
+       // print(response.body);
+        final List searchSuggestion = jsonDecode(response.body);
+        final List listOfSuggestions = searchSuggestion[1];
+
+
+        // for(String i in listOfSuggestions){
+        //   print(i);
+        // }
+
+
+
+        return listOfSuggestions;
+      } else {
+        return [];
+      }
+
+    } catch (e) {
+      return [];
+    }
+  }
+
 
   Future<List<Video>> fetchSearchResults(String query) async {
     final List<Video> searchResults = await yt.search.getVideos(query);
