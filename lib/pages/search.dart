@@ -39,7 +39,7 @@ class _SearchFunctionState extends State<SearchFunction>
   List<String> filterSearchTerms({
     required String filter,
   }) {
-    if (filter != null && filter.isNotEmpty) {
+    if (filter.isNotEmpty) {
       // Reversed because we want the last added items to appear first in the UI
       return _searchHistory.reversed
           .where((term) => term.startsWith(filter))
@@ -251,24 +251,21 @@ class _SearchFunctionState extends State<SearchFunction>
                               mainAxisSize: MainAxisSize.min,
                               children: searchSuggestions.value
                                   .map((e) => mat.InkWell(
-                                onTap: ()
+                                        onTap: () async {
+                                          setState(() {
+                                            widget.controller.query = e;
 
-    async {
-                  setState(() {
-                    widget.controller.query = e;
-
-                    putSearchTermFirst(e);
-                    // selectedTerm = term;
-                  });
-                  floatController.hide();
-                },
-
-                                    child: ListTile(
+                                            putSearchTermFirst(e);
+                                            // selectedTerm = term;
+                                          });
+                                          floatController.hide();
+                                        },
+                                        child: ListTile(
                                           title: Text(
                                             e.toString(),
                                           ),
                                         ),
-                                  ))
+                                      ))
                                   .toList(),
                             ));
                   } else if (filteredSearchHistory.isNotEmpty &&
@@ -324,7 +321,7 @@ class _SearchFunctionState extends State<SearchFunction>
                       },
                     );
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 }),
               ),

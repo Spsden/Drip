@@ -24,7 +24,7 @@ class ApiYouTube {
     return metadata;
   }
 
-  Future<List> searchSuggestions({required String searchQuery}) async {
+  Future<List<String>> searchSuggestions({required String searchQuery}) async {
     const searchUrl = 'https://suggestqueries-clients6.youtube.com/complete/search?client=firefox&q=';
     final Uri link = Uri.parse(searchUrl + searchQuery);
 
@@ -39,7 +39,7 @@ class ApiYouTube {
       if(response.statusCode == 200) {
        // print(response.body);
         final List searchSuggestion = jsonDecode(response.body);
-        final List listOfSuggestions = searchSuggestion[1];
+        final List<String> listOfSuggestions = searchSuggestion[1] as List<String>;
 
 
         // for(String i in listOfSuggestions){

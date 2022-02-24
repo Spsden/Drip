@@ -389,6 +389,11 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                     ],
                                   ),
                                   onPressed: () {
+
+                                    Navigator.push(context,
+                                        mat.MaterialPageRoute(builder: (context) => PlaylistInfinitePaginationWidget(communityPlaylistQuery: _controller.query == ''
+                                            ? widget.searchQuery
+                                            : _controller.query,)));
                                     
                                     
                                     // Navigator.push(context,
