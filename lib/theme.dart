@@ -21,6 +21,13 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
+  Color _albumArtColor = Colors.transparent;
+  Color get albumArtColor => _albumArtColor;
+  set albumArtColor(Color color){
+    _albumArtColor = color;
+    notifyListeners();
+  }
+
 
 
   ThemeMode _mode = ThemeMode.system;

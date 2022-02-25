@@ -185,8 +185,8 @@ class _SearchFunctionState extends State<SearchFunction>
                 // color: Colors.white,
                 elevation: 4,
                 child: mat.Builder(builder: (context) {
-                  if (searchSuggestions.value.isNotEmpty &&
-                      selectedTerm != '') {
+                  if (searchSuggestions.value.isNotEmpty
+                     ) {
                     return
 
                         //   mat.FutureBuilder(

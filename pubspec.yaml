@@ -59,6 +59,7 @@ dependencies:
   get_it: ^7.2.0
   implicitly_animated_reorderable_list: ^0.4.2
   great_list_view: ^0.1.4
+  palette_generator: ^0.3.3
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:flutter/material.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class ActiveAudioData extends ChangeNotifier {
 
@@ -62,6 +63,7 @@ class ActiveAudioData extends ChangeNotifier {
     "videoId": _videoId,
    // "year": year,
   };
+
 
 
 

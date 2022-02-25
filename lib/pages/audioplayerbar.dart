@@ -7,6 +7,7 @@ import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:flutter/material.dart' as mat;
+import 'package:palette_generator/palette_generator.dart';
 
 
 import 'package:provider/provider.dart';
@@ -33,6 +34,23 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
   double bufferValue = 0.0;
   bool isCompleted = false;
 
+  //late Color audioPlayerBarColor ;
+
+  // Future<Color?> getColor() async{
+  //   final PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(mat.NetworkImage( context.watch<ActiveAudioData>().thumbnailLarge.toString())
+  //   );
+  //
+  //   AppTheme().albumArtColor = paletteGenerator.dominantColor!.color;
+  //
+  //  // audioPlayerBarColor =
+  //
+  //
+  //   return paletteGenerator.dominantColor?.color;
+  // }
+  //
+  //
+
+
 
 
 
@@ -40,6 +58,13 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
   @override
   void initState() {
+   // getColor();
+
+
+
+
+
+
 
 
 

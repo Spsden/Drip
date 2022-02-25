@@ -139,6 +139,7 @@ class MyApp extends StatelessWidget {
 
 
 
+
                   themeMode: appTheme.mode,
                   debugShowCheckedModeBanner: false,
                   initialRoute: '/',
@@ -156,13 +157,19 @@ class MyApp extends StatelessWidget {
                     //   animationDuration: Duration(milliseconds: 200),
                     //
                     // ),
-                    acrylicBackgroundColor: appTheme.mode == ThemeMode.system
-                        ? darkMode
-                        ? Colors.transparent
-                        : null
-                        : appTheme.mode == ThemeMode.dark
-                        ? Colors.transparent
-                        : null,
+                    // acrylicBackgroundColor:
+                    //
+                    // context.read<AppTheme>().albumArtColor,
+
+
+
+                    // appTheme.mode == ThemeMode.system
+                    //     ? darkMode
+                    //     ? Colors.transparent
+                    //     : null
+                    //     : appTheme.mode == ThemeMode.dark
+                    //     ? Colors.transparent
+                    //     : null,
 
 
                     // acrylicBackgroundColor: Colors.transparent ,
@@ -394,12 +401,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Stack(children: [
                   const ClipRect(
                     child: Acrylic(
+
                       child: SizedBox(
                         child: AudioPlayerBar(),
                         width: double.infinity,
                         height: 100,
                         //: 100.0,
                       ),
+                      elevation: 10,
                     ),
                   ),
                   Positioned(

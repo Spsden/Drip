@@ -13,6 +13,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../theme.dart';
@@ -96,7 +97,7 @@ class _TrackBarsState extends State<TrackBars> {
                       color: context.watch<AppTheme>().color, size: 100));
             } else {
               return Padding(
-                padding: EdgeInsets.fromLTRB(20, 12, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                 child: TrackCardLarge(
                   data: TrackCardData(
                       title: widget.songs[index].title.toString(),
@@ -121,6 +122,25 @@ class _TrackBarsState extends State<TrackBars> {
                         widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
                       widget.songs[index].thumbnails.last.url.toString(),);
                     currentMediaIndex = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     await AudioControlClass.play(
                         audioUrl: audioUrl,
