@@ -62,18 +62,8 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
 
 
-
-
-
-
-
-
-
-
-
-
     super.initState();
-    //init();
+
   }
 
   @override
@@ -83,7 +73,6 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     super.dispose();
   }
 
-  final double _sliderval = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -229,9 +218,10 @@ class _PlayBackControlsState extends State<PlayBackControls> {
         child: Row(
           children: [
             mat.IconButton(
-              icon: const Icon(mat.Icons.shuffle),
+              icon: const Icon(mat.Icons.shuffle_rounded),
               iconSize: smallIcons,
               onPressed: () async{
+                //tracklist.value.shuffle();
                 //SearchMusic.getWatchPlaylist(videoId, limit)
 
 
@@ -282,7 +272,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
                       }
                       else if(playerState!.isCompleted){
                         // AudioControlClass.nextMusic(context,1);
-                        print('complll');
+                        // print('complll');
                         autoPress(context);
 
 

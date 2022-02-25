@@ -30,7 +30,7 @@ final progressNotifier = ValueNotifier<ProgressBarState>(
 
 
 final ValueNotifier<List<Track>> tracklist = ValueNotifier<List<Track>>(tracks);
-final ValueNotifier<double> bufferProgress = ValueNotifier<double>(0.0);
+final ValueNotifier<double> bufferProgress = ValueNotifier<double>(11.0);
 final ValueNotifier<int> currentTrackValueNotifier = ValueNotifier<int>(currentMediaIndex = 0);
 
 
@@ -60,6 +60,7 @@ late final mediaplayer.Player player = mediaplayer.Player(id: 12)
   })
 ..currentStream.listen((CurrentState state) {
   currentTrackValueNotifier.value = state.index!;
+
 
 })
 ;

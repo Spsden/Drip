@@ -10,6 +10,7 @@ import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -259,37 +260,48 @@ class _TrackListState extends State<TrackList> {
                       height: 15,
                     ),
                   ),
-                  PagedSliverList.separated(
+                  AnimationLimiter(
+                    child: PagedSliverList.separated(
 
-                    //physics: BouncingScrollPhysics(),
+                      //physics: BouncingScrollPhysics(),
 
-                    pagingController: _pagingController,
-                    // padding: const EdgeInsets.all(10),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 10,
-                    ),
-                    builderDelegate: PagedChildBuilderDelegate<Songs>(
-                      animateTransitions: true,
-                      transitionDuration: const Duration(milliseconds: 200),
-                      firstPageProgressIndicatorBuilder: (_) => Center(
-                        child: LoadingAnimationWidget.staggeredDotsWave(
-                            color: context.watch<AppTheme>().color, size: 300),
+                      pagingController: _pagingController,
+                      // padding: const EdgeInsets.all(10),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 10,
                       ),
-                      newPageProgressIndicatorBuilder: (_) => Center(
-                        child: LoadingAnimationWidget.staggeredDotsWave(
-                            color: context.watch<AppTheme>().color, size: 100),
+                      builderDelegate: PagedChildBuilderDelegate<Songs>(
+                        animateTransitions: true,
+                        transitionDuration: const Duration(milliseconds: 200),
+                        firstPageProgressIndicatorBuilder: (_) => Center(
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: context.watch<AppTheme>().color, size: 300),
+                        ),
+                        newPageProgressIndicatorBuilder: (_) => Center(
+                          child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: context.watch<AppTheme>().color, size: 100),
+                        ),
+                        itemBuilder: (context, songs, index) => AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 370),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: TrackListItem(
+                                songs: songs,
+                                color:  index % 2 != 0
+                                    ? Colors.transparent
+                                    : context.watch<AppTheme>().mode == ThemeMode.dark ||
+                                    context.watch<AppTheme>().mode ==
+                                        ThemeMode.system
+                                    ? Colors.grey[150]
+                                    : Colors.grey[40],
+                              ),
+                            ),
+                          ),
+                        ),
+                        // firstPageErrorIndicatorBuilder: (context) =>
                       ),
-                      itemBuilder: (context, songs, index) => TrackListItem(
-                        songs: songs,
-                        color:  index % 2 != 0
-                            ? Colors.transparent
-                            : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                            context.watch<AppTheme>().mode ==
-                                ThemeMode.system
-                            ? Colors.grey[150]
-                            : Colors.grey[40],
-                      ),
-                      // firstPageErrorIndicatorBuilder: (context) =>
                     ),
                   ),
                 ],

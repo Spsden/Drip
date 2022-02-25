@@ -7,6 +7,7 @@ import 'package:drip/pages/common/backButton.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
@@ -188,79 +189,91 @@ class _PlaylistMainState extends State<PlaylistMain> {
                         ),
                       ),
                     ),
-                    ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(15),
-                        itemCount: _tracks.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                            child: TrackCardLarge(
-                              data: TrackCardData(
-                                  title: _tracks[index].title.toString(),
-                                  artist: _tracks[index]
-                                      .artists
-                                      .first
-                                      .name
-                                      .toString(),
-                                  album: 'Drip',
-                                  duration: _tracks[index].duration.toString(),
-                                  thumbnail: _tracks[index]
-                                      .thumbnails[0]
-                                      .url
-                                      .toString()),
-                              songIndex: index,
-                              onTrackTap: () async {
-                                var audioUrl =
-                                    await AudioControlClass.getAudioUri(
-                                        _tracks[index].videoId.toString());
-                                // print(audioUrl.toString());
+                    AnimationLimiter(
+                      child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(15),
+                          itemCount: _tracks.length,
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                
+                                child: FadeInAnimation(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                                    child: TrackCardLarge(
+                                      data: TrackCardData(
+                                          title: _tracks[index].title.toString(),
+                                          artist: _tracks[index]
+                                              .artists
+                                              .first
+                                              .name
+                                              .toString(),
+                                          album: 'Drip',
+                                          duration: _tracks[index].duration.toString(),
+                                          thumbnail: _tracks[index]
+                                              .thumbnails[0]
+                                              .url
+                                              .toString()),
+                                      songIndex: index,
+                                      onTrackTap: () async {
+                                        var audioUrl =
+                                            await AudioControlClass.getAudioUri(
+                                                _tracks[index].videoId.toString());
+                                        // print(audioUrl.toString());
 
-                                playerAlerts.buffering = true;
-                                await context
-                                    .read<ActiveAudioData>()
-                                    .songDetails(
-                                        audioUrl,
-                                        _tracks[index].videoId.toString(),
-                                        _tracks[index].artists[0].name,
-                                        _tracks[index].title.toString(),
-                                        _tracks[index]
-                                            .thumbnails[0]
-                                            .url
-                                            .toString(),
-                                        _tracks[index]
-                                            .thumbnails
-                                            .map((e) => ThumbnailLocal(
-                                                height: e.height,
-                                                url: e.url.toString(),
-                                                width: e.width))
-                                            .toList(),
-                                        _tracks[index]
-                                            .thumbnails
-                                            .last
-                                            .url
-                                            .toString());
-                                currentMediaIndex = 0;
+                                        playerAlerts.buffering = true;
+                                        await context
+                                            .read<ActiveAudioData>()
+                                            .songDetails(
+                                                audioUrl,
+                                                _tracks[index].videoId.toString(),
+                                                _tracks[index].artists[0].name,
+                                                _tracks[index].title.toString(),
+                                                _tracks[index]
+                                                    .thumbnails[0]
+                                                    .url
+                                                    .toString(),
+                                                _tracks[index]
+                                                    .thumbnails
+                                                    .map((e) => ThumbnailLocal(
+                                                        height: e.height,
+                                                        url: e.url.toString(),
+                                                        width: e.width))
+                                                    .toList(),
+                                                _tracks[index]
+                                                    .thumbnails
+                                                    .last
+                                                    .url
+                                                    .toString());
+                                        currentMediaIndex = 0;
 
-                                await AudioControlClass.play(
-                                    audioUrl: audioUrl,
-                                    videoId: _tracks[index].videoId.toString(),
-                                    context: context);
-                              },
-                              color: index % 2 != 0
-                                  ? Colors.transparent
-                                  : context.watch<AppTheme>().mode ==
-                                              ThemeMode.dark ||
-                                          context.watch<AppTheme>().mode ==
-                                              ThemeMode.system
-                                      ? Colors.grey[150]
-                                      : Colors.grey[30],
-                              fromQueue: false,
-                              SuperSize: size,
-                            ),
-                          );
-                        }),
+                                        await AudioControlClass.play(
+                                            audioUrl: audioUrl,
+                                            videoId: _tracks[index].videoId.toString(),
+                                            context: context);
+                                      },
+                                      color: index % 2 != 0
+                                          ? Colors.transparent
+                                          : context.watch<AppTheme>().mode ==
+                                                      ThemeMode.dark ||
+                                                  context.watch<AppTheme>().mode ==
+                                                      ThemeMode.system
+                                              ? Colors.grey[150]
+                                              : Colors.grey[30],
+                                      fromQueue: false,
+                                      SuperSize: size,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
                     const SizedBox(
                       height: 120,
                     )

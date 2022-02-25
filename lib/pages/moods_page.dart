@@ -16,7 +16,7 @@ class MoodsAndCategories extends StatefulWidget {
   _MoodsAndCategoriesState createState() => _MoodsAndCategoriesState();
 }
 
-class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
+class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticKeepAliveClientMixin<MoodsAndCategories> {
   late MoodsCategories _moodsCategories;
 
   final ScrollController _scrollController = ScrollController();
@@ -136,23 +136,10 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                               const BoxDecoration(color: Colors.transparent),
                           child: mat.InkWell(
                             onTap: () {
-                              // print(_moodsCategories.genres![index].params.toString());
-                              // //var result;
-                              //
-                              //
-                              // SearchMusic.getMoodPlaylists(_moodsCategories.genres![index].params.toString()).then((value) => {
-                              //    print(value.length)
-                              // });
+
 
                               Navigator.push(context,
                               mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.genres![index].params.toString())));
-
-                             // print(result.toString());
-
-
-
-
-
 
                               // showSnackbar(
                               //     context,
@@ -186,4 +173,8 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> {
                         )),
               ]);
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

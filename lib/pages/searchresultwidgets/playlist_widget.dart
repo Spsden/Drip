@@ -2,6 +2,7 @@ import 'package:drip/datasources/searchresults/playlist_data_class.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -192,21 +193,27 @@ class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
      children: [
 
 
-       GridView.builder(gridDelegate:
+       AnimationLimiter(
+         child: GridView.builder(gridDelegate:
 
 
 
-       const SliverGridDelegateWithMaxCrossAxisExtent(
-         maxCrossAxisExtent: 200.0,
-         mainAxisSpacing: 15.0,
-         crossAxisSpacing: 15.0,
-         childAspectRatio: 1 / 1,
-       ),
-           itemCount: list.length,
+         const SliverGridDelegateWithMaxCrossAxisExtent(
+           maxCrossAxisExtent: 200.0,
+           mainAxisSpacing: 15.0,
+           crossAxisSpacing: 15.0,
+           childAspectRatio: 1 / 1,
+         ),
+             itemCount: list.length,
 
-           itemBuilder: (context,index) {
-             return PlaylistCard(playlistDataClass: list[index]);
-           }
+             itemBuilder: (context,index) {
+               return AnimationConfiguration.staggeredGrid(
+                 position: index,
+                   duration: Duration(milliseconds: 375),
+                   columnCount: 4,
+                   child: SlideAnimation(child: FadeInAnimation(child: PlaylistCard(playlistDataClass: list[index]))));
+             }
+         ),
        ),
 
 

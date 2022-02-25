@@ -17,6 +17,7 @@ import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 
@@ -109,7 +110,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                     child: ScrollConfiguration(
 
                       behavior: const FluentScrollBehavior(),
-                      child: ListView(
+                      child: SingleChildScrollView(
 
                         dragStartBehavior: DragStartBehavior.down,
                         physics: const BouncingScrollPhysics(
@@ -118,318 +119,324 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                         clipBehavior: Clip.hardEdge,
                         primary: false,
 
-                        children: [
+                     child: Column(
+                       children: AnimationConfiguration.toStaggeredList(childAnimationBuilder: (widget) => SlideAnimation(child: FadeInAnimation(child: widget,),horizontalOffset: 50.0),
 
-                          //mat.RaisedButton(onPressed: () => Navigator.of(context).context.findAncestorStateOfType<NavigatorState>()?.pop()),
-                          Text(
-                            _controller.query == ''
-                                ? 'Results for \"${widget.searchQuery}\"'
-                                : 'Results for \"${_controller.query}\"',
-                            style: typography.display?.apply(fontSizeFactor: 1.0),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          biggerSpacer,
-                          SizedBox(
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
+                           children: [
 
-                                // if(topResult.resultType != null)
-                                //
-                                //   Text(
-                                //     "Top result",
-                                //     style: typography.subtitle
-                                //         ?.apply(fontSizeFactor: 1.0),
-                                //   ),
-                                //   const SizedBox(height: 15,),
-                                //   if(topResult.resultType == 'video')
-                                //
-                                //
-                                //     Container(
-                                //       margin: const EdgeInsets.only(
-                                //           left: 20, right: 20),
-                                //       child: TrackCardLarge(data: TrackCardData(
-                                //           duration: topResult.duration,
-                                //           album: '',
-                                //           title: topResult.title,
-                                //           artist: '${topResult.artists.first
-                                //               .name}',
-                                //           thumbnail: topResult.thumbnails.first
-                                //               .url.toString()
-                                //       ),
-                                //           songIndex: 0,
-                                //           onTrackTap: () async {
-                                //             var audioUrl =
-                                //             await AudioControlClass.getAudioUri(
-                                //                 topResult.videoId.toString());
-                                //             // print(audioUrl.toString());
-                                //
-                                //             playerAlerts.buffering = true;
-                                //             await context
-                                //                 .read<ActiveAudioData>()
-                                //                 .songDetails(
-                                //                 audioUrl,
-                                //                 topResult.videoId.toString(),
-                                //                 topResult.artists[0].name,
-                                //                 topResult.title.toString(),
-                                //                 topResult
-                                //                     .thumbnails[0]
-                                //                     .url
-                                //                     .toString());
-                                //             currentMediaIndex = 0;
-                                //
-                                //             await AudioControlClass.play(
-                                //                 audioUrl: audioUrl,
-                                //                 videoId:
-                                //                 topResult.videoId.toString(),
-                                //                 context: context);
-                                //           },
-                                //           color: context
-                                //               .watch<AppTheme>()
-                                //               .mode == ThemeMode.dark ||
-                                //               context
-                                //                   .watch<AppTheme>()
-                                //                   .mode ==
-                                //                   ThemeMode.system
-                                //               ? Colors.grey[150]
-                                //               : Colors.grey[30]
-                                //           ,
-                                //           SuperSize: MediaQuery
-                                //               .of(context)
-                                //               .size,
-                                //           fromQueue: false),
-                                //     ),
-                                //
-                                //
-                                //   if(topResult.resultType == 'artist')
-                                //     ArtistCard(artists: Artists(
-                                //         artist: topResult.artist,
-                                //         browseId: topResult.browseId,
-                                //         radioId: topResult.radioId,
-                                //         category: topResult.category,
-                                //         resultType: topResult.resultType,
-                                //         shuffleId: topResult.shuffleId,
-                                //         thumbnails: topResult.thumbnails
-                                //     ))
-                                //
+                             //mat.RaisedButton(onPressed: () => Navigator.of(context).context.findAncestorStateOfType<NavigatorState>()?.pop()),
+                             Text(
+                               _controller.query == ''
+                                   ? 'Results for \"${widget.searchQuery}\"'
+                                   : 'Results for \"${_controller.query}\"',
+                               style: typography.display?.apply(fontSizeFactor: 1.0),
+                               maxLines: 2,
+                               overflow: TextOverflow.ellipsis,
+                             ),
+                             biggerSpacer,
+                             SizedBox(
+                               width: double.infinity,
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: const [
 
-
-
-
-
-
-                              ],
-                            ),
-                          ),
-                          biggerSpacer,
-
-                          SizedBox(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Songs",
-                                  style: typography.subtitle
-                                      ?.apply(fontSizeFactor: 1.0),
-                                ),
-                                FilledButton(
-                                  child: Row(
-                                    children: const [
-                                      //Icon(FluentIcons.more),
-                                      // spacer,
-                                      Text('Show more',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500)),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed(
-                                        'songslistpage',
-                                        arguments: _controller.query == ''
-                                            ? widget.searchQuery
-                                            : _controller.query);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          spacer,
-                          SizedBox(
-                              //height: MediaQuery.of(context).size.height * 1 / 3,
-                              child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
-
-                                  child:
-
-                                  TrackBars(
-                                    songs: songs,
-                                    isFromPrimarySearchPage: true,
-                                  )
+                                   // if(topResult.resultType != null)
+                                   //
+                                   //   Text(
+                                   //     "Top result",
+                                   //     style: typography.subtitle
+                                   //         ?.apply(fontSizeFactor: 1.0),
+                                   //   ),
+                                   //   const SizedBox(height: 15,),
+                                   //   if(topResult.resultType == 'video')
+                                   //
+                                   //
+                                   //     Container(
+                                   //       margin: const EdgeInsets.only(
+                                   //           left: 20, right: 20),
+                                   //       child: TrackCardLarge(data: TrackCardData(
+                                   //           duration: topResult.duration,
+                                   //           album: '',
+                                   //           title: topResult.title,
+                                   //           artist: '${topResult.artists.first
+                                   //               .name}',
+                                   //           thumbnail: topResult.thumbnails.first
+                                   //               .url.toString()
+                                   //       ),
+                                   //           songIndex: 0,
+                                   //           onTrackTap: () async {
+                                   //             var audioUrl =
+                                   //             await AudioControlClass.getAudioUri(
+                                   //                 topResult.videoId.toString());
+                                   //             // print(audioUrl.toString());
+                                   //
+                                   //             playerAlerts.buffering = true;
+                                   //             await context
+                                   //                 .read<ActiveAudioData>()
+                                   //                 .songDetails(
+                                   //                 audioUrl,
+                                   //                 topResult.videoId.toString(),
+                                   //                 topResult.artists[0].name,
+                                   //                 topResult.title.toString(),
+                                   //                 topResult
+                                   //                     .thumbnails[0]
+                                   //                     .url
+                                   //                     .toString());
+                                   //             currentMediaIndex = 0;
+                                   //
+                                   //             await AudioControlClass.play(
+                                   //                 audioUrl: audioUrl,
+                                   //                 videoId:
+                                   //                 topResult.videoId.toString(),
+                                   //                 context: context);
+                                   //           },
+                                   //           color: context
+                                   //               .watch<AppTheme>()
+                                   //               .mode == ThemeMode.dark ||
+                                   //               context
+                                   //                   .watch<AppTheme>()
+                                   //                   .mode ==
+                                   //                   ThemeMode.system
+                                   //               ? Colors.grey[150]
+                                   //               : Colors.grey[30]
+                                   //           ,
+                                   //           SuperSize: MediaQuery
+                                   //               .of(context)
+                                   //               .size,
+                                   //           fromQueue: false),
+                                   //     ),
+                                   //
+                                   //
+                                   //   if(topResult.resultType == 'artist')
+                                   //     ArtistCard(artists: Artists(
+                                   //         artist: topResult.artist,
+                                   //         browseId: topResult.browseId,
+                                   //         radioId: topResult.radioId,
+                                   //         category: topResult.category,
+                                   //         resultType: topResult.resultType,
+                                   //         shuffleId: topResult.shuffleId,
+                                   //         thumbnails: topResult.thumbnails
+                                   //     ))
+                                   //
 
 
 
 
-                              )),
-                          biggerSpacer,
-                          SizedBox(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Artists",
-                                  style: typography.subtitle
-                                      ?.apply(fontSizeFactor: 1.0),
-                                ),
-                                FilledButton(
-                                  child: Row(
-                                    children: const [
-                                      //Icon(FluentIcons.more),
-                                      // spacer,
-                                      Text('Show more',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500)),
-                                    ],
-                                  ),
-                                  onPressed: () {
 
-                                    // Navigator.of(context).pushNamed(
-                                    //     'artistListPage',
-                                    //     arguments: _controller.query == ''
-                                    //         ? widget.searchQuery
-                                    //         : _controller.query);
 
-                                    Navigator.push(context,
-                                        mat.MaterialPageRoute(builder: (context) => ArtistsSearchResults(artistQuery: _controller.query == ''
-                                                 ? widget.searchQuery
-                                                 : _controller.query,)));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          spacer,
-                          artists.isNotEmpty
-                              ? ArtistsSearch(artists: artists)
-                              : const Text('No Artists available'),
-                          //biggerSpacer,
-                          SizedBox(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Albums",
-                                  style: typography.subtitle
-                                      ?.apply(fontSizeFactor: 1.0),
-                                ),
-                                FilledButton(
-                                  child: Row(
-                                    children: const [
-                                      //Icon(FluentIcons.more),
-                                      // spacer,
-                                      Text('Show more',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500)),
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    // Navigator.of(context).pushNamed(
-                                    //     'albumsListPage',
-                                    //     arguments: _controller.query == ''
-                                    //         ? widget.searchQuery
-                                    //         : _controller.query);
+                                 ],
+                               ),
+                             ),
+                             biggerSpacer,
 
-                                    Navigator.push(context,
-                                        mat.MaterialPageRoute(builder: (context) => AlbumsSearchResults(albumsQuery: _controller.query == ''
-                                          ? widget.searchQuery
-                                                 : _controller.query)));
+                             SizedBox(
+                               width: double.infinity,
+                               child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text(
+                                     "Songs",
+                                     style: typography.subtitle
+                                         ?.apply(fontSizeFactor: 1.0),
+                                   ),
+                                   FilledButton(
+                                     child: Row(
+                                       children: const [
+                                         //Icon(FluentIcons.more),
+                                         // spacer,
+                                         Text('Show more',
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontWeight: FontWeight.w500)),
+                                       ],
+                                     ),
+                                     onPressed: () {
+                                       Navigator.of(context).pushNamed(
+                                           'songslistpage',
+                                           arguments: _controller.query == ''
+                                               ? widget.searchQuery
+                                               : _controller.query);
+                                     },
+                                   ),
+                                 ],
+                               ),
+                             ),
+                             spacer,
+                             SizedBox(
+                               //height: MediaQuery.of(context).size.height * 1 / 3,
+                                 child: Container(
+                                     alignment: Alignment.centerLeft,
+                                     // child: CommonTrackList(isFromPrimarySearchPage: true,songs: songs,currentTrackIndex: 1,tracklist: [],))
 
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          spacer,
-                          albums.isNotEmpty
-                              ? AlbumSearch(albums: albums)
-                              : const Text('No Albums available'),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          // biggerSpacer,
-                          SizedBox(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Community Playlists",
-                                  style: typography.subtitle
-                                      ?.apply(fontSizeFactor: 1.0),
-                                ),
-                                FilledButton(
-                                  child: Row(
-                                    children: const [
-                                      //Icon(FluentIcons.more),
-                                      // spacer,
-                                      Text('Show more',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500)),
-                                      spacer
-                                    ],
-                                  ),
-                                  onPressed: () {
+                                     child:
 
-                                    Navigator.push(context,
-                                        mat.MaterialPageRoute(builder: (context) => PlaylistInfinitePaginationWidget(communityPlaylistQuery: _controller.query == ''
-                                            ? widget.searchQuery
-                                            : _controller.query,)));
-                                    
-                                    
-                                    // Navigator.push(context,
-                                    // mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: communityPlaylists.) ))
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    showSnackbar(
-                                        context,
-                                        const Snackbar(
-                                          content: Text(
-                                            'Coming Soon',
-                                            style: TextStyle(fontSize: 30),
-                                          ),
-                                        ),
-                                        alignment: Alignment.center,
-                                        duration: const Duration(milliseconds: 200));
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                          spacer,
-                          communityPlaylists.isNotEmpty
-                              ? CommunityPlaylistSearch(
-                                  communityPlaylist: communityPlaylists)
-                              : const Text('No Playlists available'),
+                                     TrackBars(
+                                       songs: songs,
+                                       isFromPrimarySearchPage: true,
+                                     )
 
-                          biggerSpacer,
-                          biggerSpacer,
-                          biggerSpacer,
-                        ],
+
+
+
+                                 )),
+                             biggerSpacer,
+                             SizedBox(
+                               width: double.infinity,
+                               child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text(
+                                     "Artists",
+                                     style: typography.subtitle
+                                         ?.apply(fontSizeFactor: 1.0),
+                                   ),
+                                   FilledButton(
+                                     child: Row(
+                                       children: const [
+                                         //Icon(FluentIcons.more),
+                                         // spacer,
+                                         Text('Show more',
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontWeight: FontWeight.w500)),
+                                       ],
+                                     ),
+                                     onPressed: () {
+
+                                       // Navigator.of(context).pushNamed(
+                                       //     'artistListPage',
+                                       //     arguments: _controller.query == ''
+                                       //         ? widget.searchQuery
+                                       //         : _controller.query);
+
+                                       Navigator.push(context,
+                                           mat.MaterialPageRoute(builder: (context) => ArtistsSearchResults(artistQuery: _controller.query == ''
+                                               ? widget.searchQuery
+                                               : _controller.query,)));
+                                     },
+                                   ),
+                                 ],
+                               ),
+                             ),
+                             spacer,
+                             artists.isNotEmpty
+                                 ? ArtistsSearch(artists: artists)
+                                 : const Text('No Artists available'),
+                             //biggerSpacer,
+                             SizedBox(
+                               width: double.infinity,
+                               child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text(
+                                     "Albums",
+                                     style: typography.subtitle
+                                         ?.apply(fontSizeFactor: 1.0),
+                                   ),
+                                   FilledButton(
+                                     child: Row(
+                                       children: const [
+                                         //Icon(FluentIcons.more),
+                                         // spacer,
+                                         Text('Show more',
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontWeight: FontWeight.w500)),
+                                       ],
+                                     ),
+                                     onPressed: () {
+                                       // Navigator.of(context).pushNamed(
+                                       //     'albumsListPage',
+                                       //     arguments: _controller.query == ''
+                                       //         ? widget.searchQuery
+                                       //         : _controller.query);
+
+                                       Navigator.push(context,
+                                           mat.MaterialPageRoute(builder: (context) => AlbumsSearchResults(albumsQuery: _controller.query == ''
+                                               ? widget.searchQuery
+                                               : _controller.query)));
+
+                                     },
+                                   ),
+                                 ],
+                               ),
+                             ),
+                             spacer,
+                             albums.isNotEmpty
+                                 ? AlbumSearch(albums: albums)
+                                 : const Text('No Albums available'),
+                             const SizedBox(
+                               height: 40,
+                             ),
+                             // biggerSpacer,
+                             SizedBox(
+                               width: double.infinity,
+                               child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Text(
+                                     "Community Playlists",
+                                     style: typography.subtitle
+                                         ?.apply(fontSizeFactor: 1.0),
+                                   ),
+                                   FilledButton(
+                                     child: Row(
+                                       children: const [
+                                         //Icon(FluentIcons.more),
+                                         // spacer,
+                                         Text('Show more',
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontWeight: FontWeight.w500)),
+                                         spacer
+                                       ],
+                                     ),
+                                     onPressed: () {
+
+                                       Navigator.push(context,
+                                           mat.MaterialPageRoute(builder: (context) => PlaylistInfinitePaginationWidget(communityPlaylistQuery: _controller.query == ''
+                                               ? widget.searchQuery
+                                               : _controller.query,)));
+
+
+                                       // Navigator.push(context,
+                                       // mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: communityPlaylists.) ))
+
+
+
+
+
+
+
+                                       showSnackbar(
+                                           context,
+                                           const Snackbar(
+                                             content: Text(
+                                               'Coming Soon',
+                                               style: TextStyle(fontSize: 30),
+                                             ),
+                                           ),
+                                           alignment: Alignment.center,
+                                           duration: const Duration(milliseconds: 200));
+                                     },
+                                   ),
+                                 ],
+                               ),
+                             ),
+                             spacer,
+                             communityPlaylists.isNotEmpty
+                                 ? CommunityPlaylistSearch(
+                                 communityPlaylist: communityPlaylists)
+                                 : const Text('No Playlists available'),
+
+                             biggerSpacer,
+                             biggerSpacer,
+                             biggerSpacer,
+                           ]),
+                     ),
+
+
                       ),
                     ),
                   ),
