@@ -38,8 +38,8 @@ bool darkMode = true;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows) {
-    doWhenWindowReady(() {
+  if (Platform.isWindows)  {
+    doWhenWindowReady((){
       appWindow.minSize = const Size(540, 540);
       appWindow.size = const Size(900, 640);
       appWindow.alignment = Alignment.center;
@@ -225,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
       const FirstPageStack(),
       const SecondPageStack(searchArgs: '', fromFirstPage: false),
       const CurrentPlaylist(fromMainPage: true),
-      const Settings()
+      const SettingsPage()
     ];
     _pageController = PageController(initialPage: _selectedIndex);
 
