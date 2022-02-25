@@ -23,9 +23,10 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 
 class AllSearchResults extends StatefulWidget {
+  final GlobalKey? navigatorKey;
   final String searchQuery;
 
-  const AllSearchResults({Key? key, required this.searchQuery})
+  const AllSearchResults({Key? key, required this.searchQuery, this.navigatorKey})
       : super(key: key);
 
   @override

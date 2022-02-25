@@ -28,7 +28,8 @@ enum Color {
 }
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  final GlobalKey? navigatorKey;
+  const SettingsPage({Key? key, this.navigatorKey}) : super(key: key);
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -199,8 +200,8 @@ class _SettingsPageState extends State<SettingsPage> {
             Text('About', style: FluentTheme.of(context).typography.subtitle),
             spacer,
             Table(
-              children: [
-                const TableRow(children: [
+              children: const [
+                TableRow(children: [
                   Padding(
                     padding: EdgeInsets.only(bottom: 15),
                     child: Text('Version'),
@@ -272,6 +273,10 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+}
+
+class SettingsData {
+
 }
 
 //

@@ -101,8 +101,10 @@ class _SearchFunctionState extends State<SearchFunction>
       child: mat.Scaffold(
         backgroundColor: Colors.transparent,
         body: FloatingSearchBar(
+
           scrollController: mat.ScrollController(),
           elevation: 3,
+          automaticallyImplyBackButton: false,
           shadowColor: Colors.red,
           //backgroundColor: Colors.transparent,
           //backdropColor: Colors.transparent,

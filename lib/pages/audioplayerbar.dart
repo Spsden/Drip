@@ -240,7 +240,7 @@ class _PlayBackControlsState extends State<PlayBackControls> {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: context.watch<AppTheme>().color,
+                  color: context.watch<AppTheme>().color.toAccentColor(),
                   width: 3.0,
                 ),
                 borderRadius: BorderRadius.circular(largeIcons),

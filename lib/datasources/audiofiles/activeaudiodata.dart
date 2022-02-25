@@ -4,6 +4,8 @@ import 'dart:async';
 
 
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/pages/common/globals.dart';
+import 'package:drip/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -41,6 +43,12 @@ class ActiveAudioData extends ChangeNotifier {
      _audioUrl = audioUrl;
      _activeThumbnails = activeThumbnail;
      _thumbnailLarge = thumbnailLarge;
+
+    await Globals().colorGenerator(thumbnailLarge).then((value) {
+      AppTheme().albumArtColor = value;
+      //AppTheme().color = value;
+
+    });
 
     notifyListeners();
 

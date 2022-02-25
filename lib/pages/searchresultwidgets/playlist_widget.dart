@@ -221,10 +221,6 @@ class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
      ],
 
    ),
-       FloatingBackButton(
-         onPressed: () => Navigator.pop(context),
-
-       ),
 
      ],
    );

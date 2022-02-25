@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 
@@ -7,10 +9,51 @@ enum NavigationIndicators { sticky, end }
 //enum CardColors {Colors.grey[150] }
 
 class AppTheme extends ChangeNotifier {
+
+ bool _isDark = Hive.box('settings').get('darkMode',defaultValue: true ) as bool;
+
+// Color getColor(String)
+
+
+
+
+
+
+
+  Color? _albumArtColor = Colors.transparent;
+  Color? get albumArtColor => _albumArtColor;
+   set albumArtColor(Color? color){
+    _albumArtColor = color;
+
+    print(_albumArtColor.toString());
+    notifyListeners();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   AccentColor _color = systemAccentColor;
   AccentColor get color => _color;
   set color(AccentColor color) {
     _color = color;
+
     notifyListeners();
   }
 
@@ -21,12 +64,6 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
-  Color _albumArtColor = Colors.transparent;
-  Color get albumArtColor => _albumArtColor;
-  set albumArtColor(Color color){
-    _albumArtColor = color;
-    notifyListeners();
-  }
 
 
 
@@ -34,6 +71,10 @@ class AppTheme extends ChangeNotifier {
   ThemeMode get mode => _mode;
   set mode(ThemeMode mode) {
     _mode = mode;
+
+    if(ThemeMode == ThemeMode.dark){
+      Hive.box('settings').put('darkMode', true);
+    }
     notifyListeners();
   }
 
@@ -76,3 +117,9 @@ AccentColor get systemAccentColor {
   }
   return Colors.blue;
 }
+
+
+
+
+
+

@@ -13,7 +13,8 @@ import 'package:flutter/material.dart';
 
 
 class FirstPageStack extends StatefulWidget {
-  const FirstPageStack({Key? key}) : super(key: key);
+  final GlobalKey? navigatorKey;
+  const FirstPageStack({Key? key, required this.navigatorKey}) : super(key: key);
 
 
 
@@ -23,7 +24,7 @@ class FirstPageStack extends StatefulWidget {
 
 class _FirstPageStackState extends State<FirstPageStack> {
 
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
 
   bool onWillPop(){
     if(Navigator.of(context).canPop())
@@ -36,7 +37,7 @@ class _FirstPageStackState extends State<FirstPageStack> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
-      key: navigatorKey,
+      key: widget.navigatorKey,
       initialRoute: 'youtubehomescreen',
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
@@ -49,7 +50,7 @@ class _FirstPageStackState extends State<FirstPageStack> {
 
         case 'searchpage':
           final args = settings.arguments;
-          return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => SecondPageStack(searchArgs: args.toString(),fromFirstPage: true),
+          return PageRouteBuilder(pageBuilder: (context, animation , secondaryAnimation) => SecondPageStack(searchArgs: args.toString(),fromFirstPage: true,navigatorKey: widget.navigatorKey,),
           transitionsBuilder: (context,animation,secondaryAnimation,child) {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
@@ -114,9 +115,10 @@ class _FirstPageStackState extends State<FirstPageStack> {
 
 
 class SecondPageStack extends StatefulWidget {
-  const SecondPageStack({Key? key, required this.searchArgs, this.fromFirstPage}) : super(key: key);
+  const SecondPageStack({Key? key, required this.searchArgs, this.fromFirstPage, required this.navigatorKey}) : super(key: key);
   final String searchArgs;
   final bool? fromFirstPage;
+  final GlobalKey? navigatorKey;
 
   @override
   _SecondPageStackState createState() => _SecondPageStackState();
@@ -126,7 +128,9 @@ class _SecondPageStackState extends State<SecondPageStack> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
+
       initialRoute: 'searchpage',
+      key: widget.navigatorKey,
       onGenerateRoute: (RouteSettings settingsforpagetwo) {
         switch (settingsforpagetwo.name) {
           case 'searchpage':

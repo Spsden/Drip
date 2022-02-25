@@ -9,6 +9,7 @@ import 'package:drip/pages/common/backButton.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
+import 'package:drip/pages/searchpage.dart';
 import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:drip/pages/settings.dart';
 
@@ -38,14 +39,13 @@ bool darkMode = true;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows)  {
-    doWhenWindowReady((){
+  if (Platform.isWindows) {
+    doWhenWindowReady(() {
       appWindow.minSize = const Size(540, 540);
       appWindow.size = const Size(900, 640);
       appWindow.alignment = Alignment.center;
       appWindow.show();
       appWindow.title = 'Drip';
-
     });
 
     // SystemTheme.accentInstance;
@@ -64,10 +64,8 @@ void main() async {
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
-  if(Platform.isWindows){
+  if (Platform.isWindows) {
     await acrylic.Window.initialize();
-
-
   }
   //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
@@ -136,48 +134,12 @@ class MyApp extends StatelessWidget {
               final appTheme = context.watch<AppTheme>();
               return FluentApp(
                   title: appTitle,
-
-
-
-
                   themeMode: appTheme.mode,
                   debugShowCheckedModeBanner: false,
                   initialRoute: '/',
                   routes: {'/': (_) => const MyHomePage()},
                   theme: ThemeData(
                     accentColor: appTheme.color,
-                    // navigationPaneTheme: NavigationPaneThemeData(
-                    //   backgroundColor: appTheme.mode == ThemeMode.system
-                    //       ? darkMode
-                    //       ? Colors.transparent
-                    //       : null
-                    //       : appTheme.mode == ThemeMode.dark
-                    //       ? Colors.transparent
-                    //       : null,
-                    //   animationDuration: Duration(milliseconds: 200),
-                    //
-                    // ),
-                    // acrylicBackgroundColor:
-                    //
-                    // context.read<AppTheme>().albumArtColor,
-
-
-
-                    // appTheme.mode == ThemeMode.system
-                    //     ? darkMode
-                    //     ? Colors.transparent
-                    //     : null
-                    //     : appTheme.mode == ThemeMode.dark
-                    //     ? Colors.transparent
-                    //     : null,
-
-
-                    // acrylicBackgroundColor: Colors.transparent ,
-                    // navigationPaneTheme: const NavigationPaneThemeData(
-                    //   backgroundColor: Colors.transparent,
-                    //
-                    //
-                    // ) ,
                     brightness: appTheme.mode == ThemeMode.system
                         ? darkMode
                             ? Brightness.dark
@@ -205,34 +167,40 @@ class _MyHomePageState extends State<MyHomePage> {
   bool value = false;
 
   int index = 0;
-  late int _selectedIndex;
 
   late PageController _pageController;
   late List<Widget> screens;
 
   bool sheetCollapsed = true;
+
   late SheetController _sheetController;
 
   final colorsController = ScrollController();
   final settingsController = ScrollController();
 
+  // List<GlobalKey> navKeys = []
+
+  Map<int?, GlobalKey?> navigatorKeys = {
+    0: GlobalKey(),
+    1: GlobalKey(),
+    2: GlobalKey(),
+    3: GlobalKey(),
+  };
   @override
   void initState() {
     super.initState();
     index = 0;
-    _selectedIndex = 0;
+
     screens = [
-      const FirstPageStack(),
-      const SecondPageStack(searchArgs: '', fromFirstPage: false),
-      const CurrentPlaylist(fromMainPage: true),
-      const SettingsPage()
+       FirstPageStack(navigatorKey: navigatorKeys[0]),
+       SecondPageStack(searchArgs: '', fromFirstPage: false,navigatorKey: navigatorKeys[1]),
+
+       CurrentPlaylist(fromMainPage: true,navigatorKey: navigatorKeys[2],),
+       SettingsPage(navigatorKey:navigatorKeys[3],)
     ];
-    _pageController = PageController(initialPage: _selectedIndex);
+    _pageController = PageController(initialPage: index);
 
-    // _audioPlayerControls = AudioPlayerControls();
     _sheetController = SheetController();
-
-    // setWindowEffect(flutter_acrylic.WindowEffect.acrylic);
   }
 
   bool onWillPop() {
@@ -255,41 +223,29 @@ class _MyHomePageState extends State<MyHomePage> {
     final appTheme = context.watch<AppTheme>();
     return SafeArea(
       child: Stack(
-
         children: [
           NavigationView(
             appBar: NavigationAppBar(
                 automaticallyImplyLeading: true,
-
                 leading: Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: IconButton(
-                      onPressed: () {
+                      onPressed: () async{
 
-
-                   ApiYouTube().searchSuggestions(searchQuery: 'jai hind');
-
-
-
-
-                        // _pageController.previousPage(
-                        //     curve: Curves.fastLinearToSlowEaseIn,
-                        //     duration: const Duration(milliseconds: 400));
+                       await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
+                        ;
                       },
                       icon: const Icon(FluentIcons.back)),
                 ),
-
-
                 title: Platform.isWindows
                     ? const TopBar()
                     : const SizedBox.shrink()),
             pane: NavigationPane(
-              selected: _selectedIndex,
+              selected: index,
               scrollController: mat.ScrollController(),
-
               onChanged: (i) {
                 index = i;
-                _selectedIndex = i;
+
                 _pageController.animateToPage(index,
                     curve: Curves.fastLinearToSlowEaseIn,
                     duration: const Duration(milliseconds: 400));
@@ -300,13 +256,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 });
               },
-
               size: const NavigationPaneSize(
                 openWidth: 200,
                 openMinWidth: 200,
                 openMaxWidth: 200,
               ),
-
               header: Container(
                   height: kOneLineTileHeight,
                   padding:
@@ -360,9 +314,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ],
-
               autoSuggestBoxReplacement: const Icon(FluentIcons.search),
-
             ),
             content: PageView(
               scrollDirection: Axis.vertical,
@@ -399,16 +351,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.center,
                 height: 100,
                 child: Stack(children: [
-                  const ClipRect(
+                  ClipRect(
                     child: Acrylic(
-
-                      child: SizedBox(
+                      child: Container(
                         child: AudioPlayerBar(),
                         width: double.infinity,
+                        //color:  Color(0xff37141d),
+
+                        //context.read<AppTheme>().albumArtColor,
+
                         height: 100,
                         //: 100.0,
                       ),
                       elevation: 10,
+                      shape: mat.RoundedRectangleBorder(
+                          borderRadius: mat.BorderRadius.circular(8)),
                     ),
                   ),
                   Positioned(

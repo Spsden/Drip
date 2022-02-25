@@ -280,17 +280,17 @@ class _PlaylistMainState extends State<PlaylistMain> {
                   ],
                 ),
               ),
-        Positioned.fill(
-          top: 10,
-          left: 10,
-          child: Align(
-              alignment: Alignment.topLeft,
-              child: FloatingBackButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )),
-        ),
+        // Positioned.fill(
+        //   top: 10,
+        //   left: 10,
+        //   child: Align(
+        //       alignment: Alignment.topLeft,
+        //       child: FloatingBackButton(
+        //         onPressed: () {
+        //           Navigator.of(context).pop();
+        //         },
+        //       )),
+        // ),
       ],
     );
   }

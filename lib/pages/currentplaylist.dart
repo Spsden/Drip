@@ -17,8 +17,9 @@ import 'common/track_cards.dart';
 
 class CurrentPlaylist extends StatefulWidget {
   final bool fromMainPage;
+  final GlobalKey? navigatorKey;
 
-  const CurrentPlaylist({Key? key, required this.fromMainPage})
+  const CurrentPlaylist({Key? key, required this.fromMainPage, this.navigatorKey})
       : super(key: key);
 
   @override
