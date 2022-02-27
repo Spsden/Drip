@@ -3,21 +3,16 @@ import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
-import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/pages/audioplayerbar.dart';
-import 'package:drip/pages/common/backButton.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
-import 'package:drip/pages/searchpage.dart';
-import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:drip/pages/settings.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
-import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -28,6 +23,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'datasources/audiofiles/audiocontrolcentre.dart';
 import 'datasources/audiofiles/activeaudiodata.dart';
+
 import 'navigation/navigationstacks.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart' as av;
 import 'theme.dart';
@@ -60,6 +56,7 @@ void main() async {
   }
 
   await openHiveBox('settings');
+
   await openHiveBox('Favorite Songs');
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
@@ -178,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final colorsController = ScrollController();
   final settingsController = ScrollController();
 
-  // List<GlobalKey> navKeys = []
+
 
   Map<int?, GlobalKey?> navigatorKeys = {
     0: GlobalKey(),
@@ -233,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () async{
 
                        await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
-                        ;
+
                       },
                       icon: const Icon(FluentIcons.back)),
                 ),
@@ -269,7 +266,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     'Drip',
                     style: TextStyle(fontSize: 20),
                   )),
-              displayMode: Platform.isWindows
+              displayMode:
+
+              Platform.isWindows
                   ? PaneDisplayMode.compact
                   : PaneDisplayMode.top,
               indicatorBuilder: () {
@@ -348,24 +347,29 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             footerBuilder: (context, state) {
               return Container(
+
                 alignment: Alignment.center,
+
                 height: 100,
                 child: Stack(children: [
                   ClipRect(
-                    child: Acrylic(
-                      child: Container(
-                        child: AudioPlayerBar(),
-                        width: double.infinity,
-                        //color:  Color(0xff37141d),
+                    child: mat.Material(
+                      child: Acrylic(
+                        child: const SizedBox(
+                          child: AudioPlayerBar(),
+                          width: double.infinity,
+                          //color:  Color(0xff37141d),
 
-                        //context.read<AppTheme>().albumArtColor,
+                          //context.read<AppTheme>().albumArtColor,
 
-                        height: 100,
-                        //: 100.0,
+                          height: 100,
+
+                        ),
+                        elevation: 10,
+                        shape: mat.RoundedRectangleBorder(
+                            borderRadius: mat.BorderRadius.circular(8)),
+                        //tint:   Color(0xff281e0c) ,
                       ),
-                      elevation: 10,
-                      shape: mat.RoundedRectangleBorder(
-                          borderRadius: mat.BorderRadius.circular(8)),
                     ),
                   ),
                   Positioned(

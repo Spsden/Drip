@@ -70,11 +70,11 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
 
-                        const Text(
-                          'Play queue',
-                          style: TextStyle(
-                              fontSize: 40, fontWeight: mat.FontWeight.w600),
-                        ),
+                        // const Text(
+                        //   'Play queue',
+                        //   style: TextStyle(
+                        //       fontSize: 40, fontWeight: mat.FontWeight.w600),
+                        // ),
 
                         Expanded(
                           child: Stack(
@@ -168,7 +168,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
 
                           ),
                         ),
-                        const SizedBox(height: 120,)
+                        const SizedBox(height: 95,)
                       ],
 
                     ),

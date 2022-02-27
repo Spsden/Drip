@@ -35,10 +35,10 @@ String message = "";
 
 class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
     with AutomaticKeepAliveClientMixin<YouTubeHomeScreen> {
-  List ytSearch =
-      Hive.box('settings').get('ytSearch', defaultValue: []) as List;
-  bool showHistory =
-      Hive.box('settings').get('showHistory', defaultValue: true) as bool;
+  // List ytSearch =
+  //     Hive.box('settings').get('ytSearch', defaultValue: []) as List;
+  // bool showHistory =
+  //     Hive.box('settings').get('showHistory', defaultValue: true) as bool;
   final TextEditingController _controller = TextEditingController();
 
   late ScrollController _scrollController;
@@ -146,15 +146,6 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery:  headList[index]['title'].toString())));
 
-                    // Navigator.push(
-                    //   context,
-                    //   PageRouteBuilder(
-                    //     opaque: false,
-                    //     pageBuilder: (_, __, ___) => SearchPage(
-                    //       incomingquery: headList[index]['title'].toString(),
-                    //     ),
-                    //   ),
-                    // );
                   },
                   child: Card(
                     elevation: 3,
@@ -239,44 +230,9 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
 
 
 
-                                // Navigator.of(context).pushNamed('playlists',
-                                //     arguments: item['playlistId'].toString()
-
-                                  // arguments: headList[index]['title'].toString()
-
                               }
 
-                              // Navigator.of(context).pushNamed('searchpage',
-                              //     arguments: headList[index]['title'].toString());
 
-                              //   item['type'] == 'video'
-                              //       ? Navigator.push(
-                              //           context,
-                              //           PageRouteBuilder(
-                              //             opaque: false,
-                              //             pageBuilder: (_, __, ___) =>
-                              //                 YouTubeSearchPage(
-                              //               query:
-                              //                   item['title'].toString(),
-                              //             ),
-                              //           ),
-                              //         )
-                              //       : Navigator.push(
-                              //           context,
-                              //           PageRouteBuilder(
-                              //             opaque: false,
-                              //             pageBuilder: (_, __, ___) =>
-                              //                 YouTubePlaylist(
-                              //               playlistId: item['playlistId']
-                              //                   .toString(),
-                              //               playlistImage:
-                              //                   item['imageStandard']
-                              //                       .toString(),
-                              //               playlistName:
-                              //                   item['title'].toString(),
-                              //             ),
-                              //           ),
-                              //         );
                             },
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),

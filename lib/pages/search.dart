@@ -104,6 +104,8 @@ class _SearchFunctionState extends State<SearchFunction>
 
           scrollController: mat.ScrollController(),
           elevation: 3,
+          closeOnBackdropTap: true,
+
           automaticallyImplyBackButton: false,
           shadowColor: Colors.red,
           //backgroundColor: Colors.transparent,

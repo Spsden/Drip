@@ -71,6 +71,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  hive_generator: ^1.1.2
+  build_runner: ^2.1.7
   flutter_native_splash: ^1.1.7+1
   
 
