@@ -157,7 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   Wrap(children: [
             Tooltip(
               style: tooltipThemeData,
-              child: _buildColorBlock(appTheme, systemAccentColor),
+              child: _buildColorBlock(appTheme, systemAccentColor,),
               message: accentColorNames[0],
             ),
             ...List.generate(Colors.accentColors.length, (index) {
@@ -165,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
               return Tooltip(
                 style: tooltipThemeData,
                 message: accentColorNames[index + 1],
-                child: _buildColorBlock(appTheme, color),
+                child: _buildColorBlock(appTheme, color,accentColorNames[index+1]),
               );
             }),
           ]),
@@ -218,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
               ],
             ),
-            Text('Made with ❤️by Suraj Pratap Singh'),
+            const Text('Made with ❤️by Suraj Pratap Singh'),
 
 
 
@@ -285,12 +285,13 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
 
-  Widget _buildColorBlock(AppTheme appTheme, AccentColor color) {
+  Widget _buildColorBlock(AppTheme appTheme, AccentColor color, [String? accentColorName]) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Button(
         onPressed: () {
           appTheme.color = color;
+          Hive.box('settings').put('accentColor', accentColorName );
         },
         style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
         child: Container(

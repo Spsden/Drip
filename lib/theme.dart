@@ -1,4 +1,3 @@
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,35 +10,16 @@ enum NavigationIndicators { sticky, end }
 //enum CardColors {Colors.grey[150] }
 
 class AppTheme extends ChangeNotifier {
-
-  bool _isDark =
-  Hive.box('settings').get('darkMode', defaultValue: true) as bool;
-
-  String themeMode = Hive.box('settings').get('themeMode',defaultValue: 'system') as String;
-
-
-  bool _useSystemTheme =
-  Hive.box('settings').get('useSystemTheme', defaultValue: false) as bool;
+  String themeMode =
+      Hive.box('settings').get('themeMode', defaultValue: 'system') as String;
 
   String accentColor =
-  Hive.box('settings').get('themeColor', defaultValue: 'Teal') as String;
+      Hive.box('settings').get('accentColor', defaultValue: 'System') as String;
 
-
-
-  AppTheme(){
-
+  AppTheme() {
     @override
-    void dispose(){
-
-    }
+    void dispose() {}
   }
-
-
-
-
-
-
-
 
   Color? _albumArtColor = Colors.transparent;
 
@@ -52,28 +32,61 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
-  AccentColor _color = systemAccentColor;
+  AccentColor getAccentColorFromHive(String accentColor) {
+    switch (accentColor) {
+      case 'System':
+        return SystemTheme.accentInstance.accent.toAccentColor();
+
+      case 'Yellow':
+        return Colors.yellow;
+
+      case 'Orange':
+        return Colors.orange;
+
+      case 'Red':
+        return Colors.red;
+
+      case 'Magneta':
+        return Colors.magenta;
+
+      case 'Purple':
+        return Colors.purple;
+      case 'Blue':
+        return Colors.blue;
+      case 'Teal':
+        return Colors.teal;
+      case 'Green':
+        return Colors.green;
+
+      default:
+        return SystemTheme.accentInstance.accent.toAccentColor();
+    }
+  }
+
+  late AccentColor _color = getAccentColorFromHive(accentColor);
+
   AccentColor get color => _color;
+
   set color(AccentColor color) {
     _color = color;
+    //Hive.box('settings').put('accentColor', color.toString());
+    print(color.toString());
     notifyListeners();
   }
 
-
-
   Color _cardColor = Colors.grey[150];
+
   Color get cardColor => _cardColor;
+
   set cardCol(Color color) {
     _cardColor = cardColor;
     notifyListeners();
   }
 
+//ThemeSetters
 
-
-
-
-  ThemeMode getThemeModeFromHive(String themeMode){
-    switch(themeMode){
+  ThemeMode getThemeModeFromHive(String themeMode) {
+    switch (themeMode) {
       case 'dark':
         return ThemeMode.dark;
 
@@ -82,24 +95,20 @@ class AppTheme extends ChangeNotifier {
 
       case 'system':
         return ThemeMode.system;
-        
+
       default:
         return ThemeMode.system;
-        
     }
   }
 
+  late ThemeMode _mode = getThemeModeFromHive(themeMode);
 
-
-
-
-  late ThemeMode _mode = getThemeModeFromHive(themeMode) ;
   ThemeMode get mode => _mode;
-  set mode(ThemeMode mode) {
 
+  set mode(ThemeMode mode) {
     _mode = mode;
     Hive.box('settings').put('themeMode', mode.name);
-    print(Hive.box('settings').get('themeMode'));
+    //print(Hive.box('settings').get('themeMode'));
     notifyListeners();
   }
 
@@ -147,15 +156,4 @@ AccentColor get systemAccentColor {
     });
   }
   return Colors.blue;
-
-
 }
-
-
-
-
-
-
-
-
-
