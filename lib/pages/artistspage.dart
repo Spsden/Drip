@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/artistsdataclass.dart' as artistD;
-import 'common/backButton.dart';
+
 
 class ArtistsPage extends StatefulWidget {
   final String channelId;

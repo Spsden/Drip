@@ -3,7 +3,7 @@ import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/main.dart';
-import 'package:drip/pages/common/backButton.dart';
+
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
@@ -15,6 +15,7 @@ import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../theme.dart';
+import 'common/loading_widget.dart';
 import 'common/track_cards.dart';
 
 class PlaylistMain extends StatefulWidget {
@@ -72,8 +73,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
       children: [
         (!fetched)
             ? Center(
-                child: LoadingAnimationWidget.staggeredDotsWave(
-                    color: context.watch<AppTheme>().color, size: 300),
+                child: loadingWidget(context)
               )
             : SingleChildScrollView(
                 // padding: EdgeInsets.all(15),
@@ -163,7 +163,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                   child: Text(
                                     _playlists.description.toString(),
                                     softWrap: true,
-                                    maxLines: 3,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     textAlign: TextAlign.left,
                                   ),

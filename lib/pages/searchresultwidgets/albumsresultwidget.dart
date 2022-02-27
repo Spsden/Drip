@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
+import '../common/loading_widget.dart';
 import '../search.dart';
 
 class AlbumSearch extends StatelessWidget {
@@ -304,12 +305,10 @@ class _AlbumsSearchResultsState extends State<AlbumsSearchResults> {
                     animateTransitions: true,
                     transitionDuration: const Duration(milliseconds: 200),
                     firstPageProgressIndicatorBuilder: (_) => Center(
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: context.watch<AppTheme>().color, size: 300),
+                      child: loadingWidget(context)
                     ),
                     newPageProgressIndicatorBuilder: (_) => Center(
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: context.watch<AppTheme>().color, size: 100),
+                      child: loadingWidget(context)
                     ),
                     itemBuilder: (context, Albums, index) => AlbumCard(
                       albums: Albums,

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
+import '../common/loading_widget.dart';
 import '../playlistmainpage.dart';
 import '../search.dart';
 
@@ -373,12 +374,10 @@ class _PlaylistInfinitePaginationWidgetState extends State<PlaylistInfinitePagin
                     animateTransitions: true,
                     transitionDuration: const Duration(milliseconds: 200),
                     firstPageProgressIndicatorBuilder: (_) => Center(
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: context.watch<AppTheme>().color, size: 300),
+                      child: loadingWidget(context)
                     ),
                     newPageProgressIndicatorBuilder: (_) => Center(
-                      child: LoadingAnimationWidget.staggeredDotsWave(
-                          color: context.watch<AppTheme>().color, size: 100),
+                      child: loadingWidget(context)
                     ),
                     itemBuilder: (context, CommunityPlaylists, index) => CommunityPlaylistCard(
                       communityPlaylist : CommunityPlaylists,

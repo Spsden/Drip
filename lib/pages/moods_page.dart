@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/moods_data_class.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
@@ -56,8 +57,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticK
     }
     return (!fetched)
         ? mat.Center(
-            child: LoadingAnimationWidget.staggeredDotsWave(
-                color: context.watch<AppTheme>().color, size: 150),
+            child: loadingWidget(context),
           )
         : mat.ListView(
              controller: ScrollController(),

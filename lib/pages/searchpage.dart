@@ -18,7 +18,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:provider/provider.dart';
+
+import '../theme.dart';
+import 'common/loading_widget.dart';
 
 
 
@@ -97,14 +102,16 @@ class _AllSearchResultsState extends State<AllSearchResults> {
 
 
 
-            (!fetched || _controller.query.isEmpty)
+            ( _controller.query.isEmpty)
                 ? const Center(
                     child: MoodsAndCategories()
 
                     // LoadingAnimationWidget.staggeredDotsWave(
                     //     color: context.watch<AppTheme>().color, size: 300),
                   )
-                :
+                : (!fetched) ? Center(
+              child: loadingWidget(context))
+            :
             Padding(
                     padding:
                         const EdgeInsets.only(left: 10.0, right: 10.0, top: 90),

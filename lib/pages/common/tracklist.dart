@@ -5,6 +5,7 @@ import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/common/track_cards.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -94,8 +95,7 @@ class _TrackBarsState extends State<TrackBars> {
                   alignment: Alignment.center,
                   width: 500,
                   height: 500,
-                  child: LoadingAnimationWidget.staggeredDotsWave(
-                      color: context.watch<AppTheme>().color, size: 100));
+                  child: loadingWidget(context));
             } else {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
@@ -274,12 +274,10 @@ class _TrackListState extends State<TrackList> {
                         animateTransitions: true,
                         transitionDuration: const Duration(milliseconds: 200),
                         firstPageProgressIndicatorBuilder: (_) => Center(
-                          child: LoadingAnimationWidget.staggeredDotsWave(
-                              color: context.watch<AppTheme>().color, size: 300),
+                          child: loadingWidget(context),
                         ),
                         newPageProgressIndicatorBuilder: (_) => Center(
-                          child: LoadingAnimationWidget.staggeredDotsWave(
-                              color: context.watch<AppTheme>().color, size: 100),
+                          child:loadingWidget(context)
                         ),
                         itemBuilder: (context, songs, index) => AnimationConfiguration.staggeredList(
                           position: index,

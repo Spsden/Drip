@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
-import '../common/backButton.dart';
+import '../common/loading_widget.dart';
+
 
 
 
@@ -184,8 +185,7 @@ class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
 
 
    Center(
-     child: LoadingAnimationWidget.staggeredDotsWave(
-         color: context.watch<AppTheme>().color, size: 150),
+     child: loadingWidget(context)
    ) :
 
 
