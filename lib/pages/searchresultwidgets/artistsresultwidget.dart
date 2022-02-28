@@ -2,6 +2,7 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/search.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -99,26 +100,36 @@ class ArtistCard extends StatelessWidget {
                 shape: const CircleBorder(),
                 child:
 
-
-
-
-                CachedNetworkImage(
-                  imageBuilder: (context, imageProvider) => CircleAvatar(
-                    backgroundColor: mat.Colors.transparent,
-                    foregroundColor: Colors.transparent,
-                    radius:84,
-                    backgroundImage: imageProvider,
-                  ),
+                ExtendedImage.network(
+                  artists.thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
+                  width: 160,
+                  height: 160,
                   fit: BoxFit.cover,
-                  errorWidget: (context, url, error) => const Image(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/artist.jpg'),
-                  ),
-                  imageUrl: artists.thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
-                  placeholder: (context, url) => const Image(
-                      fit: BoxFit.fill,
-                      image: AssetImage('assets/artist.jpg')),
+                  cache: false,
+                  shape: BoxShape.circle,
+
                 ),
+
+
+
+
+                // CachedNetworkImage(
+                //   imageBuilder: (context, imageProvider) => CircleAvatar(
+                //     backgroundColor: mat.Colors.transparent,
+                //     foregroundColor: Colors.transparent,
+                //     radius:84,
+                //     backgroundImage: imageProvider,
+                //   ),
+                //   fit: BoxFit.cover,
+                //   errorWidget: (context, url, error) => const Image(
+                //     fit: BoxFit.cover,
+                //     image: AssetImage('assets/artist.jpg'),
+                //   ),
+                //   imageUrl: artists.thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
+                //   placeholder: (context, url) => const Image(
+                //       fit: BoxFit.fill,
+                //       image: AssetImage('assets/artist.jpg')),
+                // ),
 
               ),
             ),

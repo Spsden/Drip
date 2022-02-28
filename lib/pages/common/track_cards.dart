@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 
@@ -73,32 +74,41 @@ class TrackCardLarge extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               //mainAxisSize: MainAxisSize.min,
               children: [
-                CachedNetworkImage(
-
-                  memCacheHeight: 40,
-                  memCacheWidth: 40,
+                ExtendedImage.network(
+                    data.thumbnail,
                   width: 40,
                   height: 40,
-                  imageBuilder: (context, imageProvider) =>
-                      CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.transparent,
-                        radius: 100,
-                        backgroundImage: imageProvider,
-                      ),
                   fit: BoxFit.cover,
-                  errorWidget: (context, _, __) =>
-                  const Image(
-                    fit: BoxFit.cover,
-                    image: AssetImage('assets/cover.jpg'),
-                  ),
-                  imageUrl: data.thumbnail,
+                  cache: false,
+                  shape: BoxShape.circle,
 
-
-                  placeholder: (context, url) =>
-                  const Image(
-                      fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
                 ),
+                // CachedNetworkImage(
+                //
+                //   memCacheHeight: 40,
+                //   memCacheWidth: 40,
+                //   width: 40,
+                //   height: 40,
+                //   imageBuilder: (context, imageProvider) =>
+                //       CircleAvatar(
+                //         backgroundColor: Colors.transparent,
+                //         foregroundColor: Colors.transparent,
+                //         radius: 100,
+                //         backgroundImage: imageProvider,
+                //       ),
+                //   fit: BoxFit.cover,
+                //   errorWidget: (context, _, __) =>
+                //   const Image(
+                //     fit: BoxFit.cover,
+                //     image: AssetImage('assets/cover.jpg'),
+                //   ),
+                //   imageUrl: data.thumbnail,
+                //
+                //
+                //   placeholder: (context, url) =>
+                //   const Image(
+                //       fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
+                // ),
                 spacer,
                 SizedBox(
                   width: size * 1 / 6,

@@ -258,6 +258,7 @@ class _SearchFunctionState extends State<SearchFunction>
                                         onTap: () async {
                                           setState(() {
                                             widget.controller.query = e;
+                                            addSearchTerm(floatController.query);
 
                                             putSearchTermFirst(e);
                                             // selectedTerm = term;

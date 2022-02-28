@@ -4,6 +4,7 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/theme.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:flutter/material.dart' as mat;
@@ -121,18 +122,69 @@ class TrackInfo extends StatelessWidget {
     return Row(
       children: [
 
-        CachedNetworkImage(
+        ExtendedImage.network(
+          context.watch<ActiveAudioData>().thumbnail,
           width: MediaQuery.of(context).size.width > 500 ? 70 : 0 ,
           height: MediaQuery.of(context).size.height > 500 ? 70 : 0 ,
           fit: BoxFit.cover,
-          errorWidget: (context, _, __) => const Image(
-            fit: BoxFit.cover,
-            image: AssetImage('assets/cover.jpg'),
-          ),
-          imageUrl:  context.watch<ActiveAudioData>().thumbnail,
-          placeholder: (context, url) => const Image(
-              fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
+          cache: false,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(8),
+          loadStateChanged: (ExtendedImageState state) {
+            switch (state.extendedImageLoadState) {
+              case LoadState.loading :
+                return const Image(
+                          fit: BoxFit.cover, image: AssetImage('assets/cover.jpg'));
+                break;
+
+              case LoadState.completed:
+               // _controller.forward();
+                return ExtendedRawImage(
+                  image: state.extendedImageInfo?.image,
+                  width: MediaQuery.of(context).size.width > 500 ? 70 : 0 ,
+                  height: MediaQuery.of(context).size.height > 500 ? 70 : 0 ,
+                  fit: BoxFit.cover,
+                  // cache: false,
+                  // shape: BoxShape.rectangle,
+                  // borderRadius: BorderRadius.circular(8),
+                );
+                break;
+
+              case LoadState.failed:
+                //_controller.reset();
+                return GestureDetector(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      Image.asset(
+                        "assets/driprec.png",
+                        fit: BoxFit.fill,
+                      ),
+
+                    ],
+                  ),
+                  onTap: () {
+                    state.reLoadImage();
+                  },
+                );
+                break;
+            }
+          },
+
         ),
+
+        // CachedNetworkImage(
+        //   width: MediaQuery.of(context).size.width > 500 ? 70 : 0 ,
+        //   height: MediaQuery.of(context).size.height > 500 ? 70 : 0 ,
+        //   fit: BoxFit.cover,
+        //   errorWidget: (context, _, __) => const Image(
+        //     fit: BoxFit.cover,
+        //     image: AssetImage('assets/cover.jpg'),
+        //   ),
+        //   imageUrl:  context.watch<ActiveAudioData>().thumbnail,
+        //   placeholder: (context, url) => const Image(
+        //       fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
+        // ),
         const SizedBox(
           width: 10,
         ),

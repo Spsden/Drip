@@ -8,6 +8,7 @@ import 'package:drip/pages/common/globals.dart';
 import 'package:drip/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class ActiveAudioData extends ChangeNotifier {
 
@@ -56,25 +57,24 @@ class ActiveAudioData extends ChangeNotifier {
 
   }
 
-  Map<String, dynamic> toJson() => {
-    //"album": album?.toJson(),
-    "artists": _artists,
-
-   // "category": category,
-   // "duration": duration,
-    //"duration_seconds": durationSeconds,
-   // "feedbackTokens": feedbackTokens.toJson(),
-   // "isExplicit": isExplicit,
-   // "resultType": resultType,
-    "thumbnails": _thumbnail,
-    "title": _title,
-    "videoId": _videoId,
-   // "year": year,
-  };
 
 
 
 
+
+
+}
+
+class CurrentMusicList{
+
+  CurrentMusicList( {
+    required this.title, required this.author, required this.thumbs,
+
+
+  });
+  final String? title;
+  final String? author;
+  final ThumbnailSet? thumbs;
 
 
 

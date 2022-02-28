@@ -3,6 +3,7 @@ import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/main.dart';
+import 'package:extended_image/extended_image.dart';
 
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -106,18 +107,10 @@ class _PlaylistMainState extends State<PlaylistMain> {
                         builder: (context, constraints) => Row(
                           //  mainAxisSize: MainAxisSize.min,
                           children: [
-                            CachedNetworkImage(
-                              memCacheWidth: 100,
-                              memCacheHeight: 100,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  // shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: imageProvider, fit: BoxFit.cover),
-                                ),
-                              ),
+
+                            ExtendedImage.network(
+                              _playlists.thumbnails.last.url.toString(),
+
                               width: size.width > 500
                                   ? size.height / 4.4
                                   : constraints.maxWidth / 2.8,
@@ -125,18 +118,42 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                   ? size.height / 4.4
                                   : constraints.maxWidth / 2.8,
                               fit: BoxFit.cover,
-                              errorWidget: (context, _, __) => const Image(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/cover.jpg'),
-                              ),
-                              imageUrl:
-                                  _playlists.thumbnails.last.url.toString(),
-                              placeholder: (context, url) => const Image(
-                                  // width: size.width,
-                                  //   height: size.width,
-                                  fit: BoxFit.cover,
-                                  image: AssetImage('assets/cover.jpg')),
+                              cache: false,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(8),
+
                             ),
+                            // CachedNetworkImage(
+                            //   memCacheWidth: 100,
+                            //   memCacheHeight: 100,
+                            //   imageBuilder: (context, imageProvider) =>
+                            //       Container(
+                            //     decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(8),
+                            //       // shape: BoxShape.circle,
+                            //       image: DecorationImage(
+                            //           image: imageProvider, fit: BoxFit.cover),
+                            //     ),
+                            //   ),
+                            //   width: size.width > 500
+                            //       ? size.height / 4.4
+                            //       : constraints.maxWidth / 2.8,
+                            //   height: size.width > 500
+                            //       ? size.height / 4.4
+                            //       : constraints.maxWidth / 2.8,
+                            //   fit: BoxFit.cover,
+                            //   errorWidget: (context, _, __) => const Image(
+                            //     fit: BoxFit.cover,
+                            //     image: AssetImage('assets/cover.jpg'),
+                            //   ),
+                            //   imageUrl:
+                            //       _playlists.thumbnails.last.url.toString(),
+                            //   placeholder: (context, url) => const Image(
+                            //       // width: size.width,
+                            //       //   height: size.width,
+                            //       fit: BoxFit.cover,
+                            //       image: AssetImage('assets/cover.jpg')),
+                            // ),
                             spacer,
                             Column(
                               crossAxisAlignment: mat.CrossAxisAlignment.start,
@@ -181,7 +198,10 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                               fontWeight: FontWeight.w500)),
                                     ],
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async{
+
+                                    await AudioControlClass.addMusic(_playlists.id.toString());
+                                  },
                                 ),
                               ],
                             )

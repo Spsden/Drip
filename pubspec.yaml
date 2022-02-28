@@ -60,6 +60,8 @@ dependencies:
 
   palette_generator: ^0.3.3
   flutter_staggered_animations: ^1.0.0
+  extended_image: ^6.0.1
+
 
 dev_dependencies:
   flutter_test:

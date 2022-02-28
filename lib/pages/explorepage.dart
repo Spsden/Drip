@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/youtubehomedata.dart';
+import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/searchpage.dart';
 import 'package:drip/theme.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -153,35 +155,45 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: //FadeInImage(placeholder:
-                    // const AssetImage('assets/cover.jpg'),
-                    //     width: 37,
-                    //     height: 37,
-                    //     fit: BoxFit.cover,
-                    //
-                    //     image:  NetworkImage(
-                    //       headList[index]['image'].toString(),
-                    //     )),
+                    child:
 
-                    CachedNetworkImage(
-                      // memCacheHeight: 80,
-                      // memCacheWidth: 80,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, _, __) => const Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          'assets/ytCover.png',
-                        ),
-                      ),
-                      imageUrl: headList[index]['image'].toString(),
-                      placeholder: (context, url) => const Image(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/ytCover.png'),
-                      ),
-                    ),
+
+                          // CachedNetworkImage(
+                          //    memCacheHeight: constraints.maxHeight.toInt(),
+                          //    memCacheWidth: constraints.maxWidth.toInt(),
+                          //   fit: BoxFit.cover,
+                          //   errorWidget: (context, _, __) => const Image(
+                          //     fit: BoxFit.cover,
+                          //     image: AssetImage(
+                          //       'assets/ytCover.png',
+                          //     ),
+                          //   ),
+                          //   imageUrl: headList[index]['image'].toString(),
+                          //   placeholder: (context, url) => const Image(
+                          //     fit: BoxFit.cover,
+                          //     image: AssetImage('assets/ytCover.png'),
+                          //   ),
+                          // ),
+
+                              ExtendedImage.network(
+                                headList[index]['image'].toString(),
+                                fit: fluent.BoxFit.cover,
+                                cache: true,
+
+                                clearMemoryCacheIfFailed: true,
+                               // filterQuality: fluent.FilterQuality.medium,
+
+
+                              )
+
+
+                        )
+
+
+
                   ),
                 ),
-              ),
+
             ListView.builder(
               itemCount: searchedList.length,
               physics: const BouncingScrollPhysics(),
@@ -270,45 +282,50 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                                         clipBehavior: Clip.antiAlias,
                                         child:
 
-                                        // FadeInImage(placeholder:
-                                        // const AssetImage('assets/cover.jpg'),
-                                        //     width: 37,
-                                        //     height: 37,
-                                        //     fit: BoxFit.cover,
-                                        //
-                                        //     image:  NetworkImage(
-                                        //         item['image'].toString(),
-                                        //     )),
+                                        ExtendedImage.network(
+                                          item['image'].toString(),
+                                          fit: fluent.BoxFit.cover,
 
-                                        CachedNetworkImage(
-                                          // memCacheHeight: 80,
-                                          // memCacheWidth: (item['type'] != 'playlist'
-                                          //     ? (boxSize - 30) * (16 / 9)
-                                          //     : boxSize - 30).toInt(),
-                                          fit: BoxFit.cover,
-                                          errorWidget: (context, _, __) =>
-                                              Image(
-                                            fit: BoxFit.cover,
-                                            image: item['type'] != 'playlist'
-                                                ? const AssetImage(
-                                                    'assets/ytCover.png',
-                                                  )
-                                                : const AssetImage(
-                                                    'assets/cover.jpg',
-                                                  ),
-                                          ),
-                                          imageUrl: item['image'].toString(),
-                                          placeholder: (context, url) => Image(
-                                            fit: BoxFit.cover,
-                                            image: item['type'] != 'playlist'
-                                                ? const AssetImage(
-                                                    'assets/ytCover.png',
-                                                  )
-                                                : const AssetImage(
-                                                    'assets/cover.jpg',
-                                                  ),
-                                          ),
-                                        ),
+
+                                          cache: true,
+                                         // loadStateChanged: loadingWidget(context),
+
+
+                                          clearMemoryCacheIfFailed: true,
+                                          // filterQuality: fluent.FilterQuality.medium,
+
+
+                                        )
+
+                                        // CachedNetworkImage(
+                                        //   // memCacheHeight: 80,
+                                        //   // memCacheWidth: (item['type'] != 'playlist'
+                                        //   //     ? (boxSize - 30) * (16 / 9)
+                                        //   //     : boxSize - 30).toInt(),
+                                        //   fit: BoxFit.cover,
+                                        //   errorWidget: (context, _, __) =>
+                                        //       Image(
+                                        //     fit: BoxFit.cover,
+                                        //     image: item['type'] != 'playlist'
+                                        //         ? const AssetImage(
+                                        //             'assets/ytCover.png',
+                                        //           )
+                                        //         : const AssetImage(
+                                        //             'assets/cover.jpg',
+                                        //           ),
+                                        //   ),
+                                        //   imageUrl: item['image'].toString(),
+                                        //   placeholder: (context, url) => Image(
+                                        //     fit: BoxFit.cover,
+                                        //     image: item['type'] != 'playlist'
+                                        //         ? const AssetImage(
+                                        //             'assets/ytCover.png',
+                                        //           )
+                                        //         : const AssetImage(
+                                        //             'assets/cover.jpg',
+                                        //           ),
+                                        //   ),
+                                        // ),
 
 
                                       ),

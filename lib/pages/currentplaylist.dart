@@ -6,6 +6,7 @@ import 'package:drip/datasources/searchresults/songsdataclass.dart';
 
 
 import 'package:drip/theme.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ class CurrentPlaylist extends StatefulWidget {
 }
 
 class _CurrentPlaylistState extends State<CurrentPlaylist> {
-  List<Songs> _songs = [];
+  final List<Songs> _songs = [];
 
   //late List<Track> currentTracks = [];
 
@@ -160,7 +161,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                   color: Colors.transparent,
                                     child: Text('Up Next',
                                       style :  typography.title
-                                            ?.copyWith(color: Colors.white,fontSize: 20)
+                                            ?.copyWith(fontSize: 20)
 
                                     )),
                               ),
@@ -236,21 +237,38 @@ class AlbumArtCard extends StatelessWidget {
                                   Colors.black
                                 ]).createShader(bounds);
                           },
-                          child: CachedNetworkImage(
+                          child:
+
+                          ExtendedImage.network(
+                            context.watch<ActiveAudioData>().activeThumbnail!.last.toString(),
                             height: min(constraints.maxHeight,constraints.maxWidth),
                             width: min(constraints.maxHeight,constraints.maxWidth),
                             fit: BoxFit.cover,
-                            errorWidget: (context, url, error) =>
-                            const Image(
-                              fit: BoxFit.cover,
-                              image: AssetImage('assets/artist.jpg'),
-                            ),
-                            imageUrl: context.watch<ActiveAudioData>().activeThumbnail!.last.toString(),
+                            cache: false,
 
-                            placeholder: (context, url) => const Image(
-                                fit: BoxFit.cover,
-                                image: AssetImage('assets/artist.jpg')),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(8),
+
+
                           ),
+
+
+
+                          // CachedNetworkImage(
+                          //   height: min(constraints.maxHeight,constraints.maxWidth),
+                          //   width: min(constraints.maxHeight,constraints.maxWidth),
+                          //   fit: BoxFit.cover,
+                          //   errorWidget: (context, url, error) =>
+                          //   const Image(
+                          //     fit: BoxFit.cover,
+                          //     image: AssetImage('assets/artist.jpg'),
+                          //   ),
+                          //   imageUrl: context.watch<ActiveAudioData>().activeThumbnail!.last.toString(),
+                          //
+                          //   placeholder: (context, url) => const Image(
+                          //       fit: BoxFit.cover,
+                          //       image: AssetImage('assets/artist.jpg')),
+                          // ),
                         ),
                         SizedBox(
                           height:
