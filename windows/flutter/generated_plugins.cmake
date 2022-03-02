@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   dart_vlc
   desktop_window
   flutter_acrylic
+  hotkey_manager
   system_theme
   url_launcher_windows
 )

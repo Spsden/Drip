@@ -258,13 +258,13 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                                     .thumbnails[0]
                                                     .url
                                                     .toString(),
-                                                _tracks[index]
-                                                    .thumbnails
-                                                    .map((e) => ThumbnailLocal(
-                                                        height: e.height,
-                                                        url: e.url.toString(),
-                                                        width: e.width))
-                                                    .toList(),
+                                                // _tracks[index]
+                                                //     .thumbnails
+                                                //     .map((e) => ThumbnailLocal(
+                                                //         height: e.height,
+                                                //         url: e.url.toString(),
+                                                //         width: e.width))
+                                                //     .toList(),
                                                 _tracks[index]
                                                     .thumbnails
                                                     .last

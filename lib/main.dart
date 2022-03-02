@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
+import 'package:drip/pages/common/hot_keys.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
@@ -13,6 +14,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -60,9 +62,11 @@ void main() async {
   await openHiveBox('Favorite Songs');
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
-  //WidgetsFlutterBinding.ensureInitialized();
+
   if (Platform.isWindows) {
     await acrylic.Window.initialize();
+    hotKeyManager.unregisterAll();
+    await HotKeys.initialize();
   }
   //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
@@ -355,9 +359,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ClipRect(
                     child: mat.Material(
                       child: Acrylic(
-                        child: const SizedBox(
+                        child:  Container(
                           child: AudioPlayerBar(),
                           width: double.infinity,
+                          color:
+
+                          context.watch<ActiveAudioData>().albumExtracted.toAccentColor(). ,
                           //color:  Color(0xff37141d),
 
                           //context.read<AppTheme>().albumArtColor,

@@ -120,7 +120,7 @@ class _TrackBarsState extends State<TrackBars> {
                         widget.songs[index].artists![0].name.toString(),
                         widget.songs[index].title.toString(),
                         widget.songs[index].thumbnails[0].url.toString(),
-                        widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                       // widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
                       widget.songs[index].thumbnails.last.url.toString(),);
                     currentMediaIndex = 0;
 
@@ -342,7 +342,7 @@ class _TrackListItemState extends State<TrackListItem> {
                 widget.songs.artists![0].name,
                 widget.songs.title,
                 widget.songs.thumbnails[0].url,
-            widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+            //widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
                 widget.songs.thumbnails.last.url.toString());
 
             await AudioControlClass.play(

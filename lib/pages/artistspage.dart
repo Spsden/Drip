@@ -287,7 +287,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                   crossAxisSpacing: 10.0,
                                   childAspectRatio: 1 / 1.5,
                                 ),
-                                padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
                                 children: List.generate(
                                     _artistsPage.related!.results!.length,
                                     (index) {
@@ -313,11 +313,11 @@ class _ArtistsPageState extends State<ArtistsPage>
                                                 .toList())),
                                   );
                                 }))
-                            : Text('No result'),
+                            : const Text('No result'),
 
 
 
-                        Text('lol'),
+                        const Text('lol'),
 
 
 
@@ -329,7 +329,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                             print(_artistsPage
                                 .related?.results?.first.thumbnails?.first.url);
                           },
-                          child: Text('lol2'),
+                          child: const Text('lol2'),
                         ),
                        ]
 

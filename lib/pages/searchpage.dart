@@ -6,19 +6,20 @@ import 'package:drip/datasources/searchresults/artistsdataclass.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/pages/artistspage.dart';
+
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/moods_page.dart';
 import 'package:drip/pages/search.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
-import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
+import 'package:drip/pages/searchresultwidgets/topresultwidget.dart';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -42,13 +43,14 @@ class _AllSearchResultsState extends State<AllSearchResults> {
   String query = '';
   bool fetched = false;
   bool status = false;
-  late Map listOfSearchResults = {};
+  late Map<String,dynamic> listOfSearchResults = {};
   late List<Artists> artists = [];
   late List<Albums> albums = [];
   late List<Songs> songs = [];
   late List<CommunityPlaylist> communityPlaylists = [];
   final FloatingSearchBarController _controller = FloatingSearchBarController();
-  var topResult;
+  late dynamic topResult;
+ // var topResult;
 
   @override
   void initState() {
@@ -71,7 +73,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
 
     if (!status) {
       status = true;
-      SearchMusic.getArtists(_controller.query == '' ? widget.searchQuery  : _controller.query)
+      SearchMusic.getAllSearchResults(_controller.query == '' ? widget.searchQuery  : _controller.query)
           .then((value) {
         if (mounted) {
           setState(() {
@@ -106,8 +108,7 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                 ? const Center(
                     child: MoodsAndCategories()
 
-                    // LoadingAnimationWidget.staggeredDotsWave(
-                    //     color: context.watch<AppTheme>().color, size: 300),
+
                   )
                 : (!fetched) ? Center(
               child: loadingWidget(context))
@@ -142,98 +143,14 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                                overflow: TextOverflow.ellipsis,
                              ),
                              biggerSpacer,
+                             if(topResult == null)
+                               const SizedBox.shrink() else
                              SizedBox(
                                width: double.infinity,
-                               child: Column(
-                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                 //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                 children: const [
-
-                                   // if(topResult.resultType != null)
-                                   //
-                                   //   Text(
-                                   //     "Top result",
-                                   //     style: typography.subtitle
-                                   //         ?.apply(fontSizeFactor: 1.0),
-                                   //   ),
-                                   //   const SizedBox(height: 15,),
-                                   //   if(topResult.resultType == 'video')
-                                   //
-                                   //
-                                   //     Container(
-                                   //       margin: const EdgeInsets.only(
-                                   //           left: 20, right: 20),
-                                   //       child: TrackCardLarge(data: TrackCardData(
-                                   //           duration: topResult.duration,
-                                   //           album: '',
-                                   //           title: topResult.title,
-                                   //           artist: '${topResult.artists.first
-                                   //               .name}',
-                                   //           thumbnail: topResult.thumbnails.first
-                                   //               .url.toString()
-                                   //       ),
-                                   //           songIndex: 0,
-                                   //           onTrackTap: () async {
-                                   //             var audioUrl =
-                                   //             await AudioControlClass.getAudioUri(
-                                   //                 topResult.videoId.toString());
-                                   //             // print(audioUrl.toString());
-                                   //
-                                   //             playerAlerts.buffering = true;
-                                   //             await context
-                                   //                 .read<ActiveAudioData>()
-                                   //                 .songDetails(
-                                   //                 audioUrl,
-                                   //                 topResult.videoId.toString(),
-                                   //                 topResult.artists[0].name,
-                                   //                 topResult.title.toString(),
-                                   //                 topResult
-                                   //                     .thumbnails[0]
-                                   //                     .url
-                                   //                     .toString());
-                                   //             currentMediaIndex = 0;
-                                   //
-                                   //             await AudioControlClass.play(
-                                   //                 audioUrl: audioUrl,
-                                   //                 videoId:
-                                   //                 topResult.videoId.toString(),
-                                   //                 context: context);
-                                   //           },
-                                   //           color: context
-                                   //               .watch<AppTheme>()
-                                   //               .mode == ThemeMode.dark ||
-                                   //               context
-                                   //                   .watch<AppTheme>()
-                                   //                   .mode ==
-                                   //                   ThemeMode.system
-                                   //               ? Colors.grey[150]
-                                   //               : Colors.grey[30]
-                                   //           ,
-                                   //           SuperSize: MediaQuery
-                                   //               .of(context)
-                                   //               .size,
-                                   //           fromQueue: false),
-                                   //     ),
-                                   //
-                                   //
-                                   //   if(topResult.resultType == 'artist')
-                                   //     ArtistCard(artists: Artists(
-                                   //         artist: topResult.artist,
-                                   //         browseId: topResult.browseId,
-                                   //         radioId: topResult.radioId,
-                                   //         category: topResult.category,
-                                   //         resultType: topResult.resultType,
-                                   //         shuffleId: topResult.shuffleId,
-                                   //         thumbnails: topResult.thumbnails
-                                   //     ))
-                                   //
+                               child: SizedBox(
+                                 child: TopResultsWidget(topResult: topResult),
 
 
-
-
-
-
-                                 ],
                                ),
                              ),
                              biggerSpacer,

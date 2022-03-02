@@ -21,13 +21,10 @@ class AppTheme extends ChangeNotifier {
     void dispose() {}
   }
 
-  Color? _albumArtColor = Colors.transparent;
-
-  Color? get albumArtColor => _albumArtColor;
-
-  set albumArtColor(Color? color) {
+  late Color _albumArtColor = Colors.blue;
+  Color get albumArtColor => _albumArtColor;
+  set albumArtColor(Color color) {
     _albumArtColor = color;
-
     print(_albumArtColor.toString());
     notifyListeners();
   }

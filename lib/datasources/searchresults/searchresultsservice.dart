@@ -9,6 +9,7 @@ import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
 import 'package:drip/datasources/searchresults/videodataclass.dart' as videos;
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'albumsdataclass.dart';
@@ -21,7 +22,7 @@ class SearchMusic {
   static const String serverAddress = 'http://spden.pythonanywhere.com/';
 
 
-  static Future getArtists(String searchquery) async {
+  static Future getAllSearchResults(String searchquery) async {
     final response = await http
         .get(Uri.parse(serverAddress + 'search?query=' + searchquery));
 

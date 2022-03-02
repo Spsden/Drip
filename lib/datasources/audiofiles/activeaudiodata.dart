@@ -21,6 +21,7 @@ class ActiveAudioData extends ChangeNotifier {
   String _title = '';
   String _thumbnail = '';
   String _thumbnailLarge = '';
+  Color _albumExtracted  = Colors.transparent;
    List<ThumbnailLocal>? _activeThumbnails = [];
 
   String get videoId => _videoId;
@@ -28,26 +29,28 @@ class ActiveAudioData extends ChangeNotifier {
   String get artists => _artists;
   String get title => _title;
   String get thumbnail => _thumbnail;
+  Color get albumExtracted => _albumExtracted;
   String get thumbnailLarge => _thumbnailLarge;
-  List<ThumbnailLocal>? get activeThumbnail => _activeThumbnails;
+  //List<ThumbnailLocal>? get activeThumbnail => _activeThumbnails;
 
 
 
 
 
 
-   Future songDetails(String audioUrl,String videoId, String artist, String title, String thumbnail, List<ThumbnailLocal> activeThumbnail,String thumbnailLarge) async{
+   Future songDetails(String audioUrl,String videoId, String artist, String title, String thumbnail,String thumbnailLarge) async{
      _videoId =videoId;
      _artists = artist;
      _title = title;
      _thumbnail = thumbnail;
      _audioUrl = audioUrl;
-     _activeThumbnails = activeThumbnail;
+   //  _activeThumbnails = activeThumbnail;
      _thumbnailLarge = thumbnailLarge;
 
-    await Globals().colorGenerator(thumbnailLarge).then((value) {
+    await Globals.colorGenerator(thumbnailLarge).then((value) {
+      _albumExtracted = value;
       AppTheme().albumArtColor = value;
-      //AppTheme().color = value;
+
 
     });
 

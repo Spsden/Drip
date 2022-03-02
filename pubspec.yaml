@@ -61,6 +61,7 @@ dependencies:
   palette_generator: ^0.3.3
   flutter_staggered_animations: ^1.0.0
   extended_image: ^6.0.1
+  hotkey_manager: ^0.1.6
 
 
 dev_dependencies:

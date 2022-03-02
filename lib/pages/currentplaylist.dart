@@ -128,7 +128,7 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                                     .thumbnail![0]
                                                     .url
                                                     .toString(),
-                                                currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                                              //  currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
                                             currentTracks[index].thumbnail!.last.url.toString());
                                             currentMediaIndex = 0;
 
@@ -240,7 +240,7 @@ class AlbumArtCard extends StatelessWidget {
                           child:
 
                           ExtendedImage.network(
-                            context.watch<ActiveAudioData>().activeThumbnail!.last.toString(),
+                            context.watch<ActiveAudioData>().thumbnailLarge.toString(),
                             height: min(constraints.maxHeight,constraints.maxWidth),
                             width: min(constraints.maxHeight,constraints.maxWidth),
                             fit: BoxFit.cover,

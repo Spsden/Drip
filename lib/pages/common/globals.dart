@@ -1,5 +1,6 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
@@ -24,10 +25,10 @@ class Globals{
   //   return paletteGenerator.dominantColor?.color;
   // }
 
-  Future<Color> colorGenerator(String imageUrl)async {
+  static Future<Color> colorGenerator(String imageUrl)async {
    
     PaletteGenerator paletteGenerator;
-    paletteGenerator = await PaletteGenerator.fromImageProvider(CachedNetworkImageProvider(imageUrl));
+    paletteGenerator = await PaletteGenerator.fromImageProvider(ExtendedNetworkImageProvider(imageUrl));
     Color dominantColor = paletteGenerator.dominantColor?.color ?? AppTheme().color;
     //AppTheme().albumArtColor = dominantColor;
     if (dominantColor.computeLuminance() > 0.6) {
@@ -42,6 +43,8 @@ class Globals{
     }
    // AppTheme().al;
    // print(dominantColor.value.toString());
+     AppTheme().albumArtColor = dominantColor;
+
     print('cpmes here');
 
     return dominantColor;

@@ -107,8 +107,8 @@ abstract class AudioControlClass with ChangeNotifier {
       String videoIdOf = watchPlaylists.tracks![i].videoId.toString();
       var audioUri = await getAudioUri(videoIdOf);
       //print(watchPlaylists.tracks![i].title);
-      var currentTrackFetcher = await currentTrackDetailsGenerator(videoIdOf);
-      currentTracks.add(currentTrackFetcher);
+      // var currentTrackFetcher = await currentTrackDetailsGenerator(videoIdOf);
+      // currentTracks.add(currentTrackFetcher);
 
      // medias.add(mediaplayer.Media.network(audioUri));
       player.add(Media.network(audioUri));
@@ -201,11 +201,11 @@ abstract class AudioControlClass with ChangeNotifier {
         tracks[currentMediaIndex - 1].artists![0].name.toString(),
         tracks[currentMediaIndex - 1].title.toString(),
         tracks[currentMediaIndex - 1].thumbnail![0].url.toString(),
-        tracks[currentMediaIndex - 1]
-            .thumbnail!
-            .map((e) => ThumbnailLocal(
-                height: e.height, url: e.url.toString(), width: e.width))
-            .toList(),
+        // tracks[currentMediaIndex - 1]
+        //     .thumbnail!
+        //     .map((e) => ThumbnailLocal(
+        //         height: e.height, url: e.url.toString(), width: e.width))
+        //     .toList(),
         tracks[currentMediaIndex - 1].thumbnail!.last.url.toString());
 
     // print(context.watch<ActiveAudioData>().activeThumbnail?.last.url.toString());
@@ -233,11 +233,11 @@ abstract class AudioControlClass with ChangeNotifier {
           tracks[currentMediaIndex - 1].artists![0].name.toString(),
           tracks[currentMediaIndex - 1].title.toString(),
           tracks[currentMediaIndex - 1].thumbnail![0].url.toString(),
-          tracks[currentMediaIndex - 1]
-              .thumbnail!
-              .map((e) => ThumbnailLocal(
-                  height: e.height, url: e.url.toString(), width: e.width))
-              .toList(),
+          // tracks[currentMediaIndex - 1]
+          //     .thumbnail!
+          //     .map((e) => ThumbnailLocal(
+          //         height: e.height, url: e.url.toString(), width: e.width))
+          //     .toList(),
           tracks[currentMediaIndex - 1].thumbnail!.last.url.toString());
 
       //  player.open(medias[currentMediaIndex], autoStart: true);
