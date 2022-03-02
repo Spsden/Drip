@@ -359,12 +359,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ClipRect(
                     child: mat.Material(
                       child: Acrylic(
-                        child:  Container(
+                        child:  const SizedBox(
                           child: AudioPlayerBar(),
                           width: double.infinity,
-                          color:
 
-                          context.watch<ActiveAudioData>().albumExtracted.toAccentColor(). ,
+
+
                           //color:  Color(0xff37141d),
 
                           //context.read<AppTheme>().albumArtColor,
@@ -375,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         elevation: 10,
                         shape: mat.RoundedRectangleBorder(
                             borderRadius: mat.BorderRadius.circular(8)),
-                        //tint:   Color(0xff281e0c) ,
+                        tint: context.watch<ActiveAudioData>().albumExtracted.toAccentColor() ,,
                       ),
                     ),
                   ),
