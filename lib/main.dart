@@ -364,11 +364,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: double.infinity,
 
 
-
-                          //color:  Color(0xff37141d),
-
-                          //context.read<AppTheme>().albumArtColor,
-
                           height: 100,
 
                         ),
@@ -376,6 +371,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         shape: mat.RoundedRectangleBorder(
                             borderRadius: mat.BorderRadius.circular(8)),
                         tint: context.watch<ActiveAudioData>().albumExtracted.toAccentColor() ,
+
                       ),
                     ),
                   ),
