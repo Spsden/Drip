@@ -375,7 +375,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         elevation: 10,
                         shape: mat.RoundedRectangleBorder(
                             borderRadius: mat.BorderRadius.circular(8)),
-                        tint: context.watch<ActiveAudioData>().albumExtracted.toAccentColor() ,,
+                        tint: context.watch<ActiveAudioData>().albumExtracted.toAccentColor() ,
                       ),
                     ),
                   ),
