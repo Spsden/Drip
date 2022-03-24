@@ -1,4 +1,4 @@
-# <h1>Drip - YouTube Music Client</h1>
+# <h1>Drip - A YouTube Music Client</h1>
 ## Beta Version 0.2.5
 
 
