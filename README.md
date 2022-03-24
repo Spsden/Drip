@@ -1,4 +1,4 @@
-# Drip
+# Drip - YouTube Music Client
 ## (Still in development)
 
 
