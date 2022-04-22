@@ -1,5 +1,5 @@
 # <h1>Drip - A YouTube Music Client</h1>
-<h3>Visit Webpage: https://drip-youtube-music.vercel.app/</h3>
+<h3>Visit Webpage: https://drip-youtubemusic.vercel.app/</h3>
 ## Beta Version 0.2.5
 
 
