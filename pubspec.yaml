@@ -29,15 +29,15 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  system_theme: ^1.0.1
-  bitsdojo_window: ^0.1.1+1
-  flutter_acrylic: ^0.1.0
+  system_theme: ^2.0.0
+#  bitsdojo_window: ^0.1.1+1
+  flutter_acrylic: ^1.0.0+2
   url_strategy: ^0.2.0
   url_launcher: ^6.0.15
   clipboard: ^0.1.3
   email_validator: ^2.0.1
   provider: ^6.0.1
-  fluent_ui: ^3.8.0
+  fluent_ui: ^3.10.0
   http: ^0.13.4
   youtube_explode_dart: ^1.10.9+1
   carousel_slider: ^4.0.0
@@ -46,7 +46,7 @@ dependencies:
   hive_flutter: ^1.1.0
   loading_animation_widget: ^1.0.0+3
   audio_video_progress_bar: ^0.10.0
-  dart_vlc: ^0.1.8
+  dart_vlc: ^0.2.0
   sliding_sheet: ^0.5.2
   fluentui_system_icons: ^1.1.158
   desktop_window: ^0.4.0
@@ -57,10 +57,11 @@ dependencies:
   random_color: ^1.0.6-nullsafety
   gradient_widgets: ^0.6.0
   get_it: ^7.2.0
+  window_manager: ^0.2.1
 
   palette_generator: ^0.3.3
   flutter_staggered_animations: ^1.0.0
-  extended_image: ^6.0.1
+  extended_image: ^6.2.1
   hotkey_manager: ^0.1.6
 
 
@@ -73,10 +74,10 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
   hive_generator: ^1.1.2
   build_runner: ^2.1.7
-  flutter_native_splash: ^1.1.7+1
+  flutter_native_splash: ^2.1.6
   
 
 # For information on the generic Dart part of this file, see the
@@ -114,10 +115,10 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 
-msix_config:
-  display_name: Drip
-  publisher_display_name: SurajPratapSingh
-  identity_name: spden.app.drip
-  msix_version: 1.0.0.0
-  logo_path: D:\beep\version2\fluentUiRewrite\dripfluentnew\Drip\assets\driplogocircle.png
-  capabilities: "internetClient"
+# msix_config:
+#   display_name: Drip
+#   publisher_display_name: SurajPratapSingh
+#   identity_name: spden.app.drip
+#   msix_version: 1.0.0.0
+#   logo_path: D:\beep\version2\fluentUiRewrite\dripfluentnew\Drip\assets\driplogocircle.png
+#   capabilities: "internetClient"

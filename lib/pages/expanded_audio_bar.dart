@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:drip/main.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +66,7 @@ class _ExpandedAudioBarState extends State<ExpandedAudioBar> {
 
             )
         ),
-        const TopBar()
+       // const TopBar()
       ],
     );
   }

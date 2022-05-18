@@ -2,7 +2,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:hive/hive.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 
@@ -32,7 +31,7 @@ class AppTheme extends ChangeNotifier {
   AccentColor getAccentColorFromHive(String accentColor) {
     switch (accentColor) {
       case 'System':
-        return SystemTheme.accentInstance.accent.toAccentColor();
+        return SystemTheme.accentColor.accent.toAccentColor();
 
       case 'Yellow':
         return Colors.yellow;
@@ -56,7 +55,7 @@ class AppTheme extends ChangeNotifier {
         return Colors.green;
 
       default:
-        return SystemTheme.accentInstance.accent.toAccentColor();
+        return SystemTheme.accentColor.accent.toAccentColor();
     }
   }
 
@@ -143,13 +142,13 @@ AccentColor get systemAccentColor {
       defaultTargetPlatform == TargetPlatform.android ||
       kIsWeb) {
     return AccentColor('normal', {
-      'darkest': SystemTheme.accentInstance.darkest,
-      'darker': SystemTheme.accentInstance.darker,
-      'dark': SystemTheme.accentInstance.dark,
-      'normal': SystemTheme.accentInstance.accent,
-      'light': SystemTheme.accentInstance.light,
-      'lighter': SystemTheme.accentInstance.lighter,
-      'lightest': SystemTheme.accentInstance.lightest,
+      'darkest': SystemTheme.accentColor.darkest,
+      'darker': SystemTheme.accentColor.darker,
+      'dark': SystemTheme.accentColor.dark,
+      'normal': SystemTheme.accentColor.accent,
+      'light': SystemTheme.accentColor.light,
+      'lighter': SystemTheme.accentColor.lighter,
+      'lightest': SystemTheme.accentColor.lightest,
     });
   }
   return Colors.blue;

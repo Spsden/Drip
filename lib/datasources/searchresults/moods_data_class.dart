@@ -2,7 +2,6 @@
 //
 //     final moodsCategories = moodsCategoriesFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 MoodsCategories moodsCategoriesFromJson(String str) => MoodsCategories.fromJson(json.decode(str));
@@ -43,12 +42,12 @@ class ForYou {
   final String? title;
 
   factory ForYou.fromJson(Map<String, dynamic> json) => ForYou(
-    params: json["params"] == null ? null : json["params"],
-    title: json["title"] == null ? null : json["title"],
+    params: json["params"],
+    title: json["title"],
   );
 
   Map<String?, dynamic> toJson() => {
-    "params": params == null ? null : params,
-    "title": title == null ? null : title,
+    "params": params,
+    "title": title,
   };
 }

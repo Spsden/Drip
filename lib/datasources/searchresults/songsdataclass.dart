@@ -2,7 +2,6 @@
 //
 //     final songs = songsFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<Songs> songsFromJson(String str) =>

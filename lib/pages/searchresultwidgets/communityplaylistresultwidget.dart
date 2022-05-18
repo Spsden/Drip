@@ -1,9 +1,7 @@
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'package:provider/provider.dart';
@@ -138,9 +136,7 @@ class CommunityPlaylistSearch extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.only(bottom: 15),
                           child: Text(
-                            communityPlaylist[index].author.toString() +
-                                '\n' +
-                                communityPlaylist[index].itemCount.toString(),
+                            '${communityPlaylist[index].author}\n${communityPlaylist[index].itemCount}',
                             style: typography.bodyStrong
                                 ?.apply(fontSizeFactor: 1.0),
                             textAlign: TextAlign.center,
@@ -281,7 +277,7 @@ class PlaylistInfinitePaginationWidget extends StatefulWidget {
 
 class _PlaylistInfinitePaginationWidgetState extends State<PlaylistInfinitePaginationWidget> {
 
-  FloatingSearchBarController _controller = FloatingSearchBarController();
+  final FloatingSearchBarController _controller = FloatingSearchBarController();
 
   String query = '';
   static const _pageSize = 10;
@@ -359,8 +355,8 @@ class _PlaylistInfinitePaginationWidgetState extends State<PlaylistInfinitePagin
                     child: Text(
 
                       widget.communityPlaylistQuery == ''
-                          ? ' Results for \"${query}\"'
-                          : ' Results for \"${widget.communityPlaylistQuery}\"',
+                          ? ' Results for "$query"'
+                          : ' Results for "${widget.communityPlaylistQuery}"',
                       style:  typography.display?.apply(fontSizeFactor: 1.0),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,)

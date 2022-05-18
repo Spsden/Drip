@@ -9,7 +9,7 @@ import '../../datasources/audiofiles/audiocontrolcentre.dart';
 
 class HotKeys {
   /// [HotKeys] object instance. Must call [HotKeys.initialize].
-  static late HotKeys instance = HotKeys();
+  static HotKeys instance = HotKeys();
 
   static Future<void> initialize() async {
     await Future.wait(

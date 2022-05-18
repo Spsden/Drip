@@ -1,14 +1,9 @@
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 
-import 'package:image/image.dart' as imageLib;
 import 'package:palette_generator/palette_generator.dart';
 
-import '../../datasources/audiofiles/activeaudiodata.dart';
 import '../../theme.dart';
 
 class Globals{

@@ -24,7 +24,7 @@ class SearchMusic {
 
   static Future getAllSearchResults(String searchquery) async {
     final response = await http
-        .get(Uri.parse(serverAddress + 'search?query=' + searchquery));
+        .get(Uri.parse('${serverAddress}search?query=$searchquery'));
 
     if (response.statusCode == 200) {
       String responsestring = response.body.toString();
@@ -39,7 +39,7 @@ class SearchMusic {
       var communityplaylistlist = [];
 
      // List topResult = [];
-      var topResult;
+      Object topResult;
 
 
 
@@ -122,9 +122,9 @@ class SearchMusic {
 
 
 
-      final List<artists.Artists>? artistsearch = artists.ArtistsFromJson(artistFiltered);
-      final List<songs.Songs>? songsearch = songs.songsFromJson(songsFiltered);
-      final List<CommunityPlaylist>? communityplaylistsearch =
+      final List<artists.Artists> artistsearch = artists.ArtistsFromJson(artistFiltered);
+      final List<songs.Songs> songsearch = songs.songsFromJson(songsFiltered);
+      final List<CommunityPlaylist> communityplaylistsearch =
           communityPlaylistFromJson(communityplaylistFiltered);
       final List<Albums> albumsearch = albumsFromJson(albumFiltered);
       // final Topresults toppresult = topresultsFromJson(topresultFiltered);
@@ -149,11 +149,7 @@ class SearchMusic {
   static Future getOnlySongs(String searchquery, int limit) async {
     //int numOfResults = 30;
 
-    final response = await http.get(Uri.parse(serverAddress +
-        'searchwithfilter?query=' +
-        searchquery +
-        '&filter=songs&limit=' +
-        limit.toString()));
+    final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=songs&limit=$limit'));
 
     if (response.statusCode == 200){
 
@@ -178,18 +174,14 @@ class SearchMusic {
   static Future getOnlyArtists(String searchquery, int limit) async {
     //int numOfResults = 30;
 
-    final response = await http.get(Uri.parse(serverAddress +
-        'searchwithfilter?query=' +
-        searchquery +
-        '&filter=artists&limit=' +
-        limit.toString()));
+    final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=artists&limit=$limit'));
 
     if (response.statusCode == 200){
 
       var responselist = jsonDecode(response.body) as List;
       var filtered = jsonEncode(responselist);
 
-      final List<artists.Artists>? songOnlyResults = artists.ArtistsFromJson(filtered);
+      final List<artists.Artists> songOnlyResults = artists.ArtistsFromJson(filtered);
       // print(responselist.toString());
       // return Songs.fromJson(jsonDecode(response.body));
       // print(songOnlyResults.toString());
@@ -207,18 +199,14 @@ class SearchMusic {
   static Future getOnlyAlbums(String searchquery, int limit) async {
     //int numOfResults = 30;
 
-    final response = await http.get(Uri.parse(serverAddress +
-        'searchwithfilter?query=' +
-        searchquery +
-        '&filter=albums&limit=' +
-        limit.toString()));
+    final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=albums&limit=$limit'));
 
     if (response.statusCode == 200){
 
       var responselist = jsonDecode(response.body) as List;
       var filtered = jsonEncode(responselist);
 
-      final List<Albums>? songOnlyResults = albumsFromJson(filtered);
+      final List<Albums> songOnlyResults = albumsFromJson(filtered);
       // print(responselist.toString());
       // return Songs.fromJson(jsonDecode(response.body));
       // print(songOnlyResults.toString());
@@ -236,18 +224,14 @@ class SearchMusic {
   static Future getOnlyCommunityPlaylists(String searchquery, int limit) async {
     //int numOfResults = 30;
 
-    final response = await http.get(Uri.parse(serverAddress +
-        'searchwithfilter?query=' +
-        searchquery +
-        '&filter=community_playlists&limit=' +
-        limit.toString()));
+    final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=community_playlists&limit=$limit'));
 
     if (response.statusCode == 200){
 
       var responselist = jsonDecode(response.body) as List;
       var filtered = jsonEncode(responselist);
 
-      final List<CommunityPlaylist>? songOnlyResults = communityPlaylistFromJson(filtered);
+      final List<CommunityPlaylist> songOnlyResults = communityPlaylistFromJson(filtered);
       // print(responselist.toString());
       // return Songs.fromJson(jsonDecode(response.body));
       // print(songOnlyResults.toString());
@@ -282,7 +266,7 @@ class SearchMusic {
 
 
   static Future getWatchPlaylist(String videoId,int limit) async {
-    final response = await http.get(Uri.parse(serverAddress + 'searchwatchplaylist?videoId=' + videoId + '&limit=' + limit.toString()));
+    final response = await http.get(Uri.parse('${serverAddress}searchwatchplaylist?videoId=$videoId&limit=$limit'));
 
 
   try {
@@ -314,7 +298,7 @@ class SearchMusic {
 
   static Future getPlaylist(String playlistId, int limit ) async {
 
-    final response = await http.get(Uri.parse(serverAddress + 'searchplaylist?playlistId=' + playlistId + '&limit=' + limit.toString()));
+    final response = await http.get(Uri.parse('${serverAddress}searchplaylist?playlistId=$playlistId&limit=$limit'));
 
     try{
       if(response.statusCode == 200){
@@ -339,7 +323,7 @@ class SearchMusic {
   }
 
   static Future getArtistPage(String channelId) async {
-    final response = await http.get(Uri.parse(serverAddress + 'artist?channelid=' + channelId ));
+    final response = await http.get(Uri.parse('${serverAddress}artist?channelid=$channelId' ));
 
     try {
       if(response.statusCode == 200){
@@ -363,7 +347,7 @@ class SearchMusic {
   }
 
   static Future getMoods() async {
-    final response = await http.get(Uri.parse(serverAddress + 'moodcat' ));
+    final response = await http.get(Uri.parse('${serverAddress}moodcat' ));
 
     try {
       if(response.statusCode == 200){
@@ -388,7 +372,7 @@ class SearchMusic {
 
 
   static Future getMoodPlaylists(String params) async {
-    final response = await http.get(Uri.parse(serverAddress + 'moodplaylist?params=' + params ));
+    final response = await http.get(Uri.parse('${serverAddress}moodplaylist?params=$params' ));
 
     try {
       if(response.statusCode == 200){
@@ -396,7 +380,7 @@ class SearchMusic {
 
         print(rawResponse);
 
-        final List<PlaylistDataClass>? moodPlaylists  = playlistDataClassFromJson(rawResponse);
+        final List<PlaylistDataClass> moodPlaylists  = playlistDataClassFromJson(rawResponse);
 
         //print(artistsPage.name.toString());
         return moodPlaylists;
@@ -433,15 +417,15 @@ class ThumbnailLocal {
   final int width;
 
   factory ThumbnailLocal.fromJson(Map<String, dynamic> json) => ThumbnailLocal(
-    height: json["height"] == null ? null : json["height"],
-    url: json["url"] == null ? null : json["url"],
-    width: json["width"] == null ? null : json["width"],
+    height: json["height"],
+    url: json["url"],
+    width: json["width"],
   );
 
   Map<String, dynamic> toJson() => {
-    "height": height == null ? null : height,
-    "url": url == null ? null : url,
-    "width": width == null ? null : width,
+    "height": height,
+    "url": url,
+    "width": width,
   };
 }
 

@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
@@ -9,13 +7,10 @@ import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/common/track_cards.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../theme.dart';
@@ -180,7 +175,7 @@ class _TrackListState extends State<TrackList> {
   String query = '';
   static const _pageSize = 20;
 
-  FloatingSearchBarController _controller = FloatingSearchBarController();
+  final FloatingSearchBarController _controller = FloatingSearchBarController();
 
   final _pagingController = PagingController<int, Songs>(
     // 2

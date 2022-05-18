@@ -8,12 +8,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:flutter/material.dart' as mat;
-import 'package:palette_generator/palette_generator.dart';
 
 
 import 'package:provider/provider.dart';
 
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 class AudioPlayerBar extends StatefulWidget {

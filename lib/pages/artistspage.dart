@@ -1,8 +1,5 @@
-import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/searchresults/albumsdataclass.dart';
 import 'package:drip/datasources/searchresults/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/tracklist.dart';
@@ -13,11 +10,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:drip/datasources/searchresults/albumsdataclass.dart' as albumD;
-import 'package:flutter_acrylic/flutter_acrylic.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart' as SongDataClass;
 import 'package:provider/provider.dart';
 
-import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/artistsdataclass.dart' as artistD;
 
 
@@ -245,7 +239,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                     _artistsPage.albums!.results!.length,
                                         (index) {
 
-                                      List<albumD.Artist> _artistListForAlbum = [albumD.Artist(id: 'lol',name: _artistsPage.name.toString())];
+                                      List<albumD.Artist> artistListForAlbum = [albumD.Artist(id: 'lol',name: _artistsPage.name.toString())];
                                       //List<artistD.Thumbnail> thumbs = []
 
                                       return mat.Material(
@@ -256,7 +250,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                             type: '',
                                             isExplicit: false,
                                             category: 'artist',
-                                            artists: _artistListForAlbum,
+                                            artists: artistListForAlbum,
                                             resultType: 'albums',
                                             duration: Duration.zero,
                                             browseId: _artistsPage.albums!.results![index].browseId.toString(),
@@ -272,7 +266,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                         )
                                       );
                                     }))
-                                : Text('No result'),
+                                : const Text('No result'),
 
 
                             TrackList(songQuery: _artistsPage.name.toString()),

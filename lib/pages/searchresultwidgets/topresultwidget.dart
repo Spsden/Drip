@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../datasources/audiofiles/activeaudiodata.dart';
 import '../../datasources/audiofiles/audiocontrolcentre.dart';
 import '../../datasources/searchresults/artistsdataclass.dart';
-import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/track_cards.dart';
 import 'artistsresultwidget.dart';
@@ -99,7 +98,7 @@ class TopResultsWidget extends StatelessWidget {
         break;
 
       default :
-        return Text('lol');
+        return const Text('lol');
         break;
 
 

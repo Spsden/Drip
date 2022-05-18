@@ -1,15 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
-import 'package:drip/main.dart';
 import 'package:extended_image/extended_image.dart';
 
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
     as watch;

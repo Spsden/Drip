@@ -1,6 +1,5 @@
-import 'dart:ffi';
 
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
@@ -254,7 +253,7 @@ class TrackCardSmall extends StatelessWidget {
           ),
         ),
       ),
-    );;
+    );
   }
 }
 

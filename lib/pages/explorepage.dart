@@ -1,14 +1,12 @@
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/youtubehomedata.dart';
-import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/searchpage.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
-import 'package:fluent_ui/fluent_ui.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -94,7 +92,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    fluent.Typography typography = FluentTheme.of(context).typography;
+    fluent.Typography typography = fluent.FluentTheme.of(context).typography;
     super.build(context);
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
@@ -149,45 +147,45 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                         MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery:  headList[index]['title'].toString())));
 
                   },
-                  child: Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child:
+                  child:  Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child:
 
 
-                          // CachedNetworkImage(
-                          //    memCacheHeight: constraints.maxHeight.toInt(),
-                          //    memCacheWidth: constraints.maxWidth.toInt(),
-                          //   fit: BoxFit.cover,
-                          //   errorWidget: (context, _, __) => const Image(
-                          //     fit: BoxFit.cover,
-                          //     image: AssetImage(
-                          //       'assets/ytCover.png',
-                          //     ),
-                          //   ),
-                          //   imageUrl: headList[index]['image'].toString(),
-                          //   placeholder: (context, url) => const Image(
-                          //     fit: BoxFit.cover,
-                          //     image: AssetImage('assets/ytCover.png'),
-                          //   ),
-                          // ),
+                      // CachedNetworkImage(
+                      //    memCacheHeight: constraints.maxHeight.toInt(),
+                      //    memCacheWidth: constraints.maxWidth.toInt(),
+                      //   fit: BoxFit.cover,
+                      //   errorWidget: (context, _, __) => const Image(
+                      //     fit: BoxFit.cover,
+                      //     image: AssetImage(
+                      //       'assets/ytCover.png',
+                      //     ),
+                      //   ),
+                      //   imageUrl: headList[index]['image'].toString(),
+                      //   placeholder: (context, url) => const Image(
+                      //     fit: BoxFit.cover,
+                      //     image: AssetImage('assets/ytCover.png'),
+                      //   ),
+                      // ),
 
-                              ExtendedImage.network(
-                                headList[index]['image'].toString(),
-                                fit: fluent.BoxFit.cover,
-                                cache: true,
+                      ExtendedImage.network(
+                        headList[index]['image'].toString(),
+                        fit: fluent.BoxFit.cover,
+                        cache: true,
 
-                                clearMemoryCacheIfFailed: true,
-                               // filterQuality: fluent.FilterQuality.medium,
-
-
-                              )
+                        clearMemoryCacheIfFailed: true,
+                        // filterQuality: fluent.FilterQuality.medium,
 
 
-                        )
+                      )
+
+
+                  )
 
 
 

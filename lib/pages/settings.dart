@@ -1,14 +1,11 @@
-import 'package:flutter/foundation.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
-import '../main.dart';
 
 const List<String> accentColorNames = [
   'System',
@@ -157,8 +154,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   Wrap(children: [
             Tooltip(
               style: tooltipThemeData,
-              child: _buildColorBlock(appTheme, systemAccentColor,),
               message: accentColorNames[0],
+              child: _buildColorBlock(appTheme, systemAccentColor,),
             ),
             ...List.generate(Colors.accentColors.length, (index) {
               final color = Colors.accentColors[index];

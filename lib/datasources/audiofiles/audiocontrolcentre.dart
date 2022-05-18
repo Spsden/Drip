@@ -1,11 +1,9 @@
-import 'dart:ffi';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:dart_vlc/dart_vlc.dart' as mediaplayer;
-import 'package:flutter/foundation.dart';
 import 'package:provider/src/provider.dart';
 
 import 'package:provider/provider.dart';
@@ -30,7 +28,7 @@ final ValueNotifier<int> currentTrackValueNotifier =
 
 final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
-late final mediaplayer.Player player = mediaplayer.Player(id: 12)
+final mediaplayer.Player player = mediaplayer.Player(id: 12)
   ..positionStream.listen((mediaplayer.PositionState state) {
     final oldState = progressNotifier.value;
     progressNotifier.value =
@@ -57,26 +55,25 @@ List<Track> tracks = [];
 List<CurrentMusicList> currentTracks = [];
 
 abstract class AudioControlClass with ChangeNotifier {
-  
-  static Future<CurrentMusicList> currentTrackDetailsGenerator(String videoId) async {
+  static Future<CurrentMusicList> currentTrackDetailsGenerator(
+      String videoId) async {
     try {
-      var video = await _youtubeExplode.videos.get('https://youtube.com/watch?v=$videoId');
+      var video = await _youtubeExplode.videos
+          .get('https://youtube.com/watch?v=$videoId');
       String title = video.title.toString();
       String author = video.author.toString();
       ThumbnailSet thumbs = video.thumbnails;
-      CurrentMusicList currentMusicList = CurrentMusicList(title: title, author: author, thumbs: thumbs);
-      print(title + 'new function');
+      CurrentMusicList currentMusicList =
+          CurrentMusicList(title: title, author: author, thumbs: thumbs);
+      print('${title}new function');
 
       return currentMusicList;
-
     } catch (e) {
       rethrow;
-     // print('explode error' + e.toString());
+      // print('explode error' + e.toString());
     }
   }
-  
-  
-  
+
   static Future<String> getAudioUri(String videoId) async {
     String audioUrl = '';
 
@@ -89,7 +86,7 @@ abstract class AudioControlClass with ChangeNotifier {
       print(audioUrl);
       return audioUrl;
     } catch (e) {
-      print('explode error' + e.toString());
+      print('explode error$e');
     }
 
     return audioUrl;
@@ -110,7 +107,7 @@ abstract class AudioControlClass with ChangeNotifier {
       // var currentTrackFetcher = await currentTrackDetailsGenerator(videoIdOf);
       // currentTracks.add(currentTrackFetcher);
 
-     // medias.add(mediaplayer.Media.network(audioUri));
+      // medias.add(mediaplayer.Media.network(audioUri));
       player.add(Media.network(audioUri));
     }
   }
@@ -149,7 +146,7 @@ abstract class AudioControlClass with ChangeNotifier {
     player.open(playlist, autoStart: true);
 
     await Future.delayed(const Duration(milliseconds: 100));
-    player.jump(0);
+    player.jumpToIndex(0);
 
     await Future.delayed(const Duration(milliseconds: 100));
     player.play();
@@ -217,7 +214,7 @@ abstract class AudioControlClass with ChangeNotifier {
     // player.next();
     // player.jump(3);
 
-    player.back();
+    player.previous();
 
     currentTrackValueNotifier.value = currentMediaIndex;
 

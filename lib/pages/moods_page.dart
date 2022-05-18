@@ -4,11 +4,8 @@ import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
 import 'package:random_color/random_color.dart';
 
-import '../theme.dart';
 
 class MoodsAndCategories extends StatefulWidget {
   const MoodsAndCategories({Key? key}) : super(key: key);
@@ -97,6 +94,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticK
                             child: mat.Card(
                               semanticContainer: true,
                               clipBehavior: Clip.antiAliasWithSaveLayer,
+                              color: _randomColor.randomMaterialColor(),
                               child: mat.Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Padding(
@@ -109,7 +107,6 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticK
                                           overflow: TextOverflow.ellipsis),
                                     ),
                                   )),
-                              color: _randomColor.randomMaterialColor(),
                             ),
                           ),
                         )),
@@ -155,6 +152,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticK
                             child: mat.Card(
                               semanticContainer: true,
                               clipBehavior: Clip.antiAliasWithSaveLayer,
+                              color: _randomColor.randomColor(),
                               child: mat.Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Padding(
@@ -167,7 +165,6 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticK
                                           overflow: TextOverflow.ellipsis),
                                     ),
                                   )),
-                              color: _randomColor.randomColor(),
                             ),
                           ),
                         )),

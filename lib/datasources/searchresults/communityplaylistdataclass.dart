@@ -2,7 +2,6 @@
 //
 //     final communityPlaylist = communityPlaylistFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<CommunityPlaylist> communityPlaylistFromJson(String str) =>

@@ -1,10 +1,7 @@
 import 'dart:io';
-import 'dart:ui';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/pages/audioplayerbar.dart';
-import 'package:drip/pages/common/hot_keys.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
@@ -14,7 +11,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -22,6 +18,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'datasources/audiofiles/audiocontrolcentre.dart';
 import 'datasources/audiofiles/activeaudiodata.dart';
@@ -34,22 +31,50 @@ const String appTitle = 'Drip';
 
 bool darkMode = true;
 
+bool get isDesktop {
+  if (kIsWeb) return false;
+  return [
+    TargetPlatform.linux,
+    TargetPlatform.macOS,
+    TargetPlatform.windows,
+  ].contains(defaultTargetPlatform);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows) {
-    doWhenWindowReady(() {
-      appWindow.minSize = const Size(540, 540);
-      appWindow.size = const Size(900, 640);
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-      appWindow.title = 'Drip';
-    });
-
-    // SystemTheme.accentInstance;
+  if (kIsWeb ||
+      [TargetPlatform.windows, TargetPlatform.android]
+          .contains(defaultTargetPlatform)) {
+    SystemTheme.accentColor.load();
   }
 
-  setPathUrlStrategy();
+  if (isDesktop) {
+    // doWhenWindowReady(() {
+    //   appWindow.minSize = const Size(540, 540);
+    //   appWindow.size = const Size(900, 640);
+    //   appWindow.alignment = Alignment.center;
+    //   appWindow.show();
+    //   appWindow.title = 'Drip';
+    // });
+
+    // SystemTheme.accentInstance;
+    setPathUrlStrategy();
+
+    await acrylic.Window.initialize();
+    await WindowManager.instance.ensureInitialized();
+    windowManager.waitUntilReadyToShow().then((_) async {
+      await windowManager.setTitleBarStyle(TitleBarStyle.hidden,
+          windowButtonVisibility: false);
+    });
+
+    await windowManager.setSize(const Size(900, 640));
+    await windowManager.setMinimumSize(const Size(540, 540));
+    await windowManager.center();
+    await windowManager.show();
+    await windowManager.setSkipTaskbar(false);
+    //await windowManager.setPreventClose(true);
+  }
 
   if (Platform.isWindows) {
     await Hive.initFlutter('Drip');
@@ -63,31 +88,31 @@ void main() async {
   await openHiveBox('cache', limit: true);
   DartVLC.initialize();
 
-  if (Platform.isWindows) {
-    await acrylic.Window.initialize();
-    hotKeyManager.unregisterAll();
-    await HotKeys.initialize();
-  }
+  // if (Platform.isWindows) {
+  //   await acrylic.Window.initialize();
+  //   hotKeyManager.unregisterAll();
+  //   await HotKeys.initialize();
+  // }
   //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
 
-  if (defaultTargetPlatform == TargetPlatform.windows ||
-      defaultTargetPlatform == TargetPlatform.android ||
-      kIsWeb) {
-    darkMode = await SystemTheme.darkMode;
-    await SystemTheme.accentInstance.load();
-  } else {
-    darkMode = true;
-  }
-  if (!kIsWeb &&
-      [TargetPlatform.windows, TargetPlatform.linux]
-          .contains(defaultTargetPlatform)) {
-    //await flutter_acrylic.Window.initialize();
-  }
+  // if (defaultTargetPlatform == TargetPlatform.windows ||
+  //     defaultTargetPlatform == TargetPlatform.android ||
+  //     kIsWeb) {
+  //   darkMode = await SystemTheme.darkMode;
+  //   await SystemTheme.accentInstance.load();
+  // } else {
+  //   darkMode = true;
+  // }
+  // if (!kIsWeb &&
+  //     [TargetPlatform.windows, TargetPlatform.linux]
+  //         .contains(defaultTargetPlatform)) {
+  //   //await flutter_acrylic.Window.initialize();
+  // }
 
-  runApp(const MyApp());
+  //runApp(const MyApp());
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
@@ -134,25 +159,27 @@ class MyApp extends StatelessWidget {
             builder: (context, _) {
               final appTheme = context.watch<AppTheme>();
               return FluentApp(
-                  title: appTitle,
-                  themeMode: appTheme.mode,
-                  debugShowCheckedModeBanner: false,
-                  initialRoute: '/',
-                  routes: {'/': (_) => const MyHomePage()},
-                  theme: ThemeData(
-                    accentColor: appTheme.color,
-                    brightness: appTheme.mode == ThemeMode.system
-                        ? darkMode
-                            ? Brightness.dark
-                            : Brightness.light
-                        : appTheme.mode == ThemeMode.dark
-                            ? Brightness.dark
-                            : Brightness.light,
-                    visualDensity: VisualDensity.standard,
-                    focusTheme: FocusThemeData(
-                      glowFactor: is10footScreen() ? 2.0 : 0.0,
-                    ),
-                  ));
+                title: appTitle,
+                themeMode: appTheme.mode,
+                debugShowCheckedModeBanner: false,
+                home: const MyHomePage(),
+                // initialRoute: '/',
+                // routes: {'/': (_) => const MyHomePage()},
+                theme: ThemeData(
+                  accentColor: appTheme.color,
+                  brightness: appTheme.mode == ThemeMode.system
+                      ? darkMode
+                          ? Brightness.dark
+                          : Brightness.light
+                      : appTheme.mode == ThemeMode.dark
+                          ? Brightness.dark
+                          : Brightness.light,
+                  visualDensity: VisualDensity.standard,
+                  focusTheme: FocusThemeData(
+                    glowFactor: is10footScreen() ? 2.0 : 0.0,
+                  ),
+                ),
+              );
             }));
   }
 }
@@ -179,8 +206,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final colorsController = ScrollController();
   final settingsController = ScrollController();
 
-
-
   Map<int?, GlobalKey?> navigatorKeys = {
     0: GlobalKey(),
     1: GlobalKey(),
@@ -193,11 +218,16 @@ class _MyHomePageState extends State<MyHomePage> {
     index = 0;
 
     screens = [
-       FirstPageStack(navigatorKey: navigatorKeys[0]),
-       SecondPageStack(searchArgs: '', fromFirstPage: false,navigatorKey: navigatorKeys[1]),
-
-       CurrentPlaylist(fromMainPage: true,navigatorKey: navigatorKeys[2],),
-       SettingsPage(navigatorKey:navigatorKeys[3],)
+      FirstPageStack(navigatorKey: navigatorKeys[0]),
+      SecondPageStack(
+          searchArgs: '', fromFirstPage: false, navigatorKey: navigatorKeys[1]),
+      CurrentPlaylist(
+        fromMainPage: true,
+        navigatorKey: navigatorKeys[2],
+      ),
+      SettingsPage(
+        navigatorKey: navigatorKeys[3],
+      )
     ];
     _pageController = PageController(initialPage: index);
 
@@ -227,20 +257,37 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           NavigationView(
             appBar: NavigationAppBar(
-                automaticallyImplyLeading: true,
-                leading: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: IconButton(
-                      onPressed: () async{
+              automaticallyImplyLeading: false,
+              // leading: Padding(
+              //   padding: const EdgeInsets.only(top: 10.0),
+              //   child: IconButton(
+              //       onPressed: () async{
+              //
+              //        await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
+              //
+              //       },
+              //       icon: const Icon(FluentIcons.back)),
+              // ),
+              // title: Platform.isWindows
+              //     ? const TopBar()
+              //     : const SizedBox.shrink()
 
-                       await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
-
-                      },
-                      icon: const Icon(FluentIcons.back)),
-                ),
-                title: Platform.isWindows
-                    ? const TopBar()
-                    : const SizedBox.shrink()),
+              title: () {
+                if (kIsWeb) return const Text(appTitle);
+                return const DragToMoveArea(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(appTitle),
+                  ),
+                );
+              }(),
+              actions: kIsWeb
+                  ? null
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [Spacer(), WindowButtons()],
+                    ),
+            ),
             pane: NavigationPane(
               selected: index,
               scrollController: mat.ScrollController(),
@@ -270,18 +317,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     'Drip',
                     style: TextStyle(fontSize: 20),
                   )),
-              displayMode:
-
-              Platform.isWindows
+              displayMode: Platform.isWindows
                   ? PaneDisplayMode.compact
                   : PaneDisplayMode.top,
-              indicatorBuilder: () {
+              indicator: () {
                 switch (appTheme.indicator) {
                   case NavigationIndicators.end:
-                    return NavigationIndicator.end;
+                    return const EndNavigationIndicator();
                   case NavigationIndicators.sticky:
                   default:
-                    return NavigationIndicator.sticky;
+                    return const StickyNavigationIndicator();
                 }
               }(),
               items: [
@@ -351,27 +396,24 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             footerBuilder: (context, state) {
               return Container(
-
                 alignment: Alignment.center,
-
                 height: 100,
                 child: Stack(children: [
                   ClipRect(
                     child: mat.Material(
                       child: Acrylic(
-                        child:  const SizedBox(
-                          child: AudioPlayerBar(),
-                          width: double.infinity,
-
-
-                          height: 100,
-
-                        ),
                         elevation: 10,
                         shape: mat.RoundedRectangleBorder(
                             borderRadius: mat.BorderRadius.circular(8)),
-                        tint: context.watch<ActiveAudioData>().albumExtracted.toAccentColor() ,
-
+                        tint: context
+                            .watch<ActiveAudioData>()
+                            .albumExtracted
+                            .toAccentColor(),
+                        child: const SizedBox(
+                          width: double.infinity,
+                          height: 100,
+                          child: AudioPlayerBar(),
+                        ),
                       ),
                     ),
                   ),
@@ -426,69 +468,88 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class TopBar extends StatelessWidget {
-  const TopBar({Key? key}) : super(key: key);
+class WindowButtons extends StatelessWidget {
+  const WindowButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var color = context.watch<AppTheme>().mode == ThemeMode.dark ||
-            context.watch<AppTheme>().mode == ThemeMode.system
-        ? Colors.grey[30]
-        : Colors.grey[150];
+    final ThemeData theme = FluentTheme.of(context);
 
     return SizedBox(
-      height: 35.0,
-      child: WindowTitleBarBox(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-                child: MoveWindow(
-              child: Container(
-                margin: const mat.EdgeInsets.only(top: 8, left: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/driplogocircle.png',
-                      filterQuality: FilterQuality.high,
-                      alignment: Alignment.center,
-                      height: 30,
-                      width: 30,
-
-                      //height: 10,
-                      //width: 10,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      'Drip',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            )),
-            Expanded(child: MoveWindow()),
-            Row(
-              children: [
-                MinimizeWindowButton(
-                  colors: WindowButtonColors(iconNormal: color),
-                ),
-                MaximizeWindowButton(
-                    colors: WindowButtonColors(iconNormal: color)),
-                CloseWindowButton(colors: WindowButtonColors(iconNormal: color))
-              ],
-            )
-          ],
-        ),
+      width: 138,
+      height: 50,
+      child: WindowCaption(
+        brightness: theme.brightness,
+        backgroundColor: Colors.transparent,
       ),
     );
   }
 }
+
+
+// class TopBar extends StatelessWidget {
+//   const TopBar({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var color = context.watch<AppTheme>().mode == ThemeMode.dark ||
+//             context.watch<AppTheme>().mode == ThemeMode.system
+//         ? Colors.grey[30]
+//         : Colors.grey[150];
+//
+//     return SizedBox(
+//       height: 35.0,
+//       child: WindowTitleBarBox(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Expanded(
+//                 child: MoveWindow(
+//               child: Container(
+//                 margin: const mat.EdgeInsets.only(top: 8, left: 8),
+//                 child: Row(
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: [
+//                     Image.asset(
+//                       'assets/driplogocircle.png',
+//                       filterQuality: FilterQuality.high,
+//                       alignment: Alignment.center,
+//                       height: 30,
+//                       width: 30,
+//
+//                       //height: 10,
+//                       //width: 10,
+//                     ),
+//                     const SizedBox(
+//                       width: 10,
+//                     ),
+//                     const Text(
+//                       'Drip',
+//                       style:
+//                           TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             )),
+//             Expanded(child: MoveWindow()),
+//             Row(
+//               children: [
+//                 MinimizeWindowButton(
+//                   colors: WindowButtonColors(iconNormal: color),
+//                 ),
+//                 MaximizeWindowButton(
+//                     colors: WindowButtonColors(iconNormal: color)),
+//                 CloseWindowButton(colors: WindowButtonColors(iconNormal: color))
+//               ],
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 //
 // GetIt locator = GetIt.instance;
 //

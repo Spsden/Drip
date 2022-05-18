@@ -1,9 +1,7 @@
 import 'package:drip/datasources/searchresults/albumsdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -176,13 +174,11 @@ class AlbumCard extends StatelessWidget {
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
               ),
-              Container(
+              SizedBox(
                 width: boxSize * 3/4,
              //   margin: const EdgeInsets.only(bottom: 15,left: 5,right: 5),
                 child: Text(
-                  albums.artists[0].name.toString() +
-                      '\n' +
-                      albums.year.toString(),
+                  '${albums.artists[0].name}\n${albums.year}',
                   style: typography.bodyStrong
                       ?.apply(fontSizeFactor: 1.0),
                   textAlign: TextAlign.center,
@@ -212,7 +208,7 @@ class AlbumsSearchResults extends StatefulWidget {
 
 class _AlbumsSearchResultsState extends State<AlbumsSearchResults> {
 
-  FloatingSearchBarController _controller = FloatingSearchBarController();
+  final FloatingSearchBarController _controller = FloatingSearchBarController();
 
   String query = '';
   static const _pageSize = 10;
@@ -290,8 +286,8 @@ class _AlbumsSearchResultsState extends State<AlbumsSearchResults> {
                     child: Text(
 
                       widget.albumsQuery == ''
-                          ? ' Results for \"${query}\"'
-                          : ' Results for \"${widget.albumsQuery}\"',
+                          ? ' Results for "$query"'
+                          : ' Results for "${widget.albumsQuery}"',
                       style:  typography.display?.apply(fontSizeFactor: 1.0),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,)

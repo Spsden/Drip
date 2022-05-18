@@ -21,9 +21,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:provider/provider.dart';
 
-import '../theme.dart';
 import 'common/loading_widget.dart';
 
 
@@ -129,15 +127,15 @@ class _AllSearchResultsState extends State<AllSearchResults> {
                         primary: false,
 
                      child: Column(
-                       children: AnimationConfiguration.toStaggeredList(childAnimationBuilder: (widget) => SlideAnimation(child: FadeInAnimation(child: widget,),horizontalOffset: 50.0),
+                       children: AnimationConfiguration.toStaggeredList(childAnimationBuilder: (widget) => SlideAnimation(horizontalOffset: 50.0, child: FadeInAnimation(child: widget,)),
 
                            children: [
 
                              //mat.RaisedButton(onPressed: () => Navigator.of(context).context.findAncestorStateOfType<NavigatorState>()?.pop()),
                              Text(
                                _controller.query == ''
-                                   ? 'Results for \"${widget.searchQuery}\"'
-                                   : 'Results for \"${_controller.query}\"',
+                                   ? 'Results for "${widget.searchQuery}"'
+                                   : 'Results for "${_controller.query}"',
                                style: typography.display?.apply(fontSizeFactor: 1.0),
                                maxLines: 2,
                                overflow: TextOverflow.ellipsis,

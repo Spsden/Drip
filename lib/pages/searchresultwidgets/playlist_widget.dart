@@ -4,7 +4,6 @@ import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:provider/provider.dart';
 
@@ -209,7 +208,7 @@ class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
              itemBuilder: (context,index) {
                return AnimationConfiguration.staggeredGrid(
                  position: index,
-                   duration: Duration(milliseconds: 375),
+                   duration: const Duration(milliseconds: 375),
                    columnCount: 4,
                    child: SlideAnimation(child: FadeInAnimation(child: PlaylistCard(playlistDataClass: list[index]))));
              }

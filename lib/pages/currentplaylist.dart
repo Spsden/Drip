@@ -1,9 +1,7 @@
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
-
 
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/material.dart' as mat;
 import 'package:provider/provider.dart';
 
 import '../datasources/audiofiles/activeaudiodata.dart';
-import '../datasources/searchresults/searchresultsservice.dart';
 import '../datasources/searchresults/watchplaylistdataclass.dart';
 import 'common/track_cards.dart';
 
@@ -20,7 +17,8 @@ class CurrentPlaylist extends StatefulWidget {
   final bool fromMainPage;
   final GlobalKey? navigatorKey;
 
-  const CurrentPlaylist({Key? key, required this.fromMainPage, this.navigatorKey})
+  const CurrentPlaylist(
+      {Key? key, required this.fromMainPage, this.navigatorKey})
       : super(key: key);
 
   @override
@@ -64,13 +62,12 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
 
                 if (currentTracks.isEmpty) {
                   return const Text('Oops no playlist loaded');
-                } else{
+                } else {
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         // const Text(
                         //   'Play queue',
                         //   style: TextStyle(
@@ -80,11 +77,11 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                         Expanded(
                           child: Stack(
                             children: [
-
                               Container(
-                                margin : const EdgeInsets.only(top : 40,),
+                                margin: const EdgeInsets.only(
+                                  top: 40,
+                                ),
                                 child: ListView.builder(
-
                                     controller: _scrollController,
                                     physics: const BouncingScrollPhysics(),
                                     shrinkWrap: true,
@@ -92,19 +89,21 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
 
                                     //controller: _sc,
                                     itemBuilder: (context, index) {
-                                      return  Padding(
-
+                                      return Padding(
                                         padding: const EdgeInsets.all(8),
                                         child: TrackCardLarge(
                                           data: TrackCardData(
-                                              title: currentTracks[index].title.toString(),
+                                              title: currentTracks[index]
+                                                  .title
+                                                  .toString(),
                                               artist: currentTracks[index]
                                                   .artists![0]
                                                   .name
                                                   .toString(),
                                               album: 'Drip',
-                                              duration:
-                                              currentTracks[index].length.toString(),
+                                              duration: currentTracks[index]
+                                                  .length
+                                                  .toString(),
                                               thumbnail: currentTracks[index]
                                                   .thumbnail![0]
                                                   .url
@@ -112,73 +111,85 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                           songIndex: index,
                                           onTrackTap: () async {
                                             var audioUrl =
-                                            await AudioControlClass.getAudioUri(
-                                                currentTracks[index].videoId.toString());
-                                          //  print(audioUrl.toString());
+                                                await AudioControlClass
+                                                    .getAudioUri(
+                                                        currentTracks[index]
+                                                            .videoId
+                                                            .toString());
+                                            //  print(audioUrl.toString());
 
                                             playerAlerts.buffering = true;
                                             await context
                                                 .read<ActiveAudioData>()
                                                 .songDetails(
-                                                audioUrl,
-                                                currentTracks[index].videoId.toString(),
-                                                currentTracks[index].artists![0].name.toString(),
-                                                currentTracks[index].title.toString(),
-                                                currentTracks[index]
-                                                    .thumbnail![0]
-                                                    .url
-                                                    .toString(),
-                                              //  currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                                            currentTracks[index].thumbnail!.last.url.toString());
+                                                    audioUrl,
+                                                    currentTracks[index]
+                                                        .videoId
+                                                        .toString(),
+                                                    currentTracks[index]
+                                                        .artists![0]
+                                                        .name
+                                                        .toString(),
+                                                    currentTracks[index]
+                                                        .title
+                                                        .toString(),
+                                                    currentTracks[index]
+                                                        .thumbnail![0]
+                                                        .url
+                                                        .toString(),
+                                                    //  currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                                                    currentTracks[index]
+                                                        .thumbnail!
+                                                        .last
+                                                        .url
+                                                        .toString());
                                             currentMediaIndex = 0;
 
                                             await AudioControlClass.play(
                                                 audioUrl: audioUrl,
-                                                videoId:
-                                                currentTracks[index].videoId.toString(),
+                                                videoId: currentTracks[index]
+                                                    .videoId
+                                                    .toString(),
                                                 context: context);
                                           },
                                           color: index % 2 != 0
                                               ? Colors.transparent
-                                              : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                                              context.watch<AppTheme>().mode ==
-                                                  ThemeMode.system
-                                              ? Colors.grey[150]
-                                              : Colors.grey[40], SuperSize: size,
+                                              : context
+                                                              .watch<AppTheme>()
+                                                              .mode ==
+                                                          ThemeMode.dark ||
+                                                      context
+                                                              .watch<AppTheme>()
+                                                              .mode ==
+                                                          ThemeMode.system
+                                                  ? Colors.grey[150]
+                                                  : Colors.grey[40],
+                                          SuperSize: size,
                                           widthy: 800,
                                           fromQueue: true,
                                         ),
                                       );
-
-
                                     }),
                               ),
                               LayoutBuilder(
-                                builder: (context, constraints) =>
-                                 Container(
-                                   padding: const EdgeInsets.all(5),
-                                  width:constraints.maxWidth,
-                                  color: Colors.transparent,
+                                builder: (context, constraints) => Container(
+                                    padding: const EdgeInsets.all(5),
+                                    width: constraints.maxWidth,
+                                    color: Colors.transparent,
                                     child: Text('Up Next',
-                                      style :  typography.title
-                                            ?.copyWith(fontSize: 20)
-
-                                    )),
+                                        style: typography.title
+                                            ?.copyWith(fontSize: 20))),
                               ),
                             ],
-
                           ),
                         ),
-                        const SizedBox(height: 95,)
+                        const SizedBox(
+                          height: 95,
+                        )
                       ],
-
                     ),
                   );
-
-
                 }
-
-
               });
         });
   }
@@ -199,7 +210,6 @@ class AlbumArtCard extends StatelessWidget {
       crossAxisAlignment: mat.CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-
         Container(
           padding: const EdgeInsets.all(20),
           // constraints: BoxConstraints(
@@ -207,11 +217,7 @@ class AlbumArtCard extends StatelessWidget {
           //   maxWidth: size.width > 1000 ? 500 : size.width / 2.5,
           // ),
 
-          constraints: const BoxConstraints(
-            maxHeight: 500,
-            maxWidth: 500
-          ),
-
+          constraints: const BoxConstraints(maxHeight: 500, maxWidth: 500),
 
           // decoration: BoxDecoration(
           //   borderRadius: BorderRadius.circular(8)
@@ -230,29 +236,25 @@ class AlbumArtCard extends StatelessWidget {
                           blendMode: BlendMode.luminosity,
                           shaderCallback: (bounds) {
                             return const LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.transparent,
-                                  Colors.black
-                                ]).createShader(bounds);
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [Colors.transparent, Colors.black])
+                                .createShader(bounds);
                           },
-                          child:
-
-                          ExtendedImage.network(
-                            context.watch<ActiveAudioData>().thumbnailLarge.toString(),
-                            height: min(constraints.maxHeight,constraints.maxWidth),
-                            width: min(constraints.maxHeight,constraints.maxWidth),
+                          child: ExtendedImage.network(
+                            context
+                                .watch<ActiveAudioData>()
+                                .thumbnailLarge
+                                .toString(),
+                            height: min(
+                                constraints.maxHeight, constraints.maxWidth),
+                            width: min(
+                                constraints.maxHeight, constraints.maxWidth),
                             fit: BoxFit.cover,
                             cache: false,
-
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.circular(8),
-
-
                           ),
-
-
 
                           // CachedNetworkImage(
                           //   height: min(constraints.maxHeight,constraints.maxWidth),
@@ -282,20 +284,18 @@ class AlbumArtCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                    "Now Playing",
-                                    style: typography.title
-                                        ?.copyWith(color: Colors.white,fontSize: 30)
+                                Text("Now Playing",
+                                    style: typography.title?.copyWith(
+                                        color: Colors.white, fontSize: 30)
 
-                                  // const mat.TextStyle(
-                                  //   fontSize: 20,
-                                  // ),
+                                    // const mat.TextStyle(
+                                    //   fontSize: 20,
+                                    // ),
 
-                                ),
-                                Text(
-                                    "${context.watch<ActiveAudioData>().title}",
-                                    style: typography.title
-                                        ?.copyWith(color: Colors.white,fontSize: 20)
+                                    ),
+                                Text(context.watch<ActiveAudioData>().title,
+                                    style: typography.title?.copyWith(
+                                        color: Colors.white, fontSize: 20)
 
                                     // const mat.TextStyle(
                                     //   fontSize: 20,
@@ -305,13 +305,12 @@ class AlbumArtCard extends StatelessWidget {
                                 Text(
                                     "${context.watch<ActiveAudioData>().artists}  ",
                                     textAlign: mat.TextAlign.left,
-                                    style: typography.subtitle
-                                        ?.copyWith(color: Colors.white,fontSize: 15)),
+                                    style: typography.subtitle?.copyWith(
+                                        color: Colors.white, fontSize: 15)),
                                 //TextSpan(text:"${context.watch<ActiveAudioData>().}"),
                               ],
                             ),
                           ),
-
                         )
                       ],
                     )),

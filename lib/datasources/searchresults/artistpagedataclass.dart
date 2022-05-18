@@ -2,7 +2,6 @@
 //
 //     final artistsPageData = artistsPageDataFromJson(jsonString?);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 ArtistsPageData artistsPageDataFromJson(String str) => ArtistsPageData.fromJson(json.decode(str));
@@ -44,36 +43,36 @@ class ArtistsPageData {
 
   factory ArtistsPageData.fromJson(Map<String?, dynamic> json) => ArtistsPageData(
     albums: json["albums"] == null ? null : Albums.fromJson(json["albums"]),
-    channelId: json["channelId"] == null ? null : json["channelId"],
-    description: json["description"] == null ? null : json["description"],
-    name: json["name"] == null ? null : json["name"],
-    radioId: json["radioId"] == null ? null : json["radioId"],
+    channelId: json["channelId"],
+    description: json["description"],
+    name: json["name"],
+    radioId: json["radioId"],
     related: json["related"] == null ? null : Related.fromJson(json["related"]),
     shuffleId: json["shuffleId"],
     singles: json["singles"] == null ? null : Albums.fromJson(json["singles"]),
     songs: json["songs"] == null ? null : Songs.fromJson(json["songs"]),
-    subscribed: json["subscribed"] == null ? null : json["subscribed"],
-    subscribers: json["subscribers"] == null ? null : json["subscribers"],
+    subscribed: json["subscribed"],
+    subscribers: json["subscribers"],
     thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
     videos: json["videos"] == null ? null : Videos.fromJson(json["videos"]),
-    views: json["views"] == null ? null : json["views"],
+    views: json["views"],
   );
 
   Map<String?, dynamic> toJson() => {
     "albums": albums == null ? null : albums?.toJson(),
-    "channelId": channelId == null ? null : channelId,
-    "description": description == null ? null : description,
-    "name": name == null ? null : name,
-    "radioId": radioId == null ? null : radioId,
+    "channelId": channelId,
+    "description": description,
+    "name": name,
+    "radioId": radioId,
     "related": related == null ? null : related?.toJson(),
     "shuffleId": shuffleId,
     "singles": singles == null ? null : singles?.toJson(),
     "songs": songs == null ? null : songs?.toJson(),
-    "subscribed": subscribed == null ? null : subscribed,
-    "subscribers": subscribers == null ? null : subscribers,
+    "subscribed": subscribed,
+    "subscribers": subscribers,
     "thumbnails": thumbnails == null ? null : List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
     "videos": videos == null ? null : videos?.toJson(),
-    "views": views == null ? null : views,
+    "views": views,
   };
 }
 
@@ -89,14 +88,14 @@ class Albums {
   final List<AlbumsResult>? results;
 
   factory Albums.fromJson(Map<String?, dynamic> json) => Albums(
-    browseId: json["browseId"] == null ? null : json["browseId"],
-    params: json["params"] == null ? null : json["params"],
+    browseId: json["browseId"],
+    params: json["params"],
     results: json["results"] == null ? null : List<AlbumsResult>.from(json["results"].map((x) => AlbumsResult.fromJson(x))),
   );
 
   Map<String?, dynamic> toJson() => {
-    "browseId": browseId == null ? null : browseId,
-    "params": params == null ? null : params,
+    "browseId": browseId,
+    "params": params,
     "results": results == null ? null : List<dynamic>.from(results!.map((x) => x.toJson())),
   };
 }
@@ -117,19 +116,19 @@ class AlbumsResult {
   final String? subscribers;
 
   factory AlbumsResult.fromJson(Map<String?, dynamic> json) => AlbumsResult(
-    browseId: json["browseId"] == null ? null : json["browseId"],
+    browseId: json["browseId"],
     thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
-    title: json["title"] == null ? null : json["title"],
-    year: json["year"] == null ? null : json["year"],
-    subscribers: json["subscribers"] == null ? null : json["subscribers"],
+    title: json["title"],
+    year: json["year"],
+    subscribers: json["subscribers"],
   );
 
   Map<String?, dynamic> toJson() => {
-    "browseId": browseId == null ? null : browseId,
+    "browseId": browseId,
     "thumbnails": thumbnails == null ? null : List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
-    "title": title == null ? null : title,
-    "year": year == null ? null : year,
-    "subscribers": subscribers == null ? null : subscribers,
+    "title": title,
+    "year": year,
+    "subscribers": subscribers,
   };
 }
 
@@ -145,15 +144,15 @@ class Thumbnail {
   final int width;
 
   factory Thumbnail.fromJson(Map<String?, dynamic> json) => Thumbnail(
-    height: json["height"] == null ? null : json["height"],
-    url: json["url"] == null ? null : json["url"],
-    width: json["width"] == null ? null : json["width"],
+    height: json["height"],
+    url: json["url"],
+    width: json["width"],
   );
 
   Map<String?, dynamic> toJson() => {
-    "height": height == null ? null : height,
-    "url": url == null ? null : url,
-    "width": width == null ? null : width,
+    "height": height,
+    "url": url,
+    "width": width,
   };
 }
 
@@ -187,12 +186,12 @@ class Songs {
   final List<SongsResult>? results;
 
   factory Songs.fromJson(Map<String?, dynamic> json) => Songs(
-    browseId: json["browseId"] == null ? null : json["browseId"],
+    browseId: json["browseId"],
     results: json["results"] == null ? null : List<SongsResult>.from(json["results"].map((x) => SongsResult.fromJson(x))),
   );
 
   Map<String?, dynamic> toJson() => {
-    "browseId": browseId == null ? null : browseId,
+    "browseId": browseId,
     "results": results == null ? null : List<dynamic>.from(results!.map((x) => x.toJson())),
   };
 }
@@ -221,23 +220,23 @@ class SongsResult {
   factory SongsResult.fromJson(Map<String?, dynamic> json) => SongsResult(
     album: json["album"] == null ? null : Album.fromJson(json["album"]),
     artists: json["artists"] == null ? null : List<Album>.from(json["artists"].map((x) => Album.fromJson(x))),
-    isAvailable: json["isAvailable"] == null ? null : json["isAvailable"],
-    isExplicit: json["isExplicit"] == null ? null : json["isExplicit"],
-    likeStatus: json["likeStatus"] == null ? null : json["likeStatus"],
+    isAvailable: json["isAvailable"],
+    isExplicit: json["isExplicit"],
+    likeStatus: json["likeStatus"],
     thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
-    title: json["title"] == null ? null : json["title"],
-    videoId: json["videoId"] == null ? null : json["videoId"],
+    title: json["title"],
+    videoId: json["videoId"],
   );
 
   Map<String?, dynamic> toJson() => {
     "album": album == null ? null : album?.toJson(),
     "artists": artists == null ? null : List<dynamic>.from(artists!.map((x) => x.toJson())),
-    "isAvailable": isAvailable == null ? null : isAvailable,
-    "isExplicit": isExplicit == null ? null : isExplicit,
-    "likeStatus": likeStatus == null ? null : likeStatus,
+    "isAvailable": isAvailable,
+    "isExplicit": isExplicit,
+    "likeStatus": likeStatus,
     "thumbnails": thumbnails == null ? null : List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
-    "title": title == null ? null : title,
-    "videoId": videoId == null ? null : videoId,
+    "title": title,
+    "videoId": videoId,
   };
 }
 
@@ -251,13 +250,13 @@ class Album {
   final String? name;
 
   factory Album.fromJson(Map<String?, dynamic> json) => Album(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
+    id: json["id"],
+    name: json["name"],
   );
 
   Map<String?, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
+    "id": id,
+    "name": name,
   };
 }
 
@@ -271,12 +270,12 @@ class Videos {
   final List<VideosResult>? results;
 
   factory Videos.fromJson(Map<String?, dynamic> json) => Videos(
-    browseId: json["browseId"] == null ? null : json["browseId"],
+    browseId: json["browseId"],
     results: json["results"] == null ? null : List<VideosResult>.from(json["results"].map((x) => VideosResult.fromJson(x))),
   );
 
   Map<String?, dynamic> toJson() => {
-    "browseId": browseId == null ? null : browseId,
+    "browseId": browseId,
     "results": results == null ? null : List<dynamic>.from(results!.map((x) => x.toJson())),
   };
 }
@@ -302,18 +301,18 @@ class VideosResult {
     artists: json["artists"] == null ? null : List<Album>.from(json["artists"].map((x) => Album.fromJson(x))),
     playlistId: json["playlistId"] == null ? null : playlistIdValues.map[json["playlistId"]],
     thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
-    title: json["title"] == null ? null : json["title"],
-    videoId: json["videoId"] == null ? null : json["videoId"],
-    views: json["views"] == null ? null : json["views"],
+    title: json["title"],
+    videoId: json["videoId"],
+    views: json["views"],
   );
 
   Map<String?, dynamic> toJson() => {
     "artists": artists == null ? null : List<dynamic>.from(artists!.map((x) => x.toJson())),
     "playlistId": playlistId == null ? null : playlistIdValues.reverse[playlistId],
     "thumbnails": thumbnails == null ? null : List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
-    "title": title == null ? null : title,
-    "videoId": videoId == null ? null : videoId,
-    "views": views == null ? null : views,
+    "title": title,
+    "videoId": videoId,
+    "views": views,
   };
 }
 
@@ -330,9 +329,7 @@ class EnumValues<T> {
   EnumValues(this.map);
 
   Map<T, String?> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
+    reverseMap ??= map.map((k, v) => MapEntry(v, k));
     return reverseMap;
   }
 }

@@ -5,13 +5,9 @@ import 'package:drip/pages/search.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:provider/provider.dart';
 
-import '../../theme.dart';
 import '../common/loading_widget.dart';
 
 class ArtistsSearch extends StatelessWidget {
@@ -164,7 +160,7 @@ class ArtistsSearchResults extends StatefulWidget {
 
 class _ArtistsSearchResultsState extends State<ArtistsSearchResults> {
 
-  FloatingSearchBarController _controller = FloatingSearchBarController();
+  final FloatingSearchBarController _controller = FloatingSearchBarController();
 
   String query = '';
   static const _pageSize = 10;
@@ -253,8 +249,8 @@ class _ArtistsSearchResultsState extends State<ArtistsSearchResults> {
                   child: Text(
 
                     widget.artistQuery == ''
-                      ? ' Results for \"${query}\"'
-                      : ' Results for \"${widget.artistQuery}\"',
+                      ? ' Results for "$query"'
+                      : ' Results for "${widget.artistQuery}"',
                     style:  typography.display?.apply(fontSizeFactor: 1.0),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,)
@@ -294,10 +290,12 @@ class _ArtistsSearchResultsState extends State<ArtistsSearchResults> {
 }
 
 class MyClip extends CustomClipper<Rect> {
+  @override
   Rect getClip(Size size) {
     return Rect.fromCircle(center: const Offset(0,0),radius: 80);
   }
 
+  @override
   bool shouldReclip(oldClipper) {
     return false;
   }

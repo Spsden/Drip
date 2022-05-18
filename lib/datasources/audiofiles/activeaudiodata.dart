@@ -7,7 +7,6 @@ import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/globals.dart';
 import 'package:drip/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class ActiveAudioData extends ChangeNotifier {
@@ -22,7 +21,7 @@ class ActiveAudioData extends ChangeNotifier {
   String _thumbnail = '';
   String _thumbnailLarge = '';
   Color _albumExtracted  = Colors.transparent;
-   List<ThumbnailLocal>? _activeThumbnails = [];
+   final List<ThumbnailLocal> _activeThumbnails = [];
 
   String get videoId => _videoId;
   String get audioUrl => _audioUrl;

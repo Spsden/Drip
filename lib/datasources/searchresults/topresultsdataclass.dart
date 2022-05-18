@@ -2,7 +2,6 @@
 //
 //     final topresults = topresultsFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 Topresults topresultsFromJson(String str) =>

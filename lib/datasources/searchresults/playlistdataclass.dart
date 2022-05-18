@@ -2,7 +2,6 @@
 //
 //     final playlists = playlistsFromJson(jsonString?);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 Playlists playlistsFromJson(String str) => Playlists.fromJson(json.decode(str));
@@ -79,12 +78,12 @@ class Author {
   final String name;
 
   factory Author.fromJson(Map<String?, dynamic> json) => Author(
-    id: json["id"] == null ? null : json["id"],
+    id: json["id"],
     name: json["name"],
   );
 
   Map<String?, dynamic> toJson() => {
-    "id": id == null ? null : id,
+    "id": id,
     "name": name,
   };
 }

@@ -2,7 +2,6 @@
 //
 //     final albums = albumsFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<Albums> albumsFromJson(String str) =>
@@ -75,12 +74,12 @@ class Artist {
   String name;
 
   factory Artist.fromJson(Map<String, dynamic> json) => Artist(
-        id: json["id"] == null ? null : json["id"],
+        id: json["id"],
         name: json["name"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
+        "id": id,
         "name": name,
       };
 }

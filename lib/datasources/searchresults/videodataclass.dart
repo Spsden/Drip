@@ -2,7 +2,6 @@
 //
 //     final video = videoFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 Video videoFromJson(String str) => Video.fromJson(json.decode(str));
@@ -36,27 +35,27 @@ class Video {
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
     artists: json["artists"] == null ? null : List<Artist>.from(json["artists"].map((x) => Artist.fromJson(x))),
-    category: json["category"] == null ? null : json["category"],
-    duration: json["duration"] == null ? null : json["duration"],
-    durationSeconds: json["duration_seconds"] == null ? null : json["duration_seconds"],
-    resultType: json["resultType"] == null ? null : json["resultType"],
+    category: json["category"],
+    duration: json["duration"],
+    durationSeconds: json["duration_seconds"],
+    resultType: json["resultType"],
     thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
-    title: json["title"] == null ? null : json["title"],
-    videoId: json["videoId"] == null ? null : json["videoId"],
-    views: json["views"] == null ? null : json["views"],
+    title: json["title"],
+    videoId: json["videoId"],
+    views: json["views"],
     year: json["year"],
   );
 
   Map<String, dynamic> toJson() => {
     "artists": artists == null ? null : List<dynamic>.from(artists!.map((x) => x.toJson())),
-    "category": category == null ? null : category,
-    "duration": duration == null ? null : duration,
-    "duration_seconds": durationSeconds == null ? null : durationSeconds,
-    "resultType": resultType == null ? null : resultType,
+    "category": category,
+    "duration": duration,
+    "duration_seconds": durationSeconds,
+    "resultType": resultType,
     "thumbnails": thumbnails == null ? null : List<dynamic>.from(thumbnails!.map((x) => x.toJson())),
-    "title": title == null ? null : title,
-    "videoId": videoId == null ? null : videoId,
-    "views": views == null ? null : views,
+    "title": title,
+    "videoId": videoId,
+    "views": views,
     "year": year,
   };
 }
@@ -71,13 +70,13 @@ class Artist {
   final String name;
 
   factory Artist.fromJson(Map<String, dynamic> json) => Artist(
-    id: json["id"] == null ? null : json["id"],
-    name: json["name"] == null ? null : json["name"],
+    id: json["id"],
+    name: json["name"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "name": name == null ? null : name,
+    "id": id,
+    "name": name,
   };
 }
 
@@ -93,14 +92,14 @@ class Thumbnail {
   final int width;
 
   factory Thumbnail.fromJson(Map<String, dynamic> json) => Thumbnail(
-    height: json["height"] == null ? null : json["height"],
-    url: json["url"] == null ? null : json["url"],
-    width: json["width"] == null ? null : json["width"],
+    height: json["height"],
+    url: json["url"],
+    width: json["width"],
   );
 
   Map<String, dynamic> toJson() => {
-    "height": height == null ? null : height,
-    "url": url == null ? null : url,
-    "width": width == null ? null : width,
+    "height": height,
+    "url": url,
+    "width": width,
   };
 }
