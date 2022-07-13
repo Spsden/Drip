@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
+import 'package:drip/datasources/audiofiles/audiocontrolcentrejustaudio.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 
 import 'package:drip/theme.dart';
@@ -110,43 +111,37 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                                   .toString()),
                                           songIndex: index,
                                           onTrackTap: () async {
-                                            var audioUrl =
-                                                await AudioControlClass
-                                                    .getAudioUri(
-                                                        currentTracks[index]
-                                                            .videoId
-                                                            .toString());
-                                            //  print(audioUrl.toString());
 
-                                            playerAlerts.buffering = true;
+
+
                                             await context
                                                 .read<ActiveAudioData>()
                                                 .songDetails(
-                                                    audioUrl,
-                                                    currentTracks[index]
-                                                        .videoId
-                                                        .toString(),
-                                                    currentTracks[index]
-                                                        .artists![0]
-                                                        .name
-                                                        .toString(),
-                                                    currentTracks[index]
-                                                        .title
-                                                        .toString(),
-                                                    currentTracks[index]
-                                                        .thumbnail![0]
-                                                        .url
-                                                        .toString(),
-                                                    //  currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                                                    currentTracks[index]
-                                                        .thumbnail!
-                                                        .last
-                                                        .url
-                                                        .toString());
+                                                'lol',
+                                                currentTracks[index]
+                                                    .videoId
+                                                    .toString(),
+                                                currentTracks[index]
+                                                    .artists![0]
+                                                    .name
+                                                    .toString(),
+                                                currentTracks[index]
+                                                    .title
+                                                    .toString(),
+                                                currentTracks[index]
+                                                    .thumbnail![0]
+                                                    .url
+                                                    .toString(),
+                                                //  currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                                                currentTracks[index]
+                                                    .thumbnail!
+                                                    .last
+                                                    .url
+                                                    .toString());
                                             currentMediaIndex = 0;
 
                                             await AudioControlClass.play(
-                                                audioUrl: audioUrl,
+
                                                 videoId: currentTracks[index]
                                                     .videoId
                                                     .toString(),
@@ -155,15 +150,15 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
                                           color: index % 2 != 0
                                               ? Colors.transparent
                                               : context
-                                                              .watch<AppTheme>()
-                                                              .mode ==
-                                                          ThemeMode.dark ||
-                                                      context
-                                                              .watch<AppTheme>()
-                                                              .mode ==
-                                                          ThemeMode.system
-                                                  ? Colors.grey[150]
-                                                  : Colors.grey[40],
+                                              .watch<AppTheme>()
+                                              .mode ==
+                                              ThemeMode.dark ||
+                                              context
+                                                  .watch<AppTheme>()
+                                                  .mode ==
+                                                  ThemeMode.system
+                                              ? Colors.grey[150]
+                                              : Colors.grey[40],
                                           SuperSize: size,
                                           widthy: 800,
                                           fromQueue: true,
@@ -193,6 +188,13 @@ class _CurrentPlaylistState extends State<CurrentPlaylist> {
               });
         });
   }
+
+
+
+
+
+
+
 }
 
 class AlbumArtCard extends StatelessWidget {

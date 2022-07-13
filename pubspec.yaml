@@ -37,7 +37,7 @@ dependencies:
   clipboard: ^0.1.3
   email_validator: ^2.0.1
   provider: ^6.0.1
-  fluent_ui: ^3.10.0
+  fluent_ui: ^3.12.0
   http: ^0.13.4
   youtube_explode_dart: ^1.10.9+1
   carousel_slider: ^4.0.0
@@ -63,6 +63,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   extended_image: ^6.2.1
   hotkey_manager: ^0.1.6
+  audioplayers: ^1.0.1
 
 
 dev_dependencies:

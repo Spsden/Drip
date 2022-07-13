@@ -15,7 +15,6 @@ import 'package:provider/src/provider.dart';
 
 import '../../theme.dart';
 
-
 ///Trackbars for main Search Page
 
 class TrackBars extends StatefulWidget {
@@ -47,6 +46,8 @@ class _TrackBarsState extends State<TrackBars> {
       print(track.title.toString());
     });
   }
+
+
 
   @override
   void initState() {
@@ -104,44 +105,28 @@ class _TrackBarsState extends State<TrackBars> {
                           widget.songs[index].thumbnails[0].url.toString()),
                   songIndex: index,
                   onTrackTap: () async {
-                    var audioUrl = await AudioControlClass.getAudioUri(
-                        widget.songs[index].videoId.toString());
-                    print(audioUrl.toString());
 
-                    playerAlerts.buffering = true;
-                    await context.read<ActiveAudioData>().songDetails(
-                        audioUrl,
+
+
+                      //playerAlerts.buffering = true;
+                      await context.read<ActiveAudioData>().songDetails(
+                          widget.songs[index].videoId.toString(),
                         widget.songs[index].videoId.toString(),
                         widget.songs[index].artists![0].name.toString(),
                         widget.songs[index].title.toString(),
                         widget.songs[index].thumbnails[0].url.toString(),
-                       // widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                      widget.songs[index].thumbnails.last.url.toString(),);
-                    currentMediaIndex = 0;
+                        // widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                        widget.songs[index].thumbnails.last.url.toString(),
+                      );
+                      currentMediaIndex = 0;
+                      //
+                      await AudioControlClass.play(
+
+                          videoId: widget.songs[index].videoId.toString(),
+                          context: context,
+                      );
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    await AudioControlClass.play(
-                        audioUrl: audioUrl,
-                        videoId: widget.songs[index].videoId.toString(),
-                        context: context);
                   },
                   color: index % 2 != 0
                       ? Colors.transparent
@@ -257,7 +242,6 @@ class _TrackListState extends State<TrackList> {
                   ),
                   AnimationLimiter(
                     child: PagedSliverList.separated(
-
                       //physics: BouncingScrollPhysics(),
 
                       pagingController: _pagingController,
@@ -271,10 +255,10 @@ class _TrackListState extends State<TrackList> {
                         firstPageProgressIndicatorBuilder: (_) => Center(
                           child: loadingWidget(context),
                         ),
-                        newPageProgressIndicatorBuilder: (_) => Center(
-                          child:loadingWidget(context)
-                        ),
-                        itemBuilder: (context, songs, index) => AnimationConfiguration.staggeredList(
+                        newPageProgressIndicatorBuilder: (_) =>
+                            Center(child: loadingWidget(context)),
+                        itemBuilder: (context, songs, index) =>
+                            AnimationConfiguration.staggeredList(
                           position: index,
                           duration: const Duration(milliseconds: 370),
                           child: SlideAnimation(
@@ -282,13 +266,14 @@ class _TrackListState extends State<TrackList> {
                             child: FadeInAnimation(
                               child: TrackListItem(
                                 songs: songs,
-                                color:  index % 2 != 0
+                                color: index % 2 != 0
                                     ? Colors.transparent
-                                    : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                                    context.watch<AppTheme>().mode ==
-                                        ThemeMode.system
-                                    ? Colors.grey[150]
-                                    : Colors.grey[40],
+                                    : context.watch<AppTheme>().mode ==
+                                                ThemeMode.dark ||
+                                            context.watch<AppTheme>().mode ==
+                                                ThemeMode.system
+                                        ? Colors.grey[150]
+                                        : Colors.grey[40],
                               ),
                             ),
                           ),
@@ -309,7 +294,8 @@ class TrackListItem extends StatefulWidget {
   final Songs songs;
   final Color color;
 
-  const TrackListItem({Key? key, required this.songs, required this.color}) : super(key: key);
+  const TrackListItem({Key? key, required this.songs, required this.color})
+      : super(key: key);
 
   @override
   _TrackListItemState createState() => _TrackListItemState();
@@ -320,117 +306,110 @@ class _TrackListItemState extends State<TrackListItem> {
   Widget build(BuildContext context) {
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
-    return
-         mat.Material(
-           borderRadius: mat.BorderRadius.circular(10),
-           color: widget.color,
-           child: mat.InkWell(
-
-            onTap: () async{ var audioUrl =
-                await AudioControlClass.getAudioUri(widget.songs.videoId);
-            // print(audioUrl.toString());
-
-            playerAlerts.buffering = true;
-            await context.read<ActiveAudioData>().songDetails(
-                audioUrl,
-                widget.songs.videoId,
-                widget.songs.artists![0].name,
-                widget.songs.title,
-                widget.songs.thumbnails[0].url,
-            //widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                widget.songs.thumbnails.last.url.toString());
-
-            await AudioControlClass.play(
-                audioUrl: audioUrl,
-                videoId: widget.songs.videoId.toString(),
-                context: context);
+    return mat.Material(
+      borderRadius: mat.BorderRadius.circular(10),
+      color: widget.color,
+      child: mat.InkWell(
+        onTap: () async {
 
 
-            },
-             borderRadius: BorderRadius.circular(8),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
+          //playerAlerts.buffering = true;
+          await context.read<ActiveAudioData>().songDetails(
+              widget.songs.videoId,
+              widget.songs.videoId,
+              widget.songs.artists![0].name,
+              widget.songs.title,
+              widget.songs.thumbnails[0].url,
+              //widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+              widget.songs.thumbnails.last.url.toString());
 
-                  FadeInImage(placeholder:
-                     const AssetImage('assets/cover.jpg'),
-                      width: 40,
-                      height: 40,
-                      fit: BoxFit.cover,
+          await AudioControlClass.play(
 
-                      image:  NetworkImage(
-                        widget.songs.thumbnails.first.url.toString(),
-                      )),
-                  // CachedNetworkImage(
-                  //   memCacheHeight: 40,
-                  //   memCacheWidth: 40,
-                  //   width: 40,
-                  //   height: 40,
-                  //   imageBuilder: (context, imageProvider) => CircleAvatar(
-                  //     backgroundColor: Colors.transparent,
-                  //     foregroundColor: Colors.transparent,
-                  //     radius: 100,
-                  //     backgroundImage: imageProvider,
-                  //   ),
-                  //   fit: BoxFit.cover,
-                  //   errorWidget: (context, _, __) => const Image(
-                  //     fit: BoxFit.cover,
-                  //     image: AssetImage('assets/cover.jpg'),
-                  //   ),
-                  //   imageUrl: widget.songs.thumbnails.first.url.toString(),
-                  //   placeholder: (context, url) => const Image(
-                  //       fit: BoxFit.cover,
-                  //       image: AssetImage('assets/cover.jpg')),
-                  // ),
-                  spacer,
+              videoId: widget.songs.videoId.toString(),
+              context: context, );
 
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 1 / 4,
-                    child: Text(
-                      widget.songs.title.toString(),
-                      // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  spacer,
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 1 / 8,
-                    child: Text(
-                      widget.songs.artists![0].name.toString(),
-                      // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  spacer,
-                  if (MediaQuery.of(context).size.width > 500)
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 1 / 8,
-                      child: Text(
-                        widget.songs.album!.name.toString(),
-                        //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 1 / 15,
-                    child: Text(
-                      widget.songs.duration.toString(),
-                      //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  biggerSpacer,
-                  const Icon(FluentIcons.more_vertical)
-                  // mat.IconButton(
-                  //     iconSize : 10,
-                  //     onPressed: () {}, icon: Icon(FluentIcons.play))
-                ],
+        },
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FadeInImage(
+                  placeholder: const AssetImage('assets/cover.jpg'),
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    widget.songs.thumbnails.first.url.toString(),
+                  )),
+              // CachedNetworkImage(
+              //   memCacheHeight: 40,
+              //   memCacheWidth: 40,
+              //   width: 40,
+              //   height: 40,
+              //   imageBuilder: (context, imageProvider) => CircleAvatar(
+              //     backgroundColor: Colors.transparent,
+              //     foregroundColor: Colors.transparent,
+              //     radius: 100,
+              //     backgroundImage: imageProvider,
+              //   ),
+              //   fit: BoxFit.cover,
+              //   errorWidget: (context, _, __) => const Image(
+              //     fit: BoxFit.cover,
+              //     image: AssetImage('assets/cover.jpg'),
+              //   ),
+              //   imageUrl: widget.songs.thumbnails.first.url.toString(),
+              //   placeholder: (context, url) => const Image(
+              //       fit: BoxFit.cover,
+              //       image: AssetImage('assets/cover.jpg')),
+              // ),
+              spacer,
+
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 1 / 4,
+                child: Text(
+                  widget.songs.title.toString(),
+                  // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
+              spacer,
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 1 / 8,
+                child: Text(
+                  widget.songs.artists![0].name.toString(),
+                  // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              spacer,
+              if (MediaQuery.of(context).size.width > 500)
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 1 / 8,
+                  child: Text(
+                    widget.songs.album!.name.toString(),
+                    //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 1 / 15,
+                child: Text(
+                  widget.songs.duration.toString(),
+                  //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              biggerSpacer,
+              const Icon(FluentIcons.more_vertical)
+              // mat.IconButton(
+              //     iconSize : 10,
+              //     onPressed: () {}, icon: Icon(FluentIcons.play))
+            ],
+          ),
         ),
-         );
-
+      ),
+    );
   }
 }

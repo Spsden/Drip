@@ -41,7 +41,7 @@ class TopResultsWidget extends StatelessWidget {
                     topResult.videoId.toString());
                 // print(audioUrl.toString());
 
-                playerAlerts.buffering = true;
+                //playerAlerts.buffering = true;
                 await context
                     .read<ActiveAudioData>()
                     .songDetails(
@@ -61,11 +61,11 @@ class TopResultsWidget extends StatelessWidget {
                 );
                 currentMediaIndex = 0;
 
-                await AudioControlClass.play(
-                    audioUrl: audioUrl,
-                    videoId:
-                    topResult.videoId.toString(),
-                    context: context);
+                // await AudioControlClass.play(
+                //     audioUrl: audioUrl,
+                //     videoId:
+                //     topResult.videoId.toString(),
+                //     context: context);
               },
               color: context
                   .watch<AppTheme>()

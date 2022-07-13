@@ -319,7 +319,7 @@ class _ArtistsPageState extends State<ArtistsPage>
 
                         mat.RaisedButton(
                           onPressed: () {
-                            print(context.watch<PlayerNotifiers>().searchVal);
+                           // print(context.watch<PlayerNotifiers>().searchVal);
                             print(_artistsPage
                                 .related?.results?.first.thumbnails?.first.url);
                           },

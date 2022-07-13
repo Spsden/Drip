@@ -17,9 +17,9 @@ import 'artistsdataclass.dart' as artists;
 import 'communityplaylistdataclass.dart';
 
 class SearchMusic {
- // static const String serverAddress = 'http://127.0.0.1:5000/';
-  //static const String serverAddress = 'http://192.168.0.106:5000/';
+
   static const String serverAddress = 'http://spden.pythonanywhere.com/';
+  //static const String serverAddress = 'http://192.168.0.106:5000/';
 
 
   static Future getAllSearchResults(String searchquery) async {
@@ -134,7 +134,7 @@ class SearchMusic {
         'songsearch': songsearch,
         'albumsearch': albumsearch,
         'communityplaylistsearch': communityplaylistsearch,
-         'topresults': topResult
+         //'topresults': topResult
       };
 
 

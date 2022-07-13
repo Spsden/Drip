@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
+import 'package:drip/datasources/audiofiles/audiocontrolcentrejustaudio.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
@@ -68,11 +69,11 @@ void main() async {
           windowButtonVisibility: false);
     });
 
-    await windowManager.setSize(const Size(900, 640));
+    //await windowManager.setSize(const Size(900, 640));
     await windowManager.setMinimumSize(const Size(540, 540));
     await windowManager.center();
-    await windowManager.show();
-    await windowManager.setSkipTaskbar(false);
+    //await windowManager.show();
+    //await windowManager.setSkipTaskbar(false);
     //await windowManager.setPreventClose(true);
   }
 
@@ -98,21 +99,7 @@ void main() async {
 
   runApp(const MyApp());
 
-  // if (defaultTargetPlatform == TargetPlatform.windows ||
-  //     defaultTargetPlatform == TargetPlatform.android ||
-  //     kIsWeb) {
-  //   darkMode = await SystemTheme.darkMode;
-  //   await SystemTheme.accentInstance.load();
-  // } else {
-  //   darkMode = true;
-  // }
-  // if (!kIsWeb &&
-  //     [TargetPlatform.windows, TargetPlatform.linux]
-  //         .contains(defaultTargetPlatform)) {
-  //   //await flutter_acrylic.Window.initialize();
-  // }
 
-  //runApp(const MyApp());
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
@@ -143,11 +130,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<PlayerNotifiers>(
-            create: (BuildContext context) {
-              return PlayerNotifiers();
-            },
-          ),
+          // ChangeNotifierProvider<AudioControls>(
+          //   create: (BuildContext context) {
+          //     return AudioControls();
+          //   },
+          // ),
           ChangeNotifierProvider<ActiveAudioData>(
             create: (BuildContext context) {
               return ActiveAudioData();
@@ -167,6 +154,9 @@ class MyApp extends StatelessWidget {
                 // routes: {'/': (_) => const MyHomePage()},
                 theme: ThemeData(
                   accentColor: appTheme.color,
+                  // navigationPaneTheme: NavigationPaneThemeData(
+                  //   backgroundColor:  acrylic
+                  // ),
                   brightness: appTheme.mode == ThemeMode.system
                       ? darkMode
                           ? Brightness.dark
@@ -214,6 +204,8 @@ class _MyHomePageState extends State<MyHomePage> {
   };
   @override
   void initState() {
+
+    //windowManager.addListener(this);
     super.initState();
     index = 0;
 
@@ -243,6 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
+   // windowManager.removeListener(this);
     colorsController.dispose();
     settingsController.dispose();
     _pageController.dispose();
@@ -258,16 +251,16 @@ class _MyHomePageState extends State<MyHomePage> {
           NavigationView(
             appBar: NavigationAppBar(
               automaticallyImplyLeading: false,
-              // leading: Padding(
-              //   padding: const EdgeInsets.only(top: 10.0),
-              //   child: IconButton(
-              //       onPressed: () async{
-              //
-              //        await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
-              //
-              //       },
-              //       icon: const Icon(FluentIcons.back)),
-              // ),
+              leading: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: IconButton(
+                    onPressed: () async{
+
+                     await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
+
+                    },
+                    icon: const Icon(FluentIcons.back)),
+              ),
               // title: Platform.isWindows
               //     ? const TopBar()
               //     : const SizedBox.shrink()

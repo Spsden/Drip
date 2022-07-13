@@ -3,7 +3,6 @@ import 'package:drip/datasources/searchresults/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:extended_image/extended_image.dart';
 
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -39,7 +38,6 @@ class _PlaylistMainState extends State<PlaylistMain> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -70,9 +68,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
     return Stack(
       children: [
         (!fetched)
-            ? Center(
-                child: loadingWidget(context)
-              )
+            ? Center(child: loadingWidget(context))
             : SingleChildScrollView(
                 // padding: EdgeInsets.all(15),
                 // controller: _scrollController,
@@ -104,10 +100,8 @@ class _PlaylistMainState extends State<PlaylistMain> {
                         builder: (context, constraints) => Row(
                           //  mainAxisSize: MainAxisSize.min,
                           children: [
-
                             ExtendedImage.network(
                               _playlists.thumbnails.last.url.toString(),
-
                               width: size.width > 500
                                   ? size.height / 4.4
                                   : constraints.maxWidth / 2.8,
@@ -118,7 +112,6 @@ class _PlaylistMainState extends State<PlaylistMain> {
                               cache: false,
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(8),
-
                             ),
                             // CachedNetworkImage(
                             //   memCacheWidth: 100,
@@ -182,9 +175,8 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     textAlign: TextAlign.left,
                                   ),
                                 ),
-                               const mat.Spacer(),
+                                const mat.Spacer(),
                                 FilledButton(
-
                                   child: Row(
                                     children: const [
                                       Icon(FluentIcons.play),
@@ -195,9 +187,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                               fontWeight: FontWeight.w500)),
                                     ],
                                   ),
-                                  onPressed: () async{
-
-                                    await AudioControlClass.addMusic(_playlists.id.toString());
+                                  onPressed: () async {
+                                    await AudioControlClass.addMusic(
+                                        _playlists.id.toString());
                                   },
                                 ),
                               ],
@@ -218,37 +210,36 @@ class _PlaylistMainState extends State<PlaylistMain> {
                               duration: const Duration(milliseconds: 375),
                               child: SlideAnimation(
                                 verticalOffset: 50.0,
-                                
                                 child: FadeInAnimation(
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 12, 20, 0),
                                     child: TrackCardLarge(
                                       data: TrackCardData(
-                                          title: _tracks[index].title.toString(),
+                                          title:
+                                              _tracks[index].title.toString(),
                                           artist: _tracks[index]
                                               .artists
                                               .first
                                               .name
                                               .toString(),
                                           album: 'Drip',
-                                          duration: _tracks[index].duration.toString(),
+                                          duration: _tracks[index]
+                                              .duration
+                                              .toString(),
                                           thumbnail: _tracks[index]
                                               .thumbnails[0]
                                               .url
                                               .toString()),
                                       songIndex: index,
                                       onTrackTap: () async {
-                                        var audioUrl =
-                                            await AudioControlClass.getAudioUri(
-                                                _tracks[index].videoId.toString());
-                                        // print(audioUrl.toString());
-
-                                        playerAlerts.buffering = true;
                                         await context
                                             .read<ActiveAudioData>()
                                             .songDetails(
-                                                audioUrl,
-                                                _tracks[index].videoId.toString(),
+                                                'lol',
+                                                _tracks[index]
+                                                    .videoId
+                                                    .toString(),
                                                 _tracks[index].artists[0].name,
                                                 _tracks[index].title.toString(),
                                                 _tracks[index]
@@ -270,15 +261,18 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                         currentMediaIndex = 0;
 
                                         await AudioControlClass.play(
-                                            audioUrl: audioUrl,
-                                            videoId: _tracks[index].videoId.toString(),
+                                            videoId: _tracks[index]
+                                                .videoId
+                                                .toString(),
                                             context: context);
                                       },
                                       color: index % 2 != 0
                                           ? Colors.transparent
                                           : context.watch<AppTheme>().mode ==
                                                       ThemeMode.dark ||
-                                                  context.watch<AppTheme>().mode ==
+                                                  context
+                                                          .watch<AppTheme>()
+                                                          .mode ==
                                                       ThemeMode.system
                                               ? Colors.grey[150]
                                               : Colors.grey[30],

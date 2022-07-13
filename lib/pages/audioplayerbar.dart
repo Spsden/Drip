@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
+import 'package:drip/datasources/audiofiles/audiocontrolcentrejustaudio.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -24,7 +25,7 @@ class AudioPlayerBar extends StatefulWidget {
 }
 
 class AudioPlayerBarState extends State<AudioPlayerBar>
-    with TickerProviderStateMixin,AutomaticKeepAliveClientMixin<AudioPlayerBar>  {
+    with AutomaticKeepAliveClientMixin<AudioPlayerBar>  {
 
 
   bool isPlaying = false;
@@ -33,23 +34,6 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
   double bufferValue = 0.0;
   bool isCompleted = false;
 
-  //late Color audioPlayerBarColor ;
-
-  // Future<Color?> getColor() async{
-  //   final PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(mat.NetworkImage( context.watch<ActiveAudioData>().thumbnailLarge.toString())
-  //   );
-  //
-  //   AppTheme().albumArtColor = paletteGenerator.dominantColor!.color;
-  //
-  //  // audioPlayerBarColor =
-  //
-  //
-  //   return paletteGenerator.dominantColor?.color;
-  // }
-  //
-  //
-
-
 
 
 
@@ -57,6 +41,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
 
   @override
   void initState() {
+
    // getColor();
 
 
@@ -69,6 +54,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
   void dispose() {
     //_yt.close();
     // _audioPlayerControls.dispose();
+
     super.dispose();
   }
 
@@ -122,6 +108,7 @@ class TrackInfo extends StatelessWidget {
 
         ExtendedImage.network(
           context.watch<ActiveAudioData>().thumbnail,
+    //listOfUpNextNotifier.value[context.read<AudioControls>().currentIndex]["thumbs"][1].url.toString(),
           width: MediaQuery.of(context).size.width > 500 ? 70 : 0 ,
           height: MediaQuery.of(context).size.height > 500 ? 70 : 0 ,
           fit: BoxFit.cover,
@@ -193,7 +180,8 @@ class TrackInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                 context.watch<ActiveAudioData>().title.toString()
+               // tracklist.value[currentTrackValueNotifier.value+1].title.toString() ?? 'Play a song'
+                context.watch<ActiveAudioData>().title.toString()
 
                 ,style: mat.Theme.of(context).textTheme.bodyText1,
                   maxLines: 1
@@ -227,31 +215,35 @@ class PlayBackControls extends StatefulWidget {
   _PlayBackControlsState createState() => _PlayBackControlsState();
 }
 
-class _PlayBackControlsState extends State<PlayBackControls> {
+class _PlayBackControlsState extends State<PlayBackControls> with TickerProviderStateMixin {
+  late AnimationController iconController;
+  bool isPlaying = false;
 
-  void autoPress(BuildContext context) async{
+  // void autoPress(BuildContext context) async {
+  //   if (playerAlerts.playbackComplete) {
+  //     Timer.run(() {
+  //       AudioControlClass.nextMusic(context, 1, true);
+  //       //print('next play');
+  //1
+  //     });
+  //   }
+  // }
 
-
-    if(playerAlerts.playbackComplete){
-
-      Timer.run(() {
-        AudioControlClass.nextMusic(context,1,true);
-        //print('next play');
-
-      });
-
-
-
-
-
-    }
-
-  }
+  //}
   @override
   void initState() {
+    iconController = AnimationController(duration: const Duration(microseconds: 1),vsync: this);
+
     super.initState();
 
 
+  }
+
+  @override
+  void dispose() {
+
+    iconController.dispose();
+    super.dispose();
   }
 
 
@@ -295,17 +287,56 @@ class _PlayBackControlsState extends State<PlayBackControls> {
                 ),
                 borderRadius: BorderRadius.circular(largeIcons),
               ),
-              child: Stack(
+              child:
+
+
+              Stack(
                 children: [
+
+                  // GestureDetector(
+                  //   onTap: () {
+                  //    // AudioControls.instance.playOrPause();
+                  //    // print("toapped");
+                  //     //print(context.read<AudioControls>().playing.toString());
+                  //
+                  //     bool x = false;
+                  //
+                  //
+                  //
+                  //
+                  //     print(x);
+                  //
+                  //
+                  //     if(!context.read<AudioControls>().playing){
+                  //       iconController.forward();
+                  //       AudioControls.instance.play();
+                  //       isPlaying = true;
+                  //
+                  //     } else {
+                  //       iconController.reverse();
+                  //       AudioControls.instance.pause();
+                  //       isPlaying = false;
+                  //     }
+                  //
+                  //   },
+                  //   child: AnimatedIcon(
+                  //     icon: AnimatedIcons.play_pause,
+                  //     progress: iconController,
+                  //     size:50,
+                  //     //color: Colors.black,
+                  //   ),
+                  // ),
+
+
+                  //
                   StreamBuilder<PlaybackState>(
                     stream: player.playbackStream,
                     builder: (context, snapshot) {
                       final playerState = snapshot.data;
                       final isCompleted = playerState?.isCompleted;
-
-
-                      // final processingState = playerState?.processingState;
                       final playing = playerState?.isPlaying;
+
+
 
 
 
@@ -320,24 +351,34 @@ class _PlayBackControlsState extends State<PlayBackControls> {
                           onPressed: player.play,
                         );
                       }
-                      else if(playerState!.isCompleted){
+                      else if(playerState!.isCompleted)  {
                         // AudioControlClass.nextMusic(context,1);
                         // print('complll');
-                        autoPress(context);
+                       //autoPress(context);
+                         context.read<ActiveAudioData>().songDetails(
+                            tracklist.value[currentTrackValueNotifier.value].videoId.toString(),
+                            tracklist.value[currentTrackValueNotifier.value].videoId.toString(),
+                            tracklist.value[currentTrackValueNotifier.value].artists![0].name
+                                .toString(),
+                            tracklist.value[currentTrackValueNotifier.value].title.toString(),
+                            tracklist.value[currentTrackValueNotifier.value].thumbnail![0].url
+                                .toString(),
+                            tracklist.value[currentTrackValueNotifier.value].thumbnail!.last.url
+                                .toString());
 
 
 
-                        return mat.IconButton(
-                          hoverColor: context.watch<AppTheme>().color,
-                            splashRadius:30,
-                          icon: const Icon(mat.Icons.play_arrow),
-                          iconSize: largeIcons,
-                          onPressed: (){},
-                        );
+                        // return mat.IconButton(
+                        //   hoverColor: context.watch<AppTheme>().color,
+                        //     splashRadius:30,
+                        //   icon: const Icon(mat.Icons.play_arrow),
+                        //   iconSize: largeIcons,
+                        //   onPressed: (){},
+                        // );
                       }
 
 
-                      else if (playing == true) {
+                       {
                         return mat.IconButton(
                             splashRadius:30,
                           hoverColor: context.watch<AppTheme>().color,
@@ -349,16 +390,16 @@ class _PlayBackControlsState extends State<PlayBackControls> {
 
 
 
-                      else  {
-                        return mat.IconButton(
-                          icon: const Icon(mat.Icons.album),
-                          iconSize: largeIcons,
-                          onPressed: () =>
-                              AudioControlClass.seek(Duration.zero),
-                        );
-                      }
-                    },
-                  ),
+                      // else  {
+                      //   return mat.IconButton(
+                      //     icon: const Icon(mat.Icons.album),
+                      //     iconSize: largeIcons,
+                      //     onPressed: () =>
+                      //         AudioControlClass.seek(Duration.zero),
+                      //   );
+                      // }
+                    },),
+
 
                   ValueListenableBuilder<double>(
                       valueListenable: bufferProgress,
@@ -384,17 +425,38 @@ class _PlayBackControlsState extends State<PlayBackControls> {
               iconSize: smallIcons,
               onPressed: () {
                 AudioControlClass.nextMusic(context,2,false);
-                //player.next();
-                //AudioControlClass.nex();
-                //player.next();
-                print(medias.length.toString());
+                //AudioControls.instance.next(context);
+
+
+
+                //print(context.read()<AudioControls>().listOfUpNext.first["title"].toString());
+
+
+
                 //medias.forEach((element) {print(element.toString());});
               },
             ),
             mat.IconButton(
               icon: const Icon(mat.Icons.repeat),
               iconSize: smallIcons,
-              onPressed: () {},
+              onPressed: () {
+
+                // tracklist.value.forEach((element) {
+                //   print(element.title);
+                // });
+                //
+                print("tapped");
+
+               print(player.current.index.toString());
+               print(currentTrackValueNotifier.value.toString());
+
+
+
+
+
+
+              },
+
             ),
           ],
         ),
