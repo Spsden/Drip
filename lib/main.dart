@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentrejustaudio.dart';
+import 'package:drip/pages/audio_player_bar.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
 import 'package:drip/pages/settings.dart';
+import 'package:drip/utils/responsive.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +43,7 @@ bool get isDesktop {
   ].contains(defaultTargetPlatform);
 }
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb ||
@@ -67,14 +69,14 @@ void main() async {
     windowManager.waitUntilReadyToShow().then((_) async {
       await windowManager.setTitleBarStyle(TitleBarStyle.hidden,
           windowButtonVisibility: false);
-    });
 
-    //await windowManager.setSize(const Size(900, 640));
-    await windowManager.setMinimumSize(const Size(540, 540));
-    await windowManager.center();
-    //await windowManager.show();
-    //await windowManager.setSkipTaskbar(false);
-    //await windowManager.setPreventClose(true);
+      await windowManager.setSize(const Size(900, 650));
+      await windowManager.setMinimumSize(const Size(540, 540));
+      await windowManager.center();
+      await windowManager.show();
+      await windowManager.setPreventClose(false);
+      await windowManager.setSkipTaskbar(false);
+    });
   }
 
   if (Platform.isWindows) {
@@ -98,8 +100,6 @@ void main() async {
   //WidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
-
-
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
@@ -153,9 +153,13 @@ class MyApp extends StatelessWidget {
                 // initialRoute: '/',
                 // routes: {'/': (_) => const MyHomePage()},
                 theme: ThemeData(
+                  // scaffoldBackgroundColor: context.watch<ActiveAudioData>()
+                  //   .albumExtracted
+                  //   .toAccentColor(),
+
                   accentColor: appTheme.color,
                   // navigationPaneTheme: NavigationPaneThemeData(
-                  //   backgroundColor:  acrylic
+                  //   backgroundColor:  Colors.transparent
                   // ),
                   brightness: appTheme.mode == ThemeMode.system
                       ? darkMode
@@ -202,11 +206,12 @@ class _MyHomePageState extends State<MyHomePage> {
     2: GlobalKey(),
     3: GlobalKey(),
   };
+
   @override
   void initState() {
-
     //windowManager.addListener(this);
     super.initState();
+
     index = 0;
 
     screens = [
@@ -235,7 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-   // windowManager.removeListener(this);
+    // windowManager.removeListener(this);
     colorsController.dispose();
     settingsController.dispose();
     _pageController.dispose();
@@ -254,10 +259,9 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: IconButton(
-                    onPressed: () async{
-
-                     await Navigator.maybePop(navigatorKeys[index]!.currentState!.context);
-
+                    onPressed: () async {
+                      await Navigator.maybePop(
+                          navigatorKeys[index]!.currentState!.context);
                     },
                     icon: const Icon(FluentIcons.back)),
               ),
@@ -265,21 +269,25 @@ class _MyHomePageState extends State<MyHomePage> {
               //     ? const TopBar()
               //     : const SizedBox.shrink()
 
-              title: () {
-                if (kIsWeb) return const Text(appTitle);
-                return const DragToMoveArea(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(appTitle),
-                  ),
-                );
-              }(),
-              actions: kIsWeb
-                  ? null
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [Spacer(), WindowButtons()],
-                    ),
+              // title: () {
+              //   if (kIsWeb) return const Text(appTitle);
+              //   return const DragToMoveArea(
+              //     child: Align(
+              //       alignment: AlignmentDirectional.centerStart,
+              //       child: Text(appTitle),
+              //     ),
+              //   );
+              // }(),
+              actions:  WindowCaption(title: const Text(appTitle),brightness: FluentTheme.of(context).brightness)
+
+              // kIsWeb
+              //     ? null
+              //     : DragToMoveArea(
+              //       child: Row(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: const [Spacer(), WindowCaption()],
+              //         ),
+              //     ),
             ),
             pane: NavigationPane(
               selected: index,
@@ -298,21 +306,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
               size: const NavigationPaneSize(
+                compactWidth: 60,
                 openWidth: 200,
                 openMinWidth: 200,
                 openMaxWidth: 200,
               ),
-              header: Container(
-                  height: kOneLineTileHeight,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                  child: const Text(
-                    'Drip',
-                    style: TextStyle(fontSize: 20),
-                  )),
-              displayMode: Platform.isWindows
-                  ? PaneDisplayMode.compact
-                  : PaneDisplayMode.top,
+              //header:
+
+              // Container(
+              //     height: kOneLineTileHeight,
+              //     padding:
+              //         const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+              //     child: const Text(
+              //       'Drip',
+              //       style: TextStyle(fontSize: 20),
+              //     )),
+              displayMode: Responsive.isMobile(context)
+                  ? PaneDisplayMode.top
+                  : PaneDisplayMode.auto,
+              // Platform.isWindows
+              //     ? PaneDisplayMode.compact
+              //     : PaneDisplayMode.top,
               indicator: () {
                 switch (appTheme.indicator) {
                   case NavigationIndicators.end:
@@ -326,11 +340,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 // It doesn't look good when resizing from compact to open
                 // PaneItemHeader(header: Text('User Interaction')),
                 PaneItem(
-                  icon: const Icon(FluentIcons.home),
+                  icon: const Icon(FluentIcons.home, size: 20),
                   title: const Text('Home'),
                 ),
                 PaneItem(
-                  icon: const Icon(FluentIcons.search),
+                  icon: const Icon(FluentIcons.search, size: 20),
                   title: const Text('Search'),
                 ),
                 // PaneItem(
@@ -339,16 +353,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 // ),
                 PaneItemSeparator(),
                 PaneItem(
-                  icon: const mat.Icon(FluentIcons.playlist_music),
+                  icon: const mat.Icon(FluentIcons.playlist_music, size: 20),
                   title: const Text('Play queue'),
                 ),
                 PaneItemSeparator(),
                 PaneItem(
-                  icon: const Icon(FluentIcons.settings),
+                  icon: const Icon(FluentIcons.settings, size: 20),
                   title: const Text('Settings'),
                 ),
                 PaneItemAction(
-                  icon: const Icon(FluentIcons.open_source),
+                  icon: const Icon(FluentIcons.open_source, size: 20),
                   title: const Text('Source code'),
                   onTap: () {
                     launch('https://github.com/Spsden/Drip.git');
@@ -403,9 +417,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             .albumExtracted
                             .toAccentColor(),
                         child: const SizedBox(
-                          width: double.infinity,
+                         // width: MediaQuery.of(context).size.width ,
                           height: 100,
-                          child: AudioPlayerBar(),
+                          child: BottomBar(),
                         ),
                       ),
                     ),
@@ -478,7 +492,6 @@ class WindowButtons extends StatelessWidget {
     );
   }
 }
-
 
 // class TopBar extends StatelessWidget {
 //   const TopBar({Key? key}) : super(key: key);
