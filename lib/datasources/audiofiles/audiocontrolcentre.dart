@@ -1,11 +1,13 @@
-
 import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
-import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
+    as watch;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:dart_vlc/dart_vlc.dart' as mediaplayer;
 import 'package:flutter/foundation.dart';
 import 'package:provider/src/provider.dart';
+import 'package:drip/datasources/searchresults/playlistdataclass.dart'
+    as playData;
 
 import 'package:provider/provider.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -22,7 +24,8 @@ final progressNotifier = ValueNotifier<ProgressBarState>(
   ),
 );
 
-final ValueNotifier<List<Track>> tracklist = ValueNotifier<List<Track>>(tracks);
+final ValueNotifier<List<watch.Track>> tracklist =
+    ValueNotifier<List<watch.Track>>(tracks);
 
 final ValueNotifier<double> bufferProgress = ValueNotifier<double>(11.0);
 final ValueNotifier<int> currentTrackValueNotifier =
@@ -32,13 +35,10 @@ final YoutubeExplode _youtubeExplode = YoutubeExplode();
 
 final mediaplayer.Player player = mediaplayer.Player(id: 12)
   ..positionStream.listen((mediaplayer.PositionState state) {
-    final oldState = progressNotifier.value;
     progressNotifier.value =
         ProgressBarState(current: state.position!, total: state.duration!);
   })
   ..playbackStream.listen((mediaplayer.PlaybackState state) {
-
-
     // final isPlaying = state.isPlaying;
     // final processing = state.isSeekable;
     // final isCompleted = state.isCompleted;
@@ -50,16 +50,57 @@ final mediaplayer.Player player = mediaplayer.Player(id: 12)
   })
   ..currentStream.listen((CurrentState state) {
     currentTrackValueNotifier.value = state.index!;
-
   });
 
 List<mediaplayer.Media> medias = <mediaplayer.Media>[];
 int currentMediaIndex = 0;
 
-List<Track> tracks = [];
-
+List<watch.Track> tracks = [];
 
 abstract class AudioControlClass with ChangeNotifier {
+  static Future<void> shuffle(List<playData.Track> tracks) async {
+    player.stop();
+
+    tracklist.value.clear();
+    currentTrackValueNotifier.value = 0;
+
+    //player.open(Media.network(audioUrl,extras: extrasMap), autoStart: true);
+    player.open(Media.network(await getAudioUri(tracks[0].videoId.toString())),
+        autoStart: true);
+
+    for (int i = 0; i < tracks.length; i++) {
+      watch.Album album =
+          watch.Album(id: tracks[i].album?.id, name: tracks[i].album?.name);
+
+      List<watch.Album> artist = tracks[i]
+          .artists
+          .map((e) => watch.Album(id: e.id, name: e.name))
+          .toList();
+
+      List<watch.Thumbnail> thumbs = tracks[i]
+          .thumbnails
+          .map((e) => watch.Thumbnail(
+              height: e.height, url: e.url.toString(), width: e.width))
+          .toList();
+
+      watch.Track track = watch.Track(
+          album: album,
+          artists: artist,
+          feedbackTokens: tracks[i].isExplicit,
+          length: tracks[i].duration,
+          likeStatus: "Lol",
+          thumbnail: thumbs,
+          title: tracks[i].title,
+          videoId: tracks[i].videoId,
+          year: tracks[i].title,
+          views: "not available");
+
+      tracklist.value.add(track);
+      player.add(Media.network(
+          await getAudioUri(tracklist.value[i].videoId.toString())));
+    }
+  }
+
   static Future<String> getAudioUri(String videoId) async {
     String audioUrl = '';
 
@@ -83,7 +124,7 @@ abstract class AudioControlClass with ChangeNotifier {
   static Future<void> addMusic(
     String playlistVideoId,
   ) async {
-    late WatchPlaylists watchPlaylists;
+    late watch.WatchPlaylists watchPlaylists;
     await SearchMusic.getWatchPlaylist(playlistVideoId, 10).then((value) {
       watchPlaylists = value;
       //tracks = watchPlaylists.tracks!;
@@ -152,10 +193,7 @@ abstract class AudioControlClass with ChangeNotifier {
     player.open(Media.network(await getAudioUri(videoId)), autoStart: true);
     print("played from old logic");
 
-
-
     await addMusic(videoId);
-
   }
 
   static Future<void> playOrPause() async {
@@ -167,9 +205,6 @@ abstract class AudioControlClass with ChangeNotifier {
   }
 
   AudioControlClass() {
-
-
-
     @override
     void dispose() {
       _youtubeExplode.close();

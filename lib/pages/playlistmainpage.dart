@@ -188,8 +188,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     ],
                                   ),
                                   onPressed: () async {
-                                    await AudioControlClass.addMusic(
-                                        _playlists.id.toString());
+                                    AudioControlClass.shuffle(_tracks);
+
+                                    print("pressed here");
                                   },
                                 ),
                               ],
