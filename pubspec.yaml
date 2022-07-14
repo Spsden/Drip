@@ -49,8 +49,8 @@ dependencies:
   dart_vlc: ^0.2.0
   sliding_sheet: ^0.5.2
   fluentui_system_icons: ^1.1.158
-  desktop_window: ^0.4.0
-  material_floating_search_bar: ^0.3.6
+
+  material_floating_search_bar: ^0.3.7
   infinite_scroll_pagination: ^3.1.0
   lottie: ^1.2.1
   msix: ^3.0.1
@@ -63,7 +63,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   extended_image: ^6.2.1
   hotkey_manager: ^0.1.6
-  audioplayers: ^1.0.1
+
 
 
 dev_dependencies:

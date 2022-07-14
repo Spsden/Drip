@@ -8,6 +8,7 @@ import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
 import 'package:drip/pages/settings.dart';
+import 'package:drip/pages/splash_screen.dart';
 import 'package:drip/utils/responsive.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -149,10 +150,18 @@ class MyApp extends StatelessWidget {
                 title: appTitle,
                 themeMode: appTheme.mode,
                 debugShowCheckedModeBanner: false,
-                home: const MyHomePage(),
+                home: const SplashScreen(),
                 // initialRoute: '/',
                 // routes: {'/': (_) => const MyHomePage()},
                 theme: ThemeData(
+
+                  scaffoldBackgroundColor: Colors.transparent,
+                    navigationPaneTheme: const NavigationPaneThemeData(
+
+
+                      animationDuration: Duration(milliseconds: 50)
+                    ),
+
                   // scaffoldBackgroundColor: context.watch<ActiveAudioData>()
                   //   .albumExtracted
                   //   .toAccentColor(),
@@ -206,6 +215,35 @@ class _MyHomePageState extends State<MyHomePage> {
     2: GlobalKey(),
     3: GlobalKey(),
   };
+
+  final List<NavigationPaneItem> navigationItems = [
+    PaneItem(
+      icon: const Icon(FluentIcons.home),
+      title: const Text('Home'),
+    ),
+    PaneItem(
+      icon: const Icon(FluentIcons.search, ),
+      title: const Text('Search'),
+    ),
+    PaneItemSeparator(),
+    PaneItem(
+      icon: const mat.Icon(FluentIcons.playlist_music, ),
+      title: const Text('Play queue'),
+    ),
+    PaneItemSeparator(),
+    PaneItem(
+      icon: const Icon(FluentIcons.settings, ),
+      title: const Text('Settings'),
+    ),
+    PaneItemAction(
+      icon: const Icon(FluentIcons.open_source, ),
+      title: const Text('Source code'),
+      onTap: () {
+        launch('https://github.com/Spsden/Drip.git');
+      },
+    ),
+
+  ];
 
   @override
   void initState() {
@@ -290,6 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //     ),
             ),
             pane: NavigationPane(
+
               selected: index,
               scrollController: mat.ScrollController(),
               onChanged: (i) {
@@ -305,8 +344,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 });
               },
-              size: const NavigationPaneSize(
-                compactWidth: 60,
+              size:  const NavigationPaneSize(
+
                 openWidth: 200,
                 openMinWidth: 200,
                 openMaxWidth: 200,
@@ -336,39 +375,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     return const StickyNavigationIndicator();
                 }
               }(),
-              items: [
-                // It doesn't look good when resizing from compact to open
-                // PaneItemHeader(header: Text('User Interaction')),
-                PaneItem(
-                  icon: const Icon(FluentIcons.home, size: 20),
-                  title: const Text('Home'),
-                ),
-                PaneItem(
-                  icon: const Icon(FluentIcons.search, size: 20),
-                  title: const Text('Search'),
-                ),
-                // PaneItem(
-                //   icon: const Icon(FluentIcons.personalize),
-                //   title: const Text('Artists'),
-                // ),
-                PaneItemSeparator(),
-                PaneItem(
-                  icon: const mat.Icon(FluentIcons.playlist_music, size: 20),
-                  title: const Text('Play queue'),
-                ),
-                PaneItemSeparator(),
-                PaneItem(
-                  icon: const Icon(FluentIcons.settings, size: 20),
-                  title: const Text('Settings'),
-                ),
-                PaneItemAction(
-                  icon: const Icon(FluentIcons.open_source, size: 20),
-                  title: const Text('Source code'),
-                  onTap: () {
-                    launch('https://github.com/Spsden/Drip.git');
-                  },
-                ),
-              ],
+              items: navigationItems,
+
               autoSuggestBoxReplacement: const Icon(FluentIcons.search),
             ),
             content: PageView(

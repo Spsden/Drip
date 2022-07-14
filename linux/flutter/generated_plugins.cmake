@@ -3,9 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  audioplayers_linux
   dart_vlc
-  desktop_window
   flutter_acrylic
   hotkey_manager
   screen_retriever

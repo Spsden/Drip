@@ -6,9 +6,7 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <audioplayers_windows/audioplayers_windows_plugin.h>
 #include <dart_vlc/dart_vlc_plugin.h>
-#include <desktop_window/desktop_window_plugin.h>
 #include <flutter_acrylic/flutter_acrylic_plugin.h>
 #include <flutter_native_view/flutter_native_view_plugin.h>
 #include <hotkey_manager/hotkey_manager_plugin.h>
@@ -18,12 +16,8 @@
 #include <window_manager/window_manager_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  AudioplayersWindowsPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("AudioplayersWindowsPlugin"));
   DartVlcPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("DartVlcPlugin"));
-  DesktopWindowPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("DesktopWindowPlugin"));
   FlutterAcrylicPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FlutterAcrylicPlugin"));
   FlutterNativeViewPluginRegisterWithRegistrar(
