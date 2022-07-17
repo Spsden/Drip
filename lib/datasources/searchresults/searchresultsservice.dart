@@ -18,7 +18,8 @@ import 'communityplaylistdataclass.dart';
 
 class SearchMusic {
 
-  static const String serverAddress = 'http://spden.pythonanywhere.com/';
+  //static const String serverAddress = 'http://spden.pythonanywhere.com/';
+  static const String serverAddress = 'https://dripapi.vercel.app/';
   //static const String serverAddress = 'http://192.168.0.106:5000/';
 
 
