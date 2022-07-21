@@ -37,29 +37,29 @@ class _FirstPageStackState extends State<FirstPageStack> {
                 builder: (context) => const YouTubeHomeScreen(), settings: settings);
             break;
 
-          case 'searchpage':
-            final args = settings.arguments;
-            return PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    SecondPageStack(
-                      searchArgs: args.toString(),
-                      fromFirstPage: true,
-                      navigatorKey: widget.navigatorKey,
-                    ),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(1.0, 0.0);
-                  const end = Offset.zero;
-                  const curve = Curves.fastLinearToSlowEaseIn;
-
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
-
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                });
+          // case 'searchpage':
+          //   final args = settings.arguments;
+          //   return PageRouteBuilder(
+          //       pageBuilder: (context, animation, secondaryAnimation) =>
+          //           SecondPageStack(
+          //             searchArgs: args.toString(),
+          //             fromFirstPage: true,
+          //             navigatorKey: widget.navigatorKey,
+          //           ),
+          //       transitionsBuilder:
+          //           (context, animation, secondaryAnimation, child) {
+          //         const begin = Offset(1.0, 0.0);
+          //         const end = Offset.zero;
+          //         const curve = Curves.fastLinearToSlowEaseIn;
+          //
+          //         var tween = Tween(begin: begin, end: end)
+          //             .chain(CurveTween(curve: curve));
+          //
+          //         return SlideTransition(
+          //           position: animation.drive(tween),
+          //           child: child,
+          //         );
+          //       });
 
           case 'songslistpage':
             final args = settings.arguments;

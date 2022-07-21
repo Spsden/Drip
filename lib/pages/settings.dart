@@ -1,6 +1,8 @@
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,12 +21,34 @@ const List<String> accentColorNames = [
   'Green',
 ];
 
-// enum Color {
-//   black,
-//   white,
-//   sysTheme,
-// }
+const _WindowsWindowEffects = [
+  WindowEffect.disabled,
+  WindowEffect.solid,
+  WindowEffect.transparent,
+  WindowEffect.aero,
+  WindowEffect.acrylic,
+  WindowEffect.mica,
+  WindowEffect.tabbed,
+];
 
+bool get kIsWindowEffectsSupported {
+  return !kIsWeb &&
+      [
+        TargetPlatform.windows,
+        TargetPlatform.linux,
+        TargetPlatform.macOS,
+      ].contains(defaultTargetPlatform);
+}
+
+List<WindowEffect> get currentWindowEffects {
+  if (kIsWeb) return [];
+
+  if (defaultTargetPlatform == TargetPlatform.windows) {
+    return _WindowsWindowEffects;
+  }
+
+  return [];
+}
 
 
 class SettingsPage extends StatefulWidget {
@@ -168,7 +192,68 @@ class _SettingsPageState extends State<SettingsPage> {
           ]),
                   ],
                 )),
+            spacer,
+
+            if(kIsWindowEffectsSupported) ...[
+              Expander(
+                  header: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: mat.MainAxisAlignment.start,
+                      children: [
+                        const mat.Icon(
+                          mat.Icons.style_outlined,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 10,),
+                        mat.Text(
+                          'Window Effects',
+                          style: FluentTheme.of(context)
+                              .typography
+                              .subtitle
+                              ?.copyWith(fontSize: 15),
+                        ),
+                        const Spacer(),
+                        // Container(
+                        //   height: 30,
+                        //   width: 30,
+                        //   color: appTheme.color,
+                        //   alignment: Alignment.center,
+                        //
+                        // ),
+                      ]),
+                  content: Column(
+                    crossAxisAlignment: mat.CrossAxisAlignment.start,
+                    children: [
+                      Wrap(children: [
+                        Tooltip(
+                          style: tooltipThemeData,
+                          message: _WindowsWindowEffects[0].toString(),
+                          child: _buildColorBlock(appTheme, systemAccentColor,),
+                        ),
+                        ...List.generate(currentWindowEffects.length, (index) {
+                          final mode = currentWindowEffects[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: RadioButton(
+                                checked: appTheme.windowEffect == mode,
+                                onChanged: (value) {
+                              if (value) {
+                                appTheme.windowEffect = mode;
+                                appTheme.setEffect(mode, context);
+                              }
+                            },
+                            content: Text(
+                            mode.toString().replaceAll('WindowEffect.', ''),
+                            ),),
+                          );
+                        }),
+                      ]),
+                    ],
+                  )),
+
+            ],
             biggerSpacer,
+
             Text('About', style: FluentTheme.of(context).typography.subtitle),
             spacer,
             Table(

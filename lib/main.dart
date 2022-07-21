@@ -4,9 +4,11 @@ import 'package:dart_vlc/dart_vlc.dart';
 import 'package:drip/datasources/audiofiles/audiocontrolcentrejustaudio.dart';
 import 'package:drip/pages/audio_player_bar.dart';
 import 'package:drip/pages/audioplayerbar.dart';
+import 'package:drip/pages/common/hot_keys.dart';
 
 import 'package:drip/pages/currentplaylist.dart';
 import 'package:drip/pages/expanded_audio_bar.dart';
+import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/settings.dart';
 import 'package:drip/pages/splash_screen.dart';
 import 'package:drip/utils/responsive.dart';
@@ -15,6 +17,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_sheet/sliding_sheet.dart';
@@ -53,18 +56,9 @@ Future<void> main() async {
     SystemTheme.accentColor.load();
   }
 
+  setPathUrlStrategy();
+
   if (isDesktop) {
-    // doWhenWindowReady(() {
-    //   appWindow.minSize = const Size(540, 540);
-    //   appWindow.size = const Size(900, 640);
-    //   appWindow.alignment = Alignment.center;
-    //   appWindow.show();
-    //   appWindow.title = 'Drip';
-    // });
-
-    // SystemTheme.accentInstance;
-    setPathUrlStrategy();
-
     await acrylic.Window.initialize();
     await WindowManager.instance.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
@@ -81,15 +75,17 @@ Future<void> main() async {
   }
 
   if (Platform.isWindows) {
+    await hotKeyManager.unregisterAll();
+    await HotKeys.initialize();
     await Hive.initFlutter('Drip');
   } else {
     await Hive.initFlutter();
   }
 
+  await openHiveBox('cache', limit: true);
+  await openHiveBox('Favorite Songs');
   await openHiveBox('settings');
 
-  await openHiveBox('Favorite Songs');
-  await openHiveBox('cache', limit: true);
   DartVLC.initialize();
 
   // if (Platform.isWindows) {
@@ -154,17 +150,12 @@ class MyApp extends StatelessWidget {
                 // initialRoute: '/',
                 // routes: {'/': (_) => const MyHomePage()},
                 theme: ThemeData(
-
                   scaffoldBackgroundColor: Colors.transparent,
-                    navigationPaneTheme: const NavigationPaneThemeData(
+                  // navigationPaneTheme:  NavigationPaneThemeData(
+                  //     backgroundColor: Colors.transparent,
+                  //
+                  //     animationDuration: Duration(milliseconds: 50)),
 
-
-                      animationDuration: Duration(milliseconds: 50)
-                    ),
-
-                  // scaffoldBackgroundColor: context.watch<ActiveAudioData>()
-                  //   .albumExtracted
-                  //   .toAccentColor(),
 
                   accentColor: appTheme.color,
                   // navigationPaneTheme: NavigationPaneThemeData(
@@ -182,7 +173,26 @@ class MyApp extends StatelessWidget {
                     glowFactor: is10footScreen() ? 2.0 : 0.0,
                   ),
                 ),
+
+                // builder: (context, child) {
+                //   return Directionality(
+                //     textDirection: TextDirection.ltr,
+                //     child: NavigationPaneTheme(
+                //       data: NavigationPaneThemeData(
+                //         backgroundColor: Colors.transparent
+                //
+                //         // appTheme.windowEffect !=
+                //         //     acrylic.WindowEffect.disabled
+                //         //     ? Colors.transparent
+                //         //     : null,
+                //       ),
+                //       child: child!,
+                //     ),
+                //   );
+                // },
+
               );
+
             }));
   }
 }
@@ -194,7 +204,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WindowListener {
   bool value = false;
 
   int index = 0;
@@ -222,36 +232,44 @@ class _MyHomePageState extends State<MyHomePage> {
       title: const Text('Home'),
     ),
     PaneItem(
-      icon: const Icon(FluentIcons.search, ),
+      icon: const Icon(
+        FluentIcons.search,
+      ),
       title: const Text('Search'),
     ),
     PaneItemSeparator(),
     PaneItem(
-      icon: const mat.Icon(FluentIcons.playlist_music, ),
+      icon: const mat.Icon(
+        FluentIcons.playlist_music,
+      ),
       title: const Text('Play queue'),
     ),
     PaneItemSeparator(),
     PaneItem(
-      icon: const Icon(FluentIcons.settings, ),
+      icon: const Icon(
+        FluentIcons.settings,
+      ),
       title: const Text('Settings'),
     ),
     PaneItemAction(
-      icon: const Icon(FluentIcons.open_source, ),
+      icon: const Icon(
+        FluentIcons.open_source,
+      ),
       title: const Text('Source code'),
       onTap: () {
         launch('https://github.com/Spsden/Drip.git');
       },
     ),
-
   ];
 
-  @override
-  void initState() {
-    //windowManager.addListener(this);
-    super.initState();
+  late List<NavigationPaneItem> items = navigationItems;
 
-    index = 0;
+  // final listOfTabs = <Page>[
+  //   FirstPageStack(navigatorKey: navigatorKeys[0]),
+  //
+  // ]
 
+  Future<void> loadPages() async {
     screens = [
       FirstPageStack(navigatorKey: navigatorKeys[0]),
       SecondPageStack(
@@ -264,6 +282,17 @@ class _MyHomePageState extends State<MyHomePage> {
         navigatorKey: navigatorKeys[3],
       )
     ];
+  }
+
+  @override
+  void initState() {
+    windowManager.addListener(this);
+    super.initState();
+
+    index = 0;
+
+    loadPages();
+
     _pageController = PageController(initialPage: index);
 
     _sheetController = SheetController();
@@ -278,7 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    // windowManager.removeListener(this);
+    windowManager.removeListener(this);
     colorsController.dispose();
     settingsController.dispose();
     _pageController.dispose();
@@ -293,42 +322,44 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           NavigationView(
             appBar: NavigationAppBar(
-              automaticallyImplyLeading: false,
-              leading: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: IconButton(
-                    onPressed: () async {
-                      await Navigator.maybePop(
-                          navigatorKeys[index]!.currentState!.context);
-                    },
-                    icon: const Icon(FluentIcons.back)),
-              ),
-              // title: Platform.isWindows
-              //     ? const TopBar()
-              //     : const SizedBox.shrink()
+                automaticallyImplyLeading: false,
+                leading: Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: IconButton(
+                      onPressed: () async {
+                        await Navigator.maybePop(
+                            navigatorKeys[index]!.currentState!.context);
+                      },
+                      icon: const Icon(FluentIcons.back)),
+                ),
+                // title: Platform.isWindows
+                //     ? const TopBar()
+                //     : const SizedBox.shrink()
 
-              // title: () {
-              //   if (kIsWeb) return const Text(appTitle);
-              //   return const DragToMoveArea(
-              //     child: Align(
-              //       alignment: AlignmentDirectional.centerStart,
-              //       child: Text(appTitle),
-              //     ),
-              //   );
-              // }(),
-              actions:  WindowCaption(title: const Text(appTitle),brightness: FluentTheme.of(context).brightness)
+                title: () {
+                  if (kIsWeb) return const Text(appTitle);
+                  return const DragToMoveArea(
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(appTitle),
+                    ),
+                  );
+                }(),
+                actions: WindowCaption(
 
-              // kIsWeb
-              //     ? null
-              //     : DragToMoveArea(
-              //       child: Row(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: const [Spacer(), WindowCaption()],
-              //         ),
-              //     ),
-            ),
+                    backgroundColor: Colors.transparent,
+                    brightness: FluentTheme.of(context).brightness)
+
+                // kIsWeb
+                //     ? null
+                //     : DragToMoveArea(
+                //       child: Row(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: const [Spacer(), WindowCaption()],
+                //         ),
+                //     ),
+                ),
             pane: NavigationPane(
-
               selected: index,
               scrollController: mat.ScrollController(),
               onChanged: (i) {
@@ -344,14 +375,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 });
               },
-              size:  const NavigationPaneSize(
-
-                openWidth: 200,
-                openMinWidth: 200,
-                openMaxWidth: 200,
-              ),
-              //header:
-
+              // size: const NavigationPaneSize(
+              //   openWidth: 200,
+              //   openMinWidth: 200,
+              //   openMaxWidth: 200,
+              // ),
+              // header:
+              //
               // Container(
               //     height: kOneLineTileHeight,
               //     padding:
@@ -360,21 +390,25 @@ class _MyHomePageState extends State<MyHomePage> {
               //       'Drip',
               //       style: TextStyle(fontSize: 20),
               //     )),
-              displayMode: Responsive.isMobile(context)
+              displayMode:
+
+              Responsive.isMobile(context)
                   ? PaneDisplayMode.top
                   : PaneDisplayMode.auto,
               // Platform.isWindows
               //     ? PaneDisplayMode.compact
               //     : PaneDisplayMode.top,
-              indicator: () {
-                switch (appTheme.indicator) {
-                  case NavigationIndicators.end:
-                    return const EndNavigationIndicator();
-                  case NavigationIndicators.sticky:
-                  default:
-                    return const StickyNavigationIndicator();
-                }
-              }(),
+              indicator: const StickyNavigationIndicator(),
+
+              //     () {
+              //   switch (appTheme.indicator) {
+              //     case NavigationIndicators.end:
+              //       return const EndNavigationIndicator();
+              //     case NavigationIndicators.sticky:
+              //     default:
+              //       return const StickyNavigationIndicator();
+              //   }
+              // }(),
               items: navigationItems,
 
               autoSuggestBoxReplacement: const Icon(FluentIcons.search),
@@ -425,7 +459,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             .albumExtracted
                             .toAccentColor(),
                         child: const SizedBox(
-                         // width: MediaQuery.of(context).size.width ,
+                          // width: MediaQuery.of(context).size.width ,
                           height: 100,
                           child: BottomBar(),
                         ),

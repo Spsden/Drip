@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 
 import 'package:hive/hive.dart';
 import 'package:system_theme/system_theme.dart';
@@ -21,7 +22,9 @@ class AppTheme extends ChangeNotifier {
   }
 
   late Color _albumArtColor = Colors.blue;
+
   Color get albumArtColor => _albumArtColor;
+
   set albumArtColor(Color color) {
     _albumArtColor = color;
     print(_albumArtColor.toString());
@@ -98,9 +101,7 @@ class AppTheme extends ChangeNotifier {
   }
 
   late ThemeMode _mode = getThemeModeFromHive(themeMode);
-
   ThemeMode get mode => _mode;
-
   set mode(ThemeMode mode) {
     _mode = mode;
     Hive.box('settings').put('themeMode', mode.name);
@@ -126,14 +127,26 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
-  flutter_acrylic.WindowEffect _acrylicEffect =
-      flutter_acrylic.WindowEffect.disabled;
+  WindowEffect _windowEffect = WindowEffect.disabled;
 
-  flutter_acrylic.WindowEffect get acrylicEffect => _acrylicEffect;
+  WindowEffect get windowEffect => _windowEffect;
 
-  set acrylicEffect(flutter_acrylic.WindowEffect acrylicEffect) {
-    _acrylicEffect = acrylicEffect;
+  set windowEffect(WindowEffect windowEffect) {
+    _windowEffect = windowEffect;
     notifyListeners();
+  }
+
+  void setEffect(WindowEffect effect, BuildContext context) {
+    Window.setEffect(
+      effect: effect,
+      color: [
+        WindowEffect.solid,
+        WindowEffect.acrylic,
+      ].contains(effect)
+          ? FluentTheme.of(context).micaBackgroundColor.withOpacity(0.05)
+          : Colors.transparent,
+      dark: FluentTheme.of(context).brightness.isDark,
+    );
   }
 }
 

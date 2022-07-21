@@ -379,16 +379,15 @@ class SearchMusic {
       if(response.statusCode == 200){
         var rawResponse = response.body.toString();
 
-        print(rawResponse);
+
 
         final List<PlaylistDataClass> moodPlaylists  = playlistDataClassFromJson(rawResponse);
 
-        //print(artistsPage.name.toString());
         return moodPlaylists;
 
 
       } else {
-        //print(response.statusCode.toString());
+
       }
     } catch (e) {
       //print(e.toString());
