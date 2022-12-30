@@ -2,10 +2,11 @@ import 'package:drip/datasources/searchresults/playlist_data_class.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 
-import 'package:provider/provider.dart';
+
 
 import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
@@ -16,12 +17,12 @@ import '../common/loading_widget.dart';
 
 
 
-class PlaylistCard extends StatelessWidget {
+class PlaylistCard extends ConsumerWidget {
   const PlaylistCard({Key? key, required this.playlistDataClass}) : super(key: key);
   final PlaylistDataClass playlistDataClass;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
    Typography typography = FluentTheme.of(context).typography;
 
     final bool rotated =
@@ -43,9 +44,9 @@ class PlaylistCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                color: context.watch<AppTheme>().mode ==
+                color:ref.watch(themeProvider).mode ==
                     ThemeMode.dark ||
-                    context.watch<AppTheme>().mode ==
+                    ref.watch(themeProvider).mode ==
                         ThemeMode.system
                     ? Colors.grey[150].withOpacity(0.4)
                     : Colors.grey[30]
@@ -126,7 +127,7 @@ class PlaylistCard extends StatelessWidget {
 }
 
 
-class PlaylistSearchResults extends StatefulWidget {
+class PlaylistSearchResults extends ConsumerStatefulWidget {
   final String playlistParams;
   const PlaylistSearchResults({Key? key, required this.playlistParams,}) : super(key: key);
 
@@ -134,7 +135,7 @@ class PlaylistSearchResults extends StatefulWidget {
   _PlaylistSearchResultsState createState() => _PlaylistSearchResultsState();
 }
 
-class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
+class _PlaylistSearchResultsState extends ConsumerState<PlaylistSearchResults> {
 
  // FloatingSearchBarController _controller = FloatingSearchBarController();
  late List<PlaylistDataClass> list = [];
@@ -184,7 +185,7 @@ class _PlaylistSearchResultsState extends State<PlaylistSearchResults> {
 
 
    Center(
-     child: loadingWidget(context)
+     child: loadingWidget(context,ref.watch(themeProvider).color)
    ) :
 
 

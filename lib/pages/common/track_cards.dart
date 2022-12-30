@@ -5,11 +5,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 
 class TrackCardData {
-  final String thumbnail;
-  final String title;
-  final String artist;
-  final String album;
-  final String duration;
+  final String? thumbnail;
+  final String? title;
+  final String? artist;
+  final String? album;
+  final String? duration;
 
 
   TrackCardData({
@@ -74,7 +74,7 @@ class TrackCardLarge extends StatelessWidget {
               //mainAxisSize: MainAxisSize.min,
               children: [
                 ExtendedImage.network(
-                    data.thumbnail,
+                    data.thumbnail.toString(),
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
@@ -112,7 +112,7 @@ class TrackCardLarge extends StatelessWidget {
                 SizedBox(
                   width: size * 1 / 6,
                   child: Text(
-                    data.title,
+                    data.title.toString(),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -120,7 +120,7 @@ class TrackCardLarge extends StatelessWidget {
                 SizedBox(
                   width: size * 1 / 8,
                   child: Text(
-                    data.artist,
+                    data.artist.toString(),
 
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -137,7 +137,7 @@ class TrackCardLarge extends StatelessWidget {
                 SizedBox(
                   // width: localSize * 1 / 15,
                   child: Text(
-                    data.duration,
+                    data.duration.toString(),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -187,7 +187,7 @@ class TrackCardSmall extends StatelessWidget {
                       fit: BoxFit.cover,
 
                       image:  NetworkImage(
-                        data.thumbnail,
+                        data.thumbnail.toString(),
                       )),
                   // CachedNetworkImage(
                   //   memCacheWidth: 40,
@@ -217,7 +217,7 @@ class TrackCardSmall extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 1 / 2.3,
                         child: Text(
-                          data.title,
+                          data.title.toString(),
                           style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.w400),
                           overflow: TextOverflow.ellipsis,
@@ -227,7 +227,7 @@ class TrackCardSmall extends StatelessWidget {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 1 / 2.5,
                         child: Text(
-                          data.artist,
+                          data.artist.toString(),
                           // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -237,7 +237,7 @@ class TrackCardSmall extends StatelessWidget {
                   SizedBox(
                     // width: MediaQuery.of(context).size.width * 1 / 8,
                     child: Text(
-                      data.duration,
+                      data.duration.toString(),
                       // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
                       overflow: TextOverflow.ellipsis,
                     ),

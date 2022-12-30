@@ -2,24 +2,25 @@ import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/pages/common/hot_keys.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart' as mat;
 
-class SearchFunction extends StatefulWidget {
+class SearchFunction extends ConsumerStatefulWidget {
   final bool liveSearch;
   final Widget body;
 
   //final String ancestor;
-  final FloatingSearchBarController controller;
+  final FloatingSearchBarController? controller;
   final Function(String) onSubmitted;
 
   const SearchFunction({
     Key? key,
     required this.liveSearch,
     required this.body,
-    required this.controller,
+this.controller,
     required this.onSubmitted,
     //required this.ancestor,
   }) : super(key: key);
@@ -28,7 +29,7 @@ class SearchFunction extends StatefulWidget {
   _SearchFunctionState createState() => _SearchFunctionState();
 }
 
-class _SearchFunctionState extends State<SearchFunction>
+class _SearchFunctionState extends ConsumerState<SearchFunction>
     with AutomaticKeepAliveClientMixin<SearchFunction> {
   static const _historyLength = 5;
 
@@ -116,7 +117,7 @@ class _SearchFunctionState extends State<SearchFunction>
 
             height: 45,
             axisAlignment: -0.9,
-            accentColor: context.watch<AppTheme>().color.withOpacity(0.2),
+            accentColor: ref.watch(themeProvider).color.withOpacity(0.2),
             debounceDelay: const Duration(milliseconds: 500),
             clearQueryOnClose: false,
            // onFocusChanged: ,
@@ -138,7 +139,7 @@ class _SearchFunctionState extends State<SearchFunction>
 
             width: MediaQuery.of(context).size.width / 2,
             border: BorderSide(
-                color: context.watch<AppTheme>().color,
+                color: ref.watch(themeProvider).color,
                 width: 2,
                 style: BorderStyle.none),
             borderRadius: BorderRadius.circular(8),
@@ -146,7 +147,7 @@ class _SearchFunctionState extends State<SearchFunction>
 
             transitionCurve: Curves.easeInOutCubic,
             transitionDuration: const Duration(milliseconds: 200),
-            controller: widget.controller,
+           // controller: widget.controller,
             body: widget.body,
 
             transition: CircularFloatingSearchBarTransition(),
@@ -262,7 +263,7 @@ class _SearchFunctionState extends State<SearchFunction>
                                     .map((e) => mat.InkWell(
                                           onTap: () async {
                                             setState(() {
-                                              widget.controller.query = e;
+                                              //widget.controller.query = e;
                                               addSearchTerm(floatController.query);
 
                                               putSearchTermFirst(e);
@@ -307,7 +308,7 @@ class _SearchFunctionState extends State<SearchFunction>
                                     ),
                                     onTap: () async {
                                       setState(() {
-                                        widget.controller.query = term;
+                                       // widget.controller.query = term;
 
                                         putSearchTermFirst(term);
                                         // selectedTerm = term;

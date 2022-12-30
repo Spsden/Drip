@@ -2,16 +2,20 @@ import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/explorepage.dart';
 import 'package:drip/pages/playlistmainpage.dart';
-import 'package:drip/pages/searchpage.dart';
+
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
+import 'package:drip/pages/searchresultwidgets/search_page.dart';
 
 import 'package:flutter/material.dart';
 
 class FirstPageStack extends StatefulWidget {
   final GlobalKey? navigatorKey;
-  const FirstPageStack({Key? key, required this.navigatorKey})
-      : super(key: key);
+
+  const FirstPageStack({
+    Key? key,
+    this.navigatorKey,
+  }) : super(key: key);
 
   @override
   _FirstPageStackState createState() => _FirstPageStackState();
@@ -34,7 +38,8 @@ class _FirstPageStackState extends State<FirstPageStack> {
         switch (settings.name) {
           case 'youtubehomescreen':
             return MaterialPageRoute(
-                builder: (context) => const YouTubeHomeScreen(), settings: settings);
+                builder: (context) => const YouTubeHomeScreen(),
+                settings: settings);
             break;
 
           // case 'searchpage':
@@ -112,12 +117,12 @@ class _FirstPageStackState extends State<FirstPageStack> {
 }
 
 class SecondPageStack extends StatefulWidget {
-  const SecondPageStack(
-      {Key? key,
-      required this.searchArgs,
-      this.fromFirstPage,
-      required this.navigatorKey})
-      : super(key: key);
+  const SecondPageStack({
+    Key? key,
+    required this.searchArgs,
+    this.fromFirstPage,
+    this.navigatorKey,
+  }) : super(key: key);
   final String searchArgs;
   final bool? fromFirstPage;
   final GlobalKey? navigatorKey;
@@ -138,11 +143,9 @@ class _SecondPageStackState extends State<SecondPageStack> {
             // final args =
             return MaterialPageRoute(
                 builder: (context) => AllSearchResults(
-                    searchQuery: widget.fromFirstPage == true
-                        ? widget.searchArgs.toString()
-                        : ''),
+                    navigatorKey : widget.navigatorKey,
+                    searchQuery : 'Arijit'),
                 settings: settingsforpagetwo);
-            break;
 
           case 'songslistpage':
             final args = settingsforpagetwo.arguments;
@@ -186,7 +189,6 @@ class _SecondPageStackState extends State<SecondPageStack> {
                   );
                 });
 
-            break;
 
           case 'albumsListPage':
             final args = settingsforpagetwo.arguments;
@@ -263,7 +265,6 @@ class _SecondPageStackState extends State<SecondPageStack> {
     );
   }
 }
-
 
 //
 // class CommunityPlaylistPageStack extends StatelessWidget {

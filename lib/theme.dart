@@ -1,10 +1,15 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:hive/hive.dart';
+
 import 'package:system_theme/system_theme.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
+
+
+
 
 enum NavigationIndicators { sticky, end }
 //enum CardColors {Colors.grey[150] }
@@ -24,6 +29,7 @@ class AppTheme extends ChangeNotifier {
   late Color _albumArtColor = Colors.blue;
 
   Color get albumArtColor => _albumArtColor;
+
 
   set albumArtColor(Color color) {
     _albumArtColor = color;
@@ -109,6 +115,9 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
+
   PaneDisplayMode _displayMode = PaneDisplayMode.auto;
 
   PaneDisplayMode get displayMode => _displayMode;
@@ -148,7 +157,13 @@ class AppTheme extends ChangeNotifier {
       dark: FluentTheme.of(context).brightness.isDark,
     );
   }
+
+
+
+
 }
+
+final themeProvider = ChangeNotifierProvider<AppTheme>((ref) => AppTheme());
 
 AccentColor get systemAccentColor {
   if (defaultTargetPlatform == TargetPlatform.windows ||

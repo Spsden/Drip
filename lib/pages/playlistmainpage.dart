@@ -5,17 +5,19 @@ import 'package:extended_image/extended_image.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:provider/provider.dart';
+
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
     as watch;
 
 import '../datasources/audiofiles/activeaudiodata.dart';
+import '../datasources/audiofiles/playback.dart';
 import '../theme.dart';
 import 'common/loading_widget.dart';
 import 'common/track_cards.dart';
 
-class PlaylistMain extends StatefulWidget {
+class PlaylistMain extends ConsumerStatefulWidget {
   final String playlistId;
 
   const PlaylistMain({Key? key, required this.playlistId}) : super(key: key);
@@ -24,7 +26,7 @@ class PlaylistMain extends StatefulWidget {
   _PlaylistMainState createState() => _PlaylistMainState();
 }
 
-class _PlaylistMainState extends State<PlaylistMain> {
+class _PlaylistMainState extends ConsumerState<PlaylistMain> {
   late Playlists _playlists;
 
   List<Track> _tracks = [];
@@ -68,7 +70,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
     return Stack(
       children: [
         (!fetched)
-            ? Center(child: loadingWidget(context))
+            ? Center(child: loadingWidget(context,ref.watch(themeProvider).color))
             : SingleChildScrollView(
                 // padding: EdgeInsets.all(15),
                 // controller: _scrollController,
@@ -86,9 +88,9 @@ class _PlaylistMainState extends State<PlaylistMain> {
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(08),
-                          color: context.watch<AppTheme>().mode ==
+                          color: ref.watch(themeProvider).mode ==
                                       ThemeMode.dark ||
-                                  context.watch<AppTheme>().mode ==
+                              ref.watch(themeProvider).mode ==
                                       ThemeMode.system
                               ? Colors.grey[150].withOpacity(0.6)
                               : Colors.grey[30].withOpacity(0.9)),
@@ -188,7 +190,7 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                     ],
                                   ),
                                   onPressed: () async {
-                                    AudioControlClass.shuffle(_tracks);
+                                   // AudioControlClass.shuffle(_tracks);
 
                                     print("pressed here");
                                   },
@@ -234,45 +236,62 @@ class _PlaylistMainState extends State<PlaylistMain> {
                                               .toString()),
                                       songIndex: index,
                                       onTrackTap: () async {
-                                        await context
-                                            .read<ActiveAudioData>()
-                                            .songDetails(
-                                                'lol',
-                                                _tracks[index]
-                                                    .videoId
-                                                    .toString(),
-                                                _tracks[index].artists[0].name,
-                                                _tracks[index].title.toString(),
-                                                _tracks[index]
-                                                    .thumbnails[0]
-                                                    .url
-                                                    .toString(),
-                                                // _tracks[index]
-                                                //     .thumbnails
-                                                //     .map((e) => ThumbnailLocal(
-                                                //         height: e.height,
-                                                //         url: e.url.toString(),
-                                                //         width: e.width))
-                                                //     .toList(),
-                                                _tracks[index]
-                                                    .thumbnails
-                                                    .last
-                                                    .url
-                                                    .toString());
-                                        currentMediaIndex = 0;
+                                        CurrentMusicInstance currentMusicInstance =
+                                        CurrentMusicInstance(
+                                            title: _tracks[index].title.toString(),
+                                            author: _tracks[index].artists
+                                                ?.map((e) => e.name.toString())
+                                                .toList() ??
+                                                [],
+                                            thumbs: _tracks[index].thumbnails
+                                                ?.map((e) => e.url.toString())
+                                                .toList() ??
+                                                [],
+                                            urlOfVideo: 'NA',
+                                            videoId: _tracks[index].videoId.toString());
 
-                                        await AudioControlClass.play(
-                                            videoId: _tracks[index]
-                                                .videoId
-                                                .toString(),
-                                            context: context);
+                                        // AudioControlCentre.audioControlCentre
+                                        //     .open(currentMusicInstance);
+
+
+                                        // await ref.watch(activeAudioDataNotifier)
+                                        //     .songDetails(
+                                        //         'lol',
+                                        //         _tracks[index]
+                                        //             .videoId
+                                        //             .toString(),
+                                        //         _tracks[index].artists[0].name,
+                                        //         _tracks[index].title.toString(),
+                                        //         _tracks[index]
+                                        //             .thumbnails[0]
+                                        //             .url
+                                        //             .toString(),
+                                        //         // _tracks[index]
+                                        //         //     .thumbnails
+                                        //         //     .map((e) => ThumbnailLocal(
+                                        //         //         height: e.height,
+                                        //         //         url: e.url.toString(),
+                                        //         //         width: e.width))
+                                        //         //     .toList(),
+                                        //         _tracks[index]
+                                        //             .thumbnails
+                                        //             .last
+                                        //             .url
+                                        //             .toString());
+                                        // currentMediaIndex = 0;
+                                        //
+                                        // await AudioControlClass.play(
+                                        //     videoId: _tracks[index]
+                                        //         .videoId
+                                        //         .toString(),
+                                        //     context: context);
                                       },
                                       color: index % 2 != 0
                                           ? Colors.transparent
-                                          : context.watch<AppTheme>().mode ==
+                                          : ref.watch(themeProvider).mode ==
                                                       ThemeMode.dark ||
-                                                  context
-                                                          .watch<AppTheme>()
+
+                                        ref.watch(themeProvider)
                                                           .mode ==
                                                       ThemeMode.system
                                               ? Colors.grey[150]

@@ -19,8 +19,8 @@ import 'communityplaylistdataclass.dart';
 class SearchMusic {
 
   //static const String serverAddress = 'http://spden.pythonanywhere.com/';
-  static const String serverAddress = 'https://dripapi.vercel.app/';
-  //static const String serverAddress = 'http://192.168.0.106:5000/';
+ // static const String serverAddress = 'https://dripapi.vercel.app/';
+  static const String serverAddress = 'http://192.168.199.131:5000/';
 
 
   static Future getAllSearchResults(String searchquery) async {
@@ -76,6 +76,7 @@ class SearchMusic {
               radioId: listMap['radioId'],
               resultType: listMap['resultType'],
               shuffleId: listMap['shuffleId'],
+              subscribers: '',
               thumbnails: listMap["thumbnails"] == null ? null : List<artists.Thumbnail>.from(listMap["thumbnails"].map((x) => artists.Thumbnail.fromJson(x))),
           );
           break;
@@ -148,7 +149,7 @@ class SearchMusic {
   }
 
   static Future getOnlySongs(String searchquery, int limit) async {
-    //int numOfResults = 30;
+
 
     final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=songs&limit=$limit'));
 
@@ -158,24 +159,17 @@ class SearchMusic {
       var filtered = jsonEncode(responselist);
 
       final List<songs.Songs> songOnlyResults = songs.songsFromJson(filtered);
-     // print(responselist.toString());
-     // return Songs.fromJson(jsonDecode(response.body));
-     // print(songOnlyResults.toString());
+
       return songOnlyResults;
-
-
-
-
-
     } else {
       return <songs.Songs> [];
     }
   }
 
-  static Future getOnlyArtists(String searchquery, int limit) async {
+  static Future getOnlyArtists(String searchquery, int pageNum) async {
     //int numOfResults = 30;
 
-    final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=artists&limit=$limit'));
+    final response = await http.get(Uri.parse('${serverAddress}searchwithfilter?query=$searchquery&filter=artists&pageNum=$pageNum'));
 
     if (response.statusCode == 200){
 
@@ -183,15 +177,7 @@ class SearchMusic {
       var filtered = jsonEncode(responselist);
 
       final List<artists.Artists> songOnlyResults = artists.ArtistsFromJson(filtered);
-      // print(responselist.toString());
-      // return Songs.fromJson(jsonDecode(response.body));
-      // print(songOnlyResults.toString());
       return songOnlyResults;
-
-
-
-
-
     } else {
       return <artists.Artists> [];
     }
@@ -239,30 +225,10 @@ class SearchMusic {
       return songOnlyResults;
 
 
-
-
-
     } else {
       return <CommunityPlaylist> [];
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

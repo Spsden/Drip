@@ -3,9 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  dart_vlc
   flutter_acrylic
-  flutter_native_view
   hotkey_manager
   screen_retriever
   system_theme

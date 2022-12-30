@@ -1,24 +1,16 @@
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:palette_generator/palette_generator.dart';
 
 import '../../theme.dart';
 
+
+Color _color = Colors.black26;
 class Globals{
-  //
-  // Future<Color?> getColor(BuildContext context) async{
-  //   final PaletteGenerator paletteGenerator = await PaletteGenerator.fromImageProvider(NetworkImage( context.watch<ActiveAudioData>().thumbnailLarge.toString())
-  //   );
-  //
-  //   AppTheme().albumArtColor = paletteGenerator.dominantColor!.color;
-  //
-  //   // audioPlayerBarColor =
-  //
-  //
-  //   return paletteGenerator.dominantColor?.color;
-  // }
+
 
   static Future<Color> colorGenerator(String imageUrl)async {
    
@@ -36,16 +28,20 @@ class Globals{
         dominantColor = contrastColor;
       }
     }
-   // AppTheme().al;
-   // print(dominantColor.value.toString());
-     AppTheme().albumArtColor = dominantColor;
 
-    print('cpmes here');
+    _color = dominantColor;
+
+
+
+     AppTheme().albumArtColor = dominantColor;
 
     return dominantColor;
   }
 
+
 }
+
+
 
 
 

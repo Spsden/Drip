@@ -3,12 +3,19 @@
 //     final songs = songsFromJson(jsonString);
 
 import 'dart:convert';
+List<Album> noneAlbum = [Album(id: 'na', name: 'na')];
 
 List<Songs> songsFromJson(String str) =>
     List<Songs>.from(json.decode(str).map((x) => Songs.fromJson(x)));
 
 String songsToJson(List<Songs> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+
+
+
+
+
 
 class Songs {
   Songs({
@@ -27,6 +34,7 @@ class Songs {
   });
 
   Album? album;
+
   List<Album>? artists;
   String? category;
   String? duration;
@@ -39,10 +47,12 @@ class Songs {
   String videoId;
   dynamic year;
 
-  factory Songs.fromJson(Map<String, dynamic> json) => Songs(
-        album: Album.fromJson(json["album"]),
+  factory Songs.fromJson(Map<String, dynamic> json) =>
+      Songs(
+        album: Album.fromJson(
+            json["album"]),
         artists:
-            List<Album>.from(json["artists"].map((x) => Album.fromJson(x))),
+        List<Album>.from(json["artists"].map((x) => Album.fromJson(x))) ?? noneAlbum,
         category: json["category"],
         duration: json["duration"],
         durationSeconds: json["duration_seconds"],
@@ -54,9 +64,11 @@ class Songs {
         title: json["title"],
         videoId: json["videoId"],
         year: json["year"],
+
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "album": album?.toJson(),
         "artists": List<dynamic>.from(artists!.map((x) => x.toJson())),
         "category": category,
@@ -79,14 +91,16 @@ class Album {
   });
 
   String? id;
-  String name;
+  String? name;
 
-  factory Album.fromJson(Map<String, dynamic> json) => Album(
+  factory Album.fromJson(Map<String?, dynamic> json) =>
+      Album(
         id: json["id"],
         name: json["name"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "id": id,
         "name": name,
       };
@@ -101,12 +115,14 @@ class FeedbackTokens {
   dynamic add;
   dynamic remove;
 
-  factory FeedbackTokens.fromJson(Map<String, dynamic> json) => FeedbackTokens(
+  factory FeedbackTokens.fromJson(Map<String, dynamic> json) =>
+      FeedbackTokens(
         add: json["add"],
         remove: json["remove"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "add": add,
         "remove": remove,
       };
@@ -123,13 +139,15 @@ class Thumbnail {
   String url;
   int width;
 
-  factory Thumbnail.fromJson(Map<String, dynamic> json) => Thumbnail(
+  factory Thumbnail.fromJson(Map<String, dynamic> json) =>
+      Thumbnail(
         height: json["height"],
         url: json["url"],
         width: json["width"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "height": height,
         "url": url,
         "width": width,

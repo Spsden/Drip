@@ -1,13 +1,15 @@
 
 
+import 'package:drip/datasources/audiofiles/playback.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
-import '../../datasources/audiofiles/audiocontrolcentre.dart';
 
 
 
 
 class HotKeys {
+  //final WidgetRef ref;
   /// [HotKeys] object instance. Must call [HotKeys.initialize].
   static HotKeys instance = HotKeys();
 
@@ -16,7 +18,7 @@ class HotKeys {
       [
         HotKeyManager.instance.register(
           _spaceHotkey,
-          keyDownHandler: (_) => AudioControlClass.playOrPause(),
+          keyDownHandler: (_) => {}
         ),
 
       ],
@@ -31,7 +33,8 @@ class HotKeys {
     await HotKeyManager.instance.register(
       _spaceHotkey,
 
-      keyDownHandler: (_) =>  AudioControlClass.playOrPause(),
+      keyDownHandler: (_) => {}
+          //AudioControlCentre.audioControlCentre.playOrPause(),
     );
   }
 }

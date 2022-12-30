@@ -87,7 +87,7 @@ List<Artists> ArtistsFromJson(String str) => List<Artists>.from(json.decode(str)
 String artistsToJson(List<Artists> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Artists {
-  Artists( {
+  Artists(  {
     required this.artist,
     required this.browseId,
     required this.category,
@@ -95,6 +95,8 @@ class Artists {
     required this.resultType,
     required this.shuffleId,
     required this.thumbnails,
+    required this.subscribers
+
   });
 
   final String? artist;
@@ -103,6 +105,7 @@ class Artists {
   final String? radioId;
   final String? resultType;
   final String? shuffleId;
+  final String? subscribers;
 
   final List<Thumbnail>? thumbnails;
 
@@ -114,7 +117,7 @@ class Artists {
     resultType: json["resultType"],
     shuffleId: json["shuffleId"],
 
-    thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))),
+    thumbnails: json["thumbnails"] == null ? null : List<Thumbnail>.from(json["thumbnails"].map((x) => Thumbnail.fromJson(x))), subscribers: '',
 
   );
 

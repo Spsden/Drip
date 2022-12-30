@@ -1,6 +1,7 @@
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
@@ -13,7 +14,7 @@ import '../playlistmainpage.dart';
 import '../search.dart';
 
 
-class CommunityPlaylistSearch extends StatelessWidget {
+class CommunityPlaylistSearch extends ConsumerWidget {
   late List<CommunityPlaylist> communityPlaylist = [];
   CommunityPlaylistSearch({
     Key? key,
@@ -22,7 +23,7 @@ class CommunityPlaylistSearch extends StatelessWidget {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     double boxSize = !rotated
@@ -267,7 +268,7 @@ class CommunityPlaylistCard extends StatelessWidget {
 }
 
 
-class PlaylistInfinitePaginationWidget extends StatefulWidget {
+class PlaylistInfinitePaginationWidget extends ConsumerStatefulWidget {
   final String communityPlaylistQuery;
   const PlaylistInfinitePaginationWidget({Key? key, required this.communityPlaylistQuery, }) : super(key: key);
 
@@ -275,7 +276,7 @@ class PlaylistInfinitePaginationWidget extends StatefulWidget {
   _PlaylistInfinitePaginationWidgetState createState() => _PlaylistInfinitePaginationWidgetState();
 }
 
-class _PlaylistInfinitePaginationWidgetState extends State<PlaylistInfinitePaginationWidget> {
+class _PlaylistInfinitePaginationWidgetState extends ConsumerState<PlaylistInfinitePaginationWidget> {
 
   final FloatingSearchBarController _controller = FloatingSearchBarController();
 
@@ -370,10 +371,10 @@ class _PlaylistInfinitePaginationWidgetState extends State<PlaylistInfinitePagin
                     animateTransitions: true,
                     transitionDuration: const Duration(milliseconds: 200),
                     firstPageProgressIndicatorBuilder: (_) => Center(
-                      child: loadingWidget(context)
+                      child: loadingWidget(context,ref.watch(themeProvider).color),
                     ),
                     newPageProgressIndicatorBuilder: (_) => Center(
-                      child: loadingWidget(context)
+                      child: loadingWidget(context,ref.watch(themeProvider).color),
                     ),
                     itemBuilder: (context, CommunityPlaylists, index) => CommunityPlaylistCard(
                       communityPlaylist : CommunityPlaylists,

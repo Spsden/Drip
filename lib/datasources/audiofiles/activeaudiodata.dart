@@ -5,6 +5,8 @@ import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/globals.dart';
 import 'package:drip/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class ActiveAudioData extends ChangeNotifier {
@@ -49,13 +51,17 @@ class ActiveAudioData extends ChangeNotifier {
 
     await Globals.colorGenerator(thumbnailLarge).then((value) {
       _albumExtracted = value;
+
       AppTheme().albumArtColor = value;
+
     });
 
 
     notifyListeners();
   }
 }
+
+final activeAudioDataNotifier = ChangeNotifierProvider((ref) => ActiveAudioData(),);
 
 class CurrentMusicInstance {
 

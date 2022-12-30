@@ -1,10 +1,12 @@
-import 'package:drip/main.dart';
+import 'package:drip/home_screen.dart';
 import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as mat;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+
+
+
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,11 +21,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2)).then((value) =>
+    Future.delayed(const Duration(milliseconds: 500)).then((value) =>
         Navigator.pushAndRemoveUntil(
             context,
-            mat.MaterialPageRoute(builder: (_) => const MyHomePage()),
-                (route) => false));
+           _createRoute(),
+                (route) => false
+
+        )
+
+
+    );
     super.initState();
   }
 
@@ -32,16 +39,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
     super.dispose();
   }
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(position: animation.drive(tween),
+        child: child);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return  Container(
-      color: context.watch<AppTheme>().mode ==
-          ThemeMode.dark ||
-          context.watch<AppTheme>().mode ==
-              ThemeMode.system
-          ? Colors.grey[150].withOpacity(0.4)
-          : Colors.grey[30],
+      color:  Colors.black,
       child: Column(
 
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,11 +76,17 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           Text('Drip Music'
           ,style: FluentTheme.of(context).typography.title,),
-         SizedBox(
+         const SizedBox(
            height: 10,
          ),
           
-          loadingWidget(context,size: 80)
+          Consumer(
+            builder: (context,watch,child) {
+              final value = watch.read(themeProvider).color;
+   return loadingWidget(context,value,size: 80);
+
+            },)
+
 
         ],
       ),

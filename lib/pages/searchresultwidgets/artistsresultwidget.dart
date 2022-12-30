@@ -1,14 +1,12 @@
 import 'package:drip/datasources/searchresults/artistsdataclass.dart';
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/artistspage.dart';
-import 'package:drip/pages/search.dart';
+import 'package:drip/providers/providers.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-
-import '../common/loading_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ArtistsSearch extends StatelessWidget {
   late List<Artists> artists = [];
@@ -34,18 +32,16 @@ class ArtistsSearch extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             itemBuilder: (context, index) {
-              return ArtistCard(artists: Artists(artist: artists[index].artist,
-                  browseId: artists[index].browseId,
-                  category: artists[index].category,
-                  radioId: artists[index].radioId,
-                  resultType: artists[index].resultType,
-                  shuffleId: artists[index].shuffleId,
-                  thumbnails: artists[index].thumbnails
-              ));
-
-
-
-
+              return ArtistCard(
+                  artists: Artists(
+                      artist: artists[index].artist,
+                      subscribers: '',
+                      browseId: artists[index].browseId,
+                      category: artists[index].category,
+                      radioId: artists[index].radioId,
+                      resultType: artists[index].resultType,
+                      shuffleId: artists[index].shuffleId,
+                      thumbnails: artists[index].thumbnails));
             },
           ),
         ),
@@ -56,7 +52,7 @@ class ArtistsSearch extends StatelessWidget {
 
 class ArtistCard extends StatelessWidget {
   const ArtistCard({Key? key, required this.artists}) : super(key: key);
-  
+
   final Artists artists;
 
   @override
@@ -65,234 +61,190 @@ class ArtistCard extends StatelessWidget {
 
     //return
 
-
     return Hero(
-      tag: artists.shuffleId.toString(),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.transparent
-        ),
-        width: 200,
-        child: Column(
+        tag: artists.shuffleId.toString(),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.transparent),
+          width: 200,
+          child: Column(
+            children: [
+              mat.InkWell(
+                onTap: () {
+                  //   Navigator.of(context).pushNamed('artistsPage',
+                  //       arguments: artists.browseId.toString());
+                  // }
+                  // ,
 
-          children: [
-            mat.InkWell(
-              onTap: () {
-              //   Navigator.of(context).pushNamed('artistsPage',
-              //       arguments: artists.browseId.toString());
-              // }
-              // ,
+                  Navigator.push(
+                      context,
+                      mat.MaterialPageRoute(
+                          builder: (context) => ArtistsPage(
+                              channelId: artists.browseId.toString())));
+                },
+                child: mat.Card(
+                  elevation: 5,
+                  clipBehavior: Clip.antiAlias,
+                  shape: const CircleBorder(),
+                  child: ExtendedImage.network(
+                    artists.thumbnails?.last.url.toString() ??
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.cover,
+                    cache: false,
+                    shape: BoxShape.circle,
+                  ),
 
-          Navigator.push(context,
-         mat.MaterialPageRoute(builder: (context) => ArtistsPage(channelId: artists.browseId.toString())));
-
-        },
-
-
-              child: mat.Card(
-                elevation: 5,
-                clipBehavior: Clip.antiAlias,
-                shape: const CircleBorder(),
-                child:
-
-                ExtendedImage.network(
-                  artists.thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
-                  width: 160,
-                  height: 160,
-                  fit: BoxFit.cover,
-                  cache: false,
-                  shape: BoxShape.circle,
-
+                  // CachedNetworkImage(
+                  //   imageBuilder: (context, imageProvider) => CircleAvatar(
+                  //     backgroundColor: mat.Colors.transparent,
+                  //     foregroundColor: Colors.transparent,
+                  //     radius:84,
+                  //     backgroundImage: imageProvider,
+                  //   ),
+                  //   fit: BoxFit.cover,
+                  //   errorWidget: (context, url, error) => const Image(
+                  //     fit: BoxFit.cover,
+                  //     image: AssetImage('assets/artist.jpg'),
+                  //   ),
+                  //   imageUrl: artists.thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
+                  //   placeholder: (context, url) => const Image(
+                  //       fit: BoxFit.fill,
+                  //       image: AssetImage('assets/artist.jpg')),
+                  // ),
                 ),
-
-
-
-
-                // CachedNetworkImage(
-                //   imageBuilder: (context, imageProvider) => CircleAvatar(
-                //     backgroundColor: mat.Colors.transparent,
-                //     foregroundColor: Colors.transparent,
-                //     radius:84,
-                //     backgroundImage: imageProvider,
-                //   ),
-                //   fit: BoxFit.cover,
-                //   errorWidget: (context, url, error) => const Image(
-                //     fit: BoxFit.cover,
-                //     image: AssetImage('assets/artist.jpg'),
-                //   ),
-                //   imageUrl: artists.thumbnails?.last.url.toString() ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
-                //   placeholder: (context, url) => const Image(
-                //       fit: BoxFit.fill,
-                //       image: AssetImage('assets/artist.jpg')),
-                // ),
-
               ),
-            ),
-            const SizedBox(height: 10,),
-            Text(
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
                 artists.artist.toString(),
-              textAlign: TextAlign.left,
-              softWrap: false,
-                  style:
-                typography.body?.apply(fontSizeFactor: 1.2),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-
-      ),
-
-          ],
-        ),
-      )
-
-      );
-
+                textAlign: TextAlign.left,
+                softWrap: false,
+                style: typography.body?.apply(fontSizeFactor: 1.2),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ));
   }
 }
 
-class ArtistsSearchResults extends StatefulWidget {
+class ArtistsSearchResults extends ConsumerStatefulWidget {
   final String artistQuery;
-  const ArtistsSearchResults({Key? key, required this.artistQuery}) : super(key: key);
+
+  const ArtistsSearchResults({Key? key, required this.artistQuery})
+      : super(key: key);
 
   @override
-  _ArtistsSearchResultsState createState() => _ArtistsSearchResultsState();
+  ConsumerState<ArtistsSearchResults> createState() =>
+      _ArtistsSearchResultsState();
 }
 
-class _ArtistsSearchResultsState extends State<ArtistsSearchResults> {
-
-  final FloatingSearchBarController _controller = FloatingSearchBarController();
-
-  String query = '';
-  static const _pageSize = 10;
-
-  final _pagingController = PagingController<int, Artists>(
-    // 2
-    firstPageKey: 1,
-  );
-
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    _pagingController.addPageRequestListener((pageKey) {
-      fetchArtists(pageKey);
-    });
-    super.initState();
-  }
-
-  Future <void> fetchArtists(int pageKey) async {
-    try {
-      final List<Artists> newItems = await SearchMusic.getOnlyArtists(query == '' ? widget.artistQuery : query, _pageSize);
-      final isLastPage = newItems.length < _pageSize;
-      if(isLastPage){
-        _pagingController.appendLastPage(newItems);
-
-      }else {
-        final nextPageKey = pageKey + newItems.length;
-        _pagingController.appendPage(newItems, nextPageKey);
-      }
-    } catch (error) {
-      _pagingController.error = error;
-    }
-  }
-
+class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
+  final scrollController = ScrollController();
+  bool isScrollable = true;
+ // int itemcount = 20;
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    scrollController.dispose();
     super.dispose();
-    _pagingController.dispose();
-    _controller.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    Typography typography = FluentTheme.of(context).typography;
-    return SearchFunction(liveSearch: false ,
-         controller: _controller,
-        onSubmitted:
-            (searchQuery) async {
-          query = searchQuery;
-          _pagingController.refresh();
+    return ScaffoldPage(
+        content: GridView.custom(
+      // semanticChildCount: 10,
+      shrinkWrap: true,
 
-        },
-    body: Center(
+      physics: BouncingScrollPhysics(),
+      controller: scrollController,
 
+      childrenDelegate: SliverChildBuilderDelegate(
+        //temporary fix,
+         // childCount: itemcount,
+              (
+        context,
+        index,
+      ) {
+        const pageLimit = 20;
 
+        final page = index ~/ pageLimit + 1;
+        final itemIndexInPage = index % pageLimit;
 
-
-      child:
-
-      // mat.RaisedButton(
-      //   child: Text('test me'),
-      //   onPressed: () {
-      //
-      //     SearchMusic.getOnlyArtists(query == '' ? widget.artistQuery : query, _pageSize).then((value) => {
-      //       print(value[2].artist)
-      //     });
-      //
-      //
-      //   },
-      // )
+        final results = ref.watch(artistsListResultsProvider(page));
 
 
-      mat.RefreshIndicator(
-        onRefresh: () => Future.sync(
-            () => _pagingController.refresh(),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: CustomScrollView(
-            slivers: [
-              const SliverToBoxAdapter(child: SizedBox(height: 80)),
-              SliverToBoxAdapter(
 
-                  child: Text(
 
-                    widget.artistQuery == ''
-                      ? ' Results for "$query"'
-                      : ' Results for "${widget.artistQuery}"',
-                    style:  typography.display?.apply(fontSizeFactor: 1.0),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,)
-              ),
-              const SliverToBoxAdapter(
-                //child: SizedBox(height: 15,),
-              ),
-              PagedSliverGrid(pagingController: _pagingController,
+        return results.when(
+            error: (err, stack) => Text('error $err'),
+            loading: () => const Center(child: mat.CircularProgressIndicator()),
+            data: (results) {
+             // itemcount = results.length*page;
 
-                  builderDelegate: PagedChildBuilderDelegate<Artists>(
-                      animateTransitions: true,
-                      transitionDuration: const Duration(milliseconds: 200),
-                      firstPageProgressIndicatorBuilder: (_) => Center(
-                        child: loadingWidget(context)
-                      ),
-                      newPageProgressIndicatorBuilder: (_) => Center(
-                        child:loadingWidget(context),
-                      ),
-                      itemBuilder: (context, artists, index) => ArtistCard(
-                        artists: artists,
-                      ),),
-                  gridDelegate:  const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200.0,
-                    mainAxisSpacing: 5.0,
-                    crossAxisSpacing: 10.0,
-                    childAspectRatio: 1/1.5,
-                  ),
+              print(results.length*page);
+              if (itemIndexInPage >= results.length) {
+                scrollController.animateTo(100, duration: Duration(milliseconds: 600), curve:Curves.ease );
 
-    )
-            ],
-          ),
-        ),
+                return null;
+              }
+
+              final result = results[itemIndexInPage];
+              return ArtistCard(artists: result);
+            });
+      }),
+
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200.0,
+        mainAxisSpacing: 5.0,
+        crossAxisSpacing: 10.0,
+        childAspectRatio: 1 / 1.5,
       ),
-    ),
-    );
+    ));
   }
 }
+
+// class ArtistsSearchResults extends ConsumerStatefulWidget {
+//   final String artistQuery;
+//
+//   const ArtistsSearchResults({Key? key, required this.artistQuery})
+//       : super(key: key);
+//
+//   @override
+//   _ArtistsSearchResultsState createState() => _ArtistsSearchResultsState();
+// }
+//
+// class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
+//
+//
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//
+//     return ScaffoldPage(
+//         bottomBar: const SizedBox(
+//           height: 150,
+//         ),
+//         content: ListView.builder(
+//           controller: _scrollController,
+//           itemCount: artists.length,
+//           itemBuilder: (context, index) =>
+//               ArtistCard(artists: artists[index]),));
+//   }
+// }
 
 class MyClip extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
-    return Rect.fromCircle(center: const Offset(0,0),radius: 80);
+    return Rect.fromCircle(center: const Offset(0, 0), radius: 80);
   }
 
   @override
@@ -300,5 +252,3 @@ class MyClip extends CustomClipper<Rect> {
     return false;
   }
 }
-
-

@@ -10,12 +10,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:drip/datasources/searchresults/albumsdataclass.dart' as albumD;
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 import '../datasources/searchresults/artistsdataclass.dart' as artistD;
 
 
-class ArtistsPage extends StatefulWidget {
+class ArtistsPage extends ConsumerStatefulWidget {
   final String channelId;
 
   const ArtistsPage({Key? key, required this.channelId}) : super(key: key);
@@ -24,7 +25,7 @@ class ArtistsPage extends StatefulWidget {
   _ArtistsPageState createState() => _ArtistsPageState();
 }
 
-class _ArtistsPageState extends State<ArtistsPage>
+class _ArtistsPageState extends ConsumerState<ArtistsPage>
     with
         AutomaticKeepAliveClientMixin<ArtistsPage>,
         SingleTickerProviderStateMixin {
@@ -51,6 +52,7 @@ class _ArtistsPageState extends State<ArtistsPage>
 
   @override
   Widget build(BuildContext context) {
+
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
@@ -146,7 +148,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                 style: mat.ButtonStyle(
                                     backgroundColor:
                                         mat.MaterialStateProperty.all(
-                                            context.watch<AppTheme>().color)),
+                                            ref.watch(themeProvider).color)),
                                 onPressed: () {},
                                 child: const Text('Play'),
                               )),
@@ -206,7 +208,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                       indicator: mat.UnderlineTabIndicator(
                           borderSide: BorderSide(
                               width: 4.0,
-                              color: context.watch<AppTheme>().color)),
+                              color: ref.watch(themeProvider).color)),
                       tabs: const [
                         mat.Tab(text: 'Albums'),
                          mat.Tab(text: 'Songs'),
@@ -290,6 +292,7 @@ class _ArtistsPageState extends State<ArtistsPage>
                                   return mat.Material(
                                     child: ArtistCard(
                                         artists: artistD.Artists(
+                                          subscribers: '',
                                             artist: _artistsPage
                                                 .related!.results![index].title,
                                             browseId: _artistsPage.related!
@@ -317,7 +320,7 @@ class _ArtistsPageState extends State<ArtistsPage>
 
 
 
-                        mat.RaisedButton(
+                        mat.ElevatedButton(
                           onPressed: () {
                            // print(context.watch<PlayerNotifiers>().searchVal);
                             print(_artistsPage

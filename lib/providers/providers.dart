@@ -1,0 +1,58 @@
+
+import 'package:drip/datasources/audiofiles/playback.dart';
+import 'package:drip/theme.dart';
+import 'package:drip_api/drip_api.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:palette_generator/palette_generator.dart';
+import '../datasources/searchresults/artistsdataclass.dart';
+import '../datasources/searchresults/searchresultsservice.dart';
+
+
+final searchQueryProvider = StateProvider((ref) => '');
+
+final artistsListResultsProvider =
+FutureProvider.family((ref, int pageNum) async {
+  final List<Artists> newItems =
+  await SearchMusic.getOnlyArtists(ref.watch(searchQueryProvider), pageNum);
+  return newItems;
+});
+
+final searchResultsProvider = FutureProvider.autoDispose((ref) async {
+  final result = await DripSearch.search(query: ref.watch(searchQueryProvider));
+  if (kDebugMode) {
+    print('fetched');
+    //print(jsonEncode(res
+  }
+  return result;
+});
+
+final currentPageIndexProvider = StateProvider((ref) => 0);
+
+final paletteColorProvider = FutureProvider.autoDispose((ref)async {
+  final audioControlCentre = ref.watch(audioControlCentreProvider);
+  String imgUrl = audioControlCentre.player.state.playlist.medias.isNotEmpty ? audioControlCentre.player.state.playlist.medias[audioControlCentre.index].extras.thumbs[0].toString() : 'https://i.imgur.com/L3Ip1wh.png';
+  PaletteGenerator paletteGenerator;
+  paletteGenerator = await PaletteGenerator.fromImageProvider(ExtendedNetworkImageProvider(imgUrl));
+  Color dominantColor = paletteGenerator.dominantColor?.color ?? ref.read(themeProvider).color;
+  //AppTheme().albumArtColor = dominantColor;
+  if (dominantColor.computeLuminance() > 0.6) {
+    Color contrastColor =
+        paletteGenerator.darkMutedColor?.color ?? Colors.black;
+    if (dominantColor == contrastColor) {
+      contrastColor = paletteGenerator.lightMutedColor?.color ?? Colors.white;
+    }
+    if (contrastColor.computeLuminance() < 0.6) {
+      dominantColor = contrastColor;
+    }
+  }
+  return dominantColor;
+
+});
+
+
+
+
+

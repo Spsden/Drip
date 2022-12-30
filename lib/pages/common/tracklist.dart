@@ -1,5 +1,5 @@
-import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
+import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
@@ -8,16 +8,15 @@ import 'package:drip/pages/common/track_cards.dart';
 import 'package:drip/pages/search.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:provider/src/provider.dart';
 
 import '../../theme.dart';
 
 ///Trackbars for main Search Page
 
-class TrackBars extends StatefulWidget {
+class TrackBars extends ConsumerStatefulWidget {
   final bool isFromPrimarySearchPage;
   final List<Songs> songs;
   final VoidCallback? onScroll;
@@ -35,7 +34,7 @@ class TrackBars extends StatefulWidget {
   _TrackBarsState createState() => _TrackBarsState();
 }
 
-class _TrackBarsState extends State<TrackBars> {
+class _TrackBarsState extends ConsumerState<TrackBars> {
   //_TrackListState().
   final ScrollController _sc = ScrollController();
 
@@ -46,8 +45,6 @@ class _TrackBarsState extends State<TrackBars> {
       print(track.title.toString());
     });
   }
-
-
 
   @override
   void initState() {
@@ -91,47 +88,64 @@ class _TrackBarsState extends State<TrackBars> {
                   alignment: Alignment.center,
                   width: 500,
                   height: 500,
-                  child: loadingWidget(context));
+                  child:
+                      loadingWidget(context, ref.watch(themeProvider).color));
             } else {
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                 child: TrackCardLarge(
                   data: TrackCardData(
                       title: widget.songs[index].title.toString(),
-                      artist: widget.songs[index].artists![0].name.toString(),
+                      artist: widget.songs[index].artists!.isEmpty
+                          ? noneAlbum.first.name
+                          : widget.songs[index].artists!.first.name,
                       album: 'Drip',
                       duration: widget.songs[index].duration.toString(),
                       thumbnail:
                           widget.songs[index].thumbnails[0].url.toString()),
                   songIndex: index,
                   onTrackTap: () async {
+                    CurrentMusicInstance currentMusicInstance =
+                        CurrentMusicInstance(
+                            title: widget.songs[index].title.toString(),
+                            author: widget.songs[index].artists
+                                    ?.map((e) => e.name.toString())
+                                    .toList() ??
+                                [],
+                            thumbs: widget.songs[index].thumbnails
+                                    ?.map((e) => e.url.toString())
+                                    .toList() ??
+                                [],
+                            urlOfVideo: 'NA',
+                            videoId: widget.songs[index].videoId);
 
+                    ref.read(audioControlCentreProvider).open(currentMusicInstance);
 
+                    // AudioControlCentre.audioControlCentre
+                    //     .open(currentMusicInstance);
 
-                      //playerAlerts.buffering = true;
-                      await context.read<ActiveAudioData>().songDetails(
-                          widget.songs[index].videoId.toString(),
-                        widget.songs[index].videoId.toString(),
-                        widget.songs[index].artists![0].name.toString(),
-                        widget.songs[index].title.toString(),
-                        widget.songs[index].thumbnails[0].url.toString(),
-                        // widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                        widget.songs[index].thumbnails.last.url.toString(),
-                      );
-                      currentMediaIndex = 0;
-                      //
-                      await AudioControlClass.play(
-
-                          videoId: widget.songs[index].videoId.toString(),
-                          context: context,
-                      );
-
-
+                    //playerAlerts.buffering = true;
+                    // await ref.watch(activeAudioDataNotifier).songDetails(
+                    //     widget.songs[index].videoId.toString(),
+                    //   widget.songs[index].videoId.toString(),
+                    //   widget.songs[index].artists![0].name.toString(),
+                    //   widget.songs[index].title.toString(),
+                    //   widget.songs[index].thumbnails[0].url.toString(),
+                    //   // widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+                    //   widget.songs[index].thumbnails.last.url.toString(),
+                    // );
+                    // currentMediaIndex = 0;
+                    // //
+                    // await AudioControlClass.play(
+                    //
+                    //     videoId: widget.songs[index].videoId.toString(),
+                    //     context: context,
+                    // );
                   },
                   color: index % 2 != 0
                       ? Colors.transparent
-                      : context.watch<AppTheme>().mode == ThemeMode.dark ||
-                              context.watch<AppTheme>().mode == ThemeMode.system
+                      : ref.watch(themeProvider).mode == ThemeMode.dark ||
+                              ref.watch(themeProvider).mode == ThemeMode.system
                           ? Colors.grey[150]
                           : Colors.grey[30],
                   SuperSize: MediaQuery.of(context).size,
@@ -147,7 +161,7 @@ class _TrackBarsState extends State<TrackBars> {
 
 //Track list for infinite Pagination with search
 
-class TrackList extends StatefulWidget {
+class TrackList extends ConsumerStatefulWidget {
   final String songQuery;
 
   const TrackList({Key? key, required this.songQuery}) : super(key: key);
@@ -156,11 +170,11 @@ class TrackList extends StatefulWidget {
   _TrackListState createState() => _TrackListState();
 }
 
-class _TrackListState extends State<TrackList> {
+class _TrackListState extends ConsumerState<TrackList> {
   String query = '';
   static const _pageSize = 20;
 
-  final FloatingSearchBarController _controller = FloatingSearchBarController();
+//  final FloatingSearchBarController _controller = FloatingSearchBarController();
 
   final _pagingController = PagingController<int, Songs>(
     // 2
@@ -204,7 +218,7 @@ class _TrackListState extends State<TrackList> {
     Typography typography = FluentTheme.of(context).typography;
     return SearchFunction(
         liveSearch: false,
-        controller: _controller,
+        // controller: _controller,
         onSubmitted: (searchQuery) async {
           query = searchQuery;
 
@@ -253,10 +267,12 @@ class _TrackListState extends State<TrackList> {
                         animateTransitions: true,
                         transitionDuration: const Duration(milliseconds: 200),
                         firstPageProgressIndicatorBuilder: (_) => Center(
-                          child: loadingWidget(context),
+                          child: loadingWidget(
+                              context, ref.watch(themeProvider).color),
                         ),
-                        newPageProgressIndicatorBuilder: (_) =>
-                            Center(child: loadingWidget(context)),
+                        newPageProgressIndicatorBuilder: (_) => Center(
+                            child: loadingWidget(
+                                context, ref.watch(themeProvider).color)),
                         itemBuilder: (context, songs, index) =>
                             AnimationConfiguration.staggeredList(
                           position: index,
@@ -268,9 +284,9 @@ class _TrackListState extends State<TrackList> {
                                 songs: songs,
                                 color: index % 2 != 0
                                     ? Colors.transparent
-                                    : context.watch<AppTheme>().mode ==
+                                    : ref.watch(themeProvider).mode ==
                                                 ThemeMode.dark ||
-                                            context.watch<AppTheme>().mode ==
+                                            ref.watch(themeProvider).mode ==
                                                 ThemeMode.system
                                         ? Colors.grey[150]
                                         : Colors.grey[40],
@@ -290,7 +306,7 @@ class _TrackListState extends State<TrackList> {
   }
 }
 
-class TrackListItem extends StatefulWidget {
+class TrackListItem extends ConsumerStatefulWidget {
   final Songs songs;
   final Color color;
 
@@ -301,7 +317,7 @@ class TrackListItem extends StatefulWidget {
   _TrackListItemState createState() => _TrackListItemState();
 }
 
-class _TrackListItemState extends State<TrackListItem> {
+class _TrackListItemState extends ConsumerState<TrackListItem> {
   @override
   Widget build(BuildContext context) {
     const spacer = SizedBox(width: 10.0);
@@ -312,22 +328,27 @@ class _TrackListItemState extends State<TrackListItem> {
       child: mat.InkWell(
         onTap: () async {
 
+          CurrentMusicInstance currentMusicInstance = CurrentMusicInstance(title:widget.songs.title
+              , author: widget.songs.artists?.map((e) => e.name.toString()).toList() ?? [],
+              thumbs:   widget.songs.thumbnails?.map((e) => e.url.toString()).toList() ??
+                  [], urlOfVideo: 'NA', videoId: widget.songs.videoId);
+          ref.read(audioControlCentreProvider).open(currentMusicInstance);
 
+         // AudioControlCentre.audioControlCentre.open(currentMusicInstance);
           //playerAlerts.buffering = true;
-          await context.read<ActiveAudioData>().songDetails(
-              widget.songs.videoId,
-              widget.songs.videoId,
-              widget.songs.artists![0].name,
-              widget.songs.title,
-              widget.songs.thumbnails[0].url,
-              //widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-              widget.songs.thumbnails.last.url.toString());
-
-          await AudioControlClass.play(
-
-              videoId: widget.songs.videoId.toString(),
-              context: context, );
-
+          // await context.read<ActiveAudioData>().songDetails(
+          //     widget.songs.videoId,
+          //     widget.songs.videoId,
+          //     widget.songs.artists![0].name.toString(),
+          //     widget.songs.title,
+          //     widget.songs.thumbnails[0].url,
+          //     //widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
+          //     widget.songs.thumbnails.last.url.toString());
+          //
+          // await AudioControlClass.play(
+          //   videoId: widget.songs.videoId.toString(),
+          //   context: context,
+          // );
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(

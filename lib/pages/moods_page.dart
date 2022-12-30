@@ -2,19 +2,21 @@ import 'package:drip/datasources/searchresults/moods_data_class.dart';
 import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
+import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_color/random_color.dart';
 
 
-class MoodsAndCategories extends StatefulWidget {
+class MoodsAndCategories extends ConsumerStatefulWidget {
   const MoodsAndCategories({Key? key}) : super(key: key);
 
   @override
   _MoodsAndCategoriesState createState() => _MoodsAndCategoriesState();
 }
 
-class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticKeepAliveClientMixin<MoodsAndCategories> {
+class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with AutomaticKeepAliveClientMixin<MoodsAndCategories> {
   late MoodsCategories _moodsCategories;
 
   final ScrollController _scrollController = ScrollController();
@@ -54,7 +56,7 @@ class _MoodsAndCategoriesState extends State<MoodsAndCategories> with AutomaticK
     }
     return (!fetched)
         ? mat.Center(
-            child: loadingWidget(context),
+            child: loadingWidget(context,ref.watch(themeProvider).color),
           )
         : mat.ListView(
              controller: ScrollController(),

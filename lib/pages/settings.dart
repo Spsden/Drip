@@ -3,8 +3,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import '../theme.dart';
@@ -51,7 +52,7 @@ List<WindowEffect> get currentWindowEffects {
 }
 
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({Key? key, this.navigatorKey}) : super(key: key);
   final GlobalKey? navigatorKey;
 
@@ -59,10 +60,10 @@ class SettingsPage extends StatefulWidget {
   _SettingsPageState createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final appTheme = context.watch<AppTheme>();
+    final appTheme = ref.watch(themeProvider);
         const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
         final tooltipThemeData = TooltipThemeData(decoration: () {

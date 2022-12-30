@@ -10,10 +10,11 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:hive/hive.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:provider/provider.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -21,7 +22,7 @@ bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
 List headList = Hive.box('cache').get('ytHomeHead', defaultValue: []) as List;
 
-class YouTubeHomeScreen extends StatefulWidget {
+class YouTubeHomeScreen extends ConsumerStatefulWidget {
 
   const YouTubeHomeScreen({
     Key? key,
@@ -33,7 +34,7 @@ class YouTubeHomeScreen extends StatefulWidget {
 
 String message = "";
 
-class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
+class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
     with AutomaticKeepAliveClientMixin<YouTubeHomeScreen> {
   // List ytSearch =
   //     Hive.box('settings').get('ytSearch', defaultValue: []) as List;
@@ -46,25 +47,26 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
   @override
   bool get wantKeepAlive => true;
 
-  _scrollListener() {
-    //Curves.easeInOutSine;
-    ScrollDirection scrollDirection =
-        _scrollController.position.userScrollDirection;
-    if (scrollDirection != ScrollDirection.idle) {
-      double scrollEnd = _scrollController.offset +
-          (scrollDirection == ScrollDirection.reverse ? 30.0 : -30.0);
-      scrollEnd = min(_scrollController.position.maxScrollExtent,
-          max(_scrollController.position.minScrollExtent, scrollEnd));
-      _scrollController.jumpTo(scrollEnd);
-    }
-  }
+  // _scrollListener() {
+  //   //Curves.easeInOutSine;
+  //   ScrollDirection scrollDirection =
+  //       _scrollController.position.userScrollDirection;
+  //   if (scrollDirection != ScrollDirection.idle) {
+  //     double scrollEnd = _scrollController.offset +
+  //         (scrollDirection == ScrollDirection.reverse ? 30.0 : -30.0);
+  //     scrollEnd = min(_scrollController.position.maxScrollExtent,
+  //         max(_scrollController.position.minScrollExtent, scrollEnd));
+  //     _scrollController.jumpTo(scrollEnd);
+  //   }
+  // }
+
 
   //Color cardColor = fluent.Colors.grey[40];
 
   @override
   void initState() {
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
+   // _scrollController = ScrollController();
+    // _scrollController.addListener(_scrollListener);
     if (!status) {
       ApiYouTube().ymusicHomePageData().then((value) {
         status = true;
@@ -92,6 +94,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final ThemeMode _themeMode = ref.watch(themeProvider).mode;
     fluent.Typography typography = fluent.FluentTheme.of(context).typography;
     super.build(context);
     final bool rotated =
@@ -102,7 +105,7 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
     if (boxSize > 250) boxSize = 250;
     return SingleChildScrollView(
         //dragStartBehavior: DragStartBehavior.start,
-        controller: _scrollController,
+       // controller: _scrollController,
         clipBehavior: Clip.hardEdge,
         primary: false,
         physics: const BouncingScrollPhysics(
@@ -121,9 +124,11 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
               CarouselSlider.builder(
                 // PageView.builder(
                 // controller: _pageController,
-                // physics: const BouncingScrollPhysics(),
+                //physics: const BouncingScrollPhysics(),
                 itemCount: headList.length,
                 options: CarouselOptions(
+                  scrollPhysics: BouncingScrollPhysics(),
+                  disableCenter: false,
                   height: boxSize + 20,
                   viewportFraction: rotated ? 0.36 : 1.0,
                   autoPlay: true,
@@ -137,59 +142,45 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                   int index,
                   int pageViewIndex,
                 ) =>
-                    GestureDetector(
-                  onTap: () {
-                    //onPushSearch?.call(headList[index]['title'].toString());
-                    // Navigator.of(context).pushNamed('searchpage',
-                    //     arguments: headList[index]['title'].toString());
-
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AllSearchResults(searchQuery:  headList[index]['title'].toString())));
-
-                  },
-                  child:  Card(
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child:
+                    Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child:
 
 
-                      // CachedNetworkImage(
-                      //    memCacheHeight: constraints.maxHeight.toInt(),
-                      //    memCacheWidth: constraints.maxWidth.toInt(),
-                      //   fit: BoxFit.cover,
-                      //   errorWidget: (context, _, __) => const Image(
-                      //     fit: BoxFit.cover,
-                      //     image: AssetImage(
-                      //       'assets/ytCover.png',
-                      //     ),
-                      //   ),
-                      //   imageUrl: headList[index]['image'].toString(),
-                      //   placeholder: (context, url) => const Image(
-                      //     fit: BoxFit.cover,
-                      //     image: AssetImage('assets/ytCover.png'),
-                      //   ),
-                      // ),
+                        // CachedNetworkImage(
+                        //    memCacheHeight: constraints.maxHeight.toInt(),
+                        //    memCacheWidth: constraints.maxWidth.toInt(),
+                        //   fit: BoxFit.cover,
+                        //   errorWidget: (context, _, __) => const Image(
+                        //     fit: BoxFit.cover,
+                        //     image: AssetImage(
+                        //       'assets/ytCover.png',
+                        //     ),
+                        //   ),
+                        //   imageUrl: headList[index]['image'].toString(),
+                        //   placeholder: (context, url) => const Image(
+                        //     fit: BoxFit.cover,
+                        //     image: AssetImage('assets/ytCover.png'),
+                        //   ),
+                        // ),
 
-                      ExtendedImage.network(
-                        headList[index]['image'].toString(),
-                        fit: fluent.BoxFit.cover,
-                        cache: true,
+                        ExtendedImage.network(
+                          headList[index]['image'].toString(),
+                          fit: fluent.BoxFit.cover,
+                          cache: true,
 
-                        clearMemoryCacheIfFailed: true,
-                        // filterQuality: fluent.FilterQuality.medium,
-
-
-                      )
+                          clearMemoryCacheIfFailed: true,
+                          // filterQuality: fluent.FilterQuality.medium,
 
 
-                  )
+                        )
 
 
-
-                  ),
+                    ),
                 ),
 
             ListView.builder(
@@ -249,9 +240,11 @@ class _YouTubeHomeScreenState extends State<YouTubeHomeScreen>
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    color: context.watch<AppTheme>().mode ==
+                                    color:
+
+                                    _themeMode ==
                                                 fluent.ThemeMode.dark ||
-                                            context.watch<AppTheme>().mode ==
+                                        _themeMode ==
                                                 fluent.ThemeMode.system
                                         ? fluent.Colors.grey[150].withOpacity(0.4)
                                         : fluent.Colors.grey[30]

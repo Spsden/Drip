@@ -1,9 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:drip/datasources/searchresults/albumsdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
-import 'package:provider/provider.dart';
+
 
 import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
@@ -67,12 +69,12 @@ class AlbumSearch extends StatelessWidget {
 }
 
 
-class AlbumCard extends StatelessWidget {
+class AlbumCard extends ConsumerWidget {
   const AlbumCard({Key? key, required this.albums}) : super(key: key);
   final Albums albums;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     double boxSize = !rotated
@@ -107,8 +109,8 @@ class AlbumCard extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               color:
-              context.watch<AppTheme>().mode == ThemeMode.dark ||
-                  context.watch<AppTheme>().mode ==
+              ref.watch(themeProvider).mode == ThemeMode.dark ||
+                  ref.watch(themeProvider).mode ==
                       ThemeMode.system
                   ? Colors.grey[150]
                   : Colors.grey[30]
@@ -169,8 +171,8 @@ class AlbumCard extends StatelessWidget {
               Text(
                 albums.title.toString(),
                 style:
-                typography.bodyStrong?.apply(fontSizeFactor: 1.2),
-                textAlign: TextAlign.center,
+                typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                textAlign: TextAlign.start,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -178,8 +180,8 @@ class AlbumCard extends StatelessWidget {
                 width: boxSize * 3/4,
              //   margin: const EdgeInsets.only(bottom: 15,left: 5,right: 5),
                 child: Text(
-                  '${albums.artists[0].name}\n${albums.year}',
-                  style: typography.bodyStrong
+                  '${albums.artists.firstOrNull == null ? 'NA' : albums.artists[0].name}\n${albums.year}',
+                  style: typography.body
                       ?.apply(fontSizeFactor: 1.0),
                   textAlign: TextAlign.center,
                   softWrap: false,
@@ -198,7 +200,7 @@ class AlbumCard extends StatelessWidget {
 
 
 
-class AlbumsSearchResults extends StatefulWidget {
+class AlbumsSearchResults extends ConsumerStatefulWidget {
   final String albumsQuery;
   const AlbumsSearchResults({Key? key, required this.albumsQuery}) : super(key: key);
 
@@ -206,7 +208,7 @@ class AlbumsSearchResults extends StatefulWidget {
   _AlbumsSearchResultsState createState() => _AlbumsSearchResultsState();
 }
 
-class _AlbumsSearchResultsState extends State<AlbumsSearchResults> {
+class _AlbumsSearchResultsState extends ConsumerState<AlbumsSearchResults> {
 
   final FloatingSearchBarController _controller = FloatingSearchBarController();
 
@@ -301,10 +303,10 @@ class _AlbumsSearchResultsState extends State<AlbumsSearchResults> {
                     animateTransitions: true,
                     transitionDuration: const Duration(milliseconds: 200),
                     firstPageProgressIndicatorBuilder: (_) => Center(
-                      child: loadingWidget(context)
+                      child: loadingWidget(context,ref.watch(themeProvider).color),
                     ),
                     newPageProgressIndicatorBuilder: (_) => Center(
-                      child: loadingWidget(context)
+                      child: loadingWidget(context,ref.watch(themeProvider).color),
                     ),
                     itemBuilder: (context, Albums, index) => AlbumCard(
                       albums: Albums,
