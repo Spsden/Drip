@@ -104,14 +104,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
                   child: AutoSuggestBox(
+                    highlightColor: Colors.white,
+                    placeholder: 'Search...',
+                    placeholderStyle: TextStyle(fontSize: 16),
+                    trailingIcon: SizedBox(child: IconButton(icon: const Icon(mat.Icons.search_rounded,size: 16,),onPressed: () {},),),
 
                     enableKeyboardControls: true,
                     onChanged: (text, reason) {
-                      if (index != 1) {
-                        ref.read(currentPageIndexProvider.notifier).state = 1;
 
-                      }
                        if (text.trim().isNotEmpty) {
+                         if (index != 1) {
+                           ref.read(currentPageIndexProvider.notifier).state = 1;
+
+                         }
                       ref.read(searchQueryProvider.notifier).state = text;
                       }
                     },

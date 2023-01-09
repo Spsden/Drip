@@ -188,7 +188,7 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
 
               print(results.length * page);
               if (itemIndexInPage >= results.length) {
-                scrollController.animateTo(100,
+                scrollController.animateTo(50,
                     duration: Duration(milliseconds: 600), curve: Curves.ease);
 
                 return null;

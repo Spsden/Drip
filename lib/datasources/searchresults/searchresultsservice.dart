@@ -40,6 +40,7 @@ class SearchMusic {
         var songslist = [];
         var communityPlaylistList = [];
         var videosList = [];
+        var featuredPlaylistList = [];
         String? topResultType = 'NONE';
 
 
@@ -63,6 +64,9 @@ class SearchMusic {
           }
           if ((listMap['category']).toString() == 'Videos') {
             videosList.add(listMap);
+          }
+          if ((listMap['category']).toString() == 'Featured playlists') {
+            featuredPlaylistList.add(listMap);
           }
 
           try{
@@ -110,6 +114,7 @@ class SearchMusic {
         // var topresultFiltered = jsonEncode(topResult);
         var communityPlaylistFiltered = jsonEncode(communityPlaylistList);
         var videosFiltered = jsonEncode(videosList);
+        var featuredPlaylist = jsonEncode(featuredPlaylistList);
 
         //print(artistFiltered);
 
@@ -121,12 +126,15 @@ class SearchMusic {
         final List<Albums> albumSearch = albumsFromJson(albumFiltered);
         final List<videos.Video> videoSearch =
             videos.videosFromJson(videosFiltered);
-        // final Topresults toppresult = topresultsFromJson(topresultFiltered);
+        final List<CommunityPlaylist> featuredPlaylistSearch =
+            communityPlaylistFromJson(featuredPlaylist);
+
 
         var mapOfSearchResults = {
           'artistSearch': artistSearch,
           'songSearch': songSearch,
           'albumSearch': albumSearch,
+          'featuredPlayListSearch' :featuredPlaylistSearch,
           'communityPlaylistSearch': communityPlaylistSearch,
           'videoSearch': videoSearch,
           'topResults': topResult,

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
@@ -7,6 +8,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../customwidgets/hovered_card.dart';
 import '../../datasources/searchresults/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
@@ -15,7 +17,7 @@ import '../search.dart';
 
 
 class CommunityPlaylistSearch extends ConsumerWidget {
-  late List<CommunityPlaylist> communityPlaylist = [];
+   List<CommunityPlaylist> communityPlaylist ;
   CommunityPlaylistSearch({
     Key? key,
     required this.communityPlaylist,
@@ -43,7 +45,8 @@ class CommunityPlaylistSearch extends ConsumerWidget {
             itemCount: communityPlaylist.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+
+            padding: const EdgeInsets.symmetric(horizontal: 10),
 
             itemBuilder: (context, index) {
               return mat.InkWell(
@@ -58,97 +61,102 @@ class CommunityPlaylistSearch extends ConsumerWidget {
 
 
                 },
-                child:  Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color:
-                        context.watch<AppTheme>().mode == ThemeMode.dark ||
-                            context.watch<AppTheme>().mode ==
-                                ThemeMode.system
-                            ? Colors.grey[150]
-                            : Colors.grey[30]
-
-                      // if(co)
-
-                      //fluent.Colors.grey[40]
-
-                      // context.watch<AppTheme>().cardColor
-
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    width: boxSize - 30,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: mat.Card(
-                            margin: const EdgeInsets.only(top: 15.0),
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child:
-
-                            FadeInImage(placeholder:
-                            const AssetImage('assets/cover.jpg'),
-                                width: 150,
-                                height: 150,
-                                fit: BoxFit.cover,
-
-                                image:  NetworkImage(
-                                    communityPlaylist[index].thumbnails.first.url.toString()
-                                )),
+                child: Container(
+                  margin: EdgeInsets.only(right: 15.0),
+                    child: CommunityPlaylistCard(communityPlaylist:communityPlaylist[index] ))
 
 
-                            // CachedNetworkImage(
-                            //   width: 150,
-                            //   height: 150,
-                            //   // imageBuilder: (context, imageProvider) =>
-                            //   //     CircleAvatar(
-                            //   //   radius: 80,
-                            //   //   backgroundImage: imageProvider,
-                            //   // ),
-                            //   fit: BoxFit.cover,
-                            //   errorWidget: (context, _, __) => const Image(
-                            //     fit: BoxFit.cover,
-                            //     image: AssetImage('assets/artist.jpg'),
-                            //   ),
-                            //   imageUrl:
-                            //   communityPlaylist[index].thumbnails.first.url.toString(),
-                            //   placeholder: (context, url) => const Image(
-                            //       fit: BoxFit.fill,
-                            //       image: AssetImage('assets/artist.jpg')),
-                            // ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        Text(
-                          communityPlaylist[index].title.toString(),
-                          style:
-                          typography.bodyStrong?.apply(fontSizeFactor: 1.2),
-                          textAlign: TextAlign.center,
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 15),
-                          child: Text(
-                            '${communityPlaylist[index].author}\n${communityPlaylist[index].itemCount}',
-                            style: typography.bodyStrong
-                                ?.apply(fontSizeFactor: 1.0),
-                            textAlign: TextAlign.center,
-                            softWrap: false,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(10.0),
+                //         color:
+                //         ref.watch(themeProvider).mode == ThemeMode.dark ||
+                //             ref.watch(themeProvider).mode ==
+                //                 ThemeMode.system
+                //             ? Colors.grey[150]
+                //             : Colors.grey[30]
+                //
+                //       // if(co)
+                //
+                //       //fluent.Colors.grey[40]
+                //
+                //       // context.watch<AppTheme>().cardColor
+                //
+                //     ),
+                //     margin: const EdgeInsets.all(10),
+                //     width: boxSize - 30,
+                //     child: Column(
+                //       children: [
+                //         Expanded(
+                //           child: mat.Card(
+                //             margin: const EdgeInsets.only(top: 15.0),
+                //             elevation: 5,
+                //             shape: RoundedRectangleBorder(
+                //               borderRadius: BorderRadius.circular(10.0),
+                //             ),
+                //             clipBehavior: Clip.antiAlias,
+                //             child:
+                //
+                //             FadeInImage(placeholder:
+                //             const AssetImage('assets/cover.jpg'),
+                //                 width: 150,
+                //                 height: 150,
+                //                 fit: BoxFit.cover,
+                //
+                //                 image:  NetworkImage(
+                //                     communityPlaylist[index].thumbnails.first.url.toString()
+                //                 )),
+                //
+                //
+                //             // CachedNetworkImage(
+                //             //   width: 150,
+                //             //   height: 150,
+                //             //   // imageBuilder: (context, imageProvider) =>
+                //             //   //     CircleAvatar(
+                //             //   //   radius: 80,
+                //             //   //   backgroundImage: imageProvider,
+                //             //   // ),
+                //             //   fit: BoxFit.cover,
+                //             //   errorWidget: (context, _, __) => const Image(
+                //             //     fit: BoxFit.cover,
+                //             //     image: AssetImage('assets/artist.jpg'),
+                //             //   ),
+                //             //   imageUrl:
+                //             //   communityPlaylist[index].thumbnails.first.url.toString(),
+                //             //   placeholder: (context, url) => const Image(
+                //             //       fit: BoxFit.fill,
+                //             //       image: AssetImage('assets/artist.jpg')),
+                //             // ),
+                //           ),
+                //         ),
+                //         const SizedBox(
+                //           height: 15.0,
+                //         ),
+                //         Text(
+                //           communityPlaylist[index].title.toString(),
+                //           style:
+                //           typography.bodyStrong?.apply(fontSizeFactor: 1.2),
+                //           textAlign: TextAlign.center,
+                //           softWrap: false,
+                //           overflow: TextOverflow.ellipsis,
+                //         ),
+                //         Container(
+                //           margin: const EdgeInsets.only(bottom: 15),
+                //           child: Text(
+                //             '${communityPlaylist[index].author}\n${communityPlaylist[index].itemCount}',
+                //             style: typography.bodyStrong
+                //                 ?.apply(fontSizeFactor: 1.0),
+                //             textAlign: TextAlign.center,
+                //             softWrap: false,
+                //             overflow: TextOverflow.ellipsis,
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //   ),
+                // ),
               );
             },
           ),
@@ -180,88 +188,71 @@ class CommunityPlaylistCard extends StatelessWidget {
 
 
         },
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: context.watch<AppTheme>().mode ==
-                    ThemeMode.dark ||
-                    context.watch<AppTheme>().mode ==
-                        ThemeMode.system
-                    ? Colors.grey[150].withOpacity(0.4)
-                    : Colors.grey[30]
-
-              // if(co)
-
-              //fluent.Colors.grey[40]
-
-              // context.watch<AppTheme>().cardColor
-
-            ),
-            // margin: const EdgeInsets.only(right: 10),
-            width:
-            (boxSize - 30) * (16 / 9),
-            height: (boxSize - 30) * (16 / 9),
+        child: HoveredCard(
 
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: mat.Card(
-                    //  margin: const EdgeInsets.all(8),
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(10.0),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child:
+                Row(
 
-                    FadeInImage(placeholder:
-                    const AssetImage('assets/cover.jpg'),
-                        //width : (boxSize - 30) * (16 / 9),
-                        // height: 37,
+                  children: [
+                    Expanded(
+
+                      child: FadeInImage(
+
+
+                        placeholder: const AssetImage('assets/cover.jpg'),
                         fit: BoxFit.cover,
-
-                        image:  NetworkImage(
-                            communityPlaylist.thumbnails.first.url.toString()
-                        )),
-
-
-
-
-                  ),
+                        image: NetworkImage(
+                          communityPlaylist.thumbnails[1].url.toString()
+                          //albums.thumbnails![1].url.toString(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  communityPlaylist.title,
-                  textAlign: TextAlign.left,
-                  softWrap: false,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                // Container(
-                //   margin: const EdgeInsets.only(bottom: 15,left: 5,right: 5),
-                //   child: Text(
-                //     playlistDataClass.title,
-                //
-                //     textAlign: TextAlign.center,
-                //     softWrap: false,
-                //     overflow: TextOverflow.ellipsis,
-                //     style: TextStyle(
-                //       fontSize: 11,
-                //
-                //     ),
-                //   ),
-                // )
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(padding:
+                    const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      child: Text(
+                        communityPlaylist.title,
+                        textAlign: TextAlign.center,
+                        style:
+                        typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                    Padding(padding:
+                    const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                      child: Text(
+                        communityPlaylist.author ?? 'NA',
+                        textAlign: TextAlign.center,
+                        style:
+                        typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+
+                    ),
+                    Padding(padding:
+                    const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Text(
+                        communityPlaylist.itemCount ?? 'NA',
+                        textAlign: TextAlign.center,
+                        style:
+                        typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    )
+                  ],
+                )
               ],
-            ),
-          ),
-        ),
+            ))
       ),
     );
   }
