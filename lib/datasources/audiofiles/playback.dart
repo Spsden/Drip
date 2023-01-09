@@ -75,6 +75,7 @@ class AudioControlCentre extends ChangeNotifier {
       mediakit.Playlist([mediakit.Media(streamLink, extras: track)],
           index: index),
     );
+    tracks.clear();
 
     addWatchPlaylist(track.videoId);
   }

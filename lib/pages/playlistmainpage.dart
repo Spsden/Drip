@@ -250,8 +250,7 @@ class _PlaylistMainState extends ConsumerState<PlaylistMain> {
                                             urlOfVideo: 'NA',
                                             videoId: _tracks[index].videoId.toString());
 
-                                        // AudioControlCentre.audioControlCentre
-                                        //     .open(currentMusicInstance);
+                                    ref.read(audioControlCentreProvider).open(currentMusicInstance);
 
 
                                         // await ref.watch(activeAudioDataNotifier)

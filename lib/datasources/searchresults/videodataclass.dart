@@ -4,9 +4,12 @@
 
 import 'dart:convert';
 
+
 Video videoFromJson(String str) => Video.fromJson(json.decode(str));
 
 String videoToJson(Video data) => json.encode(data.toJson());
+
+List<Video> videosFromJson(String str) => List<Video>.from(json.decode(str).map((x) => Video.fromJson(x)));
 
 class Video {
   Video({

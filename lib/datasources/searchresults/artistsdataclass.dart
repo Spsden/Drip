@@ -81,7 +81,7 @@
 //     final artists = artistsFromJson(jsonString);
 
 import 'dart:convert';
-
+Artists artistFromJson(String str) => Artists.fromJson(jsonDecode(str));
 List<Artists> ArtistsFromJson(String str) => List<Artists>.from(json.decode(str).map((x) => Artists.fromJson(x)));
 
 String artistsToJson(List<Artists> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

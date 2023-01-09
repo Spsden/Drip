@@ -1,11 +1,6 @@
-import 'dart:convert';
-
-
 
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/pages/moods_page.dart';
 
-import 'package:drip_api/drip_api.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -294,6 +289,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final String searchQuery = ref.watch(searchQueryProvider);
     final searchPageState = ref.watch(searchResultsProvider);
     Typography typography = FluentTheme.of(context).typography;
@@ -301,27 +297,31 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
     const biggerSpacer = SizedBox(height: 40.0);
     return ScaffoldPage(
         content: searchQuery.isEmpty
-            ? Center(
+            ? const Center(
                 child: Text('Suraj Pratap Singh'),
               )
             : searchPageState.when(
                 data: (results) {
+                  //return Text(results.toString());
                   List<Songs> songs = [];
-                  if (results['songResults'] != null) {
-                    songs = songsFromJson(jsonEncode(results['songResults']));
+                  if (results['songSearch'] != null) {
+                    songs = results['songSearch'];
                   }
 
                   List<Artists> artists = [];
 
-                  if (results['artistsResults'] != null) {
-                    artists =
-                        ArtistsFromJson(jsonEncode(results['artistsResults']));
+                  if (results['artistSearch'] != null) {
+                    artists = results['artistSearch'];
                   }
 
                   List<Albums> albums = [];
-                  if (results['albumsResults'] != null) {
-                    albums =
-                        albumsFromJson(jsonEncode(results['albumsResults']));
+                  if (results['albumSearch'] != null) {
+                    albums = results['albumSearch'];
+                  }
+
+                  Object? topResult = null;
+                  if (results['topResults'] != 'LOL') {
+                    topResult = results['topResults'];
                   }
 
                   return Padding(
@@ -350,7 +350,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                   children: [
                                     //mat.RaisedButton(onPressed: () => Navigator.of(context).context.findAncestorStateOfType<NavigatorState>()?.pop()),
                                     Text(
-                                      "You searched for ${searchQuery}",
+                                      "You searched for $searchQuery",
                                       style: typography.title
                                           ?.apply(fontSizeFactor: 1.4),
                                       maxLines: 2,
@@ -358,6 +358,12 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                       overflow: TextOverflow.ellipsis,
                                     ),
 
+                                    biggerSpacer,
+                                    topResult != null
+                                        ? Align(
+                                      alignment: Alignment.centerLeft,
+                                        child: topResultWidget(context, results))
+                                        : const SizedBox.shrink(),
                                     biggerSpacer,
 
                                     SizedBox(
@@ -401,9 +407,11 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                             //     1 /
                                             //     4,
                                             child: Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.green)),
+                                                // decoration: BoxDecoration(
+                                                //     border: Border.all(
+                                                //         color: Colors.green)),
+
+
                                                 alignment: Alignment.centerLeft,
                                                 child: TrackBars(
                                                   songs: songs,
@@ -511,6 +519,52 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+}
+
+Widget topResultWidget(BuildContext context, dynamic results) {
+  Typography typography = FluentTheme.of(context).typography;
+
+  Widget topWidget = const SizedBox();
+  switch (results['topResultType']) {
+    case 'artist':
+      topWidget = ArtistCard(artists: results['topResults']);
+
+      break;
+
+    case 'album':
+      topWidget = AlbumCard(albums: results['topResults']);
+
+      break;
+
+    case 'video':
+      topWidget = SizedBox.shrink();
+
+      break;
+    case 'song':
+      topWidget = TrackBars(
+          songs: [...results['topResults']], isFromPrimarySearchPage: true);
+
+      break;
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      SizedBox(
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Top result",
+              style: typography.subtitle?.apply(fontSizeFactor: 1.0),
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 10,),
+      topWidget
+    ],
+  );
 }

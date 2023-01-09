@@ -61,8 +61,10 @@ class TrackCardLarge extends StatelessWidget {
         borderRadius: mat.BorderRadius.circular(10),
         color: color,
         child: mat.InkWell(
+          
           customBorder: mat.RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)),
+          onHover: ,
           onTap: () async {
             onTrackTap();
           },
@@ -141,8 +143,8 @@ class TrackCardLarge extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                biggerSpacer,
-                const Icon(FluentIcons.more)
+
+
               ],
             ),
           ),

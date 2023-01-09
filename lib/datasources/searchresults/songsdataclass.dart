@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 List<Album> noneAlbum = [Album(id: 'na', name: 'na')];
+Songs songFromJson(String str) => Songs.fromJson(jsonDecode(str));
 
 List<Songs> songsFromJson(String str) =>
     List<Songs>.from(json.decode(str).map((x) => Songs.fromJson(x)));

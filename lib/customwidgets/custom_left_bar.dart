@@ -22,12 +22,12 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
-      backgroundColor: Colors.transparent,
+      backgroundColor: fluent.FluentTheme.of(context).cardColor,
        // backgroundColor: fluent.FluentTheme.of(context).scaffoldBackgroundColor,
         indicatorColor: ref.watch(themeProvider).color,
         elevation: 1,
         selectedIconTheme:
-            const IconThemeData(color: Colors.deepPurpleAccent, opacity: 1, size: 30),
+            const IconThemeData(color: Colors.purpleAccent , opacity: 1, size: 30),
         unselectedIconTheme: const IconThemeData(color: Colors.black26),
         labelType: NavigationRailLabelType.all,
         onDestinationSelected: (int index) {
@@ -76,7 +76,7 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
                 color: Colors.white,
               ),
               label: Text(
-                'Home',
+                'Settings',
                 style: TextStyle(color: Colors.white),
               ))
         ],

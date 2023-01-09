@@ -42,12 +42,6 @@ class ApiYouTube {
         final List listOfSuggestions = searchSuggestion[1] ;
 
 
-        // for(String i in listOfSuggestions){
-        //   print(i);
-        // }
-
-
-
         return listOfSuggestions;
       } else {
         return [];

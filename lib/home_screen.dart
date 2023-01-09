@@ -104,29 +104,65 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
                   child: AutoSuggestBox(
+
+                    enableKeyboardControls: true,
                     onChanged: (text, reason) {
                       if (index != 1) {
                         ref.read(currentPageIndexProvider.notifier).state = 1;
 
                       }
-                      // if (text.trim().isNotEmpty) {
+                       if (text.trim().isNotEmpty) {
                       ref.read(searchQueryProvider.notifier).state = text;
-                      // }
+                      }
                     },
                     controller: _textEditingController,
-                    items: suggestions.map((item) {
-                      return AutoSuggestBoxItem(
-                        label: item,
-                        value: item,
-                        onSelected: () async {
-                          if (index != 1) {
-                            ref.read(currentPageIndexProvider.notifier).state = 1;
+                    items:
 
-                          }
-                          ref.read(searchQueryProvider.notifier).state = item;
+                    ref.watch(searchSuggestionsProvider).when(
+                        data: (suggestions) =>  suggestions.map((item) {
+                          return AutoSuggestBoxItem(
+
+                            label: item.toString(),
+                            value: item,
+                            onSelected: () async {
+                              if (index != 1) {
+                                ref.read(currentPageIndexProvider.notifier).state = 1;
+
+                              }
+                              ref.read(searchQueryProvider.notifier).state = item;
+                            },
+                          );
+                        }).toList(),
+                        error: (errr,_) {
+                          return
+
+                      [AutoSuggestBoxItem(
+                              label: 'eror',
+                              value: 'error',
+                              child: Text('error'),
+                              onSelected: () async {
+
+                              },
+                            )
+                          ];
+
                         },
-                      );
-                    }).toList(),
+                        loading: ()  {
+
+                          return
+
+                            [AutoSuggestBoxItem(
+                              label: 'Loading',
+                              value: 'Loading',
+                              onSelected: () async {
+
+                              },
+                            )
+                            ];
+
+                        })
+
+
                   ),
                 ),
               ])),
@@ -138,31 +174,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           Row(
             children: [
-              Acrylic(
-                child: CustomLeftBar(
-                  indexCallBack: () {},
-                  onIndexChange: (callBackIndex) {
-                    // setState(() {
-                    //   index = callBackIndex;
-                    // });
-                    // _pageController.animateToPage(index,
-                    //     duration: const Duration(milliseconds: 500),
-                    //     curve: Curves.fastLinearToSlowEaseIn);
-                  },
-                ),
+              CustomLeftBar(
+                indexCallBack: () {},
+                onIndexChange: (callBackIndex) {
+                  // setState(() {
+                  //   index = callBackIndex;
+                  // });
+                  // _pageController.animateToPage(index,
+                  //     duration: const Duration(milliseconds: 500),
+                  //     curve: Curves.fastLinearToSlowEaseIn);
+                },
               ),
               Expanded(
 
 
-                  child: PageView.builder(
-                    itemCount: 4,
-                    itemBuilder: (context,position){
-                      return allStacks[position];
+                  child:
 
-                    },
+                  PageView(
+
                 scrollDirection: Axis.vertical,
                 controller: _pageController,
-                // children: allStacks,
+                 children: allStacks,
               ))
             ],
           ),
@@ -172,12 +204,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             left: 0,
 
             child: Consumer(builder: (context, ref, child) {
-              ///final generatedColor = ref.watch(paletteColorProvider).asData?.value;
+              var generatedColor = Colors.transparent;
+              ref.watch(paletteColorProvider).then((value) => generatedColor = value);
               return Acrylic(
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      //color: generatedColor
+                    color: generatedColor
+
 
                   ),
                   // child: Acrylic(

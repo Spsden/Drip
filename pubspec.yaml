@@ -64,8 +64,8 @@ dependencies:
     path: external/media_kit/media_kit
   collection: ^1.16.0
   diffutil_dart: ^3.0.0
-  riverpod_infinite_scroll: ^1.0.9
-  pull_to_refresh: ^2.0.0
+
+
   hooks_riverpod: ^2.1.2
 
 

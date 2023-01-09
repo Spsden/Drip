@@ -1,5 +1,6 @@
 
 import 'package:drip/datasources/audiofiles/playback.dart';
+import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/theme.dart';
 import 'package:drip_api/drip_api.dart';
 import 'package:extended_image/extended_image.dart';
@@ -20,8 +21,10 @@ FutureProvider.family((ref, int pageNum) async {
   return newItems;
 });
 
-final searchResultsProvider = FutureProvider.autoDispose((ref) async {
-  final result = await DripSearch.search(query: ref.watch(searchQueryProvider));
+final searchResultsProvider = FutureProvider.autoDispose<Map>((ref) async {
+  //final result = await DripSearch.search(query: ref.watch(searchQueryProvider));
+  final result = await SearchMusic.getAllSearchResults(ref.watch(searchQueryProvider));
+  print(result['songSearch']);
   if (kDebugMode) {
     print('fetched');
     //print(jsonEncode(res
@@ -29,9 +32,17 @@ final searchResultsProvider = FutureProvider.autoDispose((ref) async {
   return result;
 });
 
+final searchSuggestionsProvider = FutureProvider.autoDispose((ref)  async {
+  final List suggestions = await ApiYouTube().searchSuggestions(searchQuery: ref.watch(searchQueryProvider));
+  return suggestions;
+
+});
+
 final currentPageIndexProvider = StateProvider((ref) => 0);
 
-final paletteColorProvider = FutureProvider.autoDispose((ref)async {
+
+
+final paletteColorProvider = StateProvider.autoDispose((ref)async {
   final audioControlCentre = ref.watch(audioControlCentreProvider);
   String imgUrl = audioControlCentre.player.state.playlist.medias.isNotEmpty ? audioControlCentre.player.state.playlist.medias[audioControlCentre.index].extras.thumbs[0].toString() : 'https://i.imgur.com/L3Ip1wh.png';
   PaletteGenerator paletteGenerator;

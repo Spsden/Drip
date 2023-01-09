@@ -3,7 +3,7 @@
 //     final albums = albumsFromJson(jsonString);
 
 import 'dart:convert';
-
+Albums albumFromJson(String str) => Albums.fromJson(jsonDecode(str));
 List<Albums> albumsFromJson(String str) =>
     List<Albums>.from(json.decode(str).map((x) => Albums.fromJson(x)));
 

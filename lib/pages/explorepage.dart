@@ -6,7 +6,7 @@ import 'package:drip/pages/searchpage.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
-
+import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,13 +17,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
 List headList = Hive.box('cache').get('ytHomeHead', defaultValue: []) as List;
 
 class YouTubeHomeScreen extends ConsumerStatefulWidget {
-
   const YouTubeHomeScreen({
     Key? key,
   }) : super(key: key);
@@ -60,12 +58,11 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   //   }
   // }
 
-
   //Color cardColor = fluent.Colors.grey[40];
 
   @override
   void initState() {
-   // _scrollController = ScrollController();
+    _scrollController = ScrollController();
     // _scrollController.addListener(_scrollListener);
     if (!status) {
       ApiYouTube().ymusicHomePageData().then((value) {
@@ -100,88 +97,54 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
     double boxSize = !rotated
-        ? MediaQuery.of(context).size.width / 2
-        : MediaQuery.of(context).size.height / 2.5;
+        ? MediaQuery.of(context).size.width / 2.5
+        : MediaQuery.of(context).size.height / 3;
     if (boxSize > 250) boxSize = 250;
     return SingleChildScrollView(
-        //dragStartBehavior: DragStartBehavior.start,
-       // controller: _scrollController,
-        clipBehavior: Clip.hardEdge,
-        primary: false,
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
+        dragStartBehavior: DragStartBehavior.start,
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(10, 30, 10, 35),
         child: Column(
           children: [
-            // const Align(
-            //   alignment: Alignment.topLeft,
-            //   child: Text(
-            //     'Hi, Suraj',
-            //     style: TextStyle(fontSize: 40.0),
-            //   ),
-            // ),
+
             if (headList.isNotEmpty)
               CarouselSlider.builder(
-                // PageView.builder(
-                // controller: _pageController,
-                //physics: const BouncingScrollPhysics(),
+
                 itemCount: headList.length,
                 options: CarouselOptions(
-                  scrollPhysics: BouncingScrollPhysics(),
-                  disableCenter: false,
+
                   height: boxSize + 20,
                   viewportFraction: rotated ? 0.36 : 1.0,
                   autoPlay: true,
                   enlargeCenterPage: true,
                 ),
-                // onPageChanged: (int value) {
-                // _currentPage = value;
-                // },
+
                 itemBuilder: (
                   BuildContext context,
                   int index,
                   int pageViewIndex,
                 ) =>
-                    Card(
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child:
+                    GestureDetector(
+                      onTap: (){
+                        print('lol');
+                      },
+                      child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          //clipBehavior: Clip.antiAlias,
+                          child: ExtendedImage.network(
+                            headList[index]['image'].toString(),
+                            fit: fluent.BoxFit.cover,
+                            cache: true,
 
-
-                        // CachedNetworkImage(
-                        //    memCacheHeight: constraints.maxHeight.toInt(),
-                        //    memCacheWidth: constraints.maxWidth.toInt(),
-                        //   fit: BoxFit.cover,
-                        //   errorWidget: (context, _, __) => const Image(
-                        //     fit: BoxFit.cover,
-                        //     image: AssetImage(
-                        //       'assets/ytCover.png',
-                        //     ),
-                        //   ),
-                        //   imageUrl: headList[index]['image'].toString(),
-                        //   placeholder: (context, url) => const Image(
-                        //     fit: BoxFit.cover,
-                        //     image: AssetImage('assets/ytCover.png'),
-                        //   ),
-                        // ),
-
-                        ExtendedImage.network(
-                          headList[index]['image'].toString(),
-                          fit: fluent.BoxFit.cover,
-                          cache: true,
-
-                          clearMemoryCacheIfFailed: true,
-                          // filterQuality: fluent.FilterQuality.medium,
-
-
-                        )
-
-
+                            clearMemoryCacheIfFailed: true,
+                            // filterQuality: fluent.FilterQuality.medium,
+                          )),
                     ),
-                ),
+              ),
 
             ListView.builder(
               itemCount: searchedList.length,
@@ -197,9 +160,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                         Padding(
                           padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
                           child: Text(
-
                             '${searchedList[index]["title"]}',
-
                             style: typography.title,
                             textAlign: fluent.TextAlign.left,
                           ),
@@ -220,20 +181,18 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                           final item = searchedList[index]['playlists'][idx];
                           return GestureDetector(
                             onTap: () {
-
-                              if(item['type'] == 'video'){
+                              if (item['type'] == 'video') {
                                 var query = item['title'].toString();
-                                launch('https://www.youtube.com/results?search_query=$query');
+                                launch(
+                                    'https://www.youtube.com/results?search_query=$query');
                               } else {
-
-                                Navigator.push(context,
-                                   MaterialPageRoute(builder: (context) => PlaylistMain(playlistId: item['playlistId'].toString())));
-
-
-
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PlaylistMain(
+                                            playlistId: item['playlistId']
+                                                .toString())));
                               }
-
-
                             },
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -241,13 +200,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10.0),
                                     color:
-
-                                    _themeMode ==
-                                                fluent.ThemeMode.dark ||
-                                        _themeMode ==
-                                                fluent.ThemeMode.system
-                                        ? fluent.Colors.grey[150].withOpacity(0.4)
-                                        : fluent.Colors.grey[30]
+                                        _themeMode == fluent.ThemeMode.dark ||
+                                                _themeMode ==
+                                                    fluent.ThemeMode.system
+                                            ? fluent.Colors.grey[150]
+                                                .withOpacity(0.4)
+                                            : fluent.Colors.grey[30]
 
                                     // if(co)
 
@@ -264,62 +222,56 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   children: [
                                     Expanded(
                                       child: Card(
-                                        margin: const EdgeInsets.only(top: 15.0),
-                                        elevation: 5,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                        clipBehavior: Clip.antiAlias,
-                                        child:
+                                          margin:
+                                              const EdgeInsets.only(top: 15.0),
+                                          elevation: 5,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          clipBehavior: Clip.antiAlias,
+                                          child: ExtendedImage.network(
+                                            item['image'].toString(),
+                                            fit: fluent.BoxFit.cover,
 
-                                        ExtendedImage.network(
-                                          item['image'].toString(),
-                                          fit: fluent.BoxFit.cover,
+                                            cache: true,
+                                            // loadStateChanged: loadingWidget(context),
 
+                                            clearMemoryCacheIfFailed: true,
+                                            // filterQuality: fluent.FilterQuality.medium,
+                                          )
 
-                                          cache: true,
-                                         // loadStateChanged: loadingWidget(context),
+                                          // CachedNetworkImage(
+                                          //   // memCacheHeight: 80,
+                                          //   // memCacheWidth: (item['type'] != 'playlist'
+                                          //   //     ? (boxSize - 30) * (16 / 9)
+                                          //   //     : boxSize - 30).toInt(),
+                                          //   fit: BoxFit.cover,
+                                          //   errorWidget: (context, _, __) =>
+                                          //       Image(
+                                          //     fit: BoxFit.cover,
+                                          //     image: item['type'] != 'playlist'
+                                          //         ? const AssetImage(
+                                          //             'assets/ytCover.png',
+                                          //           )
+                                          //         : const AssetImage(
+                                          //             'assets/cover.jpg',
+                                          //           ),
+                                          //   ),
+                                          //   imageUrl: item['image'].toString(),
+                                          //   placeholder: (context, url) => Image(
+                                          //     fit: BoxFit.cover,
+                                          //     image: item['type'] != 'playlist'
+                                          //         ? const AssetImage(
+                                          //             'assets/ytCover.png',
+                                          //           )
+                                          //         : const AssetImage(
+                                          //             'assets/cover.jpg',
+                                          //           ),
+                                          //   ),
+                                          // ),
 
-
-                                          clearMemoryCacheIfFailed: true,
-                                          // filterQuality: fluent.FilterQuality.medium,
-
-
-                                        )
-
-                                        // CachedNetworkImage(
-                                        //   // memCacheHeight: 80,
-                                        //   // memCacheWidth: (item['type'] != 'playlist'
-                                        //   //     ? (boxSize - 30) * (16 / 9)
-                                        //   //     : boxSize - 30).toInt(),
-                                        //   fit: BoxFit.cover,
-                                        //   errorWidget: (context, _, __) =>
-                                        //       Image(
-                                        //     fit: BoxFit.cover,
-                                        //     image: item['type'] != 'playlist'
-                                        //         ? const AssetImage(
-                                        //             'assets/ytCover.png',
-                                        //           )
-                                        //         : const AssetImage(
-                                        //             'assets/cover.jpg',
-                                        //           ),
-                                        //   ),
-                                        //   imageUrl: item['image'].toString(),
-                                        //   placeholder: (context, url) => Image(
-                                        //     fit: BoxFit.cover,
-                                        //     image: item['type'] != 'playlist'
-                                        //         ? const AssetImage(
-                                        //             'assets/ytCover.png',
-                                        //           )
-                                        //         : const AssetImage(
-                                        //             'assets/cover.jpg',
-                                        //           ),
-                                        //   ),
-                                        // ),
-
-
-                                      ),
+                                          ),
                                     ),
                                     const SizedBox(
                                       height: 15.0,
@@ -329,12 +281,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                       textAlign: TextAlign.left,
                                       softWrap: false,
                                       style: const fluent.TextStyle(
-                                        fontWeight: FontWeight.w700
-                                      ),
+                                          fontWeight: FontWeight.w700),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.only(bottom: 15,left: 5,right: 5),
+                                      margin: const EdgeInsets.only(
+                                          bottom: 15, left: 5, right: 5),
                                       child: Text(
                                         item['type'] != 'video'
                                             ? '${item["count"]} Tracks | ${item["description"]}'
@@ -359,7 +311,9 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                         },
                       ),
                     ),
-                    const fluent.SizedBox(height: 30,)
+                    const fluent.SizedBox(
+                      height: 30,
+                    )
                   ],
                 );
               },
@@ -371,4 +325,3 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
         ));
   }
 }
-

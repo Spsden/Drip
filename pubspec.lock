@@ -756,13 +756,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-  pull_to_refresh:
-    dependency: "direct main"
-    description:
-      name: pull_to_refresh
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   random_color:
     dependency: "direct main"
     description:
@@ -784,13 +777,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  riverpod_infinite_scroll:
-    dependency: "direct main"
-    description:
-      name: riverpod_infinite_scroll
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.9"
   rxdart:
     dependency: transitive
     description:
