@@ -61,10 +61,10 @@ class TrackCardLarge extends StatelessWidget {
         borderRadius: mat.BorderRadius.circular(10),
         color: color,
         child: mat.InkWell(
-          
+
           customBorder: mat.RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)),
-          onHover: ,
+        //  onHover: ,
           onTap: () async {
             onTrackTap();
           },
@@ -84,32 +84,7 @@ class TrackCardLarge extends StatelessWidget {
                   shape: BoxShape.circle,
 
                 ),
-                // CachedNetworkImage(
-                //
-                //   memCacheHeight: 40,
-                //   memCacheWidth: 40,
-                //   width: 40,
-                //   height: 40,
-                //   imageBuilder: (context, imageProvider) =>
-                //       CircleAvatar(
-                //         backgroundColor: Colors.transparent,
-                //         foregroundColor: Colors.transparent,
-                //         radius: 100,
-                //         backgroundImage: imageProvider,
-                //       ),
-                //   fit: BoxFit.cover,
-                //   errorWidget: (context, _, __) =>
-                //   const Image(
-                //     fit: BoxFit.cover,
-                //     image: AssetImage('assets/cover.jpg'),
-                //   ),
-                //   imageUrl: data.thumbnail,
-                //
-                //
-                //   placeholder: (context, url) =>
-                //   const Image(
-                //       fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
-                // ),
+
                 spacer,
                 SizedBox(
                   width: size * 1 / 6,
@@ -127,15 +102,7 @@ class TrackCardLarge extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // spacer,
-                // if (localSize > 300)
-                //   SizedBox(
-                //     width: localSize * 1 / 8,
-                //     child: Text(
-                //       data.album,
-                //       overflow: TextOverflow.ellipsis,
-                //     ),
-                //   ),
+
                 SizedBox(
                   // width: localSize * 1 / 15,
                   child: Text(

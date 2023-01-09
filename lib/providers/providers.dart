@@ -21,8 +21,8 @@ FutureProvider.family((ref, int pageNum) async {
   return newItems;
 });
 
+
 final searchResultsProvider = FutureProvider.autoDispose<Map>((ref) async {
-  //final result = await DripSearch.search(query: ref.watch(searchQueryProvider));
   final result = await SearchMusic.getAllSearchResults(ref.watch(searchQueryProvider));
   print(result['songSearch']);
   if (kDebugMode) {
@@ -32,10 +32,11 @@ final searchResultsProvider = FutureProvider.autoDispose<Map>((ref) async {
   return result;
 });
 
+
+
 final searchSuggestionsProvider = FutureProvider.autoDispose((ref)  async {
   final List suggestions = await ApiYouTube().searchSuggestions(searchQuery: ref.watch(searchQueryProvider));
   return suggestions;
-
 });
 
 final currentPageIndexProvider = StateProvider((ref) => 0);
