@@ -6,10 +6,12 @@ class HoveredCard extends StatefulWidget {
     super.key,
     required this.child,
     this.clickable = true,
+    this.aspectRatio = const AspectRatio(aspectRatio: 4/5.4),
   });
 
   final Widget child;
   final bool clickable;
+  final AspectRatio aspectRatio ;
 
 
   @override
@@ -39,40 +41,39 @@ class _HoveredCardState extends State<HoveredCard> {
       cursor: widget.clickable
           ? SystemMouseCursors.click
           : SystemMouseCursors.basic,
-      child: AspectRatio(
-        aspectRatio: 4/5.4
-        ,
-        child: AnimatedContainer(
-         // width: MediaQuery.of(context).size.width/5,
+      child: AnimatedContainer(
+       height: 200,
+        width: 180,
 
-          margin: const EdgeInsets.only(right: 15),
+
+        margin: const EdgeInsets.only(right: 15),
+        duration: kThemeAnimationDuration,
+        curve: animationCurve,
+        decoration: BoxDecoration(
+
+
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline,
+            width: 1,
+          ),
+          borderRadius: borderRadius,
+        ),
+        foregroundDecoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(
+            _hovered ? 0.12 : 0,
+          ),
+          borderRadius: borderRadius,
+        ),
+        child: TweenAnimationBuilder<BorderRadius>(
           duration: kThemeAnimationDuration,
           curve: animationCurve,
-          decoration: BoxDecoration(
-
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outline,
-              width: 1,
-            ),
+          tween: Tween(begin: BorderRadius.zero, end: borderRadius),
+          builder: (context, borderRadius, child) => ClipRRect(
+            clipBehavior: Clip.antiAlias,
             borderRadius: borderRadius,
+            child: child,
           ),
-          foregroundDecoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(
-              _hovered ? 0.12 : 0,
-            ),
-            borderRadius: borderRadius,
-          ),
-          child: TweenAnimationBuilder<BorderRadius>(
-            duration: kThemeAnimationDuration,
-            curve: animationCurve,
-            tween: Tween(begin: BorderRadius.zero, end: borderRadius),
-            builder: (context, borderRadius, child) => ClipRRect(
-              clipBehavior: Clip.antiAlias,
-              borderRadius: borderRadius,
-              child: child,
-            ),
-            child: widget.child,
-          ),
+          child: widget.child,
         ),
       ),
     );

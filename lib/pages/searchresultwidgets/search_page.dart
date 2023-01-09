@@ -11,6 +11,7 @@ import 'package:flutter/material.dart' as mat;
 
 import '../../datasources/searchresults/albumsdataclass.dart';
 import '../../datasources/searchresults/artistsdataclass.dart';
+import '../../datasources/searchresults/videodataclass.dart';
 import '../../providers/providers.dart';
 
 import '../common/tracklist.dart';
@@ -277,7 +278,7 @@ class AllSearchResults extends ConsumerStatefulWidget {
 
 class _AllSearchResultsState extends ConsumerState<AllSearchResults>
     with AutomaticKeepAliveClientMixin {
-  List suggestions = ['Hello', 'arijit', 'justin'];
+ 
 
   @override
   void initState() {
@@ -298,7 +299,8 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
     return ScaffoldPage(
-        content: searchQuery == ''
+
+        content: searchQuery.isEmpty
             ? const Center(
                 child: Text('Suraj Pratap Singh'),
               )
@@ -328,6 +330,11 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                   if (results['communityPlaylistSearch'] != null) {
                     communityPlaylist = results['communityPlaylistSearch'];
                   }
+                 // print(featuredPlaylist.length);
+                  List<Video> videos = [];
+                  if (results['videoSearch'] != null) {
+                    videos = results['videoSearch'];
+                  }
 
                   Object? topResult = null;
                   if (results['topResults'] != 'LOL') {
@@ -337,6 +344,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                   return ScrollConfiguration(
                       behavior: const FluentScrollBehavior(),
                       child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         dragStartBehavior: DragStartBehavior.down,
                         physics: const BouncingScrollPhysics(
                             parent: ClampingScrollPhysics()),
@@ -353,20 +361,21 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                         child: widget,
                                       )),
                               children: [
-                                //mat.RaisedButton(onPressed: () => Navigator.of(context).context.findAncestorStateOfType<NavigatorState>()?.pop()),
-                                Text(
-                                  "You searched for $searchQuery",
-                                  style: typography.title
-                                      ?.apply(fontSizeFactor: 1.4),
-                                  maxLines: 2,
-                                  textAlign: TextAlign.start,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                          
 
-                                biggerSpacer,
+
+
                                 topResult != null
-                                    ? Align(
-                                  alignment: Alignment.centerLeft,
+                                    ? Container(
+                                  height: 300,
+                                  padding: const EdgeInsets.all(10.0),
+
+                                  decoration: BoxDecoration(
+                                    color: FluentTheme.of(context).cardColor
+                                        ,
+                                    borderRadius: BorderRadius.circular(8.0)
+                                  ),
+
                                     child: topResultWidget(context, results))
                                     : const SizedBox.shrink(),
                                 biggerSpacer,
@@ -511,87 +520,104 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                     : const Text('No albums available'),
                                 biggerSpacer,
 
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Featured playlists",
-                                        style: typography.subtitle
-                                            ?.apply(fontSizeFactor: 1.0),
-                                      ),
-                                      FilledButton(
-                                        child: Row(
-                                          children: const [
-                                            //Icon(FluentIcons.more),
-                                            // spacer,
-                                            Text('Show more',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                    FontWeight.w500)),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              mat.MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PlaylistInfinitePaginationWidget(
-                                                       communityPlaylistQuery: searchQuery,
-                                                      )));
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
+
                                 spacer,
-                                featuredPlaylist.isEmpty || albums != null
-                                    ? CommunityPlaylistSearch(communityPlaylist: featuredPlaylist)
-                                    : const Text('No Playlists available'),
+                                featuredPlaylist.isNotEmpty
+                                    ? Column(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Featured playlists",
+                                            style: typography.subtitle
+                                                ?.apply(fontSizeFactor: 1.0),
+                                          ),
+                                          FilledButton(
+                                            child: Row(
+                                              children: const [
+                                                //Icon(FluentIcons.more),
+                                                // spacer,
+                                                Text('Show more',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                        FontWeight.w500)),
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  mat.MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PlaylistInfinitePaginationWidget(
+                                                            communityPlaylistQuery: searchQuery,
+                                                          )));
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    CommunityPlaylistSearch(communityPlaylist: featuredPlaylist)
+                                  ],
+
+                                )
+
+
+                                    : const Text('No Featured Playlists available'),
 
                                 biggerSpacer,
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Community playlists",
-                                        style: typography.subtitle
-                                            ?.apply(fontSizeFactor: 1.0),
+
+
+
+                                communityPlaylist.isNotEmpty
+                                    ? Column(
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Community playlists",
+                                            style: typography.subtitle
+                                                ?.apply(fontSizeFactor: 1.0),
+                                          ),
+                                          FilledButton(
+                                            child: Row(
+                                              children: const [
+                                                //Icon(FluentIcons.more),
+                                                // spacer,
+                                                Text('Show more',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                        FontWeight.w500)),
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  mat.MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PlaylistInfinitePaginationWidget(
+                                                            communityPlaylistQuery: searchQuery,
+                                                          )));
+                                            },
+                                          ),
+                                        ],
                                       ),
-                                      FilledButton(
-                                        child: Row(
-                                          children: const [
-                                            //Icon(FluentIcons.more),
-                                            // spacer,
-                                            Text('Show more',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                    FontWeight.w500)),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              mat.MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PlaylistInfinitePaginationWidget(
-                                                        communityPlaylistQuery: searchQuery,
-                                                      )));
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                spacer,
-                                communityPlaylist.isEmpty || albums != null
-                                    ? CommunityPlaylistSearch(communityPlaylist: communityPlaylist)
+                                    ),
+                                    spacer,
+                                    CommunityPlaylistSearch(communityPlaylist: communityPlaylist)
+                                  ],
+                                )
+
+
                                     : const Text('No Playlists available'),
 
 
@@ -654,7 +680,7 @@ Widget topResultWidget(BuildContext context, dynamic results) {
         ),
       ),
       const SizedBox(height: 10,),
-      topWidget
+      Expanded(child: topWidget)
     ],
   );
 }

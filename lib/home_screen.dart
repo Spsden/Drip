@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/pages/audio_player_bar.dart';
 import 'package:drip/pages/audioplayerbar.dart';
@@ -68,11 +67,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     ref.listen(currentPageIndexProvider, (previous, next) {
-      if(previous != next){
+      if (previous != next) {
         _pageController.animateToPage(ref.watch(currentPageIndexProvider),
             duration: const Duration(milliseconds: 500),
             curve: Curves.fastLinearToSlowEaseIn);
-
       }
     });
     return mat.Scaffold(
@@ -86,7 +84,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         leading: Button(
             onPressed: () async {
               await Navigator.maybePop(
-                  navigatorKeys[ref.read(currentPageIndexProvider)]!.currentState!.context);
+                  navigatorKeys[ref.read(currentPageIndexProvider)]!
+                      .currentState!
+                      .context);
             },
             child: const Icon(FluentIcons.back)),
         title: DragToMoveArea(
@@ -104,71 +104,67 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 3,
                   child: AutoSuggestBox(
-                    highlightColor: Colors.white,
-                    placeholder: 'Search...',
-                    placeholderStyle: TextStyle(fontSize: 16),
-                    trailingIcon: SizedBox(child: IconButton(icon: const Icon(mat.Icons.search_rounded,size: 16,),onPressed: () {},),),
+                      highlightColor: Colors.white,
+                      placeholder: 'Search...',
+                      placeholderStyle: const TextStyle(fontSize: 16),
+                      trailingIcon: SizedBox(
+                        child: IconButton(
+                          icon: const Icon(
+                            mat.Icons.search_rounded,
+                            size: 16,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      enableKeyboardControls: true,
+                      onChanged: (text, reason) {
+                        if (text.trim().isNotEmpty) {
+                          if (index != 1) {
+                            ref.read(currentPageIndexProvider.notifier).state =
+                                1;
+                          }
 
-                    enableKeyboardControls: true,
-                    onChanged: (text, reason) {
-
-                       if (text.trim().isNotEmpty) {
-                         if (index != 1) {
-                           ref.read(currentPageIndexProvider.notifier).state = 1;
-
-                         }
-                      ref.read(searchQueryProvider.notifier).state = text;
-                      }
-                    },
-                    controller: _textEditingController,
-                    items:
-
-                    ref.watch(searchSuggestionsProvider).when(
-                        data: (suggestions) =>  suggestions.map((item) {
-                          return AutoSuggestBoxItem(
-
-                            label: item.toString(),
-                            value: item,
-                            onSelected: () async {
-                              if (index != 1) {
-                                ref.read(currentPageIndexProvider.notifier).state = 1;
-
-                              }
-                              ref.read(searchQueryProvider.notifier).state = item;
-                            },
-                          );
-                        }).toList(),
-                        error: (errr,_) {
-                          return
-
-                      [AutoSuggestBoxItem(
-                              label: 'eror',
-                              value: 'error',
-                              child: Text('error'),
-                              onSelected: () async {
-
-                              },
-                            )
-                          ];
-
-                        },
-                        loading: ()  {
-
-                          return
-
-                            [AutoSuggestBoxItem(
-                              label: 'Loading',
-                              value: 'Loading',
-                              onSelected: () async {
-
-                              },
-                            )
+                        }
+                        ref.read(searchQueryProvider.notifier).state = text;
+                      },
+                      controller: _textEditingController,
+                      items: ref.watch(searchSuggestionsProvider).when(
+                          data: (suggestions) => suggestions.map((item) {
+                                return AutoSuggestBoxItem(
+                                  label: item.toString(),
+                                  value: item,
+                                  onSelected: () async {
+                                    if (index != 1) {
+                                      ref
+                                          .read(
+                                              currentPageIndexProvider.notifier)
+                                          .state = 1;
+                                    }
+                                    ref
+                                        .read(searchQueryProvider.notifier)
+                                        .state = item;
+                                  },
+                                );
+                              }).toList(),
+                          error: (errr, _) {
+                            return [
+                              AutoSuggestBoxItem(
+                                label: 'eror',
+                                value: 'error',
+                                child: Text('error'),
+                                onSelected: () async {},
+                              )
                             ];
-
-                        })
-
-
-                  ),
+                          },
+                          loading: () {
+                            return [
+                              AutoSuggestBoxItem(
+                                label: 'Loading',
+                                value: 'Loading',
+                                onSelected: () async {},
+                              )
+                            ];
+                          })),
                 ),
               ])),
         ),
@@ -191,15 +187,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 },
               ),
               Expanded(
-
-
-                  child:
-
-                  PageView(
-
+                  child: PageView(
                 scrollDirection: Axis.vertical,
                 controller: _pageController,
-                 children: allStacks,
+                children: allStacks,
               ))
             ],
           ),
@@ -207,18 +198,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             bottom: 0,
             right: 0,
             left: 0,
-
             child: Consumer(builder: (context, ref, child) {
               var generatedColor = Colors.transparent;
-              ref.watch(paletteColorProvider).then((value) => generatedColor = value);
+              ref
+                  .watch(paletteColorProvider)
+                  .then((value) => generatedColor = value);
               return Acrylic(
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                    color: generatedColor
-
-
-                  ),
+                      color: generatedColor),
                   // child: Acrylic(
 
                   child: const AudioPlayerBar(),
@@ -257,17 +246,16 @@ class SeekBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-   // print(ref.watch(audioControlCentreProvider).player.streams.position);
+    // print(ref.watch(audioControlCentreProvider).player.streams.position);
     return av.ProgressBar(
-      thumbGlowColor: Colors.blue,
-      baseBarColor: ref.watch(themeProvider).color.withOpacity(0.3),
-      thumbColor: ref.watch(themeProvider).color,
-      progressBarColor: ref.watch(themeProvider).color,
-      progress: ref.watch(audioControlCentreProvider).position,
-      // buffered: value.buffered,
-      total: ref.watch(audioControlCentreProvider).duration,
-      onSeek: (position) =>
-          ref.read(audioControlCentreProvider).seek(position)
-    );
+        thumbGlowColor: Colors.blue,
+        baseBarColor: ref.watch(themeProvider).color.withOpacity(0.3),
+        thumbColor: ref.watch(themeProvider).color,
+        progressBarColor: ref.watch(themeProvider).color,
+        progress: ref.watch(audioControlCentreProvider).position,
+        // buffered: value.buffered,
+        total: ref.watch(audioControlCentreProvider).duration,
+        onSeek: (position) =>
+            ref.read(audioControlCentreProvider).seek(position));
   }
 }

@@ -39,125 +39,17 @@ class CommunityPlaylistSearch extends ConsumerWidget {
         Container(
           alignment: Alignment.centerLeft,
           //margin: const EdgeInsets.symmetric(vertical: 20.0),
-          height: 280,
+           height: boxSize + 15,
           //width: double.infinity,
           child: ListView.builder(
             itemCount: communityPlaylist.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-
             padding: const EdgeInsets.symmetric(horizontal: 10),
-
             itemBuilder: (context, index) {
-              return mat.InkWell(
-
-                onTap: () {
-                  // Navigator.of(context).pushNamed('communityPlaylists',
-                  //     arguments: communityPlaylist[index].browseId.toString()
-
-                  Navigator.push(context,
-                      mat.MaterialPageRoute(builder: (context) => PlaylistMain(playlistId: communityPlaylist[index].browseId.toString())));
-
-
-
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 15.0),
-                    child: CommunityPlaylistCard(communityPlaylist:communityPlaylist[index] ))
-
-
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(10.0),
-                //         color:
-                //         ref.watch(themeProvider).mode == ThemeMode.dark ||
-                //             ref.watch(themeProvider).mode ==
-                //                 ThemeMode.system
-                //             ? Colors.grey[150]
-                //             : Colors.grey[30]
-                //
-                //       // if(co)
-                //
-                //       //fluent.Colors.grey[40]
-                //
-                //       // context.watch<AppTheme>().cardColor
-                //
-                //     ),
-                //     margin: const EdgeInsets.all(10),
-                //     width: boxSize - 30,
-                //     child: Column(
-                //       children: [
-                //         Expanded(
-                //           child: mat.Card(
-                //             margin: const EdgeInsets.only(top: 15.0),
-                //             elevation: 5,
-                //             shape: RoundedRectangleBorder(
-                //               borderRadius: BorderRadius.circular(10.0),
-                //             ),
-                //             clipBehavior: Clip.antiAlias,
-                //             child:
-                //
-                //             FadeInImage(placeholder:
-                //             const AssetImage('assets/cover.jpg'),
-                //                 width: 150,
-                //                 height: 150,
-                //                 fit: BoxFit.cover,
-                //
-                //                 image:  NetworkImage(
-                //                     communityPlaylist[index].thumbnails.first.url.toString()
-                //                 )),
-                //
-                //
-                //             // CachedNetworkImage(
-                //             //   width: 150,
-                //             //   height: 150,
-                //             //   // imageBuilder: (context, imageProvider) =>
-                //             //   //     CircleAvatar(
-                //             //   //   radius: 80,
-                //             //   //   backgroundImage: imageProvider,
-                //             //   // ),
-                //             //   fit: BoxFit.cover,
-                //             //   errorWidget: (context, _, __) => const Image(
-                //             //     fit: BoxFit.cover,
-                //             //     image: AssetImage('assets/artist.jpg'),
-                //             //   ),
-                //             //   imageUrl:
-                //             //   communityPlaylist[index].thumbnails.first.url.toString(),
-                //             //   placeholder: (context, url) => const Image(
-                //             //       fit: BoxFit.fill,
-                //             //       image: AssetImage('assets/artist.jpg')),
-                //             // ),
-                //           ),
-                //         ),
-                //         const SizedBox(
-                //           height: 15.0,
-                //         ),
-                //         Text(
-                //           communityPlaylist[index].title.toString(),
-                //           style:
-                //           typography.bodyStrong?.apply(fontSizeFactor: 1.2),
-                //           textAlign: TextAlign.center,
-                //           softWrap: false,
-                //           overflow: TextOverflow.ellipsis,
-                //         ),
-                //         Container(
-                //           margin: const EdgeInsets.only(bottom: 15),
-                //           child: Text(
-                //             '${communityPlaylist[index].author}\n${communityPlaylist[index].itemCount}',
-                //             style: typography.bodyStrong
-                //                 ?.apply(fontSizeFactor: 1.0),
-                //             textAlign: TextAlign.center,
-                //             softWrap: false,
-                //             overflow: TextOverflow.ellipsis,
-                //           ),
-                //         )
-                //       ],
-                //     ),
-                //   ),
-                // ),
-              );
+             return Container(
+                 margin: const EdgeInsets.only(right: 15.0),
+                 child: CommunityPlaylistCard(communityPlaylist:communityPlaylist[index] ));
             },
           ),
         )
@@ -174,14 +66,7 @@ class CommunityPlaylistCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
 
-    final bool rotated =
-        MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
-    double boxSize = !rotated
-        ? MediaQuery.of(context).size.width / 2
-        : MediaQuery.of(context).size.height / 2.5;
-    if (boxSize > 250) boxSize = 250;
-    return mat.Material(
-      child: mat.InkWell(
+    return mat.InkWell(
         onTap: () {
           Navigator.push(context,
               mat.MaterialPageRoute(builder: (context) => PlaylistMain(playlistId: communityPlaylist.browseId.toString())));
@@ -199,12 +84,13 @@ class CommunityPlaylistCard extends StatelessWidget {
                     Expanded(
 
                       child: FadeInImage(
+                        height: 170,
 
 
                         placeholder: const AssetImage('assets/cover.jpg'),
                         fit: BoxFit.cover,
                         image: NetworkImage(
-                          communityPlaylist.thumbnails[1].url.toString()
+                            communityPlaylist.thumbnails[0].url
                           //albums.thumbnails![1].url.toString(),
                         ),
                       ),
@@ -229,31 +115,20 @@ class CommunityPlaylistCard extends StatelessWidget {
                     Padding(padding:
                     const EdgeInsets.fromLTRB(10, 5, 10, 0),
                       child: Text(
-                        communityPlaylist.author ?? 'NA',
+                        'by ${communityPlaylist.author}' ?? 'NA',
                         textAlign: TextAlign.center,
                         style:
-                        typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                        typography.subtitle?.apply(fontSizeFactor: 0.7, color: mat.Colors.white60),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
 
                     ),
-                    Padding(padding:
-                    const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Text(
-                        communityPlaylist.itemCount ?? 'NA',
-                        textAlign: TextAlign.center,
-                        style:
-                        typography.bodyStrong?.apply(fontSizeFactor: 1.0),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    )
+
                   ],
                 )
               ],
             ))
-      ),
     );
   }
 }

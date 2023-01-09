@@ -78,6 +78,7 @@ class AlbumCard extends ConsumerWidget {
     Typography typography = FluentTheme.of(context).typography;
     return HoveredCard(
 
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -87,6 +88,7 @@ class AlbumCard extends ConsumerWidget {
                 Expanded(
 
                   child: FadeInImage(
+                    height: 170,
 
 
                     placeholder: const AssetImage('assets/cover.jpg'),
@@ -99,22 +101,22 @@ class AlbumCard extends ConsumerWidget {
               ],
             ),
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+
               children: [
-                Padding(padding:
-                const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                Padding(
+
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
                     albums.title,
                     textAlign: TextAlign.center,
                     style:
-                    typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                    typography.bodyStrong?.apply(fontSizeFactor: 1.0,),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
                 ),
                 Padding(padding:
-                const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
                     '${albums.artists.firstOrNull == null ? 'NA' : albums.artists[0].name}\n${albums.year}',
                     textAlign: TextAlign.center,
@@ -126,7 +128,7 @@ class AlbumCard extends ConsumerWidget {
 
                 ),
                 Padding(padding:
-                const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                const EdgeInsets.fromLTRB(10, 5, 10, 0),
                   child: Text(
                     albums.year,
                     textAlign: TextAlign.center,
@@ -250,7 +252,7 @@ class _AlbumsSearchResultsState extends ConsumerState<AlbumsSearchResults> {
                     maxCrossAxisExtent: 200.0,
                     mainAxisSpacing: 15.0,
                     crossAxisSpacing: 15.0,
-                    childAspectRatio: 1 / 1.2,
+                    childAspectRatio: 180 / 200,
                   ),
                 )
               ],
