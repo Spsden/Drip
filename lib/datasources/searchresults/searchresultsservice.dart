@@ -147,20 +147,30 @@ class SearchMusic {
     }
   }
 
-  static Future getOnlySongs(String searchquery, int limit) async {
-    final response = await http.get(Uri.parse(
-        '${serverAddress}searchwithfilter?query=$searchquery&filter=songs&limit=$limit'));
+  static Future getOnlySongs(String searchQuery, int pageNum) async {
 
-    if (response.statusCode == 200) {
-      var responselist = jsonDecode(response.body) as List;
-      var filtered = jsonEncode(responselist);
+    try {
+      final response = await http.get(Uri.parse(
+          '${serverAddress}searchwithfilter?query=$searchQuery&filter=songs&pageNum=$pageNum'));
 
-      final List<songs.Songs> songOnlyResults = songs.songsFromJson(filtered);
+      if (response.statusCode == 200) {
+        var responseList = jsonDecode(response.body) as List;
+        var filtered = jsonEncode(responseList);
 
-      return songOnlyResults;
-    } else {
-      return <songs.Songs>[];
+        final List<songs.Songs> songOnlyResults = songs.songsFromJson(filtered);
+
+        return songOnlyResults;
+      } else {
+        return <songs.Songs>[];
+      }
+
+    } catch (e){
+      if(kDebugMode){
+        print("$e from getOnlySongs");
+      }
+      return [];
     }
+
   }
 
   static Future getOnlyArtists(String searchquery, int pageNum) async {

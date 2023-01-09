@@ -1,16 +1,13 @@
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/datasources/audiofiles/playback.dart';
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
 import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/common/track_cards.dart';
-import 'package:drip/pages/search.dart';
+import 'package:drip/providers/providers.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../theme.dart';
 
@@ -51,13 +48,7 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
     // TODO: implement initState
     super.initState();
 
-    //bool loading = _TrackListState().isLoading;
-    // _sc.addListener(() {
-    //   if (_sc.position.pixels == _sc.position.maxScrollExtent) {
-    //     widget.onScroll;
-    //     print('scrollslol');
-    //   }
-    // });
+;
   }
 
   @override
@@ -171,138 +162,62 @@ class TrackList extends ConsumerStatefulWidget {
 }
 
 class _TrackListState extends ConsumerState<TrackList> {
-  String query = '';
-  static const _pageSize = 20;
 
-//  final FloatingSearchBarController _controller = FloatingSearchBarController();
-
-  final _pagingController = PagingController<int, Songs>(
-    // 2
-    firstPageKey: 1,
-  );
 
   @override
   void initState() {
-    // 3
-    _pagingController.addPageRequestListener((pageKey) {
-      fetchSongs(pageKey);
-    });
+
     super.initState();
   }
 
   @override
   void dispose() {
-    // 4
-    _pagingController.dispose();
+
     super.dispose();
   }
 
-  Future<void> fetchSongs(int pageKey) async {
-    try {
-      final List<Songs> newItems = await SearchMusic.getOnlySongs(
-          query == '' ? widget.songQuery : query, _pageSize);
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        final nextPageKey = pageKey + newItems.length;
-        _pagingController.appendPage(newItems, nextPageKey);
-      }
-    } catch (error) {
-      _pagingController.error = error;
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
-    return SearchFunction(
-        liveSearch: false,
-        // controller: _controller,
-        onSubmitted: (searchQuery) async {
-          query = searchQuery;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 20, 10, 50),
+      child: ListView.custom(
+        physics: const BouncingScrollPhysics(),
+        childrenDelegate:
+        SliverChildBuilderDelegate((context,index) {
+          const pageLimit = 20;
 
-          _pagingController.refresh();
-          // setState(() {
-          //
-          // });
-        },
-        body: Center(
-          child: mat.RefreshIndicator(
-            onRefresh: () => Future.sync(
-              () => _pagingController.refresh(),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomScrollView(
-                scrollBehavior: const FluentScrollBehavior(),
-                slivers: [
-                  const SliverToBoxAdapter(child: SizedBox(height: 50)),
-                  SliverToBoxAdapter(
-                      child: Text(
-                    query,
+          final page = index ~/ pageLimit + 1;
+          final itemIndexInPage = index % pageLimit;
 
-                    // widget.songQuery == ''
-                    //   ? '  Results for \"${query}\"'
-                    //   : '  Results for \"${widget.songQuery}\"',
-                    style: typography.display?.apply(fontSizeFactor: 1.0),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  )),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 15,
-                    ),
-                  ),
-                  AnimationLimiter(
-                    child: PagedSliverList.separated(
-                      //physics: BouncingScrollPhysics(),
+          final results = ref.watch(songsListResultsProvider(page));
+          return results.when(
+              data: (results) {
+                if (itemIndexInPage >= results.length) {
 
-                      pagingController: _pagingController,
-                      // padding: const EdgeInsets.all(10),
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 10,
-                      ),
-                      builderDelegate: PagedChildBuilderDelegate<Songs>(
-                        animateTransitions: true,
-                        transitionDuration: const Duration(milliseconds: 200),
-                        firstPageProgressIndicatorBuilder: (_) => Center(
-                          child: loadingWidget(
-                              context, ref.watch(themeProvider).color),
-                        ),
-                        newPageProgressIndicatorBuilder: (_) => Center(
-                            child: loadingWidget(
-                                context, ref.watch(themeProvider).color)),
-                        itemBuilder: (context, songs, index) =>
-                            AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 370),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: TrackListItem(
-                                songs: songs,
-                                color: index % 2 != 0
-                                    ? Colors.transparent
-                                    : ref.watch(themeProvider).mode ==
-                                                ThemeMode.dark ||
-                                            ref.watch(themeProvider).mode ==
-                                                ThemeMode.system
-                                        ? Colors.grey[150]
-                                        : Colors.grey[40],
-                              ),
-                            ),
-                          ),
-                        ),
-                        // firstPageErrorIndicatorBuilder: (context) =>
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ));
+
+                  return null;
+                }
+
+                final result = results[itemIndexInPage];
+                return Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: TrackListItem(songs: result, color: itemIndexInPage % 2 != 0 ?Colors.transparent
+                      : ref.watch(themeProvider).mode ==
+                      ThemeMode.dark ||
+                      ref.watch(themeProvider).mode ==
+                          ThemeMode.system
+                      ? Colors.grey[150]
+                      : Colors.grey[40],),
+                );
+              },
+            error: (err, stack) => Text('error $err'),
+            loading: () => loadingWidget(context, ref.watch(themeProvider).color));
+        }),
+      ),
+    );
   }
 }
 
@@ -325,6 +240,7 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
     return mat.Material(
       borderRadius: mat.BorderRadius.circular(10),
       color: widget.color,
+
       child: mat.InkWell(
         onTap: () async {
 
@@ -364,34 +280,14 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                   image: NetworkImage(
                     widget.songs.thumbnails.first.url.toString(),
                   )),
-              // CachedNetworkImage(
-              //   memCacheHeight: 40,
-              //   memCacheWidth: 40,
-              //   width: 40,
-              //   height: 40,
-              //   imageBuilder: (context, imageProvider) => CircleAvatar(
-              //     backgroundColor: Colors.transparent,
-              //     foregroundColor: Colors.transparent,
-              //     radius: 100,
-              //     backgroundImage: imageProvider,
-              //   ),
-              //   fit: BoxFit.cover,
-              //   errorWidget: (context, _, __) => const Image(
-              //     fit: BoxFit.cover,
-              //     image: AssetImage('assets/cover.jpg'),
-              //   ),
-              //   imageUrl: widget.songs.thumbnails.first.url.toString(),
-              //   placeholder: (context, url) => const Image(
-              //       fit: BoxFit.cover,
-              //       image: AssetImage('assets/cover.jpg')),
-              // ),
+
               spacer,
 
               SizedBox(
                 width: MediaQuery.of(context).size.width * 1 / 4,
                 child: Text(
                   widget.songs.title.toString(),
-                  // widget.isFromPrimarySearchPage ? widget.songs[index].title.toString() : 'Kuch is tarah',
+
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -400,7 +296,7 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                 width: MediaQuery.of(context).size.width * 1 / 8,
                 child: Text(
                   widget.songs.artists![0].name.toString(),
-                  // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -410,7 +306,7 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                   width: MediaQuery.of(context).size.width * 1 / 8,
                   child: Text(
                     widget.songs.album!.name.toString(),
-                    //  widget.isFromPrimarySearchPage ? widget.songs[index].album!.name.toString() : 'The jal band',
+
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -418,7 +314,7 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                 width: MediaQuery.of(context).size.width * 1 / 15,
                 child: Text(
                   widget.songs.duration.toString(),
-                  //widget.isFromPrimarySearchPage ? widget.songs[index].duration.toString() : '5:25',
+
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

@@ -1,5 +1,6 @@
 
 import 'package:drip/datasources/audiofiles/playback.dart';
+import 'package:drip/datasources/searchresults/songsdataclass.dart';
 import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/theme.dart';
 import 'package:drip_api/drip_api.dart';
@@ -18,6 +19,13 @@ final artistsListResultsProvider =
 FutureProvider.family((ref, int pageNum) async {
   final List<Artists> newItems =
   await SearchMusic.getOnlyArtists(ref.watch(searchQueryProvider), pageNum);
+  return newItems;
+});
+
+final songsListResultsProvider =
+FutureProvider.family((ref, int pageNum) async {
+  final List<Songs> newItems =
+  await SearchMusic.getOnlySongs(ref.watch(searchQueryProvider), pageNum);
   return newItems;
 });
 

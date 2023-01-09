@@ -147,7 +147,8 @@ class ArtistsSearchResults extends ConsumerStatefulWidget {
 class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
   final scrollController = ScrollController();
   bool isScrollable = true;
- // int itemcount = 20;
+
+  // int itemcount = 20;
 
   @override
   void dispose() {
@@ -166,9 +167,9 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
       controller: scrollController,
 
       childrenDelegate: SliverChildBuilderDelegate(
-        //temporary fix,
-         // childCount: itemcount,
-              (
+          //temporary fix,
+          // childCount: itemcount,
+          (
         context,
         index,
       ) {
@@ -179,18 +180,16 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
 
         final results = ref.watch(artistsListResultsProvider(page));
 
-
-
-
         return results.when(
             error: (err, stack) => Text('error $err'),
             loading: () => const Center(child: mat.CircularProgressIndicator()),
             data: (results) {
-             // itemcount = results.length*page;
+              // itemcount = results.length*page;
 
-              print(results.length*page);
+              print(results.length * page);
               if (itemIndexInPage >= results.length) {
-                scrollController.animateTo(100, duration: Duration(milliseconds: 600), curve:Curves.ease );
+                scrollController.animateTo(100,
+                    duration: Duration(milliseconds: 600), curve: Curves.ease);
 
                 return null;
               }

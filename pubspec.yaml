@@ -67,6 +67,7 @@ dependencies:
 
 
   hooks_riverpod: ^2.1.2
+  shimmer: ^2.0.0
 
 
 
