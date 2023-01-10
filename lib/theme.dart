@@ -75,7 +75,7 @@ class AppTheme extends ChangeNotifier {
   set color(AccentColor color) {
     _color = color;
     //Hive.box('settings').put('accentColor', color.toString());
-    print(color.toString());
+  //  print(color.toString());
     notifyListeners();
   }
 

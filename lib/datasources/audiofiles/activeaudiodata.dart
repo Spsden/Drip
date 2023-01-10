@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/pages/common/globals.dart';
 import 'package:drip/theme.dart';
 import 'package:flutter/material.dart';

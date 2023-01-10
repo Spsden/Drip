@@ -156,6 +156,7 @@ class TrackCardSmall extends StatelessWidget {
                       fit: BoxFit.cover,
 
                       image:  NetworkImage(
+
                         data.thumbnail.toString(),
                       )),
                   // CachedNetworkImage(

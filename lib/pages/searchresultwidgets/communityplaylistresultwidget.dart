@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
+import 'package:drip/datasources/searchresults/models/communityplaylistdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +9,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../customwidgets/hovered_card.dart';
-import '../../datasources/searchresults/searchresultsservice.dart';
+import '../../datasources/searchresults/requests/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
 import '../playlistmainpage.dart';

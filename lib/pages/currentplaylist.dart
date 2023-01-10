@@ -1,9 +1,8 @@
 import 'dart:math';
 
-import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
 import 'package:drip/datasources/audiofiles/playback.dart';
 
-import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
 
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
@@ -12,7 +11,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../datasources/audiofiles/activeaudiodata.dart';
-import '../datasources/searchresults/watchplaylistdataclass.dart';
+import '../datasources/searchresults/models/watchplaylistdataclass.dart';
 import 'common/track_cards.dart';
 
 class CurrentPlaylist extends ConsumerStatefulWidget {

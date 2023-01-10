@@ -1,5 +1,5 @@
-import 'package:drip/datasources/searchresults/moods_data_class.dart';
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/datasources/searchresults/models/moods_data_class.dart';
+import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/searchresultwidgets/playlist_widget.dart';
 import 'package:drip/theme.dart';
@@ -59,11 +59,13 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
             child: loadingWidget(context,ref.watch(themeProvider).color),
           )
         : mat.ListView(
+        physics: const ClampingScrollPhysics(),
+        shrinkWrap: true,
              controller: ScrollController(),
             clipBehavior: Clip.hardEdge,
             primary: false,
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
+            // physics: const BouncingScrollPhysics(
+            //     parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.fromLTRB(10, 70, 10, 125),
             children: [
                 Text(
@@ -119,6 +121,7 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
                 ),
                 spacer,
                 GridView.builder(
+                    physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     controller: _scrollController,
                     itemCount: _moodsCategories.genres?.length,

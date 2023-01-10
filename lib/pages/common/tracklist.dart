@@ -1,13 +1,14 @@
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
 import 'package:drip/datasources/audiofiles/playback.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
+import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart';
 import 'package:drip/pages/common/loading_widget.dart';
 import 'package:drip/pages/common/track_cards.dart';
 import 'package:drip/providers/providers.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
 import '../../theme.dart';
 
@@ -32,20 +33,20 @@ class TrackBars extends ConsumerStatefulWidget {
 }
 
 class _TrackBarsState extends ConsumerState<TrackBars> {
-  //_TrackListState().
+
   final ScrollController _sc = ScrollController();
 
   late WatchPlaylists watchPlaylists;
 
-  void printing() async {
-    watchPlaylists.tracks?.forEach((track) {
-      print(track.title.toString());
-    });
-  }
+  // void printing() async {
+  //   watchPlaylists.tracks?.forEach((track) {
+  //     print(track.title.toString());
+  //   });
+  // }
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
 
 ;
@@ -53,14 +54,15 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+
     super.dispose();
+    Hive.box('recentlyPlayed').close();
     _sc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const spacer = SizedBox(width: 10.0);
+    Hive.openBox('recentlyPlayed');
     const biggerSpacer = SizedBox(width: 40.0);
     return Container(
       alignment: Alignment.centerLeft,
@@ -229,23 +231,11 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
               , author: widget.songs.artists?.map((e) => e.name.toString()).toList() ?? [],
               thumbs:   widget.songs.thumbnails?.map((e) => e.url.toString()).toList() ??
                   [], urlOfVideo: 'NA', videoId: widget.songs.videoId);
-          ref.read(audioControlCentreProvider).open(currentMusicInstance);
+         await  ref.read(audioControlCentreProvider).open(currentMusicInstance);
 
-         // AudioControlCentre.audioControlCentre.open(currentMusicInstance);
-          //playerAlerts.buffering = true;
-          // await context.read<ActiveAudioData>().songDetails(
-          //     widget.songs.videoId,
-          //     widget.songs.videoId,
-          //     widget.songs.artists![0].name.toString(),
-          //     widget.songs.title,
-          //     widget.songs.thumbnails[0].url,
-          //     //widget.songs.thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-          //     widget.songs.thumbnails.last.url.toString());
-          //
-          // await AudioControlClass.play(
-          //   videoId: widget.songs.videoId.toString(),
-          //   context: context,
-          // );
+
+
+
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(

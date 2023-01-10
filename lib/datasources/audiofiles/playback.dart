@@ -1,10 +1,13 @@
 import 'dart:async';
 
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
-import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
-    as watchplaylist;
+import 'package:collection/collection.dart';
+import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
+import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart'
+as watchplaylist;
+import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:media_kit/media_kit.dart' as mediakit;
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -63,7 +66,6 @@ class AudioControlCentre extends ChangeNotifier {
   }
 
 
-
   void seek(Duration position) async {
     player.seek(position);
   }
@@ -75,9 +77,11 @@ class AudioControlCentre extends ChangeNotifier {
       mediakit.Playlist([mediakit.Media(streamLink, extras: track)],
           index: index),
     );
-    tracks.clear();
+
+     tracks.clear();
 
     addWatchPlaylist(track.videoId);
+    saveRecentlyPlayed(track);
   }
 
   Future<void> addWatchPlaylist(String videoId) async {
@@ -93,14 +97,14 @@ class AudioControlCentre extends ChangeNotifier {
       if (streamLink.isEmpty) {
         tracks.removeAt(i);
       }
-      if (streamLink.isNotEmpty) {
+     else {
         CurrentMusicInstance currentMusicInstance = CurrentMusicInstance(
             title: tracks[i].title.toString(),
             author:
-                tracks[i].artists?.map((e) => e.name.toString()).toList() ?? [],
+            tracks[i].artists?.map((e) => e.name.toString()).toList() ?? [],
             thumbs:
-                tracks[i].thumbnail?.map((e) => e.url.toString()).toList() ??
-                    [],
+            tracks[i].thumbnail?.map((e) => e.url.toString()).toList() ??
+                [],
             urlOfVideo: 'NA',
             videoId: streamLink);
         player.add(mediakit.Media(streamLink, extras: currentMusicInstance));
@@ -113,15 +117,18 @@ class AudioControlCentre extends ChangeNotifier {
 
     try {
       final StreamManifest manifest =
-          await _youtubeExplode.videos.streamsClient.getManifest(videoId);
+      await _youtubeExplode.videos.streamsClient.getManifest(videoId);
 
-      audioUrl = manifest.audioOnly.withHighestBitrate().url.toString();
+      audioUrl = manifest.audioOnly
+          .withHighestBitrate()
+          .url
+          .toString();
 
       return audioUrl;
     } catch (e) {
       print('explode error$e');
 
-      return "Shit_Happens";
+      return "";
     }
   }
 
@@ -166,7 +173,7 @@ class AudioControlCentre extends ChangeNotifier {
       notifyListeners();
     });
     player.streams.volume.listen((event) {
-      if(event == 0.0){
+      if (event == 0.0) {
         isMuted = true;
       } else {
         isMuted = false;
@@ -175,6 +182,21 @@ class AudioControlCentre extends ChangeNotifier {
       volume = event;
       notifyListeners();
     });
+  }
+
+  void saveRecentlyPlayed(CurrentMusicInstance currentMusicInstance) async {
+    RecentlyPlayed recentlyPlayed = RecentlyPlayed(title: currentMusicInstance.title,
+        author: currentMusicInstance.author,
+        thumbs: currentMusicInstance.thumbs,
+        urlOfVideo: currentMusicInstance.urlOfVideo,
+        videoId: currentMusicInstance.videoId);
+    final recentlyPlayedBox = Hive.box('recentlyPlayed');
+    print(recentlyPlayedBox.length.toString() + "iudfsghfduihg");
+
+    if(recentlyPlayedBox.length > 15){
+      recentlyPlayedBox.deleteAt(14);
+    }
+    recentlyPlayedBox.add(recentlyPlayed);
 
 
   }
@@ -189,7 +211,7 @@ class AudioControlCentre extends ChangeNotifier {
 }
 
 final audioControlCentreProvider =
-    ChangeNotifierProvider<AudioControlCentre>((ref) {
+ChangeNotifierProvider<AudioControlCentre>((ref) {
   final player = ref.watch(audioPlayerProvider);
   return AudioControlCentre(player: player, ref: ref);
 });

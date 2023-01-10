@@ -1,4 +1,4 @@
-import 'package:drip/datasources/searchresults/artistsdataclass.dart';
+import 'package:drip/datasources/searchresults/models/artistsdataclass.dart';
 import 'package:drip/pages/artistspage.dart';
 import 'package:drip/providers/providers.dart';
 

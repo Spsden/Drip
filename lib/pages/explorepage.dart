@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:drip/datasources/youtubehomedata.dart';
+import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/searchpage.dart';
 import 'package:drip/providers/providers.dart';
@@ -87,6 +87,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   @override
   void dispose() {
     _controller.dispose();
+    Hive.box('cache').close();
     super.dispose();
   }
 

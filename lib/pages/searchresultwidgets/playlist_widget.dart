@@ -1,4 +1,4 @@
-import 'package:drip/datasources/searchresults/playlist_data_class.dart';
+import 'package:drip/datasources/searchresults/models/playlist_data_class.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:fluent_ui/fluent_ui.dart' ;
 import 'package:flutter/material.dart' as mat;
@@ -8,7 +8,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 
 
-import '../../datasources/searchresults/searchresultsservice.dart';
+import '../../datasources/searchresults/requests/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
 

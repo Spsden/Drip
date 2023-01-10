@@ -78,7 +78,16 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
               label: Text(
                 'Settings',
                 style: TextStyle(color: Colors.white),
-              ))
+              )),
+          // NavigationRailDestination(
+          //     icon: Icon(
+          //       Icons.settings,
+          //       color: Colors.white,
+          //     ),
+          //     label: Text(
+          //       'Settings',
+          //       style: TextStyle(color: Colors.white),
+          //     ))
         ],
         selectedIndex: ref.watch(currentPageIndexProvider));
   }

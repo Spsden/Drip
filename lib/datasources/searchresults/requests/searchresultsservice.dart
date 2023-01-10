@@ -1,32 +1,32 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:drip/datasources/searchresults/artistpagedataclass.dart'
+import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart'
     as artistPage;
-import 'package:drip/datasources/searchresults/moods_data_class.dart';
-import 'package:drip/datasources/searchresults/playlist_data_class.dart';
-import 'package:drip/datasources/searchresults/playlistdataclass.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
-import 'package:drip/datasources/searchresults/videodataclass.dart' as videos;
-import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart';
+import 'package:drip/datasources/searchresults/models/moods_data_class.dart';
+import 'package:drip/datasources/searchresults/models/playlist_data_class.dart';
+import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart' as songs;
+import 'package:drip/datasources/searchresults/models/videodataclass.dart' as videos;
+import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
 
-import 'albumsdataclass.dart';
-import 'artistsdataclass.dart' as artists;
-import 'communityplaylistdataclass.dart';
+import '../models/albumsdataclass.dart';
+import '../models/artistsdataclass.dart' as artists;
+import '../models/communityplaylistdataclass.dart';
 
 class SearchMusic {
-  //static const String serverAddress = 'http://spden.pythonanywhere.com/';
-  //static const String serverAddress = 'https://dripapi.vercel.app/';
 
-   static const String serverAddress = 'http://192.168.199.131:5000/';
+  static const String serverAddress = 'https://drip-server-fv6tn36q0-spsden.vercel.app/';
 
-  static  Future<Map>  getAllSearchResults(String searchquery) async {
+   //static const String serverAddress = 'http://192.168.199.131:5000/';
+
+  static  Future<Map>  getAllSearchResults(String searchQuery) async {
     try {
       final response = await http
-          .get(Uri.parse('${serverAddress}search?query=$searchquery'));
+          .get(Uri.parse('${serverAddress}search?query=$searchQuery'));
 
       if (response.statusCode == 200) {
         String responsestring = response.body.toString();

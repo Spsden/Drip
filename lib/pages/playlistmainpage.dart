@@ -1,6 +1,5 @@
-import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/searchresults/playlistdataclass.dart';
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
+import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:extended_image/extended_image.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -8,7 +7,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-import 'package:drip/datasources/searchresults/watchplaylistdataclass.dart'
+import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart'
     as watch;
 
 import '../datasources/audiofiles/activeaudiodata.dart';

@@ -3,6 +3,7 @@ import 'dart:io';
 
 
 import 'package:drip/datasources/audiofiles/playback.dart';
+import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
 import 'package:drip/home.dart';
 
 import 'package:drip/pages/common/hot_keys.dart';
@@ -17,7 +18,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
-import 'package:media_kit/generated/libmpv/bindings.dart';
+
 import 'package:path_provider/path_provider.dart';
 
 import 'package:system_theme/system_theme.dart';
@@ -25,7 +26,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:riverpod/riverpod.dart' ;
+
 
 
 
@@ -79,8 +80,10 @@ Future<void> main() async {
   }
 
   await openHiveBox('cache', limit: true);
-  await openHiveBox('Favorite Songs');
+  
   await openHiveBox('settings');
+  Hive.registerAdapter(RecentlyPlayedAdapter());
+  await openHiveBox('recentlyPlayed');
  // await AudioControlCentre.initializePlayback();
 
 

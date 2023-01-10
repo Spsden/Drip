@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:drip/customwidgets/hovered_card.dart';
-import 'package:drip/datasources/searchresults/albumsdataclass.dart';
+import 'package:drip/datasources/searchresults/models/albumsdataclass.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import '../../datasources/searchresults/searchresultsservice.dart';
+import '../../datasources/searchresults/requests/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
 import '../search.dart';

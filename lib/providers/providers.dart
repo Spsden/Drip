@@ -1,16 +1,16 @@
 
 import 'package:drip/datasources/audiofiles/playback.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart';
-import 'package:drip/datasources/youtubehomedata.dart';
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
+import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
 import 'package:drip/theme.dart';
-import 'package:drip_api/drip_api.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
-import '../datasources/searchresults/artistsdataclass.dart';
-import '../datasources/searchresults/searchresultsservice.dart';
+import '../datasources/searchresults/models/artistsdataclass.dart';
+import '../datasources/searchresults/requests/searchresultsservice.dart';
 
 
 final searchQueryProvider = StateProvider((ref) => '');
@@ -32,7 +32,7 @@ FutureProvider.family((ref, int pageNum) async {
 
 final searchResultsProvider = FutureProvider.autoDispose<Map>((ref) async {
   final result = await SearchMusic.getAllSearchResults(ref.watch(searchQueryProvider));
-  print(result['songSearch']);
+  //print(result['songSearch']);
   if (kDebugMode) {
     print('fetched');
     //print(jsonEncode(res

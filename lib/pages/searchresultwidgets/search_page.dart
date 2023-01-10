@@ -1,5 +1,6 @@
-import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
+import 'package:drip/datasources/searchresults/models/communityplaylistdataclass.dart';
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart' as songs;
+import 'package:drip/pages/recently_played.dart';
 import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -7,10 +8,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter/material.dart' as mat;
+import 'package:hive/hive.dart';
 
-import '../../datasources/searchresults/albumsdataclass.dart';
-import '../../datasources/searchresults/artistsdataclass.dart';
-import '../../datasources/searchresults/videodataclass.dart';
+import '../../datasources/searchresults/models/albumsdataclass.dart';
+import '../../datasources/searchresults/models/artistsdataclass.dart';
+import '../../datasources/searchresults/models/videodataclass.dart';
 import '../../providers/providers.dart';
 
 import '../common/tracklist.dart';
@@ -319,17 +321,21 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
 
   @override
   void initState() {
+
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    Hive.box('recentlyPlayed').close();
   }
 
   @override
   Widget build(BuildContext context) {
+
     super.build(context);
+
     final String searchQuery = ref.watch(searchQueryProvider);
     final searchPageState = ref.watch(searchResultsProvider);
     Typography typography = FluentTheme
@@ -341,7 +347,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
 
         content: searchQuery.isEmpty
             ? const Center(
-          child: Text('Suraj Pratap Singh'),
+          child: RecentlyPlayed(),
         )
             : searchPageState.when(
             data: (results) {

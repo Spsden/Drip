@@ -1,7 +1,6 @@
 
-import 'package:drip/datasources/audiofiles/audiocontrolcentre.dart';
-import 'package:drip/datasources/searchresults/artistpagedataclass.dart';
-import 'package:drip/datasources/searchresults/searchresultsservice.dart';
+import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart';
+import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/pages/common/tracklist.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
@@ -9,11 +8,11 @@ import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:drip/datasources/searchresults/albumsdataclass.dart' as albumD;
+import 'package:drip/datasources/searchresults/models/albumsdataclass.dart' as albumD;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
-import '../datasources/searchresults/artistsdataclass.dart' as artistD;
+import '../datasources/searchresults/models/artistsdataclass.dart' as artistD;
 
 
 class ArtistsPage extends ConsumerStatefulWidget {
