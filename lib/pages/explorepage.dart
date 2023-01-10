@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:drip/datasources/youtubehomedata.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/searchpage.dart';
+import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
@@ -127,7 +128,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                 ) =>
                     GestureDetector(
                       onTap: (){
-                        print('lol');
+                       ref.read(searchQueryProvider.notifier).state = headList[index]['title'].toString();
+                       ref.read(currentPageIndexProvider.notifier).state = 1;
                       },
                       child: Card(
                           elevation: 3,

@@ -1,6 +1,5 @@
-
 import 'package:drip/datasources/searchresults/communityplaylistdataclass.dart';
-import 'package:drip/datasources/searchresults/songsdataclass.dart';
+import 'package:drip/datasources/searchresults/songsdataclass.dart' as songs;
 import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -264,6 +263,25 @@ import 'artistsresultwidget.dart';
 //   bool get wantKeepAlive => true;
 // }
 
+List<songs.Songs> videosToSongs(List<Video> videos) {
+  return videos.map((e) =>
+      songs.Songs(album: songs.Album(name: 'na',id: 'na'),
+          artists: e.artists?.map((e) => songs.Album(id: e.id,name: e.name)).toList(),
+          category: e.category,
+          duration: e.duration,
+          durationSeconds: e.durationSeconds,
+          feedbackTokens: songs.FeedbackTokens(add: 'na',remove: 'na'),
+          isExplicit: false,
+          resultType: e.resultType,
+          thumbnails:e.thumbnails!.map((e) => songs.Thumbnail(height: e.height,url: e.url,width: e.width)).toList(),
+          title: e.title,
+          videoId: e.videoId,
+          year: e.year
+
+
+      )).toList();
+}
+
 class AllSearchResults extends ConsumerStatefulWidget {
   final GlobalKey? navigatorKey;
   final String searchQuery;
@@ -278,7 +296,26 @@ class AllSearchResults extends ConsumerStatefulWidget {
 
 class _AllSearchResultsState extends ConsumerState<AllSearchResults>
     with AutomaticKeepAliveClientMixin {
- 
+
+  // List<songs.Songs> videosToSongs(List<Video> videos) {
+  //   return videos.map((e) =>
+  //       songs.Songs(album: songs.Album(name: 'na',id: 'na'),
+  //           artists: e.artists?.map((e) => songs.Album(id: e.id,name: e.name)).toList(),
+  //           category: e.category,
+  //           duration: e.duration,
+  //           durationSeconds: e.durationSeconds,
+  //           feedbackTokens: songs.FeedbackTokens(add: 'na',remove: 'na'),
+  //           isExplicit: false,
+  //           resultType: e.resultType,
+  //           thumbnails:e.thumbnails!.map((e) => songs.Thumbnail(height: e.height,url: e.url,width: e.width)).toList(),
+  //           title: e.title,
+  //           videoId: e.videoId,
+  //           year: e.year
+  //
+  //
+  //       )).toList();
+  // }
+
 
   @override
   void initState() {
@@ -295,153 +332,254 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
     super.build(context);
     final String searchQuery = ref.watch(searchQueryProvider);
     final searchPageState = ref.watch(searchResultsProvider);
-    Typography typography = FluentTheme.of(context).typography;
+    Typography typography = FluentTheme
+        .of(context)
+        .typography;
     const spacer = SizedBox(height: 10.0);
     const biggerSpacer = SizedBox(height: 40.0);
     return ScaffoldPage(
 
         content: searchQuery.isEmpty
             ? const Center(
-                child: Text('Suraj Pratap Singh'),
-              )
+          child: Text('Suraj Pratap Singh'),
+        )
             : searchPageState.when(
-                data: (results) {
-                  //return Text(results.toString());
-                  List<Songs> songs = [];
-                  if (results['songSearch'] != null) {
-                    songs = results['songSearch'];
-                  }
+            data: (results) {
+              //return Text(results.toString());
+              List<songs.Songs> songss = [];
+              if (results['songSearch'] != null) {
+                songss = results['songSearch'];
+              }
 
-                  List<Artists> artists = [];
+              List<Artists> artists = [];
 
-                  if (results['artistSearch'] != null) {
-                    artists = results['artistSearch'];
-                  }
+              if (results['artistSearch'] != null) {
+                artists = results['artistSearch'];
+              }
 
-                  List<Albums> albums = [];
-                  if (results['albumSearch'] != null) {
-                    albums = results['albumSearch'];
-                  }
-                  List<CommunityPlaylist> featuredPlaylist = [];
-                  if (results['featuredPlayListSearch'] != null) {
-                    featuredPlaylist = results['featuredPlayListSearch'];
-                  }
-                  List<CommunityPlaylist> communityPlaylist = [];
-                  if (results['communityPlaylistSearch'] != null) {
-                    communityPlaylist = results['communityPlaylistSearch'];
-                  }
-                 // print(featuredPlaylist.length);
-                  List<Video> videos = [];
-                  if (results['videoSearch'] != null) {
-                    videos = results['videoSearch'];
-                  }
+              List<Albums> albums = [];
+              if (results['albumSearch'] != null) {
+                albums = results['albumSearch'];
+              }
+              List<CommunityPlaylist> featuredPlaylist = [];
+              if (results['featuredPlayListSearch'] != null) {
+                featuredPlaylist = results['featuredPlayListSearch'];
+              }
+              List<CommunityPlaylist> communityPlaylist = [];
+              if (results['communityPlaylistSearch'] != null) {
+                communityPlaylist = results['communityPlaylistSearch'];
+              }
+              // print(featuredPlaylist.length);
+              List<Video> videos = [];
+              if (results['videoSearch'] != null) {
+                videos = results['videoSearch'];
+              }
 
-                  Object? topResult = null;
-                  if (results['topResults'] != 'LOL') {
-                    topResult = results['topResults'];
-                  }
-
-                  return ScrollConfiguration(
-                      behavior: const FluentScrollBehavior(),
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        dragStartBehavior: DragStartBehavior.down,
-                        physics: const BouncingScrollPhysics(
-                            parent: ClampingScrollPhysics()),
-                        //controller: controller,
-                        clipBehavior: Clip.hardEdge,
-                        primary: false,
-
-                        child: Column(
-                          children: AnimationConfiguration.toStaggeredList(
-                              childAnimationBuilder: (widget) =>
-                                  SlideAnimation(
-                                      horizontalOffset: 50.0,
-                                      child: FadeInAnimation(
-                                        child: widget,
-                                      )),
-                              children: [
-                          
+              songss.addAll(videosToSongs(videos));
 
 
 
-                                topResult != null
-                                    ? Container(
-                                  height: 300,
-                                  padding: const EdgeInsets.all(10.0),
+              Object ? topResult;
+              String topResultType = 'NA';
+              if (results['topResults'] != 'LOL') {
+                topResult = results['topResults'];
+                topResultType = results['topResultType'];
+              }
+              print(topResult);
 
-                                  decoration: BoxDecoration(
-                                    color: FluentTheme.of(context).cardColor
-                                        ,
+              return ScrollConfiguration(
+                  behavior: const FluentScrollBehavior(),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    dragStartBehavior: DragStartBehavior.down,
+                    physics: const BouncingScrollPhysics(
+                        parent: ClampingScrollPhysics()),
+                    //controller: controller,
+                    clipBehavior: Clip.hardEdge,
+                    primary: false,
+
+                    child: Column(
+                      children: AnimationConfiguration.toStaggeredList(
+                          childAnimationBuilder: (widget) =>
+                              SlideAnimation(
+                                  horizontalOffset: 50.0,
+                                  child: FadeInAnimation(
+                                    child: widget,
+                                  )),
+                          children: [
+
+
+                            topResult != null
+                                ? Container(
+                                height: topResultType == 'video' || topResultType == 'song' ? 100 : 300,
+
+                                padding: const EdgeInsets.all(10.0),
+
+                                decoration: BoxDecoration(
+                                    color: FluentTheme
+                                        .of(context)
+                                        .cardColor
+                                    ,
                                     borderRadius: BorderRadius.circular(8.0)
-                                  ),
-
-                                    child: topResultWidget(context, results))
-                                    : const SizedBox.shrink(),
-                                biggerSpacer,
-
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Songs",
-                                        style: typography.subtitle
-                                            ?.apply(fontSizeFactor: 1.0),
-                                      ),
-                                      FilledButton(
-                                        child: Row(
-                                          children: const [
-                                            //Icon(FluentIcons.more),
-                                            // spacer,
-                                            Text('Show more',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          Navigator.of(context).pushNamed(
-                                              'songslistpage',
-                                              arguments: searchQuery);
-                                        },
-                                      ),
-                                    ],
-                                  ),
                                 ),
-                                spacer,
-                                songs.isNotEmpty
-                                    ? SizedBox(
-                                        height: 200,
 
-                                        // MediaQuery.of(context).size.height *
-                                        //     1 /
-                                        //     4,
-                                        child: Container(
-                                            // decoration: BoxDecoration(
-                                            //     border: Border.all(
-                                            //         color: Colors.green)),
+                                child: topResultWidget(context, results))
+                                : const SizedBox.shrink(),
+                            biggerSpacer,
+
+                            SizedBox(
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Songs & Videos",
+                                    style: typography.subtitle
+                                        ?.apply(fontSizeFactor: 1.0),
+                                  ),
+                                  FilledButton(
+                                    child: Row(
+                                      children: const [
+                                        //Icon(FluentIcons.more),
+                                        // spacer,
+                                        Text('Show more',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight:
+                                                FontWeight.w500)),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(
+                                          'songslistpage',
+                                          arguments: searchQuery);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            spacer,
+                            songss.isNotEmpty
+                                ? SizedBox(
+                                height: 400,
+
+                                // MediaQuery.of(context).size.height *
+                                //     1 /
+                                //     4,
+                                child: Container(
+                                  // decoration: BoxDecoration(
+                                  //     border: Border.all(
+                                  //         color: Colors.green)),
 
 
-                                            alignment: Alignment.centerLeft,
-                                            child: TrackBars(
-                                              songs: songs,
-                                              isFromPrimarySearchPage: true,
-                                            )))
-                                    : const SizedBox.shrink(),
+                                    alignment: Alignment.centerLeft,
+                                    child: TrackBars(
+                                      songs: songss,
+                                      isFromPrimarySearchPage: true,
+                                    )))
+                                : const SizedBox.shrink(),
 
-                                biggerSpacer,
+                            biggerSpacer,
+                            SizedBox(
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Artists",
+                                    style: typography.subtitle
+                                        ?.apply(fontSizeFactor: 1.0),
+                                  ),
+                                  FilledButton(
+                                    child: Row(
+                                      children: const [
+                                        //Icon(FluentIcons.more),
+                                        // spacer,
+                                        Text('Show more',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight:
+                                                FontWeight.w500)),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          mat.MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ArtistsSearchResults(
+                                                      artistQuery: widget
+                                                          .searchQuery)));
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            artists.isNotEmpty || artists != null
+                                ? ArtistsSearch(artists: artists)
+                                : const Text('No Artists available'),
+
+                            //biggerSpacer,
+
+                            SizedBox(
+                              width: double.infinity,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Albums",
+                                    style: typography.subtitle
+                                        ?.apply(fontSizeFactor: 1.0),
+                                  ),
+                                  FilledButton(
+                                    child: Row(
+                                      children: const [
+                                        //Icon(FluentIcons.more),
+                                        // spacer,
+                                        Text('Show more',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight:
+                                                FontWeight.w500)),
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          mat.MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AlbumsSearchResults(
+                                                    albumsQuery:
+                                                    searchQuery,
+                                                  )));
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            spacer,
+                            albums.isEmpty || albums != null
+                                ? AlbumSearch(albums: albums)
+                                : const Text('No albums available'),
+                            biggerSpacer,
+
+
+                            spacer,
+                            featuredPlaylist.isNotEmpty
+                                ? Column(
+                              children: [
                                 SizedBox(
                                   width: double.infinity,
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Artists",
+                                        "Featured playlists",
                                         style: typography.subtitle
                                             ?.apply(fontSizeFactor: 1.0),
                                       ),
@@ -454,7 +592,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight:
-                                                        FontWeight.w500)),
+                                                    FontWeight.w500)),
                                           ],
                                         ),
                                         onPressed: () {
@@ -462,29 +600,37 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                               context,
                                               mat.MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ArtistsSearchResults(
-                                                          artistQuery: widget
-                                                              .searchQuery)));
+                                                      PlaylistInfinitePaginationWidget(
+                                                        communityPlaylistQuery: searchQuery,
+                                                      )));
                                         },
                                       ),
                                     ],
                                   ),
                                 ),
+                                CommunityPlaylistSearch(
+                                    communityPlaylist: featuredPlaylist)
+                              ],
 
-                                artists.isNotEmpty || artists != null
-                                    ? ArtistsSearch(artists: artists)
-                                    : const Text('No Artists available'),
+                            )
 
-                                //biggerSpacer,
 
+                                : const Text('No Featured Playlists available'),
+
+                            biggerSpacer,
+
+
+                            communityPlaylist.isNotEmpty
+                                ? Column(
+                              children: [
                                 SizedBox(
                                   width: double.infinity,
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Albums",
+                                        "Community playlists",
                                         style: typography.subtitle
                                             ?.apply(fontSizeFactor: 1.0),
                                       ),
@@ -497,7 +643,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontWeight:
-                                                        FontWeight.w500)),
+                                                    FontWeight.w500)),
                                           ],
                                         ),
                                         onPressed: () {
@@ -505,9 +651,8 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                               context,
                                               mat.MaterialPageRoute(
                                                   builder: (context) =>
-                                                      AlbumsSearchResults(
-                                                        albumsQuery:
-                                                            searchQuery,
+                                                      PlaylistInfinitePaginationWidget(
+                                                        communityPlaylistQuery: searchQuery,
                                                       )));
                                         },
                                       ),
@@ -515,123 +660,27 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                   ),
                                 ),
                                 spacer,
-                                albums.isEmpty || albums != null
-                                    ? AlbumSearch(albums: albums)
-                                    : const Text('No albums available'),
-                                biggerSpacer,
+                                CommunityPlaylistSearch(
+                                    communityPlaylist: communityPlaylist)
+                              ],
+                            )
 
 
-                                spacer,
-                                featuredPlaylist.isNotEmpty
-                                    ? Column(
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Featured playlists",
-                                            style: typography.subtitle
-                                                ?.apply(fontSizeFactor: 1.0),
-                                          ),
-                                          FilledButton(
-                                            child: Row(
-                                              children: const [
-                                                //Icon(FluentIcons.more),
-                                                // spacer,
-                                                Text('Show more',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                        FontWeight.w500)),
-                                              ],
-                                            ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  mat.MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PlaylistInfinitePaginationWidget(
-                                                            communityPlaylistQuery: searchQuery,
-                                                          )));
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    CommunityPlaylistSearch(communityPlaylist: featuredPlaylist)
-                                  ],
-
-                                )
+                                : const Text('No Playlists available'),
 
 
-                                    : const Text('No Featured Playlists available'),
-
-                                biggerSpacer,
-
-
-
-                                communityPlaylist.isNotEmpty
-                                    ? Column(
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Community playlists",
-                                            style: typography.subtitle
-                                                ?.apply(fontSizeFactor: 1.0),
-                                          ),
-                                          FilledButton(
-                                            child: Row(
-                                              children: const [
-                                                //Icon(FluentIcons.more),
-                                                // spacer,
-                                                Text('Show more',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                        FontWeight.w500)),
-                                              ],
-                                            ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  mat.MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PlaylistInfinitePaginationWidget(
-                                                            communityPlaylistQuery: searchQuery,
-                                                          )));
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    spacer,
-                                    CommunityPlaylistSearch(communityPlaylist: communityPlaylist)
-                                  ],
-                                )
-
-
-                                    : const Text('No Playlists available'),
-
-
-                                biggerSpacer,
-                                biggerSpacer,
-                                biggerSpacer
-                              ]),
-                        ),
-                      ));
-                },
-                error: (error, _) => Text('error'),
-                loading: () => const Center(
-                      child: ProgressRing(),
-                    )));
+                            biggerSpacer,
+                            biggerSpacer,
+                            biggerSpacer
+                          ]),
+                    ),
+                  ));
+            },
+            error: (error, _) => Text('error'),
+            loading: () =>
+            const Center(
+              child: ProgressRing(),
+            )));
   }
 
   @override
@@ -639,7 +688,9 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
 }
 
 Widget topResultWidget(BuildContext context, dynamic results) {
-  Typography typography = FluentTheme.of(context).typography;
+  Typography typography = FluentTheme
+      .of(context)
+      .typography;
 
   Widget topWidget = const SizedBox();
   switch (results['topResultType']) {
@@ -654,12 +705,13 @@ Widget topResultWidget(BuildContext context, dynamic results) {
       break;
 
     case 'video':
-      topWidget = SizedBox.shrink();
-
+      topWidget = TrackListItem(songs: videosToSongs([results['topResults']]).first,color: Colors.transparent,);
       break;
     case 'song':
-      topWidget = TrackBars(
-          songs: [...results['topResults']], isFromPrimarySearchPage: true);
+      topWidget = TrackListItem(songs: [results['topResults']].first,color: Colors.transparent,);
+
+          // TrackBars(
+          // songs: [...results['topResults']], isFromPrimarySearchPage: true);
 
       break;
   }

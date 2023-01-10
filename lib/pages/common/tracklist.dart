@@ -112,26 +112,7 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
 
                     ref.read(audioControlCentreProvider).open(currentMusicInstance);
 
-                    // AudioControlCentre.audioControlCentre
-                    //     .open(currentMusicInstance);
 
-                    //playerAlerts.buffering = true;
-                    // await ref.watch(activeAudioDataNotifier).songDetails(
-                    //     widget.songs[index].videoId.toString(),
-                    //   widget.songs[index].videoId.toString(),
-                    //   widget.songs[index].artists![0].name.toString(),
-                    //   widget.songs[index].title.toString(),
-                    //   widget.songs[index].thumbnails[0].url.toString(),
-                    //   // widget.songs[index].thumbnails.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                    //   widget.songs[index].thumbnails.last.url.toString(),
-                    // );
-                    // currentMediaIndex = 0;
-                    // //
-                    // await AudioControlClass.play(
-                    //
-                    //     videoId: widget.songs[index].videoId.toString(),
-                    //     context: context,
-                    // );
                   },
                   color: index % 2 != 0
                       ? Colors.transparent
