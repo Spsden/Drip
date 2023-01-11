@@ -1,4 +1,3 @@
-
 import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/pages/common/tracklist.dart';
@@ -8,12 +7,11 @@ import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:drip/datasources/searchresults/models/albumsdataclass.dart' as albumD;
+import 'package:drip/datasources/searchresults/models/albumsdataclass.dart'
+    as albumD;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../datasources/searchresults/models/artistsdataclass.dart' as artistD;
-
 
 class ArtistsPage extends ConsumerStatefulWidget {
   final String channelId;
@@ -51,7 +49,6 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
 
   @override
   Widget build(BuildContext context) {
-
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
@@ -75,19 +72,22 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
         (!fetched)
             ? const SizedBox()
             : CustomScrollView(
-          scrollBehavior: const CupertinoScrollBehavior(),
+                //scrollBehavior: const CupertinoScrollBehavior(),
+                physics: const BouncingScrollPhysics(),
                 controller: ScrollController(),
                 slivers: [
                   mat.SliverAppBar(
+
                     //leadingWidth: 0,
                     titleSpacing: 0,
 
-                    toolbarHeight: 90,
-                    collapsedHeight: 100,
+                    toolbarHeight: 10,
+                    collapsedHeight: 30,
                     // titleSpacing: 5,
-                    // pinned: true,
+                     pinned: true,
+                    elevation: 0,
                     //snap: true,
-                    // floating: true,
+                     floating: true,
                     actions: <Widget>[
                       mat.IconButton(
                         icon: const Icon(mat.Icons.more_horiz_rounded),
@@ -119,9 +119,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text(
-                                    //'Sonu Nigam',
                                     _artistsPage.name.toString(),
-
                                     style: const mat.TextStyle(fontSize: 35),
                                   ),
                                   Row(
@@ -166,113 +164,88 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                   colors: [Colors.transparent, Colors.black])
                               .createShader(bounds);
                         },
-                        child:
-
-                        FadeInImage(placeholder:
-                        const AssetImage('assets/artist.jpg'),
-                            width:size.width,
+                        child: FadeInImage(
+                            placeholder: const AssetImage('assets/artist.jpg'),
+                            width: size.width,
                             height: size.height,
                             fit: BoxFit.cover,
-
-                            image:  NetworkImage(
+                            image: NetworkImage(
                               _artistsPage.thumbnails!.last.url.toString(),
                             )),
 
-
-
-
-
-                        // CachedNetworkImage(
-                        //   fit: BoxFit.cover,
-                        //   errorWidget: (context, url, error) => const Image(
-                        //     fit: BoxFit.cover,
-                        //     image: AssetImage('assets/artist.jpg'),
-                        //   ),
-                        //   imageUrl:
-                        //       _artistsPage.thumbnails!.last.url.toString(),
-                        //   placeholder: (context, url) => const Image(
-                        //       fit: BoxFit.cover,
-                        //       image: AssetImage('assets/artist.jpg')),
-                        // ),
                       ),
                     ),
 
                     bottom: mat.TabBar(
-
-
                       indicatorWeight: 5,
                       indicatorSize: mat.TabBarIndicatorSize.label,
                       automaticIndicatorColorAdjustment: true,
-                     isScrollable: true,
+                      isScrollable: true,
                       indicator: mat.UnderlineTabIndicator(
                           borderSide: BorderSide(
                               width: 4.0,
                               color: ref.watch(themeProvider).color)),
                       tabs: const [
                         mat.Tab(text: 'Albums'),
-                         mat.Tab(text: 'Songs'),
-                         mat.Tab(text: 'Related'),
-                          mat.Tab(text: 'Singles'),
+                        mat.Tab(text: 'Songs'),
+                        mat.Tab(text: 'Related'),
+                        mat.Tab(text: 'Singles'),
                         mat.Tab(text: 'Videos'),
-
                       ],
                       controller: _tabController,
                     ),
                   ),
                   SliverFillRemaining(
                       child: mat.TabBarView(
-
                           physics: const BouncingScrollPhysics(),
                           controller: _tabController,
                           children: [
-                            _artistsPage.albums?.results != null
-                                ? GridView(
+                        _artistsPage.albums?.results != null
+                            ? GridView.builder(
 
                                 gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent: 200.0,
-                                  mainAxisSpacing: 5.0,
+                                  mainAxisSpacing: 20.0,
                                   crossAxisSpacing: 10.0,
                                   childAspectRatio: 1 / 1.3,
                                 ),
-                                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                                children: List.generate(
-                                    _artistsPage.albums!.results!.length,
-                                        (index) {
+                                itemCount: _artistsPage.albums?.results?.length,
+                                shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                                itemBuilder: (context, index) {
 
-                                      List<albumD.Artist> artistListForAlbum = [albumD.Artist(id: 'lol',name: _artistsPage.name.toString())];
-                                      //List<artistD.Thumbnail> thumbs = []
-
-                                      return mat.Material(
-                                        child: AlbumCard(
+                                  return mat.Material(
+                                      child: AlbumCard(
                                           albums: albumD.Albums(
-                                            title: _artistsPage.albums!.results![index].title.toString(),
-                                            year: _artistsPage.albums!.results![index].year.toString(),
-                                            type: '',
-                                            isExplicit: false,
-                                            category: 'artist',
-                                            artists: artistListForAlbum,
-                                            resultType: 'albums',
-                                            duration: Duration.zero,
-                                            browseId: _artistsPage.albums!.results![index].browseId.toString(),
-                                            thumbnails: _artistsPage.albums!
-                                                .results![index].thumbnails
-                                                ?.map((e) => albumD.Thumbnail(
-                                                width: e.width,
-                                                height: e.height,
-                                                url: e.url.toString()))
-                                                .toList()
-
-                                          )
-                                        )
-                                      );
-                                    }))
-                                : const Text('No result'),
-
-
-                            TrackList(songQuery: _artistsPage.name.toString()),
-
-
+                                              title: _artistsPage
+                                                  .albums!.results![index].title
+                                                  .toString(),
+                                              year: _artistsPage
+                                                  .albums!.results![index].year
+                                                  .toString(),
+                                              type: '',
+                                              isExplicit: false,
+                                              category: 'artist',
+                                              artists: List<albumD.Artist>.from([albumD.Artist(name: _artistsPage.name.toString(),id: 'lol')]),
+                                              resultType: 'albums',
+                                              duration: Duration.zero,
+                                              browseId: _artistsPage.albums!
+                                                  .results![index].browseId
+                                                  .toString(),
+                                              thumbnails: _artistsPage.albums!
+                                                  .results![index].thumbnails
+                                                  ?.map((e) => albumD.Thumbnail(
+                                                      width: e.width,
+                                                      height: e.height,
+                                                      url: e.url.toString()))
+                                                  .toList())));
+                                },
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                              )
+                            : const Text('No result'),
+                        TrackList(songQuery: _artistsPage.name.toString()),
                         _artistsPage.related?.results != null
                             ? GridView(
                                 gridDelegate:
@@ -282,7 +255,8 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                   crossAxisSpacing: 10.0,
                                   childAspectRatio: 1 / 1.5,
                                 ),
-                                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 20, 10, 10),
                                 children: List.generate(
                                     _artistsPage.related!.results!.length,
                                     (index) {
@@ -291,7 +265,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                   return mat.Material(
                                     child: ArtistCard(
                                         artists: artistD.Artists(
-                                          subscribers: '',
+                                            subscribers: '',
                                             artist: _artistsPage
                                                 .related!.results![index].title,
                                             browseId: _artistsPage.related!
@@ -310,26 +284,16 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                   );
                                 }))
                             : const Text('No result'),
-
-
-
                         const Text('lol'),
-
-
-
-
-
                         mat.ElevatedButton(
                           onPressed: () {
-                           // print(context.watch<PlayerNotifiers>().searchVal);
+                            // print(context.watch<PlayerNotifiers>().searchVal);
                             print(_artistsPage
                                 .related?.results?.first.thumbnails?.first.url);
                           },
                           child: const Text('lol2'),
                         ),
-                       ]
-
-                      ))
+                      ]))
                 ],
               ),
         // Positioned.fill(

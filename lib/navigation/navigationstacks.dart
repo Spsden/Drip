@@ -1,6 +1,6 @@
 import 'package:drip/pages/artistspage.dart';
 import 'package:drip/pages/common/tracklist.dart';
-import 'package:drip/pages/explorepage.dart';
+import 'package:drip/pages/explore_page/explorepage.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';

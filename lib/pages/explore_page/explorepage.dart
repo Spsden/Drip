@@ -305,7 +305,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                     Icons.navigate_before_rounded,
                                     size: 40.0,
                                   )),
-                              SizedBox(width: 10,),
+                              const SizedBox(width: 10,),
                               FloatingActionButton.small(
                                   onPressed: () {
                                     _listViewControllers[index].animateTo(
