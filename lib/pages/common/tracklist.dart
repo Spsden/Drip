@@ -56,7 +56,7 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
   void dispose() {
 
     super.dispose();
-    Hive.box('recentlyPlayed').close();
+
     _sc.dispose();
   }
 

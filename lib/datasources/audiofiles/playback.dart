@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart'
 as watchplaylist;
 import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:media_kit/media_kit.dart' as mediakit;
@@ -126,7 +125,9 @@ class AudioControlCentre extends ChangeNotifier {
 
       return audioUrl;
     } catch (e) {
-      print('explode error$e');
+      if (kDebugMode) {
+        print('explode error$e');
+      }
 
       return "";
     }
@@ -191,7 +192,7 @@ class AudioControlCentre extends ChangeNotifier {
         urlOfVideo: currentMusicInstance.urlOfVideo,
         videoId: currentMusicInstance.videoId);
     final recentlyPlayedBox = Hive.box('recentlyPlayed');
-    print(recentlyPlayedBox.length.toString() + "iudfsghfduihg");
+   // print(recentlyPlayedBox.length.toString() + "iudfsghfduihg");
 
     if(recentlyPlayedBox.length > 15){
       recentlyPlayedBox.deleteAt(14);

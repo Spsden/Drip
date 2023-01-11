@@ -1,14 +1,13 @@
 import 'dart:async';
 
 import 'package:drip/datasources/audiofiles/playback.dart';
-import 'package:drip/pages/audio_player_bar.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/currentplaylist.dart' deferred as currentplaylist;
-import 'package:drip/pages/recently_played.dart';
 import 'package:drip/pages/settings.dart' deferred as settings;
 import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:drip/utils/deferred_widget.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,7 +32,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     1: GlobalKey(),
     2: GlobalKey(),
     3: GlobalKey()
-
   };
 
   List suggestions = ['Hello', 'arijit', 'justin'];
@@ -47,11 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       SecondPageStack(searchArgs: searchQuery, navigatorKey: navigatorKeys[1]),
       DeferredWidget(currentplaylist.loadLibrary,
           () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
-
-
-
       DeferredWidget(settings.loadLibrary, () => settings.SettingsPage()),
-
     ];
   }
 
@@ -85,22 +79,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         centerTitle: true,
         leadingWidth: 75,
         elevation: 0,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
-        leading: Button(
-            onPressed: () async {
-              await Navigator.maybePop(
-                  navigatorKeys[ref.read(currentPageIndexProvider)]!
+        leading: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Button(
+                onPressed: () async {
+                  if(Navigator.canPop(navigatorKeys[ref.read(currentPageIndexProvider)]!
                       .currentState!
-                      .context);
-            },
-            child: const Icon(FluentIcons.back)),
+                      .context)){
+                    await Navigator.maybePop(
+                        navigatorKeys[ref.read(currentPageIndexProvider)]!
+                            .currentState!
+                            .context);
+
+                  }
+
+                },
+                child: const Icon(FluentIcons.back)),
+
+
+
+          ],
+        ),
         title: DragToMoveArea(
           child: Align(
               alignment: AlignmentDirectional.centerStart,
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Text(
+
+
+                    const Text(
                   'Drip',
                   style: TextStyle(fontSize: 20),
                 ),
@@ -129,7 +140,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ref.read(currentPageIndexProvider.notifier).state =
                                 1;
                           }
-
                         }
                         ref.read(searchQueryProvider.notifier).state = text;
                       },
@@ -152,12 +162,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   },
                                 );
                               }).toList(),
-                          error: (errr, _) {
+                          error: (error, _) {
                             return [
                               AutoSuggestBoxItem(
-                                label: 'eror',
+                                label: 'error',
                                 value: 'error',
-                                child: Text('error'),
+                                child: const Text('error'),
                                 onSelected: () async {},
                               )
                             ];
@@ -172,6 +182,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ];
                           })),
                 ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    ExtendedImage.network(
+
+
+                      'https://i.imgur.com/L3Ip1wh.png'
+                      ,
+                      width: 30,
+
+                    ),
+
               ])),
         ),
         toolbarHeight: 50,
@@ -205,18 +227,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             right: 0,
             left: 0,
             child: Consumer(builder: (context, ref, child) {
-
               return Acrylic(
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                     ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   // child: Acrylic(
 
                   child:
-                  //SizedBox()
+                      //SizedBox()
 
-                  const AudioPlayerBar(),
+                      const AudioPlayerBar(),
                   //),
                 ),
               );
@@ -253,9 +274,7 @@ class SeekBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // print(ref.watch(audioControlCentreProvider).player.streams.position);
-    return
-
-      av.ProgressBar(
+    return av.ProgressBar(
         thumbGlowColor: Colors.blue,
         baseBarColor: ref.watch(themeProvider).color.withOpacity(0.3),
         thumbColor: ref.watch(themeProvider).color,

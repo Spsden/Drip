@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:drip/customwidgets/carousel_slider.dart';
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/searchpage.dart';
@@ -14,7 +15,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:hive/hive.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,31 +39,20 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   //     Hive.box('settings').get('ytSearch', defaultValue: []) as List;
   // bool showHistory =
   //     Hive.box('settings').get('showHistory', defaultValue: true) as bool;
-  final TextEditingController _controller = TextEditingController();
+  // final TextEditingController _controller = TextEditingController();
 
   late ScrollController _scrollController;
+
+  late List<ScrollController> _listViewControllers;
 
   @override
   bool get wantKeepAlive => true;
 
-  // _scrollListener() {
-  //   //Curves.easeInOutSine;
-  //   ScrollDirection scrollDirection =
-  //       _scrollController.position.userScrollDirection;
-  //   if (scrollDirection != ScrollDirection.idle) {
-  //     double scrollEnd = _scrollController.offset +
-  //         (scrollDirection == ScrollDirection.reverse ? 30.0 : -30.0);
-  //     scrollEnd = min(_scrollController.position.maxScrollExtent,
-  //         max(_scrollController.position.minScrollExtent, scrollEnd));
-  //     _scrollController.jumpTo(scrollEnd);
-  //   }
-  // }
-
-  //Color cardColor = fluent.Colors.grey[40];
-
   @override
   void initState() {
     _scrollController = ScrollController();
+    _listViewControllers =
+        List.generate(searchedList.length, (index) => ScrollController());
     // _scrollController.addListener(_scrollListener);
     if (!status) {
       ApiYouTube().ymusicHomePageData().then((value) {
@@ -86,9 +75,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     Hive.box('cache').close();
     super.dispose();
+    for (var element in _listViewControllers) {
+      element.dispose();
+    }
   }
 
   @override
@@ -109,45 +101,46 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
         padding: const EdgeInsets.fromLTRB(10, 30, 10, 35),
         child: Column(
           children: [
-
             if (headList.isNotEmpty)
-              CarouselSlider.builder(
-
-                itemCount: headList.length,
-                options: CarouselOptions(
-
-                  height: boxSize + 20,
-                  viewportFraction: rotated ? 0.36 : 1.0,
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                ),
-
-                itemBuilder: (
-                  BuildContext context,
-                  int index,
-                  int pageViewIndex,
-                ) =>
-                    GestureDetector(
-                      onTap: (){
-                       ref.read(searchQueryProvider.notifier).state = headList[index]['title'].toString();
-                       ref.read(currentPageIndexProvider.notifier).state = 1;
-                      },
-                      child: Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          //clipBehavior: Clip.antiAlias,
-                          child: ExtendedImage.network(
-                            headList[index]['image'].toString(),
-                            fit: fluent.BoxFit.cover,
-                            cache: true,
-
-                            clearMemoryCacheIfFailed: true,
-                            // filterQuality: fluent.FilterQuality.medium,
-                          )),
-                    ),
-              ),
+              SizedBox(
+                  height: boxSize + 20, child: CarouselSlider(data: headList)),
+            // CarouselSlider.builder(
+            //
+            //   itemCount: headList.length,
+            //   options: CarouselOptions(
+            //
+            //     height: boxSize + 20,
+            //     viewportFraction: rotated ? 0.36 : 1.0,
+            //     autoPlay: true,
+            //     enlargeCenterPage: true,
+            //   ),
+            //
+            //   itemBuilder: (
+            //     BuildContext context,
+            //     int index,
+            //     int pageViewIndex,
+            //   ) =>
+            //       GestureDetector(
+            //         onTap: (){
+            //          ref.read(searchQueryProvider.notifier).state = headList[index]['title'].toString();
+            //          ref.read(currentPageIndexProvider.notifier).state = 1;
+            //         },
+            //         child: Card(
+            //             elevation: 3,
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(10.0),
+            //             ),
+            //             //clipBehavior: Clip.antiAlias,
+            //             child: ExtendedImage.network(
+            //               headList[index]['image'].toString(),
+            //               fit: fluent.BoxFit.cover,
+            //               cache: true,
+            //
+            //               clearMemoryCacheIfFailed: true,
+            //               // filterQuality: fluent.FilterQuality.medium,
+            //             )),
+            //       ),
+            // ),
 
             ListView.builder(
               itemCount: searchedList.length,
@@ -156,166 +149,183 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
 
               //padding: const EdgeInsets.only(bottom: 50),
               itemBuilder: (context, index) {
-                return Column(
+                return Stack(
                   children: [
-                    Row(
+                    Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
-                          child: Text(
-                            '${searchedList[index]["title"]}',
-                            style: typography.title,
-                            textAlign: fluent.TextAlign.left,
-                          ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
+                              child: Text(
+                                '${searchedList[index]["title"]}',
+                                style: typography.title,
+                                textAlign: fluent.TextAlign.left,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: boxSize + 15,
-                      width: double.infinity,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
-                        itemCount:
-                            (searchedList[index]['playlists'] as List).length,
-                        itemBuilder: (context, idx) {
-                          final item = searchedList[index]['playlists'][idx];
-                          return GestureDetector(
-                            onTap: () {
-                              if (item['type'] == 'video') {
-                                var query = item['title'].toString();
-                                launch(
-                                    'https://www.youtube.com/results?search_query=$query');
-                              } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PlaylistMain(
-                                            playlistId: item['playlistId']
-                                                .toString())));
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    color:
-                                        _themeMode == fluent.ThemeMode.dark ||
+                        SizedBox(
+                          height: boxSize + 15,
+                          width: double.infinity,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            controller: _listViewControllers[index],
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            itemCount:
+                                (searchedList[index]['playlists'] as List)
+                                    .length,
+                            itemBuilder: (context, idx) {
+                              final item =
+                                  searchedList[index]['playlists'][idx];
+                              return GestureDetector(
+                                onTap: () {
+                                  if (item['type'] == 'video') {
+                                    var query = item['title'].toString();
+                                    launch(
+                                        'https://www.youtube.com/results?search_query=$query');
+                                  } else {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => PlaylistMain(
+                                                playlistId: item['playlistId']
+                                                    .toString())));
+                                  }
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        color: _themeMode ==
+                                                    fluent.ThemeMode.dark ||
                                                 _themeMode ==
                                                     fluent.ThemeMode.system
                                             ? fluent.Colors.grey[150]
                                                 .withOpacity(0.4)
-                                            : fluent.Colors.grey[30]
+                                            : fluent.Colors.grey[30]),
+                                    margin: const EdgeInsets.only(right: 10),
+                                    width: item['type'] != 'playlist'
+                                        ? (boxSize - 30) * (16 / 9)
+                                        : boxSize - 30,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Card(
+                                            margin: const EdgeInsets.only(
+                                                top: 15.0),
+                                            elevation: 5,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: ExtendedImage.network(
+                                              item['image'].toString(),
+                                              fit: fluent.BoxFit.cover,
 
-                                    // if(co)
+                                              cache: true,
+                                              // loadStateChanged: loadingWidget(context),
 
-                                    //fluent.Colors.grey[40]
-
-                                    // context.watch<AppTheme>().cardColor
-
-                                    ),
-                                margin: const EdgeInsets.only(right: 10),
-                                width: item['type'] != 'playlist'
-                                    ? (boxSize - 30) * (16 / 9)
-                                    : boxSize - 30,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: Card(
-                                          margin:
-                                              const EdgeInsets.only(top: 15.0),
-                                          elevation: 5,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
+                                              clearMemoryCacheIfFailed: true,
+                                              // filterQuality: fluent.FilterQuality.medium,
+                                            ),
                                           ),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: ExtendedImage.network(
-                                            item['image'].toString(),
-                                            fit: fluent.BoxFit.cover,
-
-                                            cache: true,
-                                            // loadStateChanged: loadingWidget(context),
-
-                                            clearMemoryCacheIfFailed: true,
-                                            // filterQuality: fluent.FilterQuality.medium,
-                                          )
-
-                                          // CachedNetworkImage(
-                                          //   // memCacheHeight: 80,
-                                          //   // memCacheWidth: (item['type'] != 'playlist'
-                                          //   //     ? (boxSize - 30) * (16 / 9)
-                                          //   //     : boxSize - 30).toInt(),
-                                          //   fit: BoxFit.cover,
-                                          //   errorWidget: (context, _, __) =>
-                                          //       Image(
-                                          //     fit: BoxFit.cover,
-                                          //     image: item['type'] != 'playlist'
-                                          //         ? const AssetImage(
-                                          //             'assets/ytCover.png',
-                                          //           )
-                                          //         : const AssetImage(
-                                          //             'assets/cover.jpg',
-                                          //           ),
-                                          //   ),
-                                          //   imageUrl: item['image'].toString(),
-                                          //   placeholder: (context, url) => Image(
-                                          //     fit: BoxFit.cover,
-                                          //     image: item['type'] != 'playlist'
-                                          //         ? const AssetImage(
-                                          //             'assets/ytCover.png',
-                                          //           )
-                                          //         : const AssetImage(
-                                          //             'assets/cover.jpg',
-                                          //           ),
-                                          //   ),
-                                          // ),
-
-                                          ),
-                                    ),
-                                    const SizedBox(
-                                      height: 15.0,
-                                    ),
-                                    Text(
-                                      '${item["title"]}',
-                                      textAlign: TextAlign.left,
-                                      softWrap: false,
-                                      style: const fluent.TextStyle(
-                                          fontWeight: FontWeight.w700),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          bottom: 15, left: 5, right: 5),
-                                      child: Text(
-                                        item['type'] != 'video'
-                                            ? '${item["count"]} Tracks | ${item["description"]}'
-                                            : '${item["count"]} | ${item["description"]}',
-                                        textAlign: TextAlign.center,
-                                        softWrap: false,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 11,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .caption!
-                                              .color,
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                        const SizedBox(
+                                          height: 15.0,
+                                        ),
+                                        Text(
+                                          '${item["title"]}',
+                                          textAlign: TextAlign.left,
+                                          softWrap: false,
+                                          style: const fluent.TextStyle(
+                                              fontWeight: FontWeight.w700),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              bottom: 15, left: 5, right: 5),
+                                          child: Text(
+                                            item['type'] != 'video'
+                                                ? '${item["count"]} Tracks | ${item["description"]}'
+                                                : '${item["count"]} | ${item["description"]}',
+                                            textAlign: TextAlign.center,
+                                            softWrap: false,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .caption!
+                                                  .color,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                              );
+                            },
+                          ),
+                        ),
+                        const fluent.SizedBox(
+                          height: 30,
+                        )
+                      ],
                     ),
-                    const fluent.SizedBox(
-                      height: 30,
+                    Positioned.fill(
+
+                      child: Align(
+                          alignment: Alignment.topRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              FloatingActionButton.small(
+                                  onPressed: () {
+                                    _listViewControllers[index].animateTo(
+                                      _listViewControllers[index]
+                                          .position
+                                          .minScrollExtent,
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.ease,
+                                    );
+                                  },
+                                  foregroundColor: Colors.white,
+                                  backgroundColor:
+                                      ref.watch(themeProvider).color,
+                                  elevation: 5.0,
+                                  child: const Icon(
+                                    Icons.navigate_before_rounded,
+                                    size: 40.0,
+                                  )),
+                              SizedBox(width: 10,),
+                              FloatingActionButton.small(
+                                  onPressed: () {
+                                    _listViewControllers[index].animateTo(
+                                      _listViewControllers[index]
+                                          .position
+                                          .maxScrollExtent,
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.ease,
+                                    );
+                                  },
+                                  foregroundColor: Colors.white,
+                                  backgroundColor:
+                                      ref.watch(themeProvider).color,
+                                  elevation: 5.0,
+                                  child: const Icon(
+                                    Icons.navigate_next_rounded,
+                                    size: 40.0,
+                                  )),
+                            ],
+                          )),
                     )
                   ],
                 );

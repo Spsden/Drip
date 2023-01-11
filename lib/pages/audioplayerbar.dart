@@ -179,11 +179,14 @@ class TrackInfo extends ConsumerWidget {
               Text(
                   prov.player.state.playlist.medias.isNotEmpty
                       ? prov.player.state.playlist.medias[prov.index].extras
-                      .author[0]
+                      .author.join(" ")
                       : 'NA',
                   maxLines: 1,
-                  style: const TextStyle(
-                      fontSize: 15, overflow: TextOverflow.ellipsis))
+                  style:  TextStyle(
+                      fontSize: 15, overflow: TextOverflow.ellipsis,color: mat.Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .color,),)
             ],
           ),
         ),

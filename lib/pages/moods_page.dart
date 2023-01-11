@@ -138,6 +138,7 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
                               const BoxDecoration(color: Colors.transparent),
                           child: mat.InkWell(
                             onTap: () {
+                              print(_moodsCategories.genres![index].params.toString());
 
 
                               Navigator.push(context,
