@@ -1,5 +1,5 @@
 name: drip
-description: Drip Music.
+description: Stream music aesthetically.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -70,6 +70,9 @@ dev_dependencies:
   hive_generator: ^2.0.0
   build_runner: ^2.3.3
   flutter_native_splash: ^2.1.6
+  known_extents_list_view_builder:
+    git:
+      url: https://github.com/bendelonlee/known_extents_list_view_builder.git
   
 
 # For information on the generic Dart part of this file, see the

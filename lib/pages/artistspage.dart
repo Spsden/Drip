@@ -52,7 +52,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
-    var size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     var height = MediaQuery.of(context).size.height;
 
     if (!status) {
@@ -94,11 +94,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                         tooltip: 'Comment Icon',
                         onPressed: () {},
                       ), //IconButton
-                      // mat.IconButton(
-                      //   icon: Icon(mat.Icons.settings),
-                      //   tooltip: 'Setting Icon',
-                      //   onPressed: () {},
-                      // ), //IconButton
+
                     ],
 
                     expandedHeight: height / 2,

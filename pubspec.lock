@@ -525,6 +525,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.7.0"
+  known_extents_list_view_builder:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "63bad50635329c0c9905cd6f4be6d40f66dbd2c4"
+      url: "https://github.com/bendelonlee/known_extents_list_view_builder.git"
+    source: git
+    version: "1.1.0"
   lints:
     dependency: transitive
     description:

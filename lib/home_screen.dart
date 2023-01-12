@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/pages/audioplayerbar.dart';
@@ -197,7 +198,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ])),
         ),
         toolbarHeight: 50,
-        actions: const [WindowButtons()],
+        actions: Platform.isWindows ? [WindowButtons()] : null,
+
+
       ),
       body: Stack(
         children: [
@@ -236,14 +239,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   child:
                       //SizedBox()
+                  Platform.isWindows ? const  AudioPlayerBar() : const SizedBox.shrink()
 
-                      const AudioPlayerBar(),
+
                   //),
                 ),
               );
             }),
-          ),
-          const Positioned(bottom: 55, left: 8, right: 8, child: SeekBar())
+          ), Platform.isWindows ? const Positioned(bottom: 55, left: 8, right: 8, child: SeekBar()) : const SizedBox.shrink()
+
+
         ],
       ),
     );
