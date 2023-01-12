@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0"
+  badges:
+    dependency: transitive
+    description:
+      name: badges
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -239,6 +246,15 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  easy_sidemenu:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "6c48e1fd27b6b5b871f620ace22e6156c508c2e1"
+      resolved-ref: "6c48e1fd27b6b5b871f620ace22e6156c508c2e1"
+      url: "https://github.com/Spsden/easy_sidemenu.git"
+    source: git
+    version: "0.4.1"
   extended_image:
     dependency: "direct main"
     description:
@@ -526,7 +542,7 @@ packages:
     source: hosted
     version: "4.7.0"
   known_extents_list_view_builder:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: "."
       ref: HEAD

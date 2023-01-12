@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:drip/customwidgets/custom_left_pane.dart';
 import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/currentplaylist.dart' deferred as currentplaylist;
@@ -8,13 +9,11 @@ import 'package:drip/pages/settings.dart' deferred as settings;
 import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:drip/utils/deferred_widget.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'customwidgets/custom_left_bar.dart';
 import 'navigation/navigationstacks.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart' as av;
 
@@ -34,8 +33,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     2: GlobalKey(),
     3: GlobalKey()
   };
-
-  List suggestions = ['Hello', 'arijit', 'justin'];
 
   late List<Widget> allStacks;
   String searchQuery = '';
@@ -88,21 +85,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             Button(
                 onPressed: () async {
-                  if(Navigator.canPop(navigatorKeys[ref.read(currentPageIndexProvider)]!
-                      .currentState!
-                      .context)){
+                  if (Navigator.canPop(
+                      navigatorKeys[ref.read(currentPageIndexProvider)]!
+                          .currentState!
+                          .context)) {
                     await Navigator.maybePop(
                         navigatorKeys[ref.read(currentPageIndexProvider)]!
                             .currentState!
                             .context);
-
                   }
-
                 },
                 child: const Icon(FluentIcons.back)),
-
-
-
           ],
         ),
         title: DragToMoveArea(
@@ -110,9 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               alignment: AlignmentDirectional.centerStart,
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-
-
-                    const Text(
+                const Text(
                   'Drip',
                   style: TextStyle(fontSize: 20),
                 ),
@@ -183,40 +174,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ];
                           })),
                 ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    ExtendedImage.network(
-
-
-                      'https://i.imgur.com/L3Ip1wh.png'
-                      ,
-                      width: 30,
-
-                    ),
-
+                const SizedBox(
+                  width: 20,
+                ),
               ])),
         ),
         toolbarHeight: 50,
-        actions: Platform.isWindows ? [WindowButtons()] : null,
-
-
+        actions: Platform.isWindows ? [const WindowButtons()] : null,
       ),
       body: Stack(
         children: [
           Row(
             children: [
-              CustomLeftBar(
-                indexCallBack: () {},
-                onIndexChange: (callBackIndex) {
-                  // setState(() {
-                  //   index = callBackIndex;
-                  // });
-                  // _pageController.animateToPage(index,
-                  //     duration: const Duration(milliseconds: 500),
-                  //     curve: Curves.fastLinearToSlowEaseIn);
-                },
-              ),
+              const CustomLeftBar(),
+              // CustomLeftBar(
+              //   indexCallBack: () {},
+              //   onIndexChange: (callBackIndex) {
+              //     // setState(() {
+              //     //   index = callBackIndex;
+              //     // });
+              //     // _pageController.animateToPage(index,
+              //     //     duration: const Duration(milliseconds: 500),
+              //     //     curve: Curves.fastLinearToSlowEaseIn);
+              //   },
+              // ),
               Expanded(
                   child: PageView(
                 scrollDirection: Axis.vertical,
@@ -232,23 +213,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Consumer(builder: (context, ref, child) {
               return Acrylic(
                 child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  // child: Acrylic(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    // child: Acrylic(
 
-                  child:
-                      //SizedBox()
-                  Platform.isWindows ? const  AudioPlayerBar() : const SizedBox.shrink()
+                    child:
+                        //SizedBox()
+                        Platform.isWindows
+                            ? const AudioPlayerBar()
+                            : const SizedBox.shrink()
 
-
-                  //),
-                ),
+                    //),
+                    ),
               );
             }),
-          ), Platform.isWindows ? const Positioned(bottom: 55, left: 8, right: 8, child: SeekBar()) : const SizedBox.shrink()
-
-
+          ),
+          Platform.isWindows
+              ? const Positioned(
+                  bottom: 55, left: 8, right: 8, child: SeekBar())
+              : const SizedBox.shrink()
         ],
       ),
     );

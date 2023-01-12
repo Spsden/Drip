@@ -1,204 +1,139 @@
-//
-//
-// import 'package:fluent_ui/fluent_ui.dart' as fluent;
-// import 'package:flutter/material.dart';
-//
-// class CustomLeftBar extends StatefulWidget {
-//   final VoidCallback indexCallBack;
-//   final Function(int) onIndexChange;
-//
-//   const CustomLeftBar(
-//       {Key? key, required this.indexCallBack, required this.onIndexChange})
-//       : super(key: key);
-//
-//   @override
-//   State<CustomLeftBar> createState() => _CustomLeftBarState();
-// }
-//
-// class _CustomLeftBarState extends State<CustomLeftBar> {
-//
-//
+import 'package:drip/theme.dart';
+import 'package:easy_sidemenu/easy_sidemenu.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../providers/providers.dart';
+
+// class CustomLeftBar extends ConsumerWidget {
+//   const CustomLeftBar({Key? key}) : super(key: key);
 //
 //   @override
-//   Widget build(BuildContext context) {
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     SideMenuController controller = SideMenuController();
+//
 //     final theme = fluent.FluentTheme.of(context);
-//     return Container(
-//       height: MediaQuery
-//           .of(context)
-//           .size
-//           .height,
-//       width: 80,
-//       // constraints: const BoxConstraints(minWidth: 150, maxWidth: 280),
-//       decoration: BoxDecoration(color: fluent.Colors.grey[210]),
-//       child: Column(
-//         children: [
-//           const SizedBox(height: 10,),
-//           fluent.Padding(
-//             padding: const EdgeInsets.all(8.0),
 //
-//             child: InkWell(
-//
-//                 hoverColor: Colors.red,
-//                 child: TextButton(
-//                     onPressed: () {
-//                       widget.onIndexChange(0);
-//                       widget.indexCallBack();
-//                     },
-//                     child: Column(
-//                       // mainAxisAlignment: MainAxisAlignment.start,
-//                         children: const [
-//                           Icon(
-//                             fluent.FluentIcons.home,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(height: 5,),
-//
-//                           Text(
-//                             'Home',
-//                             style: TextStyle(color: Colors.white,),
-//                           )
-//                         ]))),
-//           ),
-//           const SizedBox(height: 10,),
-//           fluent.Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: InkWell(
-//
-//                 child: TextButton(
-//                     onPressed: () {
-//                       widget.onIndexChange(1);
-//                       widget.indexCallBack();
-//                     },
-//                     child: Column(
-//                       //mainAxisAlignment: MainAxisAlignment.start,
-//                         children: const [
-//                           Icon(
-//                             fluent.FluentIcons.search,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(height: 5,),
-//
-//                           Text(
-//                             'Search',
-//                             style: TextStyle(color: Colors.white),
-//                           )
-//                         ]))),
-//           ),
-//           const SizedBox(height: 10,),
-//           fluent.Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: InkWell(
-//
-//                 hoverColor: Colors.red,
-//
-//                 child: TextButton(
-//                     onPressed: () {
-//                       widget.onIndexChange(2);
-//                       widget.indexCallBack();
-//                     },
-//                     child: Column(
-//                       //mainAxisAlignment: MainAxisAlignment.start,
-//                         children: const [
-//                           Icon(
-//                             fluent.FluentIcons.playlist_music,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(height: 5,),
-//
-//                           Text(
-//                             'Queue',
-//                             style: TextStyle(color: Colors.white),
-//                           )
-//                         ]))),
-//           ),
-//           const SizedBox(height: 10,),
-//           fluent.Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: InkWell(
-//
-//                 child: TextButton(
-//                     onPressed: () {
-//                       widget.onIndexChange(3);
-//                       widget.indexCallBack();
-//                     },
-//                     child: Column(
-//                       //mainAxisAlignment: MainAxisAlignment.start,
-//                         children: const [
-//                           Icon(
-//                             fluent.FluentIcons.settings,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(height: 5,),
-//
-//                           Text(
-//                             'Home',
-//                             style: TextStyle(color: Colors.white),
-//                           )
-//                         ]))),
-//           ),
-//           // fluent.Padding(
-//           //   padding: const EdgeInsets.all(8.0),
-//           //   child: InkWell(
-//           //       child: TextButton(
-//           //           onPressed: () {},
-//           //           child: Row(
-//           //               mainAxisAlignment: MainAxisAlignment.start,
-//           //               children: const [
-//           //                 Icon(
-//           //                   fluent.fluentIcons.home,
-//           //                   color: Colors.white,
-//           //                 ),
-//           //                 SizedBox(width: 10,),
-//           //
-//           //                 Text(
-//           //                   'Home',
-//           //                   style: TextStyle(color: Colors.white),
-//           //                 )
-//           //               ]))),
-//           // ),
-//         ],
-//       ),
-//     );
 //   }
+//
 // }
-//
-// class LeftBarButtonModel {
-//   final String title;
-//   final IconData icon;
-//   final Function onPressed;
-//
-//   LeftBarButtonModel({
-//     required this.title, required this.icon, required this.onPressed,
-//
-//   });
-// }
-//
-// class LeftBarButtons extends StatelessWidget {
-//   const LeftBarButtons({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-//
-// class LeftPaneButtons extends StatelessWidget {
-//   final String title;
-//   final IconData icon;
-//   final VoidCallback callback;
-//
-//   const LeftPaneButtons({Key? key,
-//     required this.title,
-//     required this.icon,
-//     required this.callback})
-//       : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return fluent.FilledButton(
-//         child: Row(children: [Icon(icon), Text(title)]),
-//         onPressed: () {
-//           callback;
-//         });
-//   }
-// }
+
+class CustomLeftBar extends ConsumerStatefulWidget {
+  const CustomLeftBar({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<CustomLeftBar> createState() => _CustomLeftBarState();
+}
+
+class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
+  SideMenuController sideMenuController = SideMenuController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    sideMenuController.addListener((p0) {
+      ref.read(currentPageIndexProvider.notifier).state = p0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const spacer = SizedBox(height: 20,);
+    return SideMenu(
+
+      // showToggle: true,
+
+      title:  Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        child: ExtendedImage.asset(
+
+          'assets/driplogocircle.png',
+          width: 40,
+
+        ),
+      ),
+
+      displayModeToggleDuration: const Duration(milliseconds: 100),
+
+      style: SideMenuStyle(
+
+        toggleColor: ref.watch(themeProvider).color,
+
+        compactSideMenuWidth: 70,
+        openSideMenuWidth: 200,
+
+
+        showTooltip: false,
+
+        displayMode: MediaQuery.of(context).size.width > 1000
+            ? SideMenuDisplayMode.open
+            : SideMenuDisplayMode.compact,
+        hoverColor: ref.watch(themeProvider).color,
+        selectedColor: ref.watch(themeProvider).color,
+        indicatorColor: Colors.white,
+
+
+        backgroundColor: fluent.FluentTheme.of(context).cardColor,
+        selectedTitleTextStyle: const TextStyle(color: Colors.white),
+        unselectedTitleTextStyle: const TextStyle(color: Colors.white),
+        selectedIconColor: Colors.white,
+        unselectedIconColor: Colors.white,
+        itemInnerSpacing:8,
+        itemOuterPadding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+
+        // decoration: BoxDecoration(
+        //   borderRadius: BorderRadius.all(Radius.circular(10)),
+        // ),
+        // backgroundColor: Colors.blueGrey[700]
+      ),
+      items: [
+        SideMenuItem(
+          priority: 0,
+          title: 'Home',
+          onTap: (index, controller) {
+            // ref.read(currentPageIndexProvider.notifier).state = 1,
+            sideMenuController.changePage(index);
+          },
+          icon: const Icon(
+            Icons.home,
+          ),
+        ),
+
+
+        SideMenuItem(
+          priority: 1,
+          title: 'Search',
+          onTap: (index, controller) {
+            // ref.read(currentPageIndexProvider.notifier).state = 1,
+            sideMenuController.changePage(index);
+          },
+          icon: const Icon(
+            Icons.search_rounded,
+          ),
+        ),
+        SideMenuItem(
+          priority: 2,
+          title: 'Queue',
+          onTap: (index, controller) {
+            // ref.read(currentPageIndexProvider.notifier).state = 1,
+            sideMenuController.changePage(index);
+          },
+          icon: const Icon(Icons.playlist_play_rounded),
+        ),
+        SideMenuItem(
+          priority: 3,
+          title: 'Settings',
+          onTap: (index, controller) {
+            // ref.read(currentPageIndexProvider.notifier).state = 1,
+            sideMenuController.changePage(index);
+          },
+          icon: const Icon(Icons.settings),
+        ),
+      ],
+      controller: sideMenuController,
+    );
+  }
+}
