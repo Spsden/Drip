@@ -10,7 +10,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import '../../datasources/searchresults/requests/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
-import '../search.dart';
+import '../legacy_search.dart';
 
 class AlbumSearch extends StatelessWidget {
   late List<Albums> albums = [];

@@ -34,7 +34,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   loading_animation_widget: ^1.0.0+3
-  audio_video_progress_bar: ^0.10.0
+  audio_video_progress_bar: ^0.11.0
   sliding_sheet: ^0.5.2
   fluentui_system_icons: ^1.1.158
   material_floating_search_bar: ^0.3.7
@@ -64,6 +64,7 @@ dependencies:
     git:
       url: https://github.com/Spsden/easy_sidemenu.git
       ref: 6c48e1fd27b6b5b871f620ace22e6156c508c2e1
+  font_awesome_flutter: ^10.3.0
 
 
 

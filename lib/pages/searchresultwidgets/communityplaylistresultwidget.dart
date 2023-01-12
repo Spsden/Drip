@@ -13,7 +13,7 @@ import '../../datasources/searchresults/requests/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
 import '../playlistmainpage.dart';
-import '../search.dart';
+import '../legacy_search.dart';
 
 
 class CommunityPlaylistSearch extends ConsumerWidget {

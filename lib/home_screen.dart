@@ -62,6 +62,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     _pageController.dispose();
   }
 
+  final GlobalKey<mat.ScaffoldState> _scaffoldKey =
+      GlobalKey<mat.ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     ref.listen(currentPageIndexProvider, (previous, next) {
@@ -72,6 +75,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     });
     return mat.Scaffold(
+      bottomNavigationBar: Stack(
+        children: [
+          Acrylic(
+            child: Platform.isWindows
+                ? AudioPlayerBar(
+                    scaffoldKey: _scaffoldKey,
+                  )
+                : const SizedBox.shrink(),
+          ),
+          const Positioned(bottom: 76, left: 2, right: 2, child: SeekBar())
+        ],
+      ),
+      key: _scaffoldKey,
+      endDrawer: Container(
+        decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: const BorderRadius.only(
+                topLeft: mat.Radius.circular(8.0),
+                bottomLeft: mat.Radius.circular(8.0))),
+        margin: const EdgeInsets.only(bottom: 85, top: 46),
+        width: 400,
+      ),
       appBar: mat.AppBar(
         titleSpacing: 0,
         centerTitle: true,
@@ -187,17 +212,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Row(
             children: [
               const CustomLeftBar(),
-              // CustomLeftBar(
-              //   indexCallBack: () {},
-              //   onIndexChange: (callBackIndex) {
-              //     // setState(() {
-              //     //   index = callBackIndex;
-              //     // });
-              //     // _pageController.animateToPage(index,
-              //     //     duration: const Duration(milliseconds: 500),
-              //     //     curve: Curves.fastLinearToSlowEaseIn);
-              //   },
-              // ),
               Expanded(
                   child: PageView(
                 scrollDirection: Axis.vertical,
@@ -206,33 +220,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ))
             ],
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            left: 0,
-            child: Consumer(builder: (context, ref, child) {
-              return Acrylic(
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    // child: Acrylic(
-
-                    child:
-                        //SizedBox()
-                        Platform.isWindows
-                            ? const AudioPlayerBar()
-                            : const SizedBox.shrink()
-
-                    //),
-                    ),
-              );
-            }),
-          ),
-          Platform.isWindows
-              ? const Positioned(
-                  bottom: 55, left: 8, right: 8, child: SeekBar())
-              : const SizedBox.shrink()
         ],
       ),
     );
@@ -263,15 +250,24 @@ class SeekBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // print(ref.watch(audioControlCentreProvider).player.streams.position);
-    return av.ProgressBar(
-        thumbGlowColor: Colors.blue,
-        baseBarColor: ref.watch(themeProvider).color.withOpacity(0.3),
-        thumbColor: ref.watch(themeProvider).color,
-        progressBarColor: ref.watch(themeProvider).color,
-        progress: ref.watch(audioControlCentreProvider).position,
-        // buffered: value.buffered,
-        total: ref.watch(audioControlCentreProvider).duration,
-        onSeek: (position) =>
-            ref.read(audioControlCentreProvider).seek(position));
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+
+      child: av.ProgressBar(
+          thumbGlowColor: Colors.blue,
+          baseBarColor: ref.watch(themeProvider).color.withOpacity(0.3),
+          thumbColor: ref.watch(themeProvider).color,
+          thumbRadius: 5.0,
+          thumbGlowRadius: 10.0,
+          timeLabelLocation: av.TimeLabelLocation.none,
+          thumbCanPaintOutsideBar: true,
+          barHeight: 3.0,
+          progressBarColor: ref.watch(themeProvider).color,
+          progress: ref.watch(audioControlCentreProvider).position,
+          // buffered: value.buffered,
+          total: ref.watch(audioControlCentreProvider).duration,
+          onSeek: (position) =>
+              ref.read(audioControlCentreProvider).seek(position)),
+    );
   }
 }

@@ -245,6 +245,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             FloatingActionButton.small(
+                                heroTag: null,
                                 onPressed: () {
                                   _listViewControllers[index].animateTo(
                                     _listViewControllers[index]
@@ -254,8 +255,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                     curve: Curves.ease,
                                   );
                                 },
-                                foregroundColor: Colors.white,
-                                backgroundColor: ref.watch(themeProvider).color,
+                                foregroundColor: ref.watch(themeProvider).color,
+                                backgroundColor: ref.watch(themeProvider).cardColor,
                                 elevation: 5.0,
                                 child: const Icon(
                                   Icons.navigate_before_rounded,
@@ -265,6 +266,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                               width: 10,
                             ),
                             FloatingActionButton.small(
+                              heroTag: null,
                                 onPressed: () {
                                   _listViewControllers[index].animateTo(
                                     _listViewControllers[index]
@@ -274,8 +276,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                     curve: Curves.ease,
                                   );
                                 },
-                                foregroundColor: Colors.white,
-                                backgroundColor: ref.watch(themeProvider).color,
+                                foregroundColor: ref.watch(themeProvider).color,
+                                backgroundColor: ref.watch(themeProvider).cardColor,
                                 elevation: 5.0,
                                 child: const Icon(
                                   Icons.navigate_next_rounded,

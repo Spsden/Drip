@@ -1,15 +1,19 @@
+import 'package:drip/providers/audio_player_provider.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../datasources/audiofiles/playback.dart';
+import '../providers/providers.dart';
 
 class AudioPlayerBar extends StatefulWidget {
+  final GlobalKey<mat.ScaffoldState> scaffoldKey;
   const AudioPlayerBar({
-    Key? key,
+    Key? key, required this.scaffoldKey,
   }) : super(key: key);
 
   @override
@@ -42,42 +46,57 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    var size = MediaQuery
-        .of(context)
-        .size;
+    var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    return mat.LayoutBuilder(
-      builder: (context, constraints) =>
-          SizedBox(
-            height: 84.0,
-            width: double.infinity,
-            //color: Colors.black87,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
+    return   Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0)
+      ),
+      height: 84.0,
+      width: double.infinity,
+      //color: Colors.black87,
+      child:
 
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  TrackInfo(),
-
-                  Align(
-                    alignment: Alignment.center,
-                    child: PlayBackControls()
-                  ),
-
-                  MoreControls()
-
-
-                ],
-              ),
-            ),
-          ),
+      Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children:  [
+            const TrackInfo(),
+            const Align(alignment: Alignment.center, child: PlayBackControls()),
+            MoreControls(widget.scaffoldKey)
+          ],
+        ),
+      ),
     );
+
+
+    //   mat.LayoutBuilder(
+    //   builder: (context, constraints) =>
+    //
+    //       SizedBox(
+    //     height: 84.0,
+    //     width: double.infinity,
+    //     //color: Colors.black87,
+    //     child:
+    //
+    //     Padding(
+    //       padding: const EdgeInsets.all(12.0),
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //         children:  [
+    //           const TrackInfo(),
+    //           const Align(alignment: Alignment.center, child: PlayBackControls()),
+    //           MoreControls(widget.scaffoldKey)
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   @override
-
   bool get wantKeepAlive => true;
 }
 
@@ -95,17 +114,11 @@ class TrackInfo extends ConsumerWidget {
           // ref.watch(activeAudioDataNotifier).thumbnail,
           prov.player.state.playlist.medias.isNotEmpty
               ? prov
-              .player.state.playlist.medias[prov.index].extras.thumbs.first
+                  .player.state.playlist.medias[prov.index].extras.thumbs.first
               : 'https://i.imgur.com/L3Ip1wh.png',
 
-          width: MediaQuery
-              .of(context)
-              .size
-              .width > 500 ? 70 : 0,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height > 500 ? 70 : 0,
+          width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
+          height: MediaQuery.of(context).size.height > 500 ? 70 : 0,
           fit: BoxFit.cover,
           cache: false,
           shape: BoxShape.rectangle,
@@ -117,17 +130,11 @@ class TrackInfo extends ConsumerWidget {
                     fit: BoxFit.cover, image: AssetImage('assets/cover.jpg'));
 
               case LoadState.completed:
-              // _controller.forward();
+                // _controller.forward();
                 return ExtendedRawImage(
                   image: state.extendedImageInfo?.image,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width > 500 ? 70 : 0,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height > 500 ? 70 : 0,
+                  width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
+                  height: MediaQuery.of(context).size.height > 500 ? 70 : 0,
                   fit: BoxFit.cover,
                   // cache: false,
                   // shape: BoxShape.rectangle,
@@ -135,7 +142,7 @@ class TrackInfo extends ConsumerWidget {
                 );
 
               case LoadState.failed:
-              //_controller.reset();
+                //_controller.reset();
                 return GestureDetector(
                   child: Stack(
                     fit: StackFit.expand,
@@ -157,10 +164,7 @@ class TrackInfo extends ConsumerWidget {
           width: 10,
         ),
         SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 1 / 5,
+          width: MediaQuery.of(context).size.width * 1 / 5,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,25 +172,24 @@ class TrackInfo extends ConsumerWidget {
               Text(
                   prov.player.state.playlist.medias.isNotEmpty
                       ? prov
-                      .player.state.playlist.medias[prov.index].extras.title
+                          .player.state.playlist.medias[prov.index].extras.title
                       : 'Click to Play',
-                  style: mat.Theme
-                      .of(context)
-                      .textTheme
-                      .bodyText1,
+                  style: mat.Theme.of(context).textTheme.bodyText1,
                   maxLines: 1),
               const SizedBox(height: 4.0),
               Text(
-                  prov.player.state.playlist.medias.isNotEmpty
-                      ? prov.player.state.playlist.medias[prov.index].extras
-                      .author.join(" ")
-                      : 'NA',
-                  maxLines: 1,
-                  style:  TextStyle(
-                      fontSize: 15, overflow: TextOverflow.ellipsis,color: mat.Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .color,),)
+                prov.player.state.playlist.medias.isNotEmpty
+                    ? prov
+                        .player.state.playlist.medias[prov.index].extras.author
+                        .join(" ")
+                    : 'NA',
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 15,
+                  overflow: TextOverflow.ellipsis,
+                  color: mat.Theme.of(context).textTheme.caption!.color,
+                ),
+              )
             ],
           ),
         ),
@@ -223,18 +226,10 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
 
   @override
   Widget build(BuildContext context) {
-    double smallIcons = MediaQuery
-        .of(context)
-        .size
-        .width > 550 ? 30 : 25;
-    double largeIcons = MediaQuery
-        .of(context)
-        .size
-        .width > 550 ? 40 : 30;
+    double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
+    double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
     // isPlaying = ref.watch(audioControlCentreProvider).isPlaying;
-    ref
-        .watch(audioControlCentreProvider)
-        .isPlaying
+    ref.watch(audioControlCentreProvider).isPlaying
         ? _iconController.forward()
         : _iconController.reverse();
 
@@ -262,10 +257,7 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
                 border: Border.all(
-                  color: ref
-                      .watch(themeProvider)
-                      .color
-                      .toAccentColor(),
+                  color: ref.watch(themeProvider).color.toAccentColor(),
                   width: 3.0,
                 ),
                 //  borderRadius: BorderRadius.circular(largeIcons),
@@ -284,15 +276,13 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
                     ),
                   ),
                 ),
-                ref
-                    .watch(audioControlCentreProvider)
-                    .isBuffering
+                ref.watch(audioControlCentreProvider).isBuffering
                     ? Container(
-                  margin: const EdgeInsets.all(8.0),
-                  width: largeIcons,
-                  height: largeIcons,
-                  child: const mat.CircularProgressIndicator(),
-                )
+                        margin: const EdgeInsets.all(8.0),
+                        width: largeIcons,
+                        height: largeIcons,
+                        child: const mat.CircularProgressIndicator(),
+                      )
                     : const SizedBox.shrink()
               ],
             ),
@@ -306,10 +296,15 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
             },
           ),
           mat.IconButton(
-            icon: const Icon(mat.Icons.repeat),
+            icon: ref.read(audioControlCentreProvider).repeat == true
+                ? const Icon(
+                    mat.Icons.repeat,
+                    color: Colors.white,
+                  )
+                : Icon(mat.Icons.repeat, color: Colors.white.withOpacity(0.5)),
             iconSize: smallIcons,
             onPressed: () {
-              print("tapped");
+              ref.read(audioControlCentreProvider).setRepeat();
             },
           ),
         ],
@@ -319,54 +314,53 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
 }
 
 class MoreControls extends ConsumerWidget {
-  const MoreControls({Key? key}) : super(key: key);
+  final GlobalKey<mat.ScaffoldState> scaffoldKey;
+  const MoreControls(this.scaffoldKey, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         mat.IconButton(
-          icon: ref
-              .watch(audioControlCentreProvider)
-              .volume
-              .isZero
-              ? const Icon(mat.Icons.volume_up)
-              : const Icon(mat.Icons.volume_mute),
+          icon: ref.watch(audioControlCentreProvider).volume.isZero
+              ? const Icon(mat.Icons.volume_off_rounded)
+              : const Icon(mat.Icons.volume_up),
           iconSize: 25,
           onPressed: () {
-            if (ref
-                .watch(audioControlCentreProvider)
-                .volume
-                .isZero) {
+            if (ref.watch(audioControlCentreProvider).volume.isZero) {
               ref.read(audioControlCentreProvider).setVolume(25.0);
             } else {
               ref.read(audioControlCentreProvider).setVolume(0.0);
             }
           },
         ),
-        mat.SliderTheme(
-          data: mat.SliderThemeData(
-              activeTrackColor: ref
-                  .watch(themeProvider)
-                  .color,
-              thumbColor: ref
-                  .watch(themeProvider)
-                  .color),
-          child: Slider(
-              value: ref
-                  .watch(audioControlCentreProvider)
-                  .volume,
-              min: 0.0,
-              max: 100,
-              //divisions: 30,
-              onChanged: (volume) {
-                ref.read(audioControlCentreProvider).setVolume(volume);
-              }),
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 8,
+          child: mat.SliderTheme(
+            data: mat.SliderThemeData(
+                activeTrackColor: ref.watch(themeProvider).color,
+                thumbColor: ref.watch(themeProvider).color),
+            child: Slider(
+                value: ref.watch(audioControlCentreProvider).volume,
+                min: 0.0,
+                max: 100,
+                //divisions: 30,
+                onChanged: (volume) {
+                  ref.read(audioControlCentreProvider).setVolume(volume);
+                }),
+          ),
         ),
+        mat.IconButton(
+          icon: const Icon(mat.Icons.queue_music_rounded),
+          iconSize: 25,
+          onPressed: () {
+            scaffoldKey.currentState?.openEndDrawer();
+
+            // ref.read(playListSliderStateProvider.notifier).state =
+            //     !ref.read(playListSliderStateProvider);
+          },
+        )
       ],
-    )
-    ;
+    );
   }
 }
-
-

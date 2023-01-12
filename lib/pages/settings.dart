@@ -25,7 +25,7 @@ const _WindowsWindowEffects = [
   WindowEffect.disabled,
   WindowEffect.solid,
   WindowEffect.transparent,
-  WindowEffect.aero,
+  //WindowEffect.aero,
   WindowEffect.acrylic,
   WindowEffect.mica,
   WindowEffect.tabbed,

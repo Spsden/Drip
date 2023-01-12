@@ -35,6 +35,7 @@ class AudioControlCentre extends ChangeNotifier {
   bool isBuffering = false;
   bool isCompleted = false;
   bool isMuted = false;
+  bool repeat = false;
 
   //List<StreamSubscription> playBackStreams;
 
@@ -61,6 +62,12 @@ class AudioControlCentre extends ChangeNotifier {
   void setVolume(double value) {
     player.volume = value;
 
+    notifyListeners();
+  }
+
+  void setRepeat(){
+    repeat = !repeat;
+    print(repeat);
     notifyListeners();
   }
 
@@ -160,6 +167,9 @@ class AudioControlCentre extends ChangeNotifier {
     });
     player.streams.isCompleted.listen((event) {
       isCompleted = event;
+      if(repeat== true){
+        prev();
+      }
 
       notifyListeners();
     });

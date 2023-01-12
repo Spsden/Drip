@@ -1,6 +1,6 @@
 // import 'package:drip/datasources/searchresults/searchresultsservice.dart';
 // import 'package:drip/pages/moods_page.dart';
-// import 'package:drip/pages/search.dart';
+// import 'package:drip/pages/legacy_search.dart';
 // import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 // import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 // import 'package:drip/pages/searchresultwidgets/communityplaylistresultwidget.dart';
