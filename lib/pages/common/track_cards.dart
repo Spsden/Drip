@@ -135,95 +135,105 @@ class TrackCardSmall extends StatelessWidget {
     var size = MediaQuery.of(context).size.width;
 
     var spacer = SizedBox(width: size/80);
-    return  mat.Material(
-      borderRadius: mat.BorderRadius.circular(10),
-      color: color,
-      child: mat.InkWell(
-        onTap: () {
-          onTrackTap();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FadeInImage(placeholder:
-                  const AssetImage('assets/cover.jpg'),
-                      width: 37,
-                      height: 37,
-                      fit: BoxFit.cover,
+    return mat.InkWell(
+    onTap: () {
 
-                      image:  NetworkImage(
+    },
+      child: ListTile(
+        tileColor: ButtonState.resolveWith((states) => Colors.grey),
+        
+        shape: RoundedRectangleBorder(
 
-                        data.thumbnail.toString(),
-                      )),
-                  // CachedNetworkImage(
-                  //   memCacheWidth: 40,
-                  //   memCacheHeight: 40,
-                  //   width: 50,
-                  //   height: 50,
-                  //   imageBuilder: (context, imageProvider) => CircleAvatar(
-                  //     backgroundColor: Colors.transparent,
-                  //     foregroundColor: Colors.transparent,
-                  //     radius: 100,
-                  //     backgroundImage: imageProvider,
-                  //   ),
-                  //   fit: BoxFit.cover,
-                  //   errorWidget: (context, _, __) => const Image(
-                  //     fit: BoxFit.cover,
-                  //     image: AssetImage('assets/cover.jpg'),
-                  //   ),
-                  //   imageUrl: data.thumbnail,
-                  //   placeholder: (context, url) => const Image(
-                  //       fit: BoxFit.cover, image: AssetImage('assets/cover.jpg')),
-                  // ),
-                  spacer,
-                  mat.Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: mat.CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 1 / 2.3,
-                        child: Text(
-                          data.title.toString(),
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w400),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      spacer,
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 1 / 2.5,
-                        child: Text(
-                          data.artist.toString(),
-                          // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    // width: MediaQuery.of(context).size.width * 1 / 8,
-                    child: Text(
-                      data.duration.toString(),
-                      // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  spacer,
-                  const Icon(FluentIcons.more)
-                ],
-              ),
+          borderRadius: BorderRadius.circular(8),
 
-
-            ],
-
-          ),
         ),
+        title: Text(data.title ?? 'NA',maxLines: 1,overflow: TextOverflow.ellipsis),
+        subtitle: Text(data.artist ?? 'NA',maxLines: 1,overflow: TextOverflow.ellipsis,),
+        leading:
+                      FadeInImage(placeholder:
+                      const AssetImage('assets/cover.jpg'),
+                          width: 37,
+                          height: 37,
+                          fit: BoxFit.cover,
+
+                          image:  NetworkImage(
+
+                            data.thumbnail.toString(),
+                          )),
+
       ),
     );
+
+    //   mat.Material(
+    //   borderRadius: mat.BorderRadius.circular(10),
+    //   color: color,
+    //   child: mat.InkWell(
+    //     onTap: () {
+    //       onTrackTap();
+    //     },
+    //     child: Padding(
+    //       padding: const EdgeInsets.all(5),
+    //       child: Column(
+    //         children: [
+    //           Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //             children: [
+    //               FadeInImage(placeholder:
+    //               const AssetImage('assets/cover.jpg'),
+    //                   width: 37,
+    //                   height: 37,
+    //                   fit: BoxFit.cover,
+    //
+    //                   image:  NetworkImage(
+    //
+    //                     data.thumbnail.toString(),
+    //                   )),
+    //
+    //               spacer,
+    //               mat.Column(
+    //                 mainAxisAlignment: MainAxisAlignment.start,
+    //                 crossAxisAlignment: mat.CrossAxisAlignment.start,
+    //                 children: [
+    //                   SizedBox(
+    //                   //  width: MediaQuery.of(context).size.width * 1 / 2.3,
+    //                     child: Text(
+    //                       data.title.toString(),
+    //                       style: const TextStyle(
+    //                           fontSize: 17, fontWeight: FontWeight.w400),
+    //                       overflow: TextOverflow.ellipsis,
+    //                     ),
+    //                   ),
+    //                   spacer,
+    //                   SizedBox(
+    //                    // width: MediaQuery.of(context).size.width * 1 / 2.5,
+    //                     child: Text(
+    //                       data.artist.toString(),
+    //                       // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+    //                       overflow: TextOverflow.ellipsis,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //               SizedBox(
+    //                 // width: MediaQuery.of(context).size.width * 1 / 8,
+    //                 child: Text(
+    //                   data.duration.toString(),
+    //                   // widget.isFromPrimarySearchPage ? widget.songs[index].artists![0].name.toString() : 'Atif',
+    //                   overflow: TextOverflow.ellipsis,
+    //                 ),
+    //               ),
+    //               spacer,
+    //               const Icon(FluentIcons.more)
+    //             ],
+    //           ),
+    //
+    //
+    //         ],
+    //
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
 

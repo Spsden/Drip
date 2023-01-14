@@ -72,7 +72,7 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
             ? SideMenuDisplayMode.open
             : SideMenuDisplayMode.compact,
         hoverColor: ref.watch(themeProvider).color,
-        selectedColor: ref.watch(themeProvider).color,
+        selectedColor: ref.watch(themeProvider).color.withOpacity(0.4),
         indicatorColor: Colors.white,
 
 

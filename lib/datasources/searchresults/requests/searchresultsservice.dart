@@ -6,8 +6,10 @@ import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart'
 import 'package:drip/datasources/searchresults/models/moods_data_class.dart';
 import 'package:drip/datasources/searchresults/models/playlist_data_class.dart';
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
-import 'package:drip/datasources/searchresults/models/songsdataclass.dart' as songs;
-import 'package:drip/datasources/searchresults/models/videodataclass.dart' as videos;
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart'
+    as songs;
+import 'package:drip/datasources/searchresults/models/videodataclass.dart'
+    as videos;
 import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart';
 import 'package:flutter/foundation.dart';
 
@@ -18,12 +20,12 @@ import '../models/artistsdataclass.dart' as artists;
 import '../models/communityplaylistdataclass.dart';
 
 class SearchMusic {
+  static const String serverAddress =
+      'https://drip-server-fv6tn36q0-spsden.vercel.app/';
 
-  static const String serverAddress = 'https://drip-server-fv6tn36q0-spsden.vercel.app/';
+  //static const String serverAddress = 'http://192.168.199.131:5000/';
 
-   //static const String serverAddress = 'http://192.168.199.131:5000/';
-
-  static  Future<Map>  getAllSearchResults(String searchQuery) async {
+  static Future<Map> getAllSearchResults(String searchQuery) async {
     try {
       final response = await http
           .get(Uri.parse('${serverAddress}search?query=$searchQuery'));
@@ -43,10 +45,7 @@ class SearchMusic {
         var featuredPlaylistList = [];
         String? topResultType = 'NONE';
 
-
         Object? topResult = 'Lol';
-
-
 
         for (var i = 0; i < morefilter.length; i++) {
           var listMap = morefilter[i];
@@ -69,8 +68,9 @@ class SearchMusic {
             featuredPlaylistList.add(listMap);
           }
 
-          try{
+          try {
             if ((listMap['category']).toString() == 'Top result') {
+              //print(listMap['resultType']);
               switch (listMap['resultType'] as String) {
                 case 'artist':
                   topResult = artists.artistFromJson(jsonEncode(listMap));
@@ -84,8 +84,7 @@ class SearchMusic {
                   break;
 
                 case 'video':
-                  topResult =
-                      videos.videoFromJson(jsonEncode(listMap));
+                  topResult = videos.videoFromJson(jsonEncode(listMap));
                   topResultType = 'video';
 
                   break;
@@ -94,18 +93,17 @@ class SearchMusic {
                   topResultType = 'song';
 
                   break;
+                case 'playlist':
+                  topResult = oneCommunityPlaylistFromJson(jsonEncode(listMap));
+                  topResultType = 'playlist';
+                  break;
               }
-
-
             }
-
-          } catch (e){
+          } catch (e) {
             if (kDebugMode) {
               print('$e topResultsException');
             }
           }
-
-
         }
 
         var artistFiltered = jsonEncode(artistslist);
@@ -129,17 +127,17 @@ class SearchMusic {
         final List<CommunityPlaylist> featuredPlaylistSearch =
             communityPlaylistFromJson(featuredPlaylist);
 
-
         var mapOfSearchResults = {
           'artistSearch': artistSearch,
           'songSearch': songSearch,
           'albumSearch': albumSearch,
-          'featuredPlayListSearch' :featuredPlaylistSearch,
+          'featuredPlayListSearch': featuredPlaylistSearch,
           'communityPlaylistSearch': communityPlaylistSearch,
           'videoSearch': videoSearch,
           'topResults': topResult,
           'topResultType': topResultType
         };
+        print(topResultType);
 
         return mapOfSearchResults;
         // return listofsearchresults;
@@ -150,13 +148,12 @@ class SearchMusic {
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
-
-      }return{};
+      }
+      return {};
     }
   }
 
   static Future getOnlySongs(String searchQuery, int pageNum) async {
-
     try {
       final response = await http.get(Uri.parse(
           '${serverAddress}searchwithfilter?query=$searchQuery&filter=songs&pageNum=$pageNum'));
@@ -171,14 +168,12 @@ class SearchMusic {
       } else {
         return <songs.Songs>[];
       }
-
-    } catch (e){
-      if(kDebugMode){
+    } catch (e) {
+      if (kDebugMode) {
         print("$e from getOnlySongs");
       }
       return [];
     }
-
   }
 
   static Future getOnlyArtists(String searchquery, int pageNum) async {

@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:drip/datasources/audiofiles/playback.dart';
 
-import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
-
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -23,25 +21,19 @@ class CurrentPlaylist extends ConsumerStatefulWidget {
       : super(key: key);
 
   @override
-  _CurrentPlaylistState createState() => _CurrentPlaylistState();
+  CurrentPlaylistState createState() => CurrentPlaylistState();
 }
 
-class _CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
-  final List<Songs> _songs = [];
-
-  //late List<Track> currentTracks = [];
-
+class CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     _scrollController.dispose();
   }
@@ -49,13 +41,11 @@ class _CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
-    const spacer = SizedBox(width: 10.0);
-    const biggerSpacer = SizedBox(width: 40.0);
     var size = MediaQuery.of(context).size;
     final currentTracks = ref.watch(audioControlCentreProvider).tracks;
 
     return currentTracks.isEmpty
-        ? Text(('Oops No Playlist Loaded'))
+        ? const Text(('Oops No Playlist Loaded'))
         : Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -82,96 +72,81 @@ class _CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
 
                             //controller: _sc,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: TrackCardLarge(
-                                  data: TrackCardData(
-                                      title:
-                                          currentTracks[index].title.toString(),
-                                      artist: currentTracks[index]
-                                          .artists![0]
-                                          .name
-                                          .toString(),
-                                      album: 'Drip',
-                                      duration: currentTracks[index]
-                                          .length
-                                          .toString(),
-                                      thumbnail: currentTracks[index]
-                                          .thumbnail![0]
-                                          .url
-                                          .toString()),
-                                  songIndex: index,
-                                  onTrackTap: () async {
-                                    CurrentMusicInstance currentMusicInstance =
-                                        CurrentMusicInstance(
-                                            title: currentTracks[index]
-                                                .title
-                                                .toString(),
-                                            author: currentTracks[index]
-                                                    .artists
-                                                    ?.map((e) =>
-                                                        e.name.toString())
-                                                    .toList() ??
-                                                [],
-                                            thumbs: currentTracks[index]
-                                                    .thumbnail
-                                                    ?.map(
-                                                        (e) => e.url.toString())
-                                                    .toList() ??
-                                                [],
-                                            urlOfVideo: 'NA',
-                                            videoId: currentTracks[index]
-                                                .videoId
-                                                .toString());
-                                    ref
-                                        .read(audioControlCentreProvider)
-                                        .open(currentMusicInstance);
+                              TrackCardData trackCardData = TrackCardData(
+                                  title: currentTracks[index].title.toString(),
+                                  artist: currentTracks[index]
+                                      .artists![0]
+                                      .name
+                                      .toString(),
+                                  album: 'Drip',
+                                  duration:
+                                      currentTracks[index].length.toString(),
+                                  thumbnail: currentTracks[index]
+                                      .thumbnail![0]
+                                      .url
+                                      .toString());
 
-                                    // await ref.read(activeAudioDataNotifier)
-                                    //     .songDetails(
-                                    //     'lol',
-                                    //     currentTracks[index]
-                                    //         .videoId
-                                    //         .toString(),
-                                    //     currentTracks[index]
-                                    //         .artists![0]
-                                    //         .name
-                                    //         .toString(),
-                                    //     currentTracks[index]
-                                    //         .title
-                                    //         .toString(),
-                                    //     currentTracks[index]
-                                    //         .thumbnail![0]
-                                    //         .url
-                                    //         .toString(),
-                                    //     //  currentTracks[index].thumbnail!.map((e) => ThumbnailLocal(height: e.height, url: e.url.toString(), width: e.width)).toList(),
-                                    //     currentTracks[index]
-                                    //         .thumbnail!
-                                    //         .last
-                                    //         .url
-                                    //         .toString());
-                                    // currentMediaIndex = 0;
-                                    //
-                                    // await AudioControlClass.play(
-                                    //
-                                    //     videoId: currentTracks[index]
-                                    //         .videoId
-                                    //         .toString(),
-                                    //     context: context);
-                                  },
-                                  color: index % 2 != 0
-                                      ? Colors.transparent
-                                      : ref.watch(themeProvider).mode ==
-                                                  ThemeMode.dark ||
-                                              ref.watch(themeProvider).mode ==
-                                                  ThemeMode.system
-                                          ? Colors.grey[150]
-                                          : Colors.grey[40],
-                                  SuperSize: size,
-                                  widthy: 800,
-                                  fromQueue: true,
-                                ),
-                              );
+                              void play() {
+                                CurrentMusicInstance currentMusicInstance =
+                                    CurrentMusicInstance(
+                                        title: currentTracks[index]
+                                            .title
+                                            .toString(),
+                                        author: currentTracks[index]
+                                                .artists
+                                                ?.map((e) => e.name.toString())
+                                                .toList() ??
+                                            [],
+                                        thumbs: currentTracks[index]
+                                                .thumbnail
+                                                ?.map((e) => e.url.toString())
+                                                .toList() ??
+                                            [],
+                                        urlOfVideo: 'NA',
+                                        videoId: currentTracks[index]
+                                            .videoId
+                                            .toString());
+                                ref
+                                    .read(audioControlCentreProvider)
+                                    .open(currentMusicInstance);
+                              }
+
+                              return Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: widget.fromMainPage
+                                      ? TrackCardLarge(
+                                          data: trackCardData,
+                                          songIndex: index,
+                                          onTrackTap: () async {play();},
+                                          color: index % 2 != 0
+                                              ? Colors.transparent
+                                              : ref.watch(themeProvider).mode ==
+                                                          ThemeMode.dark ||
+                                                      ref
+                                                              .watch(
+                                                                  themeProvider)
+                                                              .mode ==
+                                                          ThemeMode.system
+                                                  ? Colors.grey[150]
+                                                  : Colors.grey[40],
+                                          SuperSize: size,
+                                          widthy: 800,
+                                          fromQueue: true,
+                                        )
+                                      : TrackCardSmall(
+                                          color: index % 2 != 0
+                                              ? Colors.transparent
+                                              : ref.watch(themeProvider).mode ==
+                                                          ThemeMode.dark ||
+                                                      ref
+                                                              .watch(
+                                                                  themeProvider)
+                                                              .mode ==
+                                                          ThemeMode.system
+                                                  ? Colors.grey[150]
+                                                  : Colors.grey[40],
+                                          data: trackCardData,
+                                          onTrackTap: ()=> play()));
                             }),
                       ),
                       LayoutBuilder(
@@ -186,9 +161,6 @@ class _CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 95,
-                )
               ],
             ),
           );
@@ -205,7 +177,6 @@ class AlbumArtCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Typography typography = FluentTheme.of(context).typography;
-    var size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: mat.CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,

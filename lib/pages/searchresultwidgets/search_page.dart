@@ -714,6 +714,9 @@ Widget topResultWidget(BuildContext context, dynamic results) {
         songs: [results['topResults']].first,
         color: Colors.transparent,
       );
+      break;
+    case 'playlist' :
+      topWidget = CommunityPlaylistCard(communityPlaylist: [results['topResults']].first);
 
       // TrackBars(
       // songs: [...results['topResults']], isFromPrimarySearchPage: true);

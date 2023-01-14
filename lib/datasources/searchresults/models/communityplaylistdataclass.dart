@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+CommunityPlaylist oneCommunityPlaylistFromJson(String str) => CommunityPlaylist.fromJson(jsonDecode(str));
+
 List<CommunityPlaylist> communityPlaylistFromJson(String str) =>
     List<CommunityPlaylist>.from(
         json.decode(str).map((x) => CommunityPlaylist?.fromJson(x)));

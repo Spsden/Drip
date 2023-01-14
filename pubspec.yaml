@@ -65,6 +65,7 @@ dependencies:
       url: https://github.com/Spsden/easy_sidemenu.git
       ref: 6c48e1fd27b6b5b871f620ace22e6156c508c2e1
   font_awesome_flutter: ^10.3.0
+  easy_debounce: ^2.0.3
 
 
 

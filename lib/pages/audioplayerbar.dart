@@ -12,8 +12,10 @@ import '../providers/providers.dart';
 
 class AudioPlayerBar extends StatefulWidget {
   final GlobalKey<mat.ScaffoldState> scaffoldKey;
+
   const AudioPlayerBar({
-    Key? key, required this.scaffoldKey,
+    Key? key,
+    required this.scaffoldKey,
   }) : super(key: key);
 
   @override
@@ -49,20 +51,16 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
-    return   Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.0)
-      ),
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
       height: 84.0,
       width: double.infinity,
       //color: Colors.black87,
-      child:
-
-      Padding(
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children:  [
+          children: [
             const TrackInfo(),
             const Align(alignment: Alignment.center, child: PlayBackControls()),
             MoreControls(widget.scaffoldKey)
@@ -70,7 +68,6 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
         ),
       ),
     );
-
 
     //   mat.LayoutBuilder(
     //   builder: (context, constraints) =>
@@ -315,22 +312,26 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
 
 class MoreControls extends ConsumerWidget {
   final GlobalKey<mat.ScaffoldState> scaffoldKey;
+
   const MoreControls(this.scaffoldKey, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final audioControlCentre = ref.watch(audioControlCentreProvider);
     return Row(
       children: [
+
+
         mat.IconButton(
-          icon: ref.watch(audioControlCentreProvider).volume.isZero
+          icon: audioControlCentre.volume.isZero
               ? const Icon(mat.Icons.volume_off_rounded)
               : const Icon(mat.Icons.volume_up),
           iconSize: 25,
           onPressed: () {
-            if (ref.watch(audioControlCentreProvider).volume.isZero) {
-              ref.read(audioControlCentreProvider).setVolume(25.0);
+            if (audioControlCentre.volume.isZero) {
+              audioControlCentre.setVolume(25.0);
             } else {
-              ref.read(audioControlCentreProvider).setVolume(0.0);
+              audioControlCentre.setVolume(0.0);
             }
           },
         ),
@@ -341,23 +342,23 @@ class MoreControls extends ConsumerWidget {
                 activeTrackColor: ref.watch(themeProvider).color,
                 thumbColor: ref.watch(themeProvider).color),
             child: Slider(
-                value: ref.watch(audioControlCentreProvider).volume,
+                value: audioControlCentre.volume,
                 min: 0.0,
                 max: 100,
                 //divisions: 30,
                 onChanged: (volume) {
-                  ref.read(audioControlCentreProvider).setVolume(volume);
+                  audioControlCentre.setVolume(volume);
                 }),
           ),
+        ),
+        const SizedBox(
+          width: 20,
         ),
         mat.IconButton(
           icon: const Icon(mat.Icons.queue_music_rounded),
           iconSize: 25,
           onPressed: () {
             scaffoldKey.currentState?.openEndDrawer();
-
-            // ref.read(playListSliderStateProvider.notifier).state =
-            //     !ref.read(playListSliderStateProvider);
           },
         )
       ],

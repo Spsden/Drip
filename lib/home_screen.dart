@@ -9,6 +9,7 @@ import 'package:drip/pages/settings.dart' deferred as settings;
 import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:drip/utils/deferred_widget.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,6 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     });
     return mat.Scaffold(
+      drawerScrimColor: Colors.black.withOpacity(0.3),
       bottomNavigationBar: Stack(
         children: [
           Acrylic(
@@ -84,18 +86,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   )
                 : const SizedBox.shrink(),
           ),
-          const Positioned(bottom: 76, left: 2, right: 2, child: SeekBar())
+          const Positioned(bottom: 70, left: 2, right: 2, child: SeekBar())
         ],
       ),
       key: _scaffoldKey,
       endDrawer: Container(
-        decoration: BoxDecoration(
-            color: Colors.green,
-            borderRadius: const BorderRadius.only(
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
                 topLeft: mat.Radius.circular(8.0),
                 bottomLeft: mat.Radius.circular(8.0))),
         margin: const EdgeInsets.only(bottom: 85, top: 46),
         width: 400,
+        child: Acrylic(
+          child: DeferredWidget(currentplaylist.loadLibrary,
+              () => currentplaylist.CurrentPlaylist(fromMainPage: false)),
+        ),
       ),
       appBar: mat.AppBar(
         titleSpacing: 0,
@@ -158,7 +163,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 1;
                           }
                         }
-                        ref.read(searchQueryProvider.notifier).state = text;
+                        EasyDebounce.debounce('search', const Duration(milliseconds: 600), () {
+                          ref.read(searchQueryProvider.notifier).state = text;
+                        });
+
                       },
                       controller: _textEditingController,
                       items: ref.watch(searchSuggestionsProvider).when(
@@ -252,14 +260,13 @@ class SeekBar extends ConsumerWidget {
     // print(ref.watch(audioControlCentreProvider).player.streams.position);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-
       child: av.ProgressBar(
           thumbGlowColor: Colors.blue,
           baseBarColor: ref.watch(themeProvider).color.withOpacity(0.3),
           thumbColor: ref.watch(themeProvider).color,
           thumbRadius: 5.0,
           thumbGlowRadius: 10.0,
-          timeLabelLocation: av.TimeLabelLocation.none,
+          timeLabelLocation: av.TimeLabelLocation.sides,
           thumbCanPaintOutsideBar: true,
           barHeight: 3.0,
           progressBarColor: ref.watch(themeProvider).color,
