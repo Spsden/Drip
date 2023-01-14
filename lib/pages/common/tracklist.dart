@@ -63,7 +63,6 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
   @override
   Widget build(BuildContext context) {
     Hive.openBox('recentlyPlayed');
-    const biggerSpacer = SizedBox(width: 40.0);
     return Container(
       alignment: Alignment.centerLeft,
       //padding: EdgeInsets.only(top: 20),
@@ -165,7 +164,7 @@ class _TrackListState extends ConsumerState<TrackList> {
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 20, 10, 50),
+      padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: ListView.custom(
         physics: const BouncingScrollPhysics(),
         childrenDelegate:

@@ -77,9 +77,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
     return mat.Scaffold(
       drawerScrimColor: Colors.black.withOpacity(0.3),
+      //backgroundColor: ref.watch(nowPlayingPaletteProvider),
       bottomNavigationBar: Stack(
         children: [
           Acrylic(
+            tint: ref.watch(nowPlayingPaletteProvider),
+            elevation: 10,
+
             child: Platform.isWindows
                 ? AudioPlayerBar(
                     scaffoldKey: _scaffoldKey,
@@ -98,6 +102,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         margin: const EdgeInsets.only(bottom: 85, top: 46),
         width: 400,
         child: Acrylic(
+          tint: ref.watch(nowPlayingPaletteProvider),
+          elevation: 10,
+          blurAmount: 20,
+          luminosityAlpha: 0.4,
           child: DeferredWidget(currentplaylist.loadLibrary,
               () => currentplaylist.CurrentPlaylist(fromMainPage: false)),
         ),
@@ -156,7 +164,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       enableKeyboardControls: true,
-                      onChanged: (text, reason) {
+                      onChanged: (text, reason) async{
                         if (text.trim().isNotEmpty) {
                           if (index != 1) {
                             ref.read(currentPageIndexProvider.notifier).state =
@@ -222,6 +230,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const CustomLeftBar(),
               Expanded(
                   child: PageView(
+
+                    physics: NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 controller: _pageController,
                 children: allStacks,

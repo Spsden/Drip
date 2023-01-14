@@ -16,7 +16,6 @@ class PlaylistCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Typography typography = FluentTheme.of(context).typography;
 
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
@@ -120,10 +119,7 @@ class PlaylistSearchResults extends ConsumerStatefulWidget {
 }
 
 class _PlaylistSearchResultsState extends ConsumerState<PlaylistSearchResults> {
-  // FloatingSearchBarController _controller = FloatingSearchBarController();
-  late List<PlaylistDataClass> list = [];
-  bool fetched = false;
-  bool status = false;
+
 
   @override
   void initState() {
@@ -138,32 +134,22 @@ class _PlaylistSearchResultsState extends ConsumerState<PlaylistSearchResults> {
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
-    // if (!status) {
-    //   status = true;
-    //   SearchMusic.getMoodPlaylists(widget.playlistParams.toString())
-    //       .then((value) {
-    //     // print(value.length);
-    //     if (mounted) {
-    //       setState(() {
-    //         list = value;
-    //         fetched = true;
-    //       });
-    //     }
-    //
-    //     //result = value
-    //   });
-    // }
     return FutureBuilder(
       future: SearchMusic.getMoodPlaylists(widget.playlistParams) ,
       builder: ((context, snapshot) {
         if(snapshot.connectionState == ConnectionState.done){
           if(snapshot.hasError){
             return Center(
-              child: Text('error'),
+              child: Text(snapshot.error.toString()),
             );
           }
+
           else if(snapshot.hasData){
             final List data = snapshot.data as List;
+
+            if(data.length == 1){
+              return Container(child: Text(data[0].toString()),);
+            }
             return Stack(
               children: [
                 AnimationLimiter(
@@ -184,7 +170,7 @@ class _PlaylistSearchResultsState extends ConsumerState<PlaylistSearchResults> {
                             child: SlideAnimation(
                                 child: FadeInAnimation(
                                     child: PlaylistCard(
-                                        playlistDataClass: data![index]))));
+                                        playlistDataClass: data[index]))));
                       }),
                 ),
               ],

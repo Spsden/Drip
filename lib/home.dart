@@ -10,6 +10,7 @@ class StartPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FluentApp(
+
         title: 'Drip',
         themeMode: ref.watch(themeProvider).mode,
         debugShowCheckedModeBanner: false,

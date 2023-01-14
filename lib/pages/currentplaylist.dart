@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:drip/datasources/audiofiles/playback.dart';
+import 'package:drip/pages/common/loading_widget.dart';
 
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/models/watchplaylistdataclass.dart';
@@ -44,126 +46,143 @@ class CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
     var size = MediaQuery.of(context).size;
     final currentTracks = ref.watch(audioControlCentreProvider).tracks;
 
-    return currentTracks.isEmpty
-        ? const Text(('Oops No Playlist Loaded'))
-        : Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // const Text(
-                //   'Play queue',
-                //   style: TextStyle(
-                //       fontSize: 40, fontWeight: mat.FontWeight.w600),
-                // ),
+    return Container(
 
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 40,
-                        ),
-                        child: ListView.builder(
-                            controller: _scrollController,
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: currentTracks.length,
+      child:  currentTracks.isEmpty
+          ?  loadingWidget(context, Colors.red)
+          : Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // const Text(
+            //   'Play queue',
+            //   style: TextStyle(
+            //       fontSize: 40, fontWeight: mat.FontWeight.w600),
+            // ),
 
-                            //controller: _sc,
-                            itemBuilder: (context, index) {
-                              TrackCardData trackCardData = TrackCardData(
-                                  title: currentTracks[index].title.toString(),
-                                  artist: currentTracks[index]
-                                      .artists![0]
-                                      .name
-                                      .toString(),
-                                  album: 'Drip',
-                                  duration:
-                                      currentTracks[index].length.toString(),
-                                  thumbnail: currentTracks[index]
-                                      .thumbnail![0]
-                                      .url
-                                      .toString());
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(
+                      top: 40,
+                    ),
+                    child: ListView.builder(
+                        controller: _scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: currentTracks.length,
 
-                              void play() {
-                                CurrentMusicInstance currentMusicInstance =
-                                    CurrentMusicInstance(
-                                        title: currentTracks[index]
-                                            .title
-                                            .toString(),
-                                        author: currentTracks[index]
-                                                .artists
-                                                ?.map((e) => e.name.toString())
-                                                .toList() ??
-                                            [],
-                                        thumbs: currentTracks[index]
-                                                .thumbnail
-                                                ?.map((e) => e.url.toString())
-                                                .toList() ??
-                                            [],
-                                        urlOfVideo: 'NA',
-                                        videoId: currentTracks[index]
-                                            .videoId
-                                            .toString());
-                                ref
-                                    .read(audioControlCentreProvider)
-                                    .open(currentMusicInstance);
-                              }
+                        //controller: _sc,
+                        itemBuilder: (context, index) {
+                          TrackCardData trackCardData = TrackCardData(
+                              title: currentTracks[index].title.toString(),
+                              artist: currentTracks[index]
+                                  .artists![0]
+                                  .name
+                                  .toString(),
+                              album: 'Drip',
+                              duration:
+                              currentTracks[index].length.toString(),
+                              thumbnail: currentTracks[index]
+                                  .thumbnail![0]
+                                  .url
+                                  .toString());
 
-                              return Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: widget.fromMainPage
-                                      ? TrackCardLarge(
-                                          data: trackCardData,
-                                          songIndex: index,
-                                          onTrackTap: () async {play();},
-                                          color: index % 2 != 0
-                                              ? Colors.transparent
-                                              : ref.watch(themeProvider).mode ==
-                                                          ThemeMode.dark ||
-                                                      ref
-                                                              .watch(
-                                                                  themeProvider)
-                                                              .mode ==
-                                                          ThemeMode.system
-                                                  ? Colors.grey[150]
-                                                  : Colors.grey[40],
-                                          SuperSize: size,
-                                          widthy: 800,
-                                          fromQueue: true,
-                                        )
-                                      : TrackCardSmall(
-                                          color: index % 2 != 0
-                                              ? Colors.transparent
-                                              : ref.watch(themeProvider).mode ==
-                                                          ThemeMode.dark ||
-                                                      ref
-                                                              .watch(
-                                                                  themeProvider)
-                                                              .mode ==
-                                                          ThemeMode.system
-                                                  ? Colors.grey[150]
-                                                  : Colors.grey[40],
-                                          data: trackCardData,
-                                          onTrackTap: ()=> play()));
-                            }),
-                      ),
-                      LayoutBuilder(
-                        builder: (context, constraints) => Container(
-                            padding: const EdgeInsets.all(5),
-                            width: constraints.maxWidth,
-                            color: Colors.transparent,
-                            child: Text('Up Next',
-                                style:
-                                    typography.title?.copyWith(fontSize: 20))),
-                      ),
-                    ],
+                          void play() {
+                            CurrentMusicInstance currentMusicInstance =
+                            CurrentMusicInstance(
+                                title: currentTracks[index]
+                                    .title
+                                    .toString(),
+                                author: currentTracks[index]
+                                    .artists
+                                    ?.map((e) => e.name.toString())
+                                    .toList() ??
+                                    [],
+                                thumbs: currentTracks[index]
+                                    .thumbnail
+                                    ?.map((e) => e.url.toString())
+                                    .toList() ??
+                                    [],
+                                urlOfVideo: 'NA',
+                                videoId: currentTracks[index]
+                                    .videoId
+                                    .toString());
+                            ref
+                                .read(audioControlCentreProvider)
+                                .open(currentMusicInstance);
+                          }
+
+                          return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: widget.fromMainPage
+                                  ? TrackCardLarge(
+                                data: trackCardData,
+                                songIndex: index,
+                                onTrackTap: () async {
+                                  play();
+                                },
+                                color: index % 2 != 0
+                                    ? Colors.transparent
+                                    : ref.watch(themeProvider).mode ==
+                                    ThemeMode.dark ||
+                                    ref
+                                        .watch(
+                                        themeProvider)
+                                        .mode ==
+                                        ThemeMode.system
+                                    ? Colors.grey[150]
+                                    : Colors.grey[40],
+                                SuperSize: size,
+                                widthy: 800,
+                                fromQueue: true,
+                              )
+                                  :
+
+
+                              TrackCardSmall(
+                                  color: index % 2 != 0
+                                      ? Colors.transparent
+                                      : ref.watch(themeProvider).mode ==
+                                      ThemeMode.dark ||
+                                      ref
+                                          .watch(
+                                          themeProvider)
+                                          .mode ==
+                                          ThemeMode.system
+                                      ? Colors.grey[150]
+                                      : Colors.grey[40],
+                                  data: trackCardData,
+                                  onTrackTap: () async {
+                                    print("fjdk");
+                                    play();
+                                  })
+
+
+                          );
+                        }),
                   ),
-                ),
-              ],
+                  LayoutBuilder(
+                    builder: (context, constraints) => Container(
+                        padding: const EdgeInsets.all(5),
+                        width: constraints.maxWidth,
+                        color: Colors.transparent,
+                        child: Text('Up Next',
+                            style:
+                            typography.title?.copyWith(fontSize: 20))),
+                  ),
+                ],
+              ),
             ),
-          );
+          ],
+        ),
+      )
+    );
+
+
+
   }
 }
 

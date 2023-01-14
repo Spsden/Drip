@@ -4,6 +4,7 @@ import 'package:drip/datasources/searchresults/requests/searchresultsservice.dar
 import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart'
 as watchplaylist;
 import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
+import 'package:drip/providers/providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -53,10 +54,12 @@ class AudioControlCentre extends ChangeNotifier {
 
   void next() {
     player.next();
+    ref.read(nowPlayingPaletteProvider.notifier).updatePalette(tracks[index].thumbnail?.first.url ?? 'https://i.imgur.com/L3Ip1wh.png');
   }
 
   void prev() {
     player.previous();
+    ref.read(nowPlayingPaletteProvider.notifier).updatePalette(tracks[index].thumbnail?.first.url ?? 'https://i.imgur.com/L3Ip1wh.png');
   }
 
   void setVolume(double value) {
@@ -67,7 +70,7 @@ class AudioControlCentre extends ChangeNotifier {
 
   void setRepeat(){
     repeat = !repeat;
-    print(repeat);
+    //print(repeat);
     notifyListeners();
   }
 
@@ -83,6 +86,8 @@ class AudioControlCentre extends ChangeNotifier {
       mediakit.Playlist([mediakit.Media(streamLink, extras: track)],
           index: index),
     );
+
+    ref.read(nowPlayingPaletteProvider.notifier).updatePalette(track.thumbs.first.toString());
 
      tracks.clear();
 
@@ -145,16 +150,13 @@ class AudioControlCentre extends ChangeNotifier {
       if (event.index < 0 || event.index > event.medias.length - 1) {
         return;
       }
+
       index = event.index;
 
       notifyListeners();
     });
 
-    player.streams.isPlaying.listen((event) {
-      isPlaying = event;
 
-      notifyListeners();
-    });
 
     player.streams.isPlaying.listen((event) {
       isPlaying = event;
@@ -166,6 +168,12 @@ class AudioControlCentre extends ChangeNotifier {
       notifyListeners();
     });
     player.streams.isCompleted.listen((event) {
+      if(isCompleted != event){
+        ref.read(nowPlayingPaletteProvider.notifier).updatePalette(tracks[index].thumbnail?.first.url ?? 'https://i.imgur.com/L3Ip1wh.png');
+      }
+      print(event);
+
+
       isCompleted = event;
       if(repeat== true){
         prev();

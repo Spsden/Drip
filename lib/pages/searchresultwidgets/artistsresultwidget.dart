@@ -150,6 +150,8 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
 
   // int itemcount = 20;
 
+  int paged = 0;
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -159,23 +161,28 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
-        content: GridView.custom(
-      // semanticChildCount: 10,
-      shrinkWrap: true,
+        content: mat.GridView.custom(
+      //itemCount: ref.watch(artistsListResultsProvider(paged)).value?.length,
 
-      physics: BouncingScrollPhysics(),
+      // semanticChildCount: 10,
+      // shrinkWrap: true,
+
+      physics: const BouncingScrollPhysics(),
       controller: scrollController,
 
-      childrenDelegate: SliverChildBuilderDelegate(
-          //temporary fix,
-          // childCount: itemcount,
-          (
-        context,
-        index,
-      ) {
-        const pageLimit = 20;
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200.0,
+        mainAxisSpacing: 5.0,
+        crossAxisSpacing: 10.0,
+        childAspectRatio: 1 / 1.5,
+      ),
+      childrenDelegate: mat.SliverChildBuilderDelegate(
+
+         (BuildContext context, int index) {
+        const pageLimit = 5;
 
         final page = index ~/ pageLimit + 1;
+
         final itemIndexInPage = index % pageLimit;
 
         final results = ref.watch(artistsListResultsProvider(page));
@@ -195,17 +202,14 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
               }
 
               final result = results[itemIndexInPage];
-              return ArtistCard(artists: result);
-            });
-      }),
+              return
 
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200.0,
-        mainAxisSpacing: 5.0,
-        crossAxisSpacing: 10.0,
-        childAspectRatio: 1 / 1.5,
-      ),
-    ));
+                  //Container(height: 200,width: 200,color: Colors.red,);
+
+                  ArtistCard(artists: result);
+            });
+      },
+    )));
   }
 }
 

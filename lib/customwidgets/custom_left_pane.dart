@@ -41,30 +41,24 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
 
   @override
   Widget build(BuildContext context) {
-    const spacer = SizedBox(height: 20,);
     return SideMenu(
-
       // showToggle: true,
 
-      title:  Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+      title: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
         child: ExtendedImage.asset(
-
           'assets/driplogocircle.png',
           width: 40,
-
         ),
       ),
 
       displayModeToggleDuration: const Duration(milliseconds: 100),
 
       style: SideMenuStyle(
-
         toggleColor: ref.watch(themeProvider).color,
 
         compactSideMenuWidth: 70,
         openSideMenuWidth: 200,
-
 
         showTooltip: false,
 
@@ -75,14 +69,14 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
         selectedColor: ref.watch(themeProvider).color.withOpacity(0.4),
         indicatorColor: Colors.white,
 
-
         backgroundColor: fluent.FluentTheme.of(context).cardColor,
         selectedTitleTextStyle: const TextStyle(color: Colors.white),
         unselectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,
         unselectedIconColor: Colors.white,
-        itemInnerSpacing:8,
-        itemOuterPadding: const EdgeInsets.symmetric(vertical: 3,horizontal: 5),
+        itemInnerSpacing: 8,
+        itemOuterPadding:
+            const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
 
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -101,8 +95,6 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
             Icons.home,
           ),
         ),
-
-
         SideMenuItem(
           priority: 1,
           title: 'Search',

@@ -9,7 +9,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter/material.dart' as mat;
-import 'package:hive/hive.dart';
 
 import '../../datasources/searchresults/models/albumsdataclass.dart';
 import '../../datasources/searchresults/models/artistsdataclass.dart';
@@ -330,7 +329,7 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
   @override
   void dispose() {
     super.dispose();
-   // Hive.box('recentlyPlayed').close();
+    // Hive.box('recentlyPlayed').close();
   }
 
   @override
@@ -387,7 +386,6 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                     topResult = results['topResults'];
                     topResultType = results['topResultType'];
                   }
-
 
                   return ScrollConfiguration(
                       behavior: const FluentScrollBehavior(),
@@ -715,8 +713,9 @@ Widget topResultWidget(BuildContext context, dynamic results) {
         color: Colors.transparent,
       );
       break;
-    case 'playlist' :
-      topWidget = CommunityPlaylistCard(communityPlaylist: [results['topResults']].first);
+    case 'playlist':
+      topWidget = CommunityPlaylistCard(
+          communityPlaylist: [results['topResults']].first);
 
       // TrackBars(
       // songs: [...results['topResults']], isFromPrimarySearchPage: true);

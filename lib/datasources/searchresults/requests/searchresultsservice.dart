@@ -330,15 +330,23 @@ class SearchMusic {
 
     try {
       if (response.statusCode == 200) {
-        var rawResponse = response.body.toString();
+        var rawResponse = response.body;
+
+       // print(rawResponse);
 
         final List<PlaylistDataClass> moodPlaylists =
             playlistDataClassFromJson(rawResponse);
 
         return moodPlaylists;
-      } else {}
+      } else {
+
+        return [response.statusCode];
+        print(response.statusCode);
+      }
     } catch (e) {
-      //print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
 
     }
   }

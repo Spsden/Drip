@@ -54,6 +54,8 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
               }
           });
     }
+
+   // FutureBuilder<
     return (!fetched)
         ? mat.Center(
             child: loadingWidget(context,ref.watch(themeProvider).color),

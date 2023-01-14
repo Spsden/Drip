@@ -1,5 +1,3 @@
-
-
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
@@ -10,7 +8,6 @@ class TrackCardData {
   final String? artist;
   final String? album;
   final String? duration;
-
 
   TrackCardData({
     required this.title,
@@ -29,8 +26,7 @@ class TrackCardLarge extends StatelessWidget {
     required this.songIndex,
     required this.onTrackTap,
     required this.color,
-    required this.SuperSize
-    ,
+    required this.SuperSize,
     this.widthy,
     required this.fromQueue,
 
@@ -46,7 +42,6 @@ class TrackCardLarge extends StatelessWidget {
   final int? widthy;
   final bool fromQueue;
 
-
   //final List<TrackCardData> listOfSongs;
   //final Size size;
 
@@ -54,17 +49,16 @@ class TrackCardLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
 
-    var spacer = SizedBox(width: size/80);
-    var  biggerSpacer = SizedBox(width: size/40);
+    var spacer = SizedBox(width: size / 80);
+    var biggerSpacer = SizedBox(width: size / 40);
     if (SuperSize.width > 700) {
       return mat.Material(
         borderRadius: mat.BorderRadius.circular(10),
         color: color,
         child: mat.InkWell(
-
           customBorder: mat.RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)),
-        //  onHover: ,
+          //  onHover: ,
           onTap: () async {
             onTrackTap();
           },
@@ -76,15 +70,13 @@ class TrackCardLarge extends StatelessWidget {
               //mainAxisSize: MainAxisSize.min,
               children: [
                 ExtendedImage.network(
-                    data.thumbnail.toString(),
+                  data.thumbnail.toString(),
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
                   cache: false,
                   shape: BoxShape.circle,
-
                 ),
-
                 spacer,
                 SizedBox(
                   width: size * 1 / 6,
@@ -98,11 +90,9 @@ class TrackCardLarge extends StatelessWidget {
                   width: size * 1 / 8,
                   child: Text(
                     data.artist.toString(),
-
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-
                 SizedBox(
                   // width: localSize * 1 / 15,
                   child: Text(
@@ -110,22 +100,30 @@ class TrackCardLarge extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-
-
               ],
             ),
           ),
         ),
       );
     } else {
-      return TrackCardSmall(color: color,data: data, onTrackTap: () { onTrackTap(); },);
-
+      return TrackCardSmall(
+        color: color,
+        data: data,
+        onTrackTap: () {
+          onTrackTap();
+        },
+      );
     }
   }
 }
 
 class TrackCardSmall extends StatelessWidget {
-  const TrackCardSmall({Key? key, required this.color, required this.data, required this.onTrackTap}) : super(key: key);
+  const TrackCardSmall(
+      {Key? key,
+      required this.color,
+      required this.data,
+      required this.onTrackTap})
+      : super(key: key);
   final Color color;
   final TrackCardData data;
   final Function() onTrackTap;
@@ -134,34 +132,32 @@ class TrackCardSmall extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.width;
 
-    var spacer = SizedBox(width: size/80);
-    return mat.InkWell(
-    onTap: () {
+    var spacer = SizedBox(width: size / 80);
+    return
 
-    },
-      child: ListTile(
-        tileColor: ButtonState.resolveWith((states) => Colors.grey),
-        
-        shape: RoundedRectangleBorder(
-
-          borderRadius: BorderRadius.circular(8),
-
-        ),
-        title: Text(data.title ?? 'NA',maxLines: 1,overflow: TextOverflow.ellipsis),
-        subtitle: Text(data.artist ?? 'NA',maxLines: 1,overflow: TextOverflow.ellipsis,),
-        leading:
-                      FadeInImage(placeholder:
-                      const AssetImage('assets/cover.jpg'),
-                          width: 37,
-                          height: 37,
-                          fit: BoxFit.cover,
-
-                          image:  NetworkImage(
-
-                            data.thumbnail.toString(),
-                          )),
-
+      mat.ListTile(
+      onTap: () {
+        onTrackTap();
+      },
+      //tileColor: ButtonState.resolveWith((states) => Colors.grey),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
       ),
+      title: Text(data.title ?? 'NA',
+          maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: Text(
+        data.artist ?? 'NA',
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      leading: FadeInImage(
+          placeholder: const AssetImage('assets/cover.jpg'),
+          width: 37,
+          height: 37,
+          fit: BoxFit.cover,
+          image: NetworkImage(
+            data.thumbnail.toString(),
+          )),
     );
 
     //   mat.Material(
@@ -236,4 +232,5 @@ class TrackCardSmall extends StatelessWidget {
     // );
   }
 }
+
 

@@ -8,6 +8,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:palette_generator/palette_generator.dart';
+import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
 import '../datasources/searchresults/models/artistsdataclass.dart';
 import '../datasources/searchresults/requests/searchresultsservice.dart';
 
@@ -72,4 +73,35 @@ final paletteColorProvider = StateProvider.autoDispose((ref) async {
   return dominantColor;
 });
 
-final playListSliderStateProvider = StateProvider((ref) => false);
+class NowPlayingPalette extends StateNotifier<Color> {
+  NowPlayingPalette(this.ref) : super(ref.read(themeProvider).color);
+
+  final Ref ref;
+
+  Future<void> updatePalette(String imgUrl) async {
+    PaletteGenerator paletteGenerator;
+    paletteGenerator = await PaletteGenerator.fromImageProvider(
+        ExtendedNetworkImageProvider(imgUrl));
+    Color dominantColor =
+        paletteGenerator.dominantColor?.color ?? ref.read(themeProvider).color;
+
+    if (dominantColor.computeLuminance() > 0.6) {
+      Color contrastColor =
+          paletteGenerator.darkMutedColor?.color ?? Colors.black;
+      if (dominantColor == contrastColor) {
+        contrastColor = paletteGenerator.lightMutedColor?.color ?? Colors.white;
+      }
+      if (contrastColor.computeLuminance() < 0.6) {
+        dominantColor = contrastColor;
+      }
+    }
+
+    state = dominantColor;
+    //return dominantColor;
+  }
+}
+
+final nowPlayingPaletteProvider =
+    StateNotifierProvider<NowPlayingPalette, Color>((ref) {
+  return NowPlayingPalette(ref);
+});

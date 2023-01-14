@@ -6,7 +6,6 @@ description: Stream music aesthetically.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
 environment:
@@ -66,6 +65,7 @@ dependencies:
       ref: 6c48e1fd27b6b5b871f620ace22e6156c508c2e1
   font_awesome_flutter: ^10.3.0
   easy_debounce: ^2.0.3
+  riverpod_infinite_scroll: ^1.0.9
 
 
 

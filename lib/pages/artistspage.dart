@@ -207,8 +207,8 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                   childAspectRatio: 1 / 1.3,
                                 ),
                                 itemCount: _artistsPage.albums?.results?.length,
-                                shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
+                                // shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
 
                                   return mat.Material(

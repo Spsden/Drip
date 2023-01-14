@@ -251,8 +251,9 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
             },
           ),
           Container(
-            padding: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
+              color: ref.watch(themeProvider).color.toAccentColor(),
                 border: Border.all(
                   color: ref.watch(themeProvider).color.toAccentColor(),
                   width: 3.0,
