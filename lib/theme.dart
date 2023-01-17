@@ -136,7 +136,9 @@ class AppTheme extends ChangeNotifier {
     notifyListeners();
   }
 
-  WindowEffect _windowEffect = WindowEffect.disabled;
+ // late WindowEffect winEffect = WindowEffect.tabbed;
+
+  WindowEffect _windowEffect = WindowEffect.tabbed;
 
   WindowEffect get windowEffect => _windowEffect;
 

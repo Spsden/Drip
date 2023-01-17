@@ -68,7 +68,7 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
             primary: false,
             // physics: const BouncingScrollPhysics(
             //     parent: AlwaysScrollableScrollPhysics()),
-            padding: const EdgeInsets.fromLTRB(10, 70, 10, 125),
+            padding: const EdgeInsets.fromLTRB(10, 70, 10, 12),
             children: [
                 Text(
                   'Moods & moments',
@@ -100,7 +100,7 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
                             child: mat.Card(
                               semanticContainer: true,
                               clipBehavior: Clip.antiAliasWithSaveLayer,
-                              color: _randomColor.randomMaterialColor(),
+                              color: _randomColor.randomMaterialColor(colorHue: ColorHue.random).shade700,
                               child: mat.Align(
                                   alignment: Alignment.bottomLeft,
                                   child: Padding(

@@ -1,15 +1,15 @@
 import 'dart:math';
 
 import 'package:drip/datasources/audiofiles/playback.dart';
-import 'package:drip/pages/common/loading_widget.dart';
 
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
+
+import '../customwidgets/drip_placeholder.dart';
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/models/watchplaylistdataclass.dart';
 import 'common/track_cards.dart';
@@ -49,7 +49,7 @@ class CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
     return Container(
 
       child:  currentTracks.isEmpty
-          ?  loadingWidget(context, Colors.red)
+          ?  const DripPlaceHolder()
           : Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(

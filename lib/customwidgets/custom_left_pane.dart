@@ -34,13 +34,23 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
   void initState() {
     super.initState();
 
-    sideMenuController.addListener((p0) {
-      ref.read(currentPageIndexProvider.notifier).state = p0;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
     });
+
+    // sideMenuController.addListener((p0) {
+    //   ref.read(currentPageIndexProvider.notifier).state = p0;
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
+    sideMenuController.changePage(ref.watch(currentPageIndexProvider));
+
+   // ref.listen(currentPageIndexProvider, (previous, next) {
+   //    sideMenuController.changePage(ref.read(currentPageIndexProvider));
+   //
+   //  });
     return SideMenu(
       // showToggle: true,
 
@@ -88,8 +98,8 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
           priority: 0,
           title: 'Home',
           onTap: (index, controller) {
-            // ref.read(currentPageIndexProvider.notifier).state = 1,
-            sideMenuController.changePage(index);
+             ref.read(currentPageIndexProvider.notifier).state = index;
+            //sideMenuController.changePage(index);
           },
           icon: const Icon(
             Icons.home,
@@ -99,8 +109,8 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
           priority: 1,
           title: 'Search',
           onTap: (index, controller) {
-            // ref.read(currentPageIndexProvider.notifier).state = 1,
-            sideMenuController.changePage(index);
+             ref.read(currentPageIndexProvider.notifier).state = index;
+           // sideMenuController.changePage(index);
           },
           icon: const Icon(
             Icons.search_rounded,
@@ -110,20 +120,31 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
           priority: 2,
           title: 'Queue',
           onTap: (index, controller) {
-            // ref.read(currentPageIndexProvider.notifier).state = 1,
-            sideMenuController.changePage(index);
+            ref.read(currentPageIndexProvider.notifier).state = index;
+            //sideMenuController.changePage(index);
           },
           icon: const Icon(Icons.playlist_play_rounded),
         ),
         SideMenuItem(
           priority: 3,
+          title: 'Library',
+          onTap: (index, controller) {
+            ref.read(currentPageIndexProvider.notifier).state = index;
+            //sideMenuController.changePage(index);
+          },
+          icon: const Icon(Icons.library_add_check_rounded),
+        ),
+        SideMenuItem(
+          priority: 4,
           title: 'Settings',
           onTap: (index, controller) {
-            // ref.read(currentPageIndexProvider.notifier).state = 1,
-            sideMenuController.changePage(index);
+            ref.read(currentPageIndexProvider.notifier).state = index;
+            //sideMenuController.changePage(index);
           },
           icon: const Icon(Icons.settings),
         ),
+
+
       ],
       controller: sideMenuController,
     );

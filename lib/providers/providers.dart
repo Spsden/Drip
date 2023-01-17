@@ -74,7 +74,7 @@ final paletteColorProvider = StateProvider.autoDispose((ref) async {
 });
 
 class NowPlayingPalette extends StateNotifier<Color> {
-  NowPlayingPalette(this.ref) : super(ref.read(themeProvider).color);
+  NowPlayingPalette(this.ref) : super(ref.read(themeProvider).color.withOpacity(0.7));
 
   final Ref ref;
 

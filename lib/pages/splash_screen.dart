@@ -32,6 +32,8 @@ class _SplashScreenState extends State<SplashScreen> {
         const end = Offset.zero;
         const curve = Curves.ease;
 
+        return DrillInPageTransition(child: child, animation: animation);
+
 
         return FadeTransition(
           opacity: animation,

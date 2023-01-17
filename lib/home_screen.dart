@@ -6,6 +6,7 @@ import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/currentplaylist.dart' deferred as currentplaylist;
 import 'package:drip/pages/settings.dart' deferred as settings;
+import 'package:drip/pages/user_library.dart' deferred as userlibrary;
 import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:drip/utils/deferred_widget.dart';
@@ -32,7 +33,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     0: GlobalKey(),
     1: GlobalKey(),
     2: GlobalKey(),
-    3: GlobalKey()
+    3: GlobalKey(),
+    4: GlobalKey(),
   };
 
   late List<Widget> allStacks;
@@ -44,6 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       SecondPageStack(searchArgs: searchQuery, navigatorKey: navigatorKeys[1]),
       DeferredWidget(currentplaylist.loadLibrary,
           () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
+      DeferredWidget(userlibrary.loadLibrary, () => userlibrary.UserLibrary()),
       DeferredWidget(settings.loadLibrary, () => settings.SettingsPage()),
     ];
   }
@@ -77,22 +80,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
     return mat.Scaffold(
       drawerScrimColor: Colors.black.withOpacity(0.3),
-      //backgroundColor: ref.watch(nowPlayingPaletteProvider),
-      bottomNavigationBar: Stack(
-        children: [
-          Acrylic(
-            tint: ref.watch(nowPlayingPaletteProvider),
-            elevation: 10,
-
-            child: Platform.isWindows
-                ? AudioPlayerBar(
-                    scaffoldKey: _scaffoldKey,
-                  )
-                : const SizedBox.shrink(),
-          ),
-          const Positioned(bottom: 70, left: 2, right: 2, child: SeekBar())
-        ],
-      ),
+      bottomNavigationBar: Platform.isWindows
+          ? Stack(
+              children: [
+                Acrylic(
+                  tint: ref.watch(nowPlayingPaletteProvider),
+                  elevation: 10,
+                  child: Platform.isWindows
+                      ? AudioPlayerBar(
+                          scaffoldKey: _scaffoldKey,
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                const Positioned(
+                    bottom: 70, left: 2, right: 2, child: SeekBar())
+              ],
+            )
+          : const SizedBox.shrink(),
       key: _scaffoldKey,
       endDrawer: Container(
         decoration: const BoxDecoration(
@@ -111,11 +115,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       appBar: mat.AppBar(
+        //foregroundColor: Colors.transparent,
         titleSpacing: 0,
         centerTitle: true,
         leadingWidth: 75,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: FluentTheme.of(context).micaBackgroundColor,
         automaticallyImplyLeading: true,
         leading: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -164,17 +169,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       enableKeyboardControls: true,
-                      onChanged: (text, reason) async{
+                      onChanged: (text, reason) async {
                         if (text.trim().isNotEmpty) {
                           if (index != 1) {
                             ref.read(currentPageIndexProvider.notifier).state =
                                 1;
                           }
                         }
-                        EasyDebounce.debounce('search', const Duration(milliseconds: 600), () {
+                        EasyDebounce.debounce(
+                            'search', const Duration(milliseconds: 600), () {
                           ref.read(searchQueryProvider.notifier).state = text;
                         });
-
                       },
                       controller: _textEditingController,
                       items: ref.watch(searchSuggestionsProvider).when(
@@ -230,8 +235,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const CustomLeftBar(),
               Expanded(
                   child: PageView(
-
-                    physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 controller: _pageController,
                 children: allStacks,
@@ -255,8 +259,9 @@ class WindowButtons extends StatelessWidget {
       width: 138,
       height: 50,
       child: WindowCaption(
-        brightness: theme.brightness,
         backgroundColor: Colors.transparent,
+        brightness: theme.brightness,
+        // backgroundColor: Colors.transparent,
       ),
     );
   }
