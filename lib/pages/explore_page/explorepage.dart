@@ -290,7 +290,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                 ],
               );
             }),
-            itemExtents: List.generate(searchedList.length, (index) => 330.0))
+            itemExtents: List.generate(searchedList.length, (index) => 344.0))
 
         // SingleChildScrollView(
         //       dragStartBehavior: DragStartBehavior.start,

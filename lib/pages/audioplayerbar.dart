@@ -1,14 +1,11 @@
-import 'package:drip/providers/audio_player_provider.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../datasources/audiofiles/playback.dart';
-import '../providers/providers.dart';
 
 class AudioPlayerBar extends StatefulWidget {
   final GlobalKey<mat.ScaffoldState> scaffoldKey;
@@ -49,7 +46,6 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
   Widget build(BuildContext context) {
     super.build(context);
     var size = MediaQuery.of(context).size;
-    var height = size.height;
     var width = size.width;
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
@@ -61,9 +57,13 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const TrackInfo(),
+            SizedBox(width: (size.width * 3) / 10, child: const TrackInfo()),
             const Align(alignment: Alignment.center, child: PlayBackControls()),
-            MoreControls(widget.scaffoldKey)
+            SizedBox(
+
+                // alignment: Alignment.centerRight,
+                width: (size.width * 3) / 10,
+                child: MoreControls(widget.scaffoldKey))
           ],
         ),
       ),
@@ -253,7 +253,7 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
           Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: ref.watch(themeProvider).color.toAccentColor(),
+                color: ref.watch(themeProvider).color.toAccentColor(),
                 border: Border.all(
                   color: ref.watch(themeProvider).color.toAccentColor(),
                   width: 3.0,
@@ -320,9 +320,8 @@ class MoreControls extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final audioControlCentre = ref.watch(audioControlCentreProvider);
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-
-
         mat.IconButton(
           icon: audioControlCentre.volume.isZero
               ? const Icon(mat.Icons.volume_off_rounded)
