@@ -7,6 +7,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../datasources/audiofiles/activeaudiodata.dart';
+import '../../datasources/audiofiles/playback.dart';
+
 class TrendingHeader extends ConsumerStatefulWidget {
   final List headList;
 
@@ -60,9 +63,24 @@ class _TrendingHeaderState extends ConsumerState<TrendingHeader> {
             itemCount: headList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
+
                 onTap: () {
-                  ref.read(searchQueryProvider.notifier).state = headList[index]['title'];
-                  ref.read(currentPageIndexProvider.notifier).state = 1;
+                  print(headList[index]['videoId']);
+                  CurrentMusicInstance currentMusicInstance =
+                      CurrentMusicInstance(
+                          title: headList[index]['title'],
+                          author: ['NA'],
+                          thumbs: [
+                            headList[index]['image'],
+                            headList[index]['imageMedium']
+                          ],
+                          urlOfVideo: 'NA',
+                          videoId: headList[index]['videoId']);
+                  ref
+                      .read(audioControlCentreProvider)
+                      .open(currentMusicInstance);
+                  // ref.read(searchQueryProvider.notifier).state = headList[index]['title'];
+                  // ref.read(currentPageIndexProvider.notifier).state = 1;
                 },
                 child: ShaderMask(
                     blendMode: BlendMode.luminosity,
@@ -96,14 +114,15 @@ class _TrendingHeaderState extends ConsumerState<TrendingHeader> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: SizedBox(
-                                      width: size.width/2.5,
+                                      width: size.width / 2.5,
                                       child: Text(
                                         headList[index]['title'],
-                                        style: const TextStyle(fontSize: 40,fontWeight: FontWeight.w600),
+                                        style: const TextStyle(
+                                            fontSize: 40,
+                                            fontWeight: FontWeight.w600),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                      )
-                                  ),
+                                      )),
                                 ),
                               )
                             ],

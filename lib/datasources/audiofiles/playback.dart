@@ -68,6 +68,8 @@ class AudioControlCentre extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   void setRepeat(){
     repeat = !repeat;
     //print(repeat);
@@ -171,7 +173,6 @@ class AudioControlCentre extends ChangeNotifier {
       if(isCompleted != event){
         ref.read(nowPlayingPaletteProvider.notifier).updatePalette(tracks[index].thumbnail?.first.url ?? 'https://i.imgur.com/L3Ip1wh.png');
       }
-      print(event);
 
 
       isCompleted = event;

@@ -238,6 +238,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                     ],
                   ),
                   Positioned.fill(
+                    top: 5,
                     right: 10,
                     child: Align(
                         alignment: Alignment.topRight,
@@ -289,7 +290,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                 ],
               );
             }),
-            itemExtents: List.generate(searchedList.length, (index) => 350.0))
+            itemExtents: List.generate(searchedList.length, (index) => 330.0))
 
         // SingleChildScrollView(
         //       dragStartBehavior: DragStartBehavior.start,
