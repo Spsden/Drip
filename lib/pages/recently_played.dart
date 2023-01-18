@@ -1,3 +1,4 @@
+import 'package:drip/pages/common/track_cards.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 
@@ -6,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:drip/datasources/searchresults/local_models/recently_played.dart'
     as recent_model;
-
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/audiofiles/playback.dart';
@@ -36,9 +36,8 @@ class _RecentlyPlayedState extends State<RecentlyPlayed> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-      body: ListView(
+    return fluent.ScaffoldPage(
+      content: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
           Padding(
@@ -86,90 +85,28 @@ class RecentlyPlayedWidget extends ConsumerWidget {
             itemBuilder: (context, index) {
               recent_model.RecentlyPlayed recentlyPlayed = recent[index];
               return Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    boxShadow: const [
-                      BoxShadow(
+                child: TrackCardSmall(
+                  onTrackTap: () async{
+                    CurrentMusicInstance currentMusicInstance =
+                    CurrentMusicInstance(
+                        title: recentlyPlayed.title,
+                        author: recentlyPlayed.author,
+                        thumbs: recentlyPlayed.thumbs,
+                        urlOfVideo: 'NA',
+                        videoId: recentlyPlayed.videoId);
 
-                      )
-                    ],
-                    color: ref.watch(themeProvider).mode == ThemeMode.dark ||
-                            ref.watch(themeProvider).mode == ThemeMode.system
-                        ? Colors.grey[850]?.withOpacity(0.9)
-                        : Colors.grey[30]?.withOpacity(0.9),
-                  ),
-                  padding: const EdgeInsets.all(5),
-                  child: InkWell(
-                        onTap: () async {
-                          CurrentMusicInstance currentMusicInstance =
-                          CurrentMusicInstance(
-                              title: recentlyPlayed.title,
-                              author: recentlyPlayed.author
-                                 ,
-                              thumbs: recentlyPlayed.thumbs
-                                ,
-                              urlOfVideo: 'NA',
-                              videoId: recentlyPlayed.videoId);
+                    ref
+                        .read(audioControlCentreProvider)
+                        .open(currentMusicInstance);
 
-                          ref.read(audioControlCentreProvider).open(currentMusicInstance);
-
-                        },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ExtendedImage.network(
-                              recentlyPlayed.thumbs.first.toString(),
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                              cache: false,
-                              shape: BoxShape.rectangle,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: 300,
-                                    child: Text(
-                                      recentlyPlayed.title,
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w400),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    child: Text(
-                                      recentlyPlayed.author.join(" "),
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .caption!
-                                            .color,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  },
+                  color: Colors.transparent,
+                  data: TrackCardData(
+                      title: recentlyPlayed.title,
+                      duration: "NA",
+                      album: 'NA',
+                      artist: recentlyPlayed.author.join(", "),
+                      thumbnail: recentlyPlayed.thumbs.first),
                 ),
 
                 //     ListTile(

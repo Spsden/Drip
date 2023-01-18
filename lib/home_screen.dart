@@ -122,25 +122,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         elevation: 0,
         backgroundColor: FluentTheme.of(context).micaBackgroundColor,
         automaticallyImplyLeading: true,
-        leading: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Button(
-                onPressed: () async {
-                  if (Navigator.canPop(
-                      navigatorKeys[ref.read(currentPageIndexProvider)]!
-                          .currentState!
-                          .context)) {
-                    await Navigator.maybePop(
-                        navigatorKeys[ref.read(currentPageIndexProvider)]!
-                            .currentState!
-                            .context);
-                  }
-                },
-                child: const Icon(FluentIcons.back)),
-          ],
-        ),
+        leading: Button(
+            onPressed: () async {
+              if (Navigator.canPop(
+                  navigatorKeys[ref.read(currentPageIndexProvider)]!
+                      .currentState!
+                      .context)) {
+                await Navigator.maybePop(
+                    navigatorKeys[ref.read(currentPageIndexProvider)]!
+                        .currentState!
+                        .context);
+              }
+            },
+            child: const Icon(FluentIcons.back)),
         title: DragToMoveArea(
           child: Align(
               alignment: AlignmentDirectional.centerStart,

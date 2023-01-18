@@ -34,9 +34,7 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-
-    });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
 
     // sideMenuController.addListener((p0) {
     //   ref.read(currentPageIndexProvider.notifier).state = p0;
@@ -46,11 +44,12 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
   @override
   Widget build(BuildContext context) {
     sideMenuController.changePage(ref.watch(currentPageIndexProvider));
+    final ThemeMode _themeMode = ref.watch(themeProvider).mode;
 
-   // ref.listen(currentPageIndexProvider, (previous, next) {
-   //    sideMenuController.changePage(ref.read(currentPageIndexProvider));
-   //
-   //  });
+    // ref.listen(currentPageIndexProvider, (previous, next) {
+    //    sideMenuController.changePage(ref.read(currentPageIndexProvider));
+    //
+    //  });
     return SideMenu(
       // showToggle: true,
 
@@ -65,9 +64,10 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
       displayModeToggleDuration: const Duration(milliseconds: 100),
 
       style: SideMenuStyle(
+
         toggleColor: ref.watch(themeProvider).color,
 
-        compactSideMenuWidth: 70,
+        compactSideMenuWidth: 75,
         openSideMenuWidth: 200,
 
         showTooltip: false,
@@ -83,7 +83,10 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
         selectedTitleTextStyle: const TextStyle(color: Colors.white),
         unselectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,
-        unselectedIconColor: Colors.white,
+        unselectedIconColor: _themeMode == fluent.ThemeMode.dark ||
+                _themeMode == fluent.ThemeMode.system
+            ? Colors.white
+            : Colors.black,
         itemInnerSpacing: 8,
         itemOuterPadding:
             const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
@@ -98,7 +101,7 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
           priority: 0,
           title: 'Home',
           onTap: (index, controller) {
-             ref.read(currentPageIndexProvider.notifier).state = index;
+            ref.read(currentPageIndexProvider.notifier).state = index;
             //sideMenuController.changePage(index);
           },
           icon: const Icon(
@@ -109,8 +112,8 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
           priority: 1,
           title: 'Search',
           onTap: (index, controller) {
-             ref.read(currentPageIndexProvider.notifier).state = index;
-           // sideMenuController.changePage(index);
+            ref.read(currentPageIndexProvider.notifier).state = index;
+            // sideMenuController.changePage(index);
           },
           icon: const Icon(
             Icons.search_rounded,
@@ -143,8 +146,6 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
           },
           icon: const Icon(Icons.settings),
         ),
-
-
       ],
       controller: sideMenuController,
     );

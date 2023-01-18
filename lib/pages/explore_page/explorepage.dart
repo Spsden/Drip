@@ -91,6 +91,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
     if (boxSize > 250) boxSize = 250;
     Size size = MediaQuery.of(context).size;
     return CustomScrollView(
+
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(

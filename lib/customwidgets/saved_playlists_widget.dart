@@ -3,65 +3,65 @@ import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PlayContainer extends ConsumerWidget {
-  final String imageUrl, songName, singerName, year;
-
-  const PlayContainer(
-      {Key? key,
-        required this.imageUrl,
-        required this.songName,
-        required this.singerName,
-        required this.year})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    return InkWell(
-      onTap: () {
-        print("Hell");
-      },
-      child: fluent.Acrylic(
-        tint: ref.watch(nowPlayingPaletteProvider),
-        child: Container(
-
-          margin: const EdgeInsets.symmetric(vertical: 6),
-          width: MediaQuery.of(context).size.width / 1.28,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Image.network(
-                    imageUrl,
-                    width: 70,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          songName,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [Text("$singerName - "), Text(year)],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const Icon(Icons.more_vert)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class PlayContainer extends ConsumerWidget {
+//   final String imageUrl, songName, singerName, year;
+//
+//   const PlayContainer(
+//       {Key? key,
+//         required this.imageUrl,
+//         required this.songName,
+//         required this.singerName,
+//         required this.year})
+//       : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context,WidgetRef ref) {
+//     return InkWell(
+//       onTap: () {
+//         print("Hell");
+//       },
+//       child: fluent.Acrylic(
+//         tint: ref.watch(nowPlayingPaletteProvider),
+//         child: Container(
+//
+//           margin: const EdgeInsets.symmetric(vertical: 6),
+//           width: MediaQuery.of(context).size.width / 1.28,
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Row(
+//                 children: [
+//                   Image.network(
+//                     imageUrl,
+//                     width: 70,
+//                   ),
+//                   Container(
+//                     padding: const EdgeInsets.symmetric(horizontal: 8),
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text(
+//                           songName,
+//                           style: const TextStyle(
+//                               fontSize: 16, fontWeight: FontWeight.bold),
+//                         ),
+//                         const SizedBox(height: 6),
+//                         Row(
+//                           children: [Text("$singerName - "), Text(year)],
+//                         )
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               const Icon(Icons.more_vert)
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class PlaylistContainer extends StatelessWidget {
   const PlaylistContainer({Key? key}) : super(key: key);
@@ -71,13 +71,17 @@ class PlaylistContainer extends StatelessWidget {
     String image_url =
         "https://i0.wp.com/99lyricstore.com/wp-content/uploads/2022/11/Apna-Bana-Le-Lyrics-Arijit-Singh.jpg";
 
-    return  Container(
-       height: 500,
-       width: 400,
+    return Container(
+      height: 500,
+      width: 400,
       //margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(8),
-     decoration:
-      BoxDecoration(borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: fluent.FluentTheme.of(context)
+            .resources
+            .cardBackgroundFillColorDefault,
+      ),
       child: Column(
         children: [
           Row(
@@ -97,12 +101,14 @@ class PlaylistContainer extends StatelessWidget {
                   children: const [
                     Text(
                       "10 Pops Music",
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-
-                    Text("YouTube Music 92 songs ", style: TextStyle(fontSize: 15),maxLines: 1,),
-
+                    Text(
+                      "YouTube Music 92 songs ",
+                      style: TextStyle(fontSize: 15),
+                      maxLines: 1,
+                    ),
                   ],
                 ),
               ),
@@ -121,42 +127,37 @@ class PlaylistContainer extends StatelessWidget {
           ),
           Column(
             children: [
-              ListTile(leading: Image.network(
-
-                image_url,
-                width: 70,
-              ),
+              ListTile(
+                leading: Image.network(
+                  image_url,
+                  width: 70,
+                ),
                 title: Text("Apna Bana Le"),
                 subtitle: Text("Arijit Singh"),
                 trailing: const Icon(Icons.more_vert),
                 tileColor: Colors.green,
-                onTap: () {
-
-                },
+                onTap: () {},
               ),
-              ListTile(leading: Image.network(
-                image_url,
-                width: 70,
-              ),
+              ListTile(
+                leading: Image.network(
+                  image_url,
+                  width: 70,
+                ),
                 title: Text("Apna Bana Le"),
                 subtitle: Text("Arijit Singh"),
                 trailing: const Icon(Icons.more_vert),
-                onTap: () {
-
-                },
+                onTap: () {},
               ),
-              ListTile(leading: Image.network(
-                image_url,
-                width: 70,
-              ),
+              ListTile(
+                leading: Image.network(
+                  image_url,
+                  width: 70,
+                ),
                 title: Text("Apna Bana Le"),
                 subtitle: Text("Arijit Singh"),
                 trailing: const Icon(Icons.more_vert),
-                onTap: () {
-
-                },
+                onTap: () {},
               ),
-
               Align(
                 alignment: Alignment.centerLeft,
                 child: Row(

@@ -114,8 +114,8 @@ class TrackInfo extends ConsumerWidget {
                   .player.state.playlist.medias[prov.index].extras.thumbs.first
               : 'https://i.imgur.com/L3Ip1wh.png',
 
-          width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
-          height: MediaQuery.of(context).size.height > 500 ? 70 : 0,
+          // width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
+          // height: MediaQuery.of(context).size.height > 500 ? 70 : 0,
           fit: BoxFit.cover,
           cache: false,
           shape: BoxShape.rectangle,
@@ -130,8 +130,8 @@ class TrackInfo extends ConsumerWidget {
                 // _controller.forward();
                 return ExtendedRawImage(
                   image: state.extendedImageInfo?.image,
-                  width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
-                  height: MediaQuery.of(context).size.height > 500 ? 70 : 0,
+                  width: 70,
+                  height: 70,
                   fit: BoxFit.cover,
                   // cache: false,
                   // shape: BoxShape.rectangle,
@@ -161,7 +161,7 @@ class TrackInfo extends ConsumerWidget {
           width: 10,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 1 / 5,
+          width:90,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,

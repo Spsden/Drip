@@ -47,34 +47,10 @@ final searchSuggestionsProvider = FutureProvider.autoDispose((ref) async {
 
 final currentPageIndexProvider = StateProvider((ref) => 0);
 
-final paletteColorProvider = StateProvider.autoDispose((ref) async {
-  final audioControlCentre = ref.watch(audioControlCentreProvider);
-  String imgUrl = audioControlCentre.player.state.playlist.medias.isNotEmpty
-      ? audioControlCentre.player.state.playlist
-          .medias[audioControlCentre.index].extras.thumbs[0]
-          .toString()
-      : 'https://i.imgur.com/L3Ip1wh.png';
-  PaletteGenerator paletteGenerator;
-  paletteGenerator = await PaletteGenerator.fromImageProvider(
-      ExtendedNetworkImageProvider(imgUrl));
-  Color dominantColor =
-      paletteGenerator.dominantColor?.color ?? ref.read(themeProvider).color;
-  //AppTheme().albumArtColor = dominantColor;
-  if (dominantColor.computeLuminance() > 0.6) {
-    Color contrastColor =
-        paletteGenerator.darkMutedColor?.color ?? Colors.black;
-    if (dominantColor == contrastColor) {
-      contrastColor = paletteGenerator.lightMutedColor?.color ?? Colors.white;
-    }
-    if (contrastColor.computeLuminance() < 0.6) {
-      dominantColor = contrastColor;
-    }
-  }
-  return dominantColor;
-});
+
 
 class NowPlayingPalette extends StateNotifier<Color> {
-  NowPlayingPalette(this.ref) : super(ref.read(themeProvider).color.withOpacity(0.7));
+  NowPlayingPalette(this.ref) : super(Colors.transparent);
 
   final Ref ref;
 
@@ -83,7 +59,7 @@ class NowPlayingPalette extends StateNotifier<Color> {
     paletteGenerator = await PaletteGenerator.fromImageProvider(
         ExtendedNetworkImageProvider(imgUrl));
     Color dominantColor =
-        paletteGenerator.dominantColor?.color ?? ref.read(themeProvider).color;
+        paletteGenerator.dominantColor?.color ?? Colors.transparent;
 
     if (dominantColor.computeLuminance() > 0.6) {
       Color contrastColor =
@@ -102,6 +78,6 @@ class NowPlayingPalette extends StateNotifier<Color> {
 }
 
 final nowPlayingPaletteProvider =
-    StateNotifierProvider<NowPlayingPalette, Color>((ref) {
+    StateNotifierProvider.autoDispose<NowPlayingPalette, Color>((ref) {
   return NowPlayingPalette(ref);
 });

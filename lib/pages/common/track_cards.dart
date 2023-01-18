@@ -136,6 +136,7 @@ class TrackCardSmall extends StatelessWidget {
     return
 
       mat.ListTile(
+        tileColor: FluentTheme.of(context).resources.cardBackgroundFillColorDefault,
       onTap: () {
         onTrackTap();
       },
@@ -150,14 +151,15 @@ class TrackCardSmall extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      leading: FadeInImage(
-          placeholder: const AssetImage('assets/cover.jpg'),
-          width: 37,
-          height: 37,
-          fit: BoxFit.cover,
-          image: NetworkImage(
-            data.thumbnail.toString(),
-          )),
+      leading: ExtendedImage.network(
+        data.thumbnail.toString(),
+        width: 50,
+        height: 50,
+        fit: BoxFit.cover,
+        cache: false,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(5),
+      ),
     );
 
     //   mat.Material(

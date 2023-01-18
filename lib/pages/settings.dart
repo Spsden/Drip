@@ -102,6 +102,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       content: Padding(
         padding: const EdgeInsets.all(20),
         child: ListView(
+          physics: const BouncingScrollPhysics(),
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Personalisation',
@@ -281,7 +282,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 15),
-                    child: Text('0.1.0-alpha'),
+                    child: Text('0.2.0-alpha'),
                   )
                 ]),
               ],
@@ -314,8 +315,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
             const Text('Made with ❤️by Suraj Pratap Singh'),
             biggerSpacer,
-            biggerSpacer,
-            biggerSpacer,
+
           ],
         ),
       ),
