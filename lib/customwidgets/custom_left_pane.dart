@@ -4,21 +4,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../providers/providers.dart';
 
-// class CustomLeftBar extends ConsumerWidget {
-//   const CustomLeftBar({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     SideMenuController controller = SideMenuController();
-//
-//     final theme = fluent.FluentTheme.of(context);
-//
-//   }
-//
-// }
+
 
 class CustomLeftBar extends ConsumerStatefulWidget {
   const CustomLeftBar({Key? key}) : super(key: key);
@@ -44,7 +32,7 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
   @override
   Widget build(BuildContext context) {
     sideMenuController.changePage(ref.watch(currentPageIndexProvider));
-    final ThemeMode _themeMode = ref.watch(themeProvider).mode;
+    final ThemeMode themeMode = ref.watch(themeProvider).mode;
 
     // ref.listen(currentPageIndexProvider, (previous, next) {
     //    sideMenuController.changePage(ref.read(currentPageIndexProvider));
@@ -83,8 +71,8 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
         selectedTitleTextStyle: const TextStyle(color: Colors.white),
         unselectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,
-        unselectedIconColor: _themeMode == fluent.ThemeMode.dark ||
-                _themeMode == fluent.ThemeMode.system
+        unselectedIconColor: themeMode == fluent.ThemeMode.dark ||
+                themeMode == fluent.ThemeMode.system
             ? Colors.white
             : Colors.black,
         itemInnerSpacing: 8,

@@ -1,21 +1,12 @@
 import 'dart:io';
-
-
-
 import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
 import 'package:drip/home.dart';
-
 import 'package:drip/pages/common/hot_keys.dart';
 import 'package:drip/providers/audio_player_provider.dart';
-
-
-
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
-import 'package:flutter_acrylic/window_effect.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
@@ -98,13 +89,13 @@ Future<void> main() async {
   //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
 
-  runApp( ProviderScope(
+  runApp(  ProviderScope(
     overrides: [audioControlCentreProvider.overrideWith((ref) {
       final player = ref.watch(audioPlayerProvider);
       final audioControlCentre = AudioControlCentre(player: player,ref: ref);
       return audioControlCentre;
     })],
-      child:const StartPage()));
+      child: const StartPage()));
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {

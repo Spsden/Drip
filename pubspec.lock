@@ -620,6 +620,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  media_kit_libs_windows_audio:
+    dependency: "direct main"
+    description:
+      path: "external/media_kit/media_kit_libs_windows_audio"
+      relative: true
+    source: path
+    version: "1.0.0"
   meta:
     dependency: transitive
     description:

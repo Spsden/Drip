@@ -45,15 +45,20 @@ dependencies:
   extended_image: ^6.2.1
   hotkey_manager: ^0.1.6
   riverpod: ^2.1.1
+
   flutter_riverpod: ^2.1.1
-  drip_api:
-    path: external/drip_api
-  media_kit:
-    path: external/media_kit/media_kit
+
   collection: ^1.16.0
   diffutil_dart: ^3.0.0
   hooks_riverpod: ^2.1.2
   shimmer: ^2.0.0
+
+  drip_api:
+    path: external/drip_api
+  media_kit:
+    path: external/media_kit/media_kit
+  media_kit_libs_windows_audio:
+    path: external/media_kit/media_kit_libs_windows_audio
   known_extents_list_view_builder:
     git:
       url: https://github.com/bendelonlee/known_extents_list_view_builder.git
