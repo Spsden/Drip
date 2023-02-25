@@ -170,7 +170,7 @@ class PlaylistContainer extends StatelessWidget {
                           minimumSize: const Size(50, 50)),
                       child: const Icon(Icons.play_arrow_rounded),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     ElevatedButton(

@@ -58,7 +58,7 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
       context: context,
       builder: (context) => fluent.ContentDialog(
         style: fluent.ContentDialogThemeData(
-            barrierColor: Colors.yellow,
+
             decoration: fluent.BoxDecoration(
                 color: fluent.FluentTheme.of(context).micaBackgroundColor,
                 borderRadius: BorderRadius.circular(8))),

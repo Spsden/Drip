@@ -133,10 +133,9 @@ class TrackCardSmall extends StatelessWidget {
     var size = MediaQuery.of(context).size.width;
 
     var spacer = SizedBox(width: size / 80);
-    return
-
-      mat.ListTile(
-        tileColor: FluentTheme.of(context).resources.cardBackgroundFillColorDefault,
+    return mat.ListTile(
+      tileColor:
+          FluentTheme.of(context).resources.cardBackgroundFillColorDefault,
       onTap: () {
         onTrackTap();
       },
@@ -234,5 +233,3 @@ class TrackCardSmall extends StatelessWidget {
     // );
   }
 }
-
-
