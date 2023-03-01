@@ -64,7 +64,9 @@ class RecentlyPlayedWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ValueListenableBuilder(
+      child:
+
+      ValueListenableBuilder(
         valueListenable: Hive.box('recentlyPlayed').listenable(),
         builder: (context, Box box, _) {
           List recent = List.from(box.values.toList().reversed);

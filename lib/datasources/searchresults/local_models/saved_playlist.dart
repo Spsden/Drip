@@ -1,5 +1,5 @@
-import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
 
+import 'package:drip/datasources/searchresults/local_models/tracks_local.dart';
 import 'package:hive/hive.dart';
 
 part 'saved_playlist.g.dart';

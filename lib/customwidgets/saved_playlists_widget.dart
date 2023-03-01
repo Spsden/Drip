@@ -1,7 +1,9 @@
-import 'package:drip/providers/providers.dart';
+import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
+import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
+import 'package:drip/datasources/searchresults/local_models/tracks_local.dart' as localtracks;
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import "package:flutter/material.dart";
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 // class PlayContainer extends ConsumerWidget {
 //   final String imageUrl, songName, singerName, year;
@@ -64,12 +66,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // }
 
 class PlaylistContainer extends StatelessWidget {
-  const PlaylistContainer({Key? key}) : super(key: key);
+  final SavedPlayList data;
+  const PlaylistContainer({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String image_url =
-        "https://i0.wp.com/99lyricstore.com/wp-content/uploads/2022/11/Apna-Bana-Le-Lyrics-Arijit-Singh.jpg";
+    List<localtracks.Track> tracks = data.tracks.sublist(0,2);
+    debugPrint(tracks.length.toString());
+    // String image_url =
+    //     "https://i0.wp.com/99lyricstore.com/wp-content/uploads/2022/11/Apna-Bana-Le-Lyrics-Arijit-Singh.jpg";
 
     return Container(
       height: 500,
@@ -82,14 +87,18 @@ class PlaylistContainer extends StatelessWidget {
             .resources
             .cardBackgroundFillColorDefault,
       ),
-      child: Column(
+      child:
+
+
+
+      Column(
         children: [
           Row(
             children: [
               Center(
                 // height: 200,
                 child: Image.network(
-                  image_url,
+                  data.thumbnail,
                   height: 50,
                 ),
               ),
@@ -98,15 +107,18 @@ class PlaylistContainer extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children:  [
                     Text(
-                      "10 Pops Music",
+                      data.playListTitle,
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "YouTube Music 92 songs ",
+                      data.description,
                       style: TextStyle(fontSize: 15),
+
                       maxLines: 1,
                     ),
                   ],
@@ -125,65 +137,86 @@ class PlaylistContainer extends StatelessWidget {
               style: TextStyle(fontSize: 15),
             ),
           ),
+
+
           Column(
-            children: [
-              ListTile(
-                leading: Image.network(
-                  image_url,
-                  width: 70,
+            children: tracks.map((e) =>
+                ListTile(
+                  leading: Image.network(
+
+
+                    e.thumbnails.first,
+                    width: 70,
+                  ),
+                  title: Text(e.title ?? 'na'),
+                  subtitle: Text(e.artists.join(" "), ),
+                  trailing: const Icon(Icons.more_vert),
+                  //tileColor: Colors.green,
+                  onTap: () {},
                 ),
-                title: Text("Apna Bana Le"),
-                subtitle: Text("Arijit Singh"),
-                trailing: const Icon(Icons.more_vert),
-                tileColor: Colors.green,
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Image.network(
-                  image_url,
-                  width: 70,
-                ),
-                title: Text("Apna Bana Le"),
-                subtitle: Text("Arijit Singh"),
-                trailing: const Icon(Icons.more_vert),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Image.network(
-                  image_url,
-                  width: 70,
-                ),
-                title: Text("Apna Bana Le"),
-                subtitle: Text("Arijit Singh"),
-                trailing: const Icon(Icons.more_vert),
-                onTap: () {},
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          minimumSize: const Size(50, 50)),
-                      child: const Icon(Icons.play_arrow_rounded),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          shape: const CircleBorder(),
-                          minimumSize: const Size(50, 50)),
-                      child: const Icon(Icons.delete),
-                    )
-                  ],
-                ),
-              )
-            ],
+
+
+            ).toList()
+
+
+            // [
+            //   ListTile(
+            //     leading: Image.network(
+            //       image_url,
+            //       width: 70,
+            //     ),
+            //     title: Text("Apna Bana Le"),
+            //     subtitle: Text("Arijit Singh"),
+            //     trailing: const Icon(Icons.more_vert),
+            //     tileColor: Colors.green,
+            //     onTap: () {},
+            //   ),
+            //   ListTile(
+            //     leading: Image.network(
+            //       image_url,
+            //       width: 70,
+            //     ),
+            //     title: Text("Apna Bana Le"),
+            //     subtitle: Text("Arijit Singh"),
+            //     trailing: const Icon(Icons.more_vert),
+            //     onTap: () {},
+            //   ),
+            //   ListTile(
+            //     leading: Image.network(
+            //       image_url,
+            //       width: 70,
+            //     ),
+            //     title: Text("Apna Bana Le"),
+            //     subtitle: Text("Arijit Singh"),
+            //     trailing: const Icon(Icons.more_vert),
+            //     onTap: () {},
+            //   ),
+            //   Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.start,
+            //       children: [
+            //         ElevatedButton(
+            //           onPressed: () {},
+            //           style: ElevatedButton.styleFrom(
+            //               shape: const CircleBorder(),
+            //               minimumSize: const Size(50, 50)),
+            //           child: const Icon(Icons.play_arrow_rounded),
+            //         ),
+            //         const SizedBox(
+            //           width: 20,
+            //         ),
+            //         ElevatedButton(
+            //           onPressed: () {},
+            //           style: ElevatedButton.styleFrom(
+            //               shape: const CircleBorder(),
+            //               minimumSize: const Size(50, 50)),
+            //           child: const Icon(Icons.delete),
+            //         )
+            //       ],
+            //     ),
+            //   )
+            // ],
           )
         ],
       ),

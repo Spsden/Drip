@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
+import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
 import 'package:drip/home.dart';
 import 'package:drip/pages/common/hot_keys.dart';
 import 'package:drip/providers/audio_player_provider.dart';
@@ -17,6 +18,8 @@ import 'package:system_theme/system_theme.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'datasources/searchresults/local_models/tracks_local.dart';
 
 
 
@@ -76,7 +79,10 @@ Future<void> main() async {
   
   await openHiveBox('settings');
   Hive.registerAdapter(RecentlyPlayedAdapter());
+  Hive.registerAdapter(SavedPlayListAdapter());
+  Hive.registerAdapter(TrackAdapter());
   await openHiveBox('recentlyPlayed');
+  await openHiveBox('savedPlaylists');
  // await AudioControlCentre.initializePlayback();
 
 
