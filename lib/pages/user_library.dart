@@ -98,6 +98,8 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
     recentlyPlayedBox.add(addToLocalData(playlists));
   }
 
+  final TextEditingController _textEditingController = TextEditingController();
+
   void showContentDialog(BuildContext context) async {
     final result = await showDialog<String>(
       context: context,
@@ -107,27 +109,43 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
                 color: fluent.FluentTheme.of(context).micaBackgroundColor,
                 borderRadius: BorderRadius.circular(8))),
         title: const Text('Playlist Link'),
-        content: const fluent.TextBox(),
+        content: fluent.TextBox(
+          controller: _textEditingController,
+        ),
         actions: [
           fluent.Button(
             child: const Text('Import'),
             onPressed: () {
-              String ll =
-                  'https://music.youtube.com/playlist?list=PLEKd4tmw8baciGt7F1Gl-bltDdbmAULkT&feature=share';
-              addPlaylist(ll);
+              String ll = _textEditingController.text;
+              //   'https://music.youtube.com/playlist?list=PLEKd4tmw8baciGt7F1Gl-bltDdbmAULkT&feature=share';
+              // addPlaylist(ll);
+              debugPrint(ll);
+              _textEditingController.clear();
 
               Navigator.pop(context, 'User deleted file');
               // Delete file here
             },
           ),
           fluent.FilledButton(
-            child: const Text('Cancel'),
-            onPressed: () => Navigator.pop(context, 'User canceled dialog'),
-          ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context, 'User canceled dialog');
+                _textEditingController.clear();
+              }),
         ],
       ),
     );
-    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -149,7 +167,7 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
   Widget buttonSquare(BuildContext context) {
     return InkWell(
       onTap: () {
-        debugPrint("Tapped import");
+        //  debugPrint("Tapped import");
         showContentDialog(context);
       },
       child: Container(
@@ -190,9 +208,7 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
               child: Text('No recent searches'),
             );
           }
-          return
-
-            GridView.builder(
+          return GridView.builder(
               itemCount: recent.length,
               physics: const ClampingScrollPhysics(),
               shrinkWrap: true,
@@ -208,8 +224,8 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
                 // recent_model.RecentlyPlayed recentlyPlayed = recent[index];
                 return
 
-                  //Placeholder() ;
-                  PlaylistContainer(data: savedPlayList);
+                    //Placeholder() ;
+                    PlaylistContainer(data: savedPlayList);
               });
         });
   }
