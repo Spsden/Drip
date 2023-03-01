@@ -62,6 +62,8 @@ class AddPlayListWidget extends StatefulWidget {
 }
 
 class _AddPlayListWidgetState extends State<AddPlayListWidget> {
+
+
   SavedPlayList addToLocalData(playlist.Playlists data) {
     SavedPlayList savedPlayList = SavedPlayList(
         playListTitle: data.title ?? "NA",
@@ -115,10 +117,10 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
         actions: [
           fluent.Button(
             child: const Text('Import'),
-            onPressed: () {
+            onPressed: () async {
               String ll = _textEditingController.text;
               //   'https://music.youtube.com/playlist?list=PLEKd4tmw8baciGt7F1Gl-bltDdbmAULkT&feature=share';
-              // addPlaylist(ll);
+              addPlaylist(ll);
               debugPrint(ll);
               _textEditingController.clear();
 
