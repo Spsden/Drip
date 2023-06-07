@@ -18,10 +18,13 @@ import 'package:http/http.dart' as http;
 import '../models/albumsdataclass.dart';
 import '../models/artistsdataclass.dart' as artists;
 import '../models/communityplaylistdataclass.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' ;
+
+
 
 class SearchMusic {
-  static const String serverAddress =
-      'https://drip-server-fv6tn36q0-spsden.vercel.app/';
+  static  String serverAddress = dotenv.get('SERVER');
+      // 'https://drip-server-fv6tn36q0-spsden.vercel.app/';
 
   //static const String serverAddress = 'http://192.168.199.131:5000/';
 
@@ -67,6 +70,8 @@ class SearchMusic {
           if ((listMap['category']).toString() == 'Featured playlists') {
             featuredPlaylistList.add(listMap);
           }
+
+        //  print(songslist);
 
           try {
             if ((listMap['category']).toString() == 'Top result') {
@@ -166,7 +171,9 @@ class SearchMusic {
 
         return songOnlyResults;
       } else {
-        return <songs.Songs>[];
+        return  null;
+
+         // <songs.Songs>[];
       }
     } catch (e) {
       if (kDebugMode) {

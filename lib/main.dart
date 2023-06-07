@@ -8,6 +8,7 @@ import 'package:drip/providers/audio_player_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as acrylic;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 
@@ -39,6 +40,7 @@ bool get isDesktop {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   if (kIsWeb ||
       [TargetPlatform.windows, TargetPlatform.android]

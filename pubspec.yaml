@@ -65,10 +65,11 @@ dependencies:
   easy_sidemenu:
     git:
       url: https://github.com/Spsden/easy_sidemenu.git
-      ref: 6c48e1fd27b6b5b871f620ace22e6156c508c2e1
+      ref: d244151d8df1719cf0cd08c71862300eac1cdaca
   font_awesome_flutter: ^10.3.0
   easy_debounce: ^2.0.3
   riverpod_infinite_scroll: ^1.0.9
+  flutter_dotenv: ^5.1.0
 
 
 
@@ -92,6 +93,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - .env
 
 
 
