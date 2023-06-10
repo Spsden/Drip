@@ -61,7 +61,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
             const Align(alignment: Alignment.center, child: PlayBackControls()),
             SizedBox(
 
-                // alignment: Alignment.centerRight,
+              // alignment: Alignment.centerRight,
                 width: (size.width * 3) / 10,
                 child: MoreControls(widget.scaffoldKey))
           ],
@@ -111,7 +111,7 @@ class TrackInfo extends ConsumerWidget {
           // ref.watch(activeAudioDataNotifier).thumbnail,
           prov.player.state.playlist.medias.isNotEmpty
               ? prov
-                  .player.state.playlist.medias[prov.index].extras.thumbs.first
+              .player.state.playlist.medias[prov.index].extras.thumbs.first
               : 'https://i.imgur.com/L3Ip1wh.png',
 
           // width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
@@ -127,7 +127,7 @@ class TrackInfo extends ConsumerWidget {
                     fit: BoxFit.cover, image: AssetImage('assets/cover.jpg'));
 
               case LoadState.completed:
-                // _controller.forward();
+              // _controller.forward();
                 return ExtendedRawImage(
                   image: state.extendedImageInfo?.image,
                   width: 70,
@@ -139,7 +139,7 @@ class TrackInfo extends ConsumerWidget {
                 );
 
               case LoadState.failed:
-                //_controller.reset();
+              //_controller.reset();
                 return GestureDetector(
                   child: Stack(
                     fit: StackFit.expand,
@@ -169,7 +169,7 @@ class TrackInfo extends ConsumerWidget {
               Text(
                   prov.player.state.playlist.medias.isNotEmpty
                       ? prov
-                          .player.state.playlist.medias[prov.index].extras.title
+                      .player.state.playlist.medias[prov.index].extras.title
                       : 'Click to Play',
                   style: mat.Theme.of(context).textTheme.bodyText1,
                   maxLines: 1),
@@ -177,8 +177,8 @@ class TrackInfo extends ConsumerWidget {
               Text(
                 prov.player.state.playlist.medias.isNotEmpty
                     ? prov
-                        .player.state.playlist.medias[prov.index].extras.author
-                        .join(" ")
+                    .player.state.playlist.medias[prov.index].extras.author
+                    .join(" ")
                     : 'NA',
                 maxLines: 1,
                 style: TextStyle(
@@ -276,11 +276,11 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
                 ),
                 ref.watch(audioControlCentreProvider).isBuffering
                     ? Container(
-                        margin: const EdgeInsets.all(8.0),
-                        width: largeIcons,
-                        height: largeIcons,
-                        child: const mat.CircularProgressIndicator(),
-                      )
+                  margin: const EdgeInsets.all(8.0),
+                  width: largeIcons,
+                  height: largeIcons,
+                  child: const mat.CircularProgressIndicator(),
+                )
                     : const SizedBox.shrink()
               ],
             ),
@@ -296,9 +296,9 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
           mat.IconButton(
             icon: ref.read(audioControlCentreProvider).repeat == true
                 ? const Icon(
-                    mat.Icons.repeat,
-                    color: Colors.white,
-                  )
+              mat.Icons.repeat,
+              color: Colors.white,
+            )
                 : Icon(mat.Icons.repeat, color: Colors.white.withOpacity(0.5)),
             iconSize: smallIcons,
             onPressed: () {

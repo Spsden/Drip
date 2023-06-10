@@ -44,139 +44,139 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
     const biggerSpacer = SizedBox(height: 40.0);
     if (!status) {
       SearchMusic.getMoods().then((value) => {
-            if (mounted)
-              {
-                setState(() {
-                  status = true;
-                  _moodsCategories = value;
-                  fetched = true;
-                })
-              }
-          });
+        if (mounted)
+          {
+            setState(() {
+              status = true;
+              _moodsCategories = value;
+              fetched = true;
+            })
+          }
+      });
     }
 
-   // FutureBuilder<
+    // FutureBuilder<
     return (!fetched)
         ? mat.Center(
-            child: loadingWidget(context,ref.watch(themeProvider).color),
-          )
+      child: loadingWidget(context,ref.watch(themeProvider).color),
+    )
         : mat.ListView(
         physics: const ClampingScrollPhysics(),
         shrinkWrap: true,
-             controller: ScrollController(),
-            clipBehavior: Clip.hardEdge,
-            primary: false,
-            // physics: const BouncingScrollPhysics(
-            //     parent: AlwaysScrollableScrollPhysics()),
-            padding: const EdgeInsets.fromLTRB(10, 70, 10, 12),
-            children: [
-                Text(
-                  'Moods & moments',
-                  style: typography.title,
-                ),
-                spacer,
-                GridView.builder(
-                    shrinkWrap: true,
-                    controller: ScrollController(),
-                    itemCount: _moodsCategories.moodsMoments?.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 150.0,
-                            mainAxisSpacing: 15.0,
-                            crossAxisSpacing: 10.0,
-                            childAspectRatio: 1.5 / 1),
-                    itemBuilder: (context, index) => Container(
-                          height: 30,
-                          width: 60,
-                          decoration:
-                              const BoxDecoration(color: Colors.transparent),
-                          child: mat.InkWell(
-                            onTap: () {
+        controller: ScrollController(),
+        clipBehavior: Clip.hardEdge,
+        primary: false,
+        // physics: const BouncingScrollPhysics(
+        //     parent: AlwaysScrollableScrollPhysics()),
+        padding: const EdgeInsets.fromLTRB(10, 70, 10, 12),
+        children: [
+          Text(
+            'Moods & moments',
+            style: typography.title,
+          ),
+          spacer,
+          GridView.builder(
+              shrinkWrap: true,
+              controller: ScrollController(),
+              itemCount: _moodsCategories.moodsMoments?.length,
+              gridDelegate:
+              const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 150.0,
+                  mainAxisSpacing: 15.0,
+                  crossAxisSpacing: 10.0,
+                  childAspectRatio: 1.5 / 1),
+              itemBuilder: (context, index) => Container(
+                height: 30,
+                width: 60,
+                decoration:
+                const BoxDecoration(color: Colors.transparent),
+                child: mat.InkWell(
+                  onTap: () {
 
-                              Navigator.push(context,
-                                  mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.moodsMoments![index].params.toString())));
+                    Navigator.push(context,
+                        mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.moodsMoments![index].params.toString())));
 
-                            },
-                            child: mat.Card(
-                              semanticContainer: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              color: _randomColor.randomMaterialColor(colorHue: ColorHue.random).shade700,
-                              child: mat.Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      _moodsCategories.moodsMoments![index].title
-                                          .toString(),
-                                      style: typography.subtitle?.copyWith(
-                                          fontSize: 25,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  )),
-                            ),
+                  },
+                  child: mat.Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: _randomColor.randomMaterialColor(colorHue: ColorHue.random).shade700,
+                    child: mat.Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _moodsCategories.moodsMoments![index].title
+                                .toString(),
+                            style: typography.subtitle?.copyWith(
+                                fontSize: 25,
+                                overflow: TextOverflow.ellipsis),
                           ),
                         )),
-                biggerSpacer,
-                Text(
-                  'Genres',
-                  style: typography.title,
+                  ),
                 ),
-                spacer,
-                GridView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemCount: _moodsCategories.genres?.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 150.0,
-                            mainAxisSpacing: 15.0,
-                            crossAxisSpacing: 10.0,
-                            childAspectRatio: 1.5 / 1),
-                    itemBuilder: (context, index) => Container(
-                          height: 30,
-                          width: 60,
-                          decoration:
-                              const BoxDecoration(color: Colors.transparent),
-                          child: mat.InkWell(
-                            onTap: () {
-                              print(_moodsCategories.genres![index].params.toString());
+              )),
+          biggerSpacer,
+          Text(
+            'Genres',
+            style: typography.title,
+          ),
+          spacer,
+          GridView.builder(
+              physics: const ClampingScrollPhysics(),
+              shrinkWrap: true,
+              controller: _scrollController,
+              itemCount: _moodsCategories.genres?.length,
+              gridDelegate:
+              const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 150.0,
+                  mainAxisSpacing: 15.0,
+                  crossAxisSpacing: 10.0,
+                  childAspectRatio: 1.5 / 1),
+              itemBuilder: (context, index) => Container(
+                height: 30,
+                width: 60,
+                decoration:
+                const BoxDecoration(color: Colors.transparent),
+                child: mat.InkWell(
+                  onTap: () {
+                    print(_moodsCategories.genres![index].params.toString());
 
 
-                              Navigator.push(context,
-                              mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.genres![index].params.toString())));
+                    Navigator.push(context,
+                        mat.MaterialPageRoute(builder: (context) => PlaylistSearchResults(playlistParams: _moodsCategories.genres![index].params.toString())));
 
-                              // showSnackbar(
-                              //     context,
-                              //     const Snackbar(
-                              //       content: Text(
-                              //         'Coming Soon',
-                              //         style: TextStyle(fontSize: 30),
-                              //       ),
-                              //     ),
-                              //     alignment: Alignment.center,
-                              //     duration: const Duration(milliseconds: 200));
-                            },
-                            child: mat.Card(
-                              semanticContainer: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              color: _randomColor.randomColor(),
-                              child: mat.Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      _moodsCategories.genres![index].title
-                                          .toString(),
-                                      style: typography.subtitle?.copyWith(
-                                          fontSize: 25,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                  )),
-                            ),
+                    // showSnackbar(
+                    //     context,
+                    //     const Snackbar(
+                    //       content: Text(
+                    //         'Coming Soon',
+                    //         style: TextStyle(fontSize: 30),
+                    //       ),
+                    //     ),
+                    //     alignment: Alignment.center,
+                    //     duration: const Duration(milliseconds: 200));
+                  },
+                  child: mat.Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: _randomColor.randomColor(),
+                    child: mat.Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _moodsCategories.genres![index].title
+                                .toString(),
+                            style: typography.subtitle?.copyWith(
+                                fontSize: 25,
+                                overflow: TextOverflow.ellipsis),
                           ),
                         )),
-              ]);
+                  ),
+                ),
+              )),
+        ]);
   }
 
   @override

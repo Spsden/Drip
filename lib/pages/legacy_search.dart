@@ -4,9 +4,9 @@ import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import 'package:flutter/material.dart' as mat;
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
 class SearchFunction extends ConsumerStatefulWidget {
   final bool liveSearch;

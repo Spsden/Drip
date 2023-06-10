@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
+import 'package:drip/providers/ThemesProvider.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
     as playlist;
@@ -11,24 +12,18 @@ import 'package:drip/customwidgets/saved_playlists_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:window_manager/window_manager.dart';
 
-class UserLibrary extends StatefulWidget {
+class UserLibrary extends ConsumerWidget {
   const UserLibrary({Key? key}) : super(key: key);
 
   @override
-  State<UserLibrary> createState() => _UserLibraryState();
-}
-
-class _UserLibraryState extends State<UserLibrary> {
-  // List<Widget> list = List.generate(10, (index) => const PlaylistContainer());
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
-          children: const [
+          children:  [
             AddPlayListWidget(),
             // Container(
             //   child: Row(
@@ -46,6 +41,8 @@ class _UserLibraryState extends State<UserLibrary> {
             //     ],
             //   ),
             // ),
+      fluent.AutoSuggestBox(items: []),
+            DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
             ImportedAndSavedPlaylists()
           ],
         ),
@@ -53,6 +50,9 @@ class _UserLibraryState extends State<UserLibrary> {
     );
   }
 }
+
+
+
 
 class AddPlayListWidget extends StatefulWidget {
   const AddPlayListWidget({Key? key}) : super(key: key);

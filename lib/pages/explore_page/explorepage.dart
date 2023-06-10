@@ -103,12 +103,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
           floating: true,
           flexibleSpace: FlexibleSpaceBar(
               background: TrendingHeader(
-            headList: headList,
-          )),
+                headList: headList,
+              )),
         ),
         SliverKnownExtentsList(
             delegate: SliverChildBuilderDelegate(
-              addAutomaticKeepAlives: true,
+                addAutomaticKeepAlives: true,
 
                 childCount: searchedList.length, (context, index) {
               return Stack(
@@ -137,7 +137,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           itemCount:
-                              (searchedList[index]['playlists'] as List).length,
+                          (searchedList[index]['playlists'] as List).length,
                           itemBuilder: (context, idx) {
                             final item = searchedList[index]['playlists'][idx];
                             return GestureDetector(
@@ -145,7 +145,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                 if (item['type'] == 'video') {
                                   var query = item['title'].toString();
                                   launchUrl(Uri.parse('https://www.youtube.com/results?search_query=$query')
-                                      );
+                                  );
                                 } else {
                                   Navigator.push(
                                       context,
@@ -161,12 +161,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.0),
                                       color:
-                                          _themeMode == fluent.ThemeMode.dark ||
-                                                  _themeMode ==
-                                                      fluent.ThemeMode.system
-                                              ? fluent.Colors.grey[150]
-                                                  .withOpacity(0.4)
-                                              : fluent.Colors.grey[30]),
+                                      _themeMode == fluent.ThemeMode.dark ||
+                                          _themeMode ==
+                                              fluent.ThemeMode.system
+                                          ? fluent.Colors.grey[150]
+                                          .withOpacity(0.4)
+                                          : fluent.Colors.grey[30]),
                                   margin: const EdgeInsets.only(right: 10),
                                   width: item['type'] != 'playlist'
                                       ? (boxSize - 30) * (16 / 9)
@@ -176,11 +176,11 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                       Expanded(
                                         child: Card(
                                           margin:
-                                              const EdgeInsets.only(top: 15.0),
+                                          const EdgeInsets.only(top: 15.0),
                                           elevation: 5,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10.0),
+                                            BorderRadius.circular(10.0),
                                           ),
                                           clipBehavior: Clip.antiAlias,
                                           child: ExtendedImage.network(
@@ -268,7 +268,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                               width: 10,
                             ),
                             FloatingActionButton.small(
-                              heroTag: null,
+                                heroTag: null,
                                 onPressed: () {
                                   _listViewControllers[index].animateTo(
                                     _listViewControllers[index]

@@ -19,9 +19,9 @@ class StartPage extends ConsumerWidget {
         theme: ThemeData(
           accentColor: ref.watch(themeProvider).color,
           visualDensity: VisualDensity.standard,
-          focusTheme: FocusThemeData(
-            glowFactor: is10footScreen() ? 2.0 : 0.0,
-          ),
+          // focusTheme: FocusThemeData(
+          //   glowFactor: is10footScreen() ? 2.0 : 0.0,
+          // ),
         ),
         darkTheme: ThemeData(
 
@@ -29,9 +29,9 @@ class StartPage extends ConsumerWidget {
           brightness: Brightness.dark,
           accentColor: ref.watch(themeProvider).color,
           visualDensity: VisualDensity.standard,
-          focusTheme: FocusThemeData(
-            glowFactor: is10footScreen() ? 2.0 : 0.0,
-          ),
+          // focusTheme: FocusThemeData(
+          //   glowFactor: is10footScreen() ? 2.0 : 0.0,
+          // ),
         ),
         home: Platform.isWindows ? const SplashScreen() : const HomeScreen());
   }

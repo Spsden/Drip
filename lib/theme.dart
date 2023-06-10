@@ -16,10 +16,10 @@ enum NavigationIndicators { sticky, end }
 
 class AppTheme extends ChangeNotifier {
   String themeMode =
-      Hive.box('settings').get('themeMode', defaultValue: 'system') as String;
+      Hive.box('settings').get('themeMode', defaultValue: 'system') ;
 
   String accentColor =
-      Hive.box('settings').get('accentColor', defaultValue: 'System') as String;
+      Hive.box('settings').get('accentColor', defaultValue: 'System') ;
 
   AppTheme() {
     @override

@@ -384,10 +384,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           alignment: Alignment.center,
           child: appTheme.color == color
               ? Icon(
-                  FluentIcons.check_mark,
-                  color: color.basedOnLuminance(),
-                  size: 22.0,
-                )
+            FluentIcons.check_mark,
+            color: color.basedOnLuminance(),
+            size: 22.0,
+          )
               : null,
         ),
       ),

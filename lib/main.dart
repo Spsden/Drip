@@ -21,6 +21,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'datasources/searchresults/local_models/tracks_local.dart';
+import 'package:stack_trace/stack_trace.dart' as stack_trace;
+
 
 
 
@@ -56,17 +58,35 @@ Future<void> main() async {
     //await acrylic.Window.setEffect(effect: WindowEffect.tabbed,);
 
     await WindowManager.instance.ensureInitialized();
-    windowManager.waitUntilReadyToShow().then((_) async {
-      await windowManager.setTitleBarStyle(TitleBarStyle.hidden,
-          windowButtonVisibility: false);
 
-      await windowManager.setSize(const Size(900, 650));
-      await windowManager.setMinimumSize(const Size(740, 600));
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(900, 650),
+      minimumSize:Size(740, 600) ,
+      center: true,
+   //   backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.hidden,
+      windowButtonVisibility: false,
+      title: appTitle
+    );
 
-      await windowManager.show();
-      await windowManager.setPreventClose(false);
-      await windowManager.setSkipTaskbar(false);
-    });
+    windowManager.waitUntilReadyToShow(
+      windowOptions,() async {
+        await windowManager.show();
+        await windowManager.focus();
+    }
+    );
+    // windowManager.waitUntilReadyToShow().then((_) async {
+    //   // await windowManager.setTitleBarStyle(TitleBarStyle.hidden,
+    //   //     windowButtonVisibility: false);
+    //
+    //   // await windowManager.setSize(const Size(900, 650));
+    //   // await windowManager.setMinimumSize(const Size(740, 600));
+    //
+    //   await windowManager.show();
+    //   // await windowManager.setPreventClose(false);
+    //   // await windowManager.setSkipTaskbar(false);
+    // });
   }
 
   if (Platform.isWindows) {
@@ -103,7 +123,14 @@ Future<void> main() async {
       final audioControlCentre = AudioControlCentre(player: player,ref: ref);
       return audioControlCentre;
     })],
-      child: const StartPage()));
+      child:  const StartPage()));
+
+
+  FlutterError.demangleStackTrace = (StackTrace stack) {
+    if (stack is stack_trace.Trace) return stack.vmTrace;
+    if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+    return stack;
+  };
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {

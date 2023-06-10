@@ -72,12 +72,12 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
         unselectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,
         unselectedIconColor: themeMode == fluent.ThemeMode.dark ||
-                themeMode == fluent.ThemeMode.system
+            themeMode == fluent.ThemeMode.system
             ? Colors.white
             : Colors.black,
         itemInnerSpacing: 8,
         itemOuterPadding:
-            const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+        const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
 
         // decoration: BoxDecoration(
         //   borderRadius: BorderRadius.all(Radius.circular(10)),

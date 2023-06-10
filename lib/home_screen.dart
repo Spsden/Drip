@@ -26,7 +26,7 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
   late PageController _pageController;
   int index = 0;
   Map<int?, GlobalKey?> navigatorKeys = {
@@ -45,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       FirstPageStack(navigatorKey: navigatorKeys[0]),
       SecondPageStack(searchArgs: searchQuery, navigatorKey: navigatorKeys[1]),
       DeferredWidget(currentplaylist.loadLibrary,
-          () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
+              () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
       DeferredWidget(userlibrary.loadLibrary, () => userlibrary.UserLibrary()),
       DeferredWidget(settings.loadLibrary, () => settings.SettingsPage()),
     ];
@@ -55,19 +55,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
+    windowManager.addListener(this);
     super.initState();
+
     loadPages();
     _pageController = PageController(initialPage: index);
   }
 
   @override
   void dispose() {
-    super.dispose();
+    windowManager.removeListener(this);
     _pageController.dispose();
+    _textEditingController.dispose();
+    super.dispose();
+
   }
 
+
+
+
   final GlobalKey<mat.ScaffoldState> _scaffoldKey =
-      GlobalKey<mat.ScaffoldState>();
+  GlobalKey<mat.ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -82,20 +90,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       drawerScrimColor: Colors.black.withOpacity(0.3),
       bottomNavigationBar: Platform.isWindows
           ? Stack(
-              children: [
-                Acrylic(
-                  tint: ref.watch(nowPlayingPaletteProvider),
-                  elevation: 10,
-                  child: Platform.isWindows
-                      ? AudioPlayerBar(
-                          scaffoldKey: _scaffoldKey,
-                        )
-                      : const SizedBox.shrink(),
-                ),
-                const Positioned(
-                    bottom: 70, left: 2, right: 2, child: SeekBar())
-              ],
+        children: [
+          Acrylic(
+            tint: ref.watch(nowPlayingPaletteProvider),
+            elevation: 10,
+            child: Platform.isWindows
+                ? AudioPlayerBar(
+              scaffoldKey: _scaffoldKey,
             )
+                : const SizedBox.shrink(),
+          ),
+          const Positioned(
+              bottom: 70, left: 2, right: 2, child: SeekBar())
+        ],
+      )
           : const SizedBox.shrink(),
       key: _scaffoldKey,
       endDrawer: Container(
@@ -111,7 +119,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           blurAmount: 20,
           luminosityAlpha: 0.4,
           child: DeferredWidget(currentplaylist.loadLibrary,
-              () => currentplaylist.CurrentPlaylist(fromMainPage: false)),
+                  () => currentplaylist.CurrentPlaylist(fromMainPage: false)),
         ),
       ),
       appBar: mat.AppBar(
@@ -135,90 +143,85 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               }
             },
             child: const Icon(FluentIcons.back)),
-        title: DragToMoveArea(
-          child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Text(
-                  'Drip',
-                  style: TextStyle(fontSize: 20),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: AutoSuggestBox(
-                      highlightColor: Colors.white,
-                      placeholder: 'Search...',
-                      placeholderStyle: const TextStyle(fontSize: 16),
-                      trailingIcon: SizedBox(
-                        child: IconButton(
-                          icon: const Icon(
-                            mat.Icons.search_rounded,
-                            size: 16,
-                          ),
-                          onPressed: () {},
-                        ),
+        title:Row(
+          children: [
+            const Expanded(child: DragToMoveArea(child: SizedBox(width: double.infinity,height: 75,))),
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 3,
+              child: AutoSuggestBox(
+                  highlightColor: Colors.white,
+                  placeholder: 'Search...',
+                  placeholderStyle: const TextStyle(fontSize: 16),
+                  trailingIcon: SizedBox(
+                    child: IconButton(
+                      icon: const Icon(
+                        mat.Icons.search_rounded,
+                        size: 16,
                       ),
-                      enableKeyboardControls: true,
-                      onChanged: (text, reason) async {
-                        if (text.trim().isNotEmpty) {
-                          if (index != 1) {
-                            ref.read(currentPageIndexProvider.notifier).state =
-                                1;
-                          }
-                        }
-                        EasyDebounce.debounce(
-                            'search', const Duration(milliseconds: 600), () {
-                          ref.read(searchQueryProvider.notifier).state = text;
-                        });
-                      },
-                      controller: _textEditingController,
-                      items: ref.watch(searchSuggestionsProvider).when(
-                          data: (suggestions) => suggestions.map((item) {
-                                return AutoSuggestBoxItem(
-                                  label: item.toString(),
-                                  value: item,
-                                  onSelected: () async {
-                                    if (index != 1) {
-                                      ref
-                                          .read(
-                                              currentPageIndexProvider.notifier)
-                                          .state = 1;
-                                    }
-                                    ref
-                                        .read(searchQueryProvider.notifier)
-                                        .state = item;
-                                  },
-                                );
-                              }).toList(),
-                          error: (error, _) {
-                            return [
-                              AutoSuggestBoxItem(
-                                label: 'error',
-                                value: 'error',
-                                child: const Text('error'),
-                                onSelected: () async {},
-                              )
-                            ];
+                      onPressed: () {},
+                    ),
+                  ),
+                  enableKeyboardControls: true,
+                  onChanged: (text, reason) async {
+                    if (text.trim().isNotEmpty) {
+                      if (index != 1) {
+                        ref.read(currentPageIndexProvider.notifier).state =
+                        1;
+                      }
+                    }
+                    EasyDebounce.debounce(
+                        'search', const Duration(milliseconds: 600), () {
+                      ref.read(searchQueryProvider.notifier).state = text;
+                    });
+                  },
+                  controller: _textEditingController,
+                  items: ref.watch(searchSuggestionsProvider).when(
+                      data: (suggestions) => suggestions.map((item) {
+                        return AutoSuggestBoxItem(
+                          label: item.toString(),
+                          value: item,
+                          onSelected: () async {
+                            if (index != 1) {
+                              ref
+                                  .read(
+                                  currentPageIndexProvider.notifier)
+                                  .state = 1;
+                            }
+                            ref
+                                .read(searchQueryProvider.notifier)
+                                .state = item;
                           },
-                          loading: () {
-                            return [
-                              AutoSuggestBoxItem(
-                                label: 'Loading',
-                                value: 'Loading',
-                                onSelected: () async {},
-                              )
-                            ];
-                          })),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-              ])),
+                        );
+                      }).toList(),
+                      error: (error, _) {
+                        return [
+                          AutoSuggestBoxItem(
+                            label: 'error',
+                            value: 'error',
+                            child: const Text('error'),
+                            onSelected: () async {},
+                          )
+                        ];
+                      },
+                      loading: () {
+                        return [
+                          AutoSuggestBoxItem(
+                            label: 'Loading',
+                            value: 'Loading',
+                            onSelected: () async {},
+                          )
+                        ];
+                      })),
+            ),
+            const Expanded(child: DragToMoveArea(child: SizedBox(width: double.infinity,height: 75,))),
+
+
+
+          ],
+         
         ),
+        
+
         toolbarHeight: 50,
         actions: Platform.isWindows ? [const WindowButtons()] : null,
       ),
@@ -229,16 +232,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const CustomLeftBar(),
               Expanded(
                   child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                controller: _pageController,
-                children: allStacks,
-              ))
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    controller: _pageController,
+                    children: allStacks,
+                  ))
             ],
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void onWindowClose() async {
+    await windowManager.destroy();
   }
 }
 
