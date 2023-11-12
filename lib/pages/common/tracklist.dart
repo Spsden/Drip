@@ -1,5 +1,4 @@
 import 'package:drip/datasources/audiofiles/activeaudiodata.dart';
-import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart';
 import 'package:drip/pages/common/loading_widget.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
+import '../../providers/audio_player_provider.dart';
 import '../../theme.dart';
 
 ///Trackbars for main Search Page
@@ -111,7 +111,7 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
                             urlOfVideo: 'NA',
                             videoId: widget.songs[index].videoId);
 
-                    ref.read(audioControlCentreProvider).open(currentMusicInstance);
+                    ref.read(audioPlayerProvider).open(currentMusicInstance);
 
 
                   },
@@ -230,7 +230,7 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
               , author: widget.songs.artists?.map((e) => e.name.toString()).toList() ?? [],
               thumbs:   widget.songs.thumbnails?.map((e) => e.url.toString()).toList() ??
                   [], urlOfVideo: 'NA', videoId: widget.songs.videoId);
-         await  ref.read(audioControlCentreProvider).open(currentMusicInstance);
+         await  ref.read(audioPlayerProvider).open(currentMusicInstance);
 
 
 

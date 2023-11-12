@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
-import 'package:provider/provider.dart';
 
 import '../../customwidgets/hovered_card.dart';
 import '../../datasources/searchresults/requests/searchresultsservice.dart';

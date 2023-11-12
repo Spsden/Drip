@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../customwidgets/drip_placeholder.dart';
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/searchresults/models/watchplaylistdataclass.dart';
+import '../providers/audio_player_provider.dart';
 import 'common/track_cards.dart';
 
 class CurrentPlaylist extends ConsumerStatefulWidget {
@@ -44,7 +45,7 @@ class CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     var size = MediaQuery.of(context).size;
-    final currentTracks = ref.watch(audioControlCentreProvider).tracks;
+    final currentTracks = ref.watch(audioPlayerProvider).tracks;
 
     return Container(
 
@@ -111,7 +112,7 @@ class CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
                                     .videoId
                                     .toString());
                             ref
-                                .read(audioControlCentreProvider)
+                                .read(audioPlayerProvider)
                                 .open(currentMusicInstance);
                           }
 

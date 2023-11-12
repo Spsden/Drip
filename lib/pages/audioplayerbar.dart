@@ -6,6 +6,7 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../datasources/audiofiles/playback.dart';
+import '../providers/audio_player_provider.dart';
 
 class AudioPlayerBar extends StatefulWidget {
   final GlobalKey<mat.ScaffoldState> scaffoldKey;
@@ -103,15 +104,15 @@ class TrackInfo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //super.build(context);
-    final prov = ref.watch(audioControlCentreProvider);
+    final prov = ref.watch(audioPlayerProvider);
 
     return Row(
       children: [
         ExtendedImage.network(
           // ref.watch(activeAudioDataNotifier).thumbnail,
-          prov.player.state.playlist.medias.isNotEmpty
+          prov.player!.state.playlist.medias.isNotEmpty
               ? prov
-              .player.state.playlist.medias[prov.index].extras.thumbs.first
+              .player!.state.playlist.medias[prov.index].extras!['thumbs'].first
               : 'https://i.imgur.com/L3Ip1wh.png',
 
           // width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
@@ -167,17 +168,17 @@ class TrackInfo extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                  prov.player.state.playlist.medias.isNotEmpty
+                  prov.player!.state.playlist.medias.isNotEmpty
                       ? prov
-                      .player.state.playlist.medias[prov.index].extras.title
+                      .player!.state.playlist.medias[prov.index].extras!['title']
                       : 'Click to Play',
                   style: mat.Theme.of(context).textTheme.bodyText1,
                   maxLines: 1),
               const SizedBox(height: 4.0),
               Text(
-                prov.player.state.playlist.medias.isNotEmpty
+                prov.player!.state.playlist.medias.isNotEmpty
                     ? prov
-                    .player.state.playlist.medias[prov.index].extras.author
+                    .player!.state.playlist.medias[prov.index].extras!["author"].first
                     .join(" ")
                     : 'NA',
                 maxLines: 1,
@@ -225,8 +226,8 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
   Widget build(BuildContext context) {
     double smallIcons = MediaQuery.of(context).size.width > 550 ? 30 : 25;
     double largeIcons = MediaQuery.of(context).size.width > 550 ? 40 : 30;
-    // isPlaying = ref.watch(audioControlCentreProvider).isPlaying;
-    ref.watch(audioControlCentreProvider).isPlaying
+    // isPlaying = ref.watch(audioPlayerProvider).isPlaying;
+    ref.watch(audioPlayerProvider).isPlaying
         ? _iconController.forward()
         : _iconController.reverse();
 
@@ -247,7 +248,7 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
             icon: const Icon(mat.Icons.skip_previous),
             iconSize: smallIcons,
             onPressed: () {
-              ref.read(audioControlCentreProvider).prev();
+              ref.read(audioPlayerProvider).prev();
             },
           ),
           Container(
@@ -265,7 +266,7 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      ref.read(audioControlCentreProvider).playOrPause();
+                      ref.read(audioPlayerProvider).playOrPause();
                     },
                     child: AnimatedIcon(
                       icon: AnimatedIcons.play_pause,
@@ -274,7 +275,7 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
                     ),
                   ),
                 ),
-                ref.watch(audioControlCentreProvider).isBuffering
+                ref.watch(audioPlayerProvider).isBuffering
                     ? Container(
                   margin: const EdgeInsets.all(8.0),
                   width: largeIcons,
@@ -289,12 +290,12 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
             icon: const Icon(mat.Icons.skip_next),
             iconSize: smallIcons,
             onPressed: () {
-              ref.read(audioControlCentreProvider).next();
+              ref.read(audioPlayerProvider).next();
               //AudioControlCentre.audioControlCentre.next();
             },
           ),
           mat.IconButton(
-            icon: ref.read(audioControlCentreProvider).repeat == true
+            icon: ref.read(audioPlayerProvider).repeat == true
                 ? const Icon(
               mat.Icons.repeat,
               color: Colors.white,
@@ -302,7 +303,7 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
                 : Icon(mat.Icons.repeat, color: Colors.white.withOpacity(0.5)),
             iconSize: smallIcons,
             onPressed: () {
-              ref.read(audioControlCentreProvider).setRepeat();
+              ref.read(audioPlayerProvider).setRepeat();
             },
           ),
         ],
@@ -318,7 +319,7 @@ class MoreControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final audioControlCentre = ref.watch(audioControlCentreProvider);
+    final audioControlCentre = ref.watch(audioPlayerProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

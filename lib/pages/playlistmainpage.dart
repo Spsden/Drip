@@ -12,6 +12,7 @@ import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dar
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/audiofiles/playback.dart';
+import '../providers/audio_player_provider.dart';
 import '../theme.dart';
 import 'common/loading_widget.dart';
 import 'common/track_cards.dart';
@@ -249,7 +250,7 @@ class _PlaylistMainState extends ConsumerState<PlaylistMain> {
                                             urlOfVideo: 'NA',
                                             videoId: _tracks[index].videoId.toString());
 
-                                    ref.read(audioControlCentreProvider).open(currentMusicInstance);
+                                    ref.read(audioPlayerProvider).open(currentMusicInstance);
 
 
                                         // await ref.watch(activeAudioDataNotifier)

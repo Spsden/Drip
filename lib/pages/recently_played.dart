@@ -10,6 +10,7 @@ import 'package:drip/datasources/searchresults/local_models/recently_played.dart
 
 import '../datasources/audiofiles/activeaudiodata.dart';
 import '../datasources/audiofiles/playback.dart';
+import '../providers/audio_player_provider.dart';
 import '../theme.dart';
 import 'moods_page.dart';
 
@@ -98,7 +99,7 @@ class RecentlyPlayedWidget extends ConsumerWidget {
                         videoId: recentlyPlayed.videoId);
 
                     ref
-                        .read(audioControlCentreProvider)
+                        .read(audioPlayerProvider)
                         .open(currentMusicInstance);
 
                   },

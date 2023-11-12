@@ -7,6 +7,7 @@ import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/currentplaylist.dart' deferred as currentplaylist;
 import 'package:drip/pages/settings.dart' deferred as settings;
 import 'package:drip/pages/user_library.dart' deferred as userlibrary;
+import 'package:drip/providers/audio_player_provider.dart';
 import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:drip/utils/deferred_widget.dart';
@@ -42,10 +43,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
 
   Future<void> loadPages() async {
     allStacks = [
-      FirstPageStack(navigatorKey: navigatorKeys[0]),
+
+       FirstPageStack(navigatorKey: navigatorKeys[0]),
       SecondPageStack(searchArgs: searchQuery, navigatorKey: navigatorKeys[1]),
       DeferredWidget(currentplaylist.loadLibrary,
-              () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
+          () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
       DeferredWidget(userlibrary.loadLibrary, () => userlibrary.UserLibrary()),
       DeferredWidget(settings.loadLibrary, () => settings.SettingsPage()),
     ];
@@ -68,14 +70,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
     _pageController.dispose();
     _textEditingController.dispose();
     super.dispose();
-
   }
 
-
-
-
   final GlobalKey<mat.ScaffoldState> _scaffoldKey =
-  GlobalKey<mat.ScaffoldState>();
+      GlobalKey<mat.ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -86,25 +84,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
             curve: Curves.fastLinearToSlowEaseIn);
       }
     });
+
     return mat.Scaffold(
+
       drawerScrimColor: Colors.black.withOpacity(0.3),
-      bottomNavigationBar: Platform.isWindows
-          ? Stack(
-        children: [
-          Acrylic(
-            tint: ref.watch(nowPlayingPaletteProvider),
-            elevation: 10,
-            child: Platform.isWindows
-                ? AudioPlayerBar(
-              scaffoldKey: _scaffoldKey,
-            )
-                : const SizedBox.shrink(),
-          ),
-          const Positioned(
-              bottom: 70, left: 2, right: 2, child: SeekBar())
-        ],
-      )
-          : const SizedBox.shrink(),
+      // bottomNavigationBar: Platform.isWindows
+      //     ? Container(
+      //       child: Stack(
+      //           children: [
+      //             Acrylic(
+      //              // tint: ref.watch(nowPlayingPaletteProvider) ?? Colors.blue,
+      //               elevation: 10,
+      //               child: Platform.isWindows
+      //                   ? AudioPlayerBar(
+      //                 scaffoldKey: _scaffoldKey,
+      //               )
+      //                   : const SizedBox.shrink(),
+      //             ),
+      //             const Positioned(
+      //                 bottom: 70, left: 2, right: 2, child: SeekBar())
+      //           ],
+      //         ),
+      //     )
+      //     : const SizedBox.shrink(),
       key: _scaffoldKey,
       endDrawer: Container(
         decoration: const BoxDecoration(
@@ -119,7 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
           blurAmount: 20,
           luminosityAlpha: 0.4,
           child: DeferredWidget(currentplaylist.loadLibrary,
-                  () => currentplaylist.CurrentPlaylist(fromMainPage: false)),
+              () => currentplaylist.CurrentPlaylist(fromMainPage: false)),
         ),
       ),
       appBar: mat.AppBar(
@@ -128,7 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
         centerTitle: true,
         leadingWidth: 75,
         elevation: 0,
-        backgroundColor: FluentTheme.of(context).micaBackgroundColor,
+         backgroundColor: FluentTheme.of(context).micaBackgroundColor,
         automaticallyImplyLeading: true,
         leading: Button(
             onPressed: () async {
@@ -143,9 +145,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
               }
             },
             child: const Icon(FluentIcons.back)),
-        title:Row(
+        title: Row(
           children: [
-            const Expanded(child: DragToMoveArea(child: SizedBox(width: double.infinity,height: 75,))),
+            const Expanded(
+                child: DragToMoveArea(
+                    child: SizedBox(
+              width: double.infinity,
+              height: 75,
+            ))),
             SizedBox(
               width: MediaQuery.of(context).size.width / 3,
               child: AutoSuggestBox(
@@ -165,8 +172,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
                   onChanged: (text, reason) async {
                     if (text.trim().isNotEmpty) {
                       if (index != 1) {
-                        ref.read(currentPageIndexProvider.notifier).state =
-                        1;
+                        ref.read(currentPageIndexProvider.notifier).state = 1;
                       }
                     }
                     EasyDebounce.debounce(
@@ -177,22 +183,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
                   controller: _textEditingController,
                   items: ref.watch(searchSuggestionsProvider).when(
                       data: (suggestions) => suggestions.map((item) {
-                        return AutoSuggestBoxItem(
-                          label: item.toString(),
-                          value: item,
-                          onSelected: () async {
-                            if (index != 1) {
-                              ref
-                                  .read(
-                                  currentPageIndexProvider.notifier)
-                                  .state = 1;
-                            }
-                            ref
-                                .read(searchQueryProvider.notifier)
-                                .state = item;
-                          },
-                        );
-                      }).toList(),
+                            return AutoSuggestBoxItem(
+                              label: item.toString(),
+                              value: item,
+                              onSelected: () async {
+                                if (index != 1) {
+                                  ref
+                                      .read(currentPageIndexProvider.notifier)
+                                      .state = 1;
+                                }
+                                ref.read(searchQueryProvider.notifier).state =
+                                    item;
+                              },
+                            );
+                          }).toList(),
                       error: (error, _) {
                         return [
                           AutoSuggestBoxItem(
@@ -213,18 +217,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
                         ];
                       })),
             ),
-            const Expanded(child: DragToMoveArea(child: SizedBox(width: double.infinity,height: 75,))),
-
-
-
+            const Expanded(
+                child: DragToMoveArea(
+                    child: SizedBox(
+              width: double.infinity,
+              height: 75,
+            ))),
           ],
-         
         ),
-        
 
         toolbarHeight: 50,
         actions: Platform.isWindows ? [const WindowButtons()] : null,
       ),
+
+
+
       body: Stack(
         children: [
           Row(
@@ -232,11 +239,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
               const CustomLeftBar(),
               Expanded(
                   child: PageView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    controller: _pageController,
-                    children: allStacks,
-                  ))
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                controller: _pageController,
+                children: allStacks,
+              ))
             ],
           ),
         ],
@@ -255,7 +262,7 @@ class WindowButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = FluentTheme.of(context);
+    final FluentThemeData theme = FluentTheme.of(context);
 
     return SizedBox(
       width: 138,
@@ -287,11 +294,11 @@ class SeekBar extends ConsumerWidget {
           thumbCanPaintOutsideBar: true,
           barHeight: 3.0,
           progressBarColor: ref.watch(themeProvider).color,
-          progress: ref.watch(audioControlCentreProvider).position,
+          progress: ref.watch(audioPlayerProvider).position,
           // buffered: value.buffered,
-          total: ref.watch(audioControlCentreProvider).duration,
+          total: ref.watch(audioPlayerProvider).duration,
           onSeek: (position) =>
-              ref.read(audioControlCentreProvider).seek(position)),
+              ref.read(audioPlayerProvider).seek(position)),
     );
   }
 }

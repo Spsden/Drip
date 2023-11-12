@@ -16,14 +16,14 @@ class StartPage extends ConsumerWidget {
         title: 'Drip',
         themeMode: ref.watch(themeProvider).mode,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
+        theme: FluentThemeData(
           accentColor: ref.watch(themeProvider).color,
           visualDensity: VisualDensity.standard,
           // focusTheme: FocusThemeData(
           //   glowFactor: is10footScreen() ? 2.0 : 0.0,
           // ),
         ),
-        darkTheme: ThemeData(
+        darkTheme: FluentThemeData(
 
 
           brightness: Brightness.dark,
@@ -33,6 +33,6 @@ class StartPage extends ConsumerWidget {
           //   glowFactor: is10footScreen() ? 2.0 : 0.0,
           // ),
         ),
-        home: Platform.isWindows ? const SplashScreen() : const HomeScreen());
+        home: HomeScreen());
   }
 }

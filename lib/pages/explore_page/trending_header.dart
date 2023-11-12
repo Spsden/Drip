@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:drip/pages/explore_page/explorepage.dart';
-import 'package:drip/providers/providers.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../datasources/audiofiles/activeaudiodata.dart';
-import '../../datasources/audiofiles/playback.dart';
+import '../../providers/audio_player_provider.dart';
 
 class TrendingHeader extends ConsumerStatefulWidget {
   final List headList;
@@ -77,7 +75,7 @@ class _TrendingHeaderState extends ConsumerState<TrendingHeader> {
                           urlOfVideo: 'NA',
                           videoId: headList[index]['videoId']);
                   ref
-                      .read(audioControlCentreProvider)
+                      .read(audioPlayerProvider)
                       .open(currentMusicInstance);
                   // ref.read(searchQueryProvider.notifier).state = headList[index]['title'];
                   // ref.read(currentPageIndexProvider.notifier).state = 1;
