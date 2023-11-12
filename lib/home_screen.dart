@@ -88,25 +88,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
     return mat.Scaffold(
 
       drawerScrimColor: Colors.black.withOpacity(0.3),
-      // bottomNavigationBar: Platform.isWindows
-      //     ? Container(
-      //       child: Stack(
-      //           children: [
-      //             Acrylic(
-      //              // tint: ref.watch(nowPlayingPaletteProvider) ?? Colors.blue,
-      //               elevation: 10,
-      //               child: Platform.isWindows
-      //                   ? AudioPlayerBar(
-      //                 scaffoldKey: _scaffoldKey,
-      //               )
-      //                   : const SizedBox.shrink(),
-      //             ),
-      //             const Positioned(
-      //                 bottom: 70, left: 2, right: 2, child: SeekBar())
-      //           ],
-      //         ),
-      //     )
-      //     : const SizedBox.shrink(),
+      bottomNavigationBar: Platform.isWindows
+          ? Container(
+            child: Stack(
+                children: [
+                  Acrylic(
+                    tint: ref.watch(audioPlayerProvider).color,
+                    elevation: 10,
+                    child: Platform.isWindows
+                        ? AudioPlayerBar(
+                      scaffoldKey: _scaffoldKey,
+                    )
+                        : const SizedBox.shrink(),
+                  ),
+                  const Positioned(
+                      bottom: 70, left: 2, right: 2, child: SeekBar())
+                ],
+              ),
+          )
+          : const SizedBox.shrink(),
       key: _scaffoldKey,
       endDrawer: Container(
         decoration: const BoxDecoration(

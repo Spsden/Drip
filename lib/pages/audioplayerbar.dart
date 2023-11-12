@@ -179,7 +179,7 @@ class TrackInfo extends ConsumerWidget {
                 prov.player!.state.playlist.medias.isNotEmpty
                     ? prov
                     .player!.state.playlist.medias[prov.index].extras!["author"].first
-                    .join(" ")
+
                     : 'NA',
                 maxLines: 1,
                 style: TextStyle(

@@ -47,12 +47,12 @@ final searchSuggestionsProvider = FutureProvider.autoDispose((ref) async {
 
 final currentPageIndexProvider = StateProvider((ref) => 0);
 
-
-
 class NowPlayingPalette extends StateNotifier<Color> {
   NowPlayingPalette(this.ref) : super(Colors.transparent);
 
   final Ref ref;
+
+  // ref.watch(audioPlayerProvider).
 
   Future<void> updatePalette(String imgUrl) async {
     PaletteGenerator paletteGenerator;
