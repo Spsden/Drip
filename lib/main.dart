@@ -92,7 +92,7 @@ Future<void> main() async {
     Hive.registerAdapter(TrackAdapter());
     await openHiveBox('recentlyPlayed');
     await openHiveBox('savedPlaylists');
-   // await AudioControlCentre.initialize();
+    await AudioControlCentre.initialize();
 
 
     runApp(ProviderScope(
@@ -102,7 +102,7 @@ Future<void> main() async {
         //   return audioControlCentre;
         // })
         // ],
-        child:  PlayBackTest()));
+        child:  StartPage()));
   } catch (exception, stacktrace) {
     debugPrint(exception.toString());
     debugPrint(stacktrace.toString());
