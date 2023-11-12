@@ -125,7 +125,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
         ),
       ),
       appBar: mat.AppBar(
-        //foregroundColor: Colors.transparent,
+        foregroundColor: Colors.transparent,
         titleSpacing: 0,
         centerTitle: true,
         leadingWidth: 75,

@@ -179,8 +179,8 @@ class _PlaylistMainState extends ConsumerState<PlaylistMain> {
                                 ),
                                 const mat.Spacer(),
                                 FilledButton(
-                                  child: Row(
-                                    children: const [
+                                  child: const Row(
+                                    children: [
                                       Icon(FluentIcons.play),
                                       spacer,
                                       Text('Shuffle',

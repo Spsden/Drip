@@ -127,8 +127,14 @@ class CurrentPlaylistState extends ConsumerState<CurrentPlaylist> {
                                 },
                                 color: index % 2 != 0
                                     ? Colors.transparent
+                                    : ref.watch(themeProvider).mode ==
+                                    ThemeMode.dark ||
 
-                                    : Colors.grey[40],
+                                    ref.watch(themeProvider)
+                                        .mode ==
+                                        ThemeMode.system
+                                    ? Colors.grey[150]
+                                    : Colors.grey[30],
                                 SuperSize: size,
                                 widthy: 800,
                                 fromQueue: true,

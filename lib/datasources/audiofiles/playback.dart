@@ -342,10 +342,16 @@ class AudioControlCentre extends ChangeNotifier {
         videoId: currentMusicInstance.videoId);
     final recentlyPlayedBox = Hive.box('recentlyPlayed');
 
-    if (recentlyPlayedBox.length > 15) {
-      recentlyPlayedBox.deleteAt(14);
+    bool existsInList = recentlyPlayedBox.values
+        .any((element) => element.title == recentlyPlayed.title);
+    if (!existsInList) {
+      if (recentlyPlayedBox.length > 15) {
+        recentlyPlayedBox.deleteAt(14);
+      }
+
+      recentlyPlayedBox.add(recentlyPlayed);
     }
-    recentlyPlayedBox.add(recentlyPlayed);
+    // print(recentlyPlayedBox.values.first.title);
   }
 
   @override
