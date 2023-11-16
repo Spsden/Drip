@@ -65,9 +65,7 @@ class RecentlyPlayedWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child:
-
-      ValueListenableBuilder(
+      child: ValueListenableBuilder(
         valueListenable: Hive.box('recentlyPlayed').listenable(),
         builder: (context, Box box, _) {
           List recent = List.from(box.values.toList().reversed);
@@ -89,19 +87,16 @@ class RecentlyPlayedWidget extends ConsumerWidget {
               recent_model.RecentlyPlayed recentlyPlayed = recent[index];
               return Center(
                 child: TrackCardSmall(
-                  onTrackTap: () async{
+                  onTrackTap: () async {
                     CurrentMusicInstance currentMusicInstance =
-                    CurrentMusicInstance(
-                        title: recentlyPlayed.title,
-                        author: recentlyPlayed.author,
-                        thumbs: recentlyPlayed.thumbs,
-                        urlOfVideo: 'NA',
-                        videoId: recentlyPlayed.videoId);
+                        CurrentMusicInstance(
+                            title: recentlyPlayed.title,
+                            author: recentlyPlayed.author,
+                            thumbs: recentlyPlayed.thumbs,
+                            urlOfVideo: 'NA',
+                            videoId: recentlyPlayed.videoId);
 
-                    ref
-                        .read(audioPlayerProvider)
-                        .open(currentMusicInstance);
-
+                    ref.read(audioPlayerProvider).open(currentMusicInstance);
                   },
                   color: Colors.transparent,
                   data: TrackCardData(

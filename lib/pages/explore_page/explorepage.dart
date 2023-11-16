@@ -7,6 +7,7 @@ import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:known_extents_list_view_builder/sliver_known_extents_list.dart';
@@ -16,8 +17,32 @@ import 'package:hive/hive.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../datasources/searchresults/models/youtubehome/drip_home_page/content.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
+import '../../datasources/searchresults/models/youtubehome/drip_home_page/output.dart';
 
+
+
+
+List<List<Content>> converter(List<Content> songs) {
+  int sublistSize = 4;
+
+  List<List<Content>> listOfLists = [];
+
+  for (int i = 0; i < songs.length; i += sublistSize) {
+    int endIndex = i + sublistSize;
+    if (endIndex > songs.length) {
+      endIndex = songs.length;
+    }
+    List<Content> sublist = songs.sublist(i, endIndex);
+    listOfLists.add(sublist);
+  }
+  return listOfLists;
+}
+
+Future<List<List<Content>>> _getModifiedList(List<Content> content) async {
+  return compute(converter, content);
+}
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
 List headList = Hive.box('cache').get('ytHomeHead', defaultValue: []) as List;
@@ -85,7 +110,9 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   Widget build(BuildContext context) {
     final ThemeMode _themeMode = ref.watch(themeProvider).mode;
     fluent.Typography typography = fluent.FluentTheme.of(context).typography;
-   // final AsyncValue<DripHomePage> dripHome = ref.watch(getHomeProvider);
+    final AsyncValue<DripHomePage> dripHome = ref.watch(getHomeProvider);
+
+    // final AsyncValue<DripHomePage> dripHome = ref.watch(getHomeProvider);
     super.build(context);
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
@@ -109,15 +136,66 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
               background: TrendingHeader(
                 headList: headList,
               )),
-        ),
-        SliverToBoxAdapter(
-          child:SizedBox(
-              height: boxSize + 85,
-              width: double.infinity,
+        ),(){
+          if (dripHome is AsyncData) {
+            final DripHomePage data = (dripHome as AsyncData).value;
+            final List<Output>? fullList = data.output;
+            // final listOfQuickPicks =
 
-              child: Placeholder())
+            return SliverKnownExtentsList(
+              delegate: SliverChildBuilderDelegate(
+                  childCount: fullList!.length - 1, (context, index) {
+                final Output currentOutput = fullList[index];
+                final String? currentOutputTitle = currentOutput.title;
+                if (currentOutputTitle == "Quick picks") {
+                  final List<List<Content>> quickPicks =
+                  converter(currentOutput.contents ?? []);
+                  return FutureBuilder(
+                    future: _getModifiedList(currentOutput.contents ?? []),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return QuickPicks(
+                            songs: snapshot.data as List<List<Content>>);
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  );
 
-        ),
+                } else
+                  return Stack(
+                    children: [
+                      Column(children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding:
+                              const EdgeInsets.fromLTRB(7, 7, 0, 5),
+                              child: Text('${currentOutput.title}'),
+                            )
+                          ],
+                        )
+                      ])
+                    ],
+                  );
+              }),
+                itemExtents:
+                List.generate(fullList!.length, (index) => 344.0)
+
+            );
+
+
+          } else if (dripHome is AsyncError) {
+            return const Text('Oops, something unexpected happened');
+          } else {
+            return SliverToBoxAdapter(child: const CircularProgressIndicator());
+          }
+
+
+        }(),
+
 
         SliverKnownExtentsList(
             delegate: SliverChildBuilderDelegate(

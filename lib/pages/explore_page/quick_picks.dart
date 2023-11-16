@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:known_extents_list_view_builder/sliver_known_extents_list.dart';
 
+import '../../datasources/audiofiles/activeaudiodata.dart';
 import '../../datasources/searchresults/requests/youtubehomedata.dart';
+import '../../providers/audio_player_provider.dart';
 
 // class QuickPicks extends StatefulWidget {
 //   const QuickPicks({super.key});
@@ -141,13 +143,13 @@ class QuickPicks extends StatelessWidget {
   }
 }
 
-class FourQuickPics extends StatelessWidget {
+class FourQuickPics extends ConsumerWidget {
   const FourQuickPics({super.key, required this.data});
 
   final List<Content> data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
         itemCount: 4,
         itemBuilder: ((context, index) {
@@ -164,7 +166,25 @@ class FourQuickPics extends StatelessWidget {
               child: TrackCardSmall(
                 data: trackData,
                 color: Colors.lightBlue,
-                onTrackTap: () {},
+                onTrackTap: () {
+                  CurrentMusicInstance currentMusicInstance =
+                      CurrentMusicInstance(
+                          title: trackData.title.toString(),
+                          author: data[index]
+                                  .artists
+                                  ?.map((artist) => artist.name.toString())
+                                  .toList() ??
+                              [],
+                          thumbs: data[index]
+                                  .thumbnails
+                                  ?.map((thumb) => thumb.url.toString())
+                                  .toList() ??
+                              [],
+                          urlOfVideo: 'NA',
+                          videoId: data[index].videoId.toString());
+
+                  ref.read(audioPlayerProvider).open(currentMusicInstance);
+                },
               ),
             ),
           );
@@ -213,14 +233,9 @@ List<TrackCardData> generateRandomTrackDataList(int count) {
   return trackList;
 }
 
-
 //modifying list in a separate isolate
 Future<List<List<Content>>> _getModifiedList(List<Content> content) async {
-  return compute(
-      converter,
-      content
-
-  );
+  return compute(converter, content);
 }
 
 class Test extends ConsumerWidget {
@@ -245,19 +260,21 @@ class Test extends ConsumerWidget {
                     final Output currentOutput = fullList[index];
                     final String? currentOutputTitle = currentOutput.title;
                     if (currentOutputTitle == "Quick picks") {
-                      final List<List<Content>> quickPicks = converter(
-                          currentOutput.contents ?? []);
+                      final List<List<Content>> quickPicks =
+                          converter(currentOutput.contents ?? []);
                       return FutureBuilder(
-                        future: _getModifiedList(currentOutput.contents ?? [
-                        ]), builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return QuickPicks(songs: snapshot.data as List<List<Content>>);
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },);
+                        future: _getModifiedList(currentOutput.contents ?? []),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return QuickPicks(
+                                songs: snapshot.data as List<List<Content>>);
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      );
 
                       Text(jsonEncode(currentOutput.contents));
                     } else
@@ -268,7 +285,7 @@ class Test extends ConsumerWidget {
                               children: [
                                 Padding(
                                   padding:
-                                  const EdgeInsets.fromLTRB(7, 7, 0, 5),
+                                      const EdgeInsets.fromLTRB(7, 7, 0, 5),
                                   child: Text('${currentOutput.title}'),
                                 )
                               ],
@@ -278,7 +295,9 @@ class Test extends ConsumerWidget {
                       );
                   }),
                   itemExtents:
-                  List.generate(fullList!.length, (index) => 344.0)),
+                      List.generate(fullList!.length, (index) => 344.0)
+
+              ),
             ],
           );
           return Text(jsonEncode(fullList));
