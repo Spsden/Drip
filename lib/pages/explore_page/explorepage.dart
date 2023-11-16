@@ -196,6 +196,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                     "assets/cover.jpg";
                                 String title =
                                     currentOutput.contents?[idx].title ?? "NA";
+                                String desc = currentOutput.contents?[idx].description ?? "na";
                                 String everythingElse = currentOutput
                                         .contents?[idx].artists
                                         ?.map((artist) => artist.name)
@@ -275,7 +276,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                             margin: const EdgeInsets.only(
                                                 bottom: 15, left: 5, right: 5),
                                             child: Text(
-                                              everythingElse,
+                                              desc,
                                               textAlign: TextAlign.center,
                                               softWrap: false,
                                               overflow: TextOverflow.ellipsis,

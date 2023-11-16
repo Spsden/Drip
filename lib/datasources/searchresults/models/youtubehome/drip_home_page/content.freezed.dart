@@ -26,6 +26,7 @@ mixin _$Content {
   List<Thumbnail>? get thumbnails => throw _privateConstructorUsedError;
   bool? get isExplicit => throw _privateConstructorUsedError;
   Album? get album => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $ContentCopyWith<$Res> {
       List<Artist>? artists,
       List<Thumbnail>? thumbnails,
       bool? isExplicit,
-      Album? album});
+      Album? album,
+      String? description});
 
   $AlbumCopyWith<$Res>? get album;
 }
@@ -67,6 +69,7 @@ class _$ContentCopyWithImpl<$Res, $Val extends Content>
     Object? thumbnails = freezed,
     Object? isExplicit = freezed,
     Object? album = freezed,
+    Object? description = freezed,
   }) {
     return _then(_value.copyWith(
       title: freezed == title
@@ -93,6 +96,10 @@ class _$ContentCopyWithImpl<$Res, $Val extends Content>
           ? _value.album
           : album // ignore: cast_nullable_to_non_nullable
               as Album?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -122,7 +129,8 @@ abstract class _$$ContentImplCopyWith<$Res> implements $ContentCopyWith<$Res> {
       List<Artist>? artists,
       List<Thumbnail>? thumbnails,
       bool? isExplicit,
-      Album? album});
+      Album? album,
+      String? description});
 
   @override
   $AlbumCopyWith<$Res>? get album;
@@ -145,6 +153,7 @@ class __$$ContentImplCopyWithImpl<$Res>
     Object? thumbnails = freezed,
     Object? isExplicit = freezed,
     Object? album = freezed,
+    Object? description = freezed,
   }) {
     return _then(_$ContentImpl(
       title: freezed == title
@@ -171,6 +180,10 @@ class __$$ContentImplCopyWithImpl<$Res>
           ? _value.album
           : album // ignore: cast_nullable_to_non_nullable
               as Album?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -184,7 +197,8 @@ class _$ContentImpl implements _Content {
       final List<Artist>? artists,
       final List<Thumbnail>? thumbnails,
       this.isExplicit,
-      this.album})
+      this.album,
+      this.description})
       : _artists = artists,
         _thumbnails = thumbnails;
 
@@ -219,10 +233,12 @@ class _$ContentImpl implements _Content {
   final bool? isExplicit;
   @override
   final Album? album;
+  @override
+  final String? description;
 
   @override
   String toString() {
-    return 'Content(title: $title, videoId: $videoId, artists: $artists, thumbnails: $thumbnails, isExplicit: $isExplicit, album: $album)';
+    return 'Content(title: $title, videoId: $videoId, artists: $artists, thumbnails: $thumbnails, isExplicit: $isExplicit, album: $album, description: $description)';
   }
 
   @override
@@ -237,7 +253,9 @@ class _$ContentImpl implements _Content {
                 .equals(other._thumbnails, _thumbnails) &&
             (identical(other.isExplicit, isExplicit) ||
                 other.isExplicit == isExplicit) &&
-            (identical(other.album, album) || other.album == album));
+            (identical(other.album, album) || other.album == album) &&
+            (identical(other.description, description) ||
+                other.description == description));
   }
 
   @JsonKey(ignore: true)
@@ -249,7 +267,8 @@ class _$ContentImpl implements _Content {
       const DeepCollectionEquality().hash(_artists),
       const DeepCollectionEquality().hash(_thumbnails),
       isExplicit,
-      album);
+      album,
+      description);
 
   @JsonKey(ignore: true)
   @override
@@ -272,7 +291,8 @@ abstract class _Content implements Content {
       final List<Artist>? artists,
       final List<Thumbnail>? thumbnails,
       final bool? isExplicit,
-      final Album? album}) = _$ContentImpl;
+      final Album? album,
+      final String? description}) = _$ContentImpl;
 
   factory _Content.fromJson(Map<String, dynamic> json) = _$ContentImpl.fromJson;
 
@@ -288,6 +308,8 @@ abstract class _Content implements Content {
   bool? get isExplicit;
   @override
   Album? get album;
+  @override
+  String? get description;
   @override
   @JsonKey(ignore: true)
   _$$ContentImplCopyWith<_$ContentImpl> get copyWith =>
