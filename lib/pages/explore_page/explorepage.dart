@@ -21,6 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/content.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/output.dart';
+import '../common/loading_widget.dart';
 
 List<List<Content>> converter(List<Content> songs) {
   int sublistSize = 4;
@@ -154,11 +155,33 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                       future: _getModifiedList(currentOutput.contents ?? []),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return QuickPicks(
-                              songs: snapshot.data as List<List<Content>>);
+                          return Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(7, 7, 0, 5),
+                                    child: Text(
+                                      '${currentOutput.title}',
+                                      style: typography.title,
+                                      textAlign: fluent.TextAlign.left,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: boxSize + 75,
+                                width: double.infinity,
+                                child: QuickPicks(
+                                    songs: snapshot.data as List<List<Content>>),
+                              )
+                            ],
+                          );
                         } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                          return Center(
+                            child: loadingWidget(
+                                context, ref.watch(themeProvider).color),
                           );
                         }
                       },
@@ -171,9 +194,11 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                             children: [
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
-                                child: Text('${currentOutput.title}',style: typography.title,
-                                  textAlign: fluent.TextAlign.left,),
-
+                                child: Text(
+                                  '${currentOutput.title}',
+                                  style: typography.title,
+                                  textAlign: fluent.TextAlign.left,
+                                ),
                               )
                             ],
                           ),
@@ -198,7 +223,9 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                     "assets/cover.jpg";
                                 String title =
                                     currentOutput.contents?[idx].title ?? "NA";
-                                String desc = currentOutput.contents?[idx].description ?? "na";
+                                String desc =
+                                    currentOutput.contents?[idx].description ??
+                                        "na";
                                 String everythingElse = currentOutput
                                         .contents?[idx].artists
                                         ?.map((artist) => artist.name)
@@ -306,9 +333,11 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                 }),
                 itemExtents: List.generate(fullList!.length, (index) => 344.0));
           } else if (dripHome is AsyncError) {
-            return const Text('Oops, something unexpected happened');
+            return const SliverToBoxAdapter(
+                child: Text('Oops, something unexpected happened'));
           } else {
-            return SliverToBoxAdapter(child: const CircularProgressIndicator());
+            return SliverToBoxAdapter(
+                child: loadingWidget(context, ref.watch(themeProvider).color));
           }
         }(),
 
@@ -337,7 +366,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                         width: double.infinity,
                         child: ListView.builder(
                           // shrinkWrap: true,
-                          controller: _listViewControllers[index],
+                          // controller: _listViewControllers[index],
                           physics: const BouncingScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 2),

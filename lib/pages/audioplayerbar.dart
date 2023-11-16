@@ -141,7 +141,12 @@ class TrackInfo extends ConsumerWidget {
 
               case LoadState.failed:
               //_controller.reset();
-                return GestureDetector(
+                return Image.asset(
+            "assets/driprec.png",
+            fit: BoxFit.fill,
+            );
+
+                  GestureDetector(
                   child: Stack(
                     fit: StackFit.expand,
                     children: <Widget>[

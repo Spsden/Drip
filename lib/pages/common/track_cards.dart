@@ -160,6 +160,7 @@ class TrackCardSmall extends StatelessWidget {
         fit: BoxFit.cover,
         cache: false,
         shape: BoxShape.rectangle,
+        enableMemoryCache: true,
         borderRadius: BorderRadius.circular(5),
       ),
     );

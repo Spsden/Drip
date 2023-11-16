@@ -83,6 +83,7 @@ Future<void> main() async {
     await hotKeyManager.unregisterAll();
     await HotKeys.initialize();
     await Hive.initFlutter('Drip');
+    await initHive();
     await openHiveBox('cache', limit: true);
 
     await openHiveBox('settings');
@@ -175,7 +176,11 @@ Future<void> main() async {
     return stack;
   };
 }
-
+Future<void> initHive() async {
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  await Hive.openBox('cacheBox');
+}
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
   final box = await Hive.openBox(boxName).onError((error, stackTrace) async {
     final Directory dir = await getApplicationDocumentsDirectory();

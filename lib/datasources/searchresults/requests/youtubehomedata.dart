@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart' as dio;
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:drip/datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
 import 'package:drip_api/drip_api.dart';
+import 'package:hive/hive.dart';
 import 'package:riverpod/src/framework.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -9,11 +13,31 @@ import 'dart:convert';
 
 part 'youtubehomedata.g.dart';
 
+dio.Dio createDioWithCache() {
+  final options = CacheOptions(
+    store: HiveCacheStore('cacheBox'),
+    policy: CachePolicy.forceCache,
+    priority: CachePriority.high,
+    hitCacheOnErrorExcept: [401, 403],
+    maxStale: const Duration(days: 7),
+  );
+
+  final dioInstance = dio.Dio();
+  dioInstance.interceptors.add(DioCacheInterceptor(options: options));
+  return dioInstance;
+}
+
+dio.Dio dioInstance = createDioWithCache();
 @riverpod
 Future<DripHomePage> getHome(GetHomeRef ref) async {
-  final response = await get(Uri.https('drip-2023.vercel.app', '/gethome'));
-  final json = jsonDecode(response.body) as Map<String, dynamic>;
-  return DripHomePage.fromJson(json);
+ // final response = await  get( Uri.https('drip-2023.vercel.app','/gethome'));
+
+
+  final resdio = await  dioInstance.get('https://drip-2023.vercel.app/gethome');
+  print(resdio.data.runtimeType);
+////  final jsondio =  jsonDecode(resdio)
+  //final json = jsonDecode(response.body) as Map<String, dynamic>;
+  return DripHomePage.fromJson(resdio.data);
 }
 class ApiYouTube {
   String ysearch = 'www.youtube.com';
