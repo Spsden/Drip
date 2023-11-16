@@ -1,5 +1,6 @@
 
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
+import 'package:drip/pages/explore_page/quick_picks.dart';
 import 'package:drip/pages/explore_page/trending_header.dart';
 import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/providers/providers.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
 
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
@@ -82,6 +85,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   Widget build(BuildContext context) {
     final ThemeMode _themeMode = ref.watch(themeProvider).mode;
     fluent.Typography typography = fluent.FluentTheme.of(context).typography;
+   // final AsyncValue<DripHomePage> dripHome = ref.watch(getHomeProvider);
     super.build(context);
     final bool rotated =
         MediaQuery.of(context).size.height < MediaQuery.of(context).size.width;
@@ -106,6 +110,15 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                 headList: headList,
               )),
         ),
+        SliverToBoxAdapter(
+          child:SizedBox(
+              height: boxSize + 85,
+              width: double.infinity,
+
+              child: Placeholder())
+
+        ),
+
         SliverKnownExtentsList(
             delegate: SliverChildBuilderDelegate(
                 addAutomaticKeepAlives: true,

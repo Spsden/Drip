@@ -58,8 +58,8 @@ dependencies:
   media_kit: ^1.1.10
   media_kit_libs_audio: ^1.0.3
 
-#  drip_api:
-#    path: external/drip_api
+  drip_api:
+    path: external/drip_api
 #  media_kit:
 #    path: external/media_kit/media_kit
 #  media_kit_libs_windows_audio:
@@ -76,6 +76,8 @@ dependencies:
   riverpod_infinite_scroll: ^1.0.9
   flutter_dotenv: ^5.1.0
   material_floating_search_bar_2: ^0.5.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
 
 
 
@@ -88,10 +90,12 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   hive_generator: ^2.0.0
   flutter_native_splash: ^2.1.6
-  build_runner:
+  build_runner: ^2.4.6
   custom_lint:
   riverpod_generator: ^2.3.5
   riverpod_lint: ^2.3.3
+  freezed: ^2.4.5
+  json_serializable: ^6.7.1
 
   
 

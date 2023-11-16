@@ -1,7 +1,20 @@
+import 'package:drip/datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
+import 'package:drip_api/drip_api.dart';
+import 'package:riverpod/src/framework.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
+
+part 'youtubehomedata.g.dart';
+
+@riverpod
+Future<DripHomePage> getHome(GetHomeRef ref) async {
+  final response = await get(Uri.https('drip-2023.vercel.app', '/gethome'));
+  final json = jsonDecode(response.body) as Map<String, dynamic>;
+  return DripHomePage.fromJson(json);
+}
 class ApiYouTube {
   String ysearch = 'www.youtube.com';
 
@@ -14,6 +27,12 @@ class ApiYouTube {
 
   var yt = YoutubeExplode();
 
+  Future<List> getQuickPicks() async {
+    List quickPicks = await DripSearch.fetchHomeContent();
+    print(quickPicks[0]['contents'].length.toString());
+    return quickPicks[0]['contents'];
+  }
+
   Future<List<Video>> playListSongs(String id) async {
     final List<Video> results = await yt.playlists.getVideos(id).toList();
     return results;
@@ -25,33 +44,31 @@ class ApiYouTube {
   }
 
   Future<List> searchSuggestions({required String searchQuery}) async {
-    const searchUrl = 'https://suggestqueries-clients6.youtube.com/complete/search?client=firefox&q=';
+    const searchUrl =
+        'https://suggestqueries-clients6.youtube.com/complete/search?client=firefox&q=';
     final Uri link = Uri.parse(searchUrl + searchQuery);
 
     const headers = {
       'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; rv:96.0) Gecko/20100101 Firefox/96.0'
+          'Mozilla/5.0 (Windows NT 10.0; rv:96.0) Gecko/20100101 Firefox/96.0'
     };
 
     try {
-      final response = await get(link,headers: headers);
+      final response = await get(link, headers: headers);
 
-      if(response.statusCode == 200) {
-       // print(response.body);
+      if (response.statusCode == 200) {
+        // print(response.body);
         final List searchSuggestion = jsonDecode(response.body);
-        final List listOfSuggestions = searchSuggestion[1] ;
-
+        final List listOfSuggestions = searchSuggestion[1];
 
         return listOfSuggestions;
       } else {
         return [];
       }
-
     } catch (e) {
       return [];
     }
   }
-
 
   Future<List<Video>> fetchSearchResults(String query) async {
     final List<Video> searchResults = await yt.search.getVideos(query);

@@ -134,11 +134,14 @@ class TrackCardSmall extends StatelessWidget {
 
     var spacer = SizedBox(width: size / 80);
     return mat.ListTile(
+      visualDensity: const mat.VisualDensity(vertical: -2),
+      dense: true,
       tileColor:
           FluentTheme.of(context).resources.cardBackgroundFillColorDefault,
       onTap: () {
         onTrackTap();
       },
+
       //tileColor: ButtonState.resolveWith((states) => Colors.grey),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),

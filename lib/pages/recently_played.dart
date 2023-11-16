@@ -82,7 +82,7 @@ class RecentlyPlayedWidget extends ConsumerWidget {
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 350.0,
-                mainAxisSpacing: 15.0,
+                mainAxisSpacing: 0.1,
                 crossAxisSpacing: 10.0,
                 childAspectRatio: 8 / 2),
             itemBuilder: (context, index) {

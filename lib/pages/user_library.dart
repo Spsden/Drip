@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
+import 'package:drip/pages/explore_page/quick_picks.dart';
 import 'package:drip/providers/ThemesProvider.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
@@ -20,33 +21,38 @@ class UserLibrary extends ConsumerWidget {
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
-          children:  [
-            AddPlayListWidget(),
-            // Container(
-            //   child: Row(
-            //     children: [
-            //       Container(
-            //         width: 200,
-            //         height: 200,
-            //         color: Colors.yellow,
-            //       ),
-            //       Container(
-            //         width: 200,
-            //         height: 200,
-            //         color: Colors.red,
-            //       )
-            //     ],
-            //   ),
-            // ),
-      fluent.AutoSuggestBox(items: []),
-            DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
-            ImportedAndSavedPlaylists()
-          ],
-        ),
-      ),
+      body:Test()
+
+      // Padding(
+      //   padding: const EdgeInsets.symmetric(horizontal: 20),
+      //   child: ListView(
+      //     children:  [
+      //       AddPlayListWidget(),
+      //       // Container(
+      //       //   child: Row(
+      //       //     children: [
+      //       //       Container(
+      //       //         width: 200,
+      //       //         height: 200,
+      //       //         color: Colors.yellow,
+      //       //       ),
+      //       //       Container(
+      //       //         width: 200,
+      //       //         height: 200,
+      //       //         color: Colors.red,
+      //       //       )
+      //       //     ],
+      //       //   ),
+      //       // ),
+      //       Container(
+      //         child: Test(),
+      //       ),
+      // fluent.AutoSuggestBox(items: []),
+      //       DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
+      //       ImportedAndSavedPlaylists()
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

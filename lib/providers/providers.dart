@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
@@ -47,37 +49,37 @@ final searchSuggestionsProvider = FutureProvider.autoDispose((ref) async {
 
 final currentPageIndexProvider = StateProvider((ref) => 0);
 
-class NowPlayingPalette extends StateNotifier<Color> {
-  NowPlayingPalette(this.ref) : super(Colors.transparent);
-
-  final Ref ref;
-
-  // ref.watch(audioPlayerProvider).
-
-  Future<void> updatePalette(String imgUrl) async {
-    PaletteGenerator paletteGenerator;
-    paletteGenerator = await PaletteGenerator.fromImageProvider(
-        ExtendedNetworkImageProvider(imgUrl));
-    Color dominantColor =
-        paletteGenerator.dominantColor?.color ?? Colors.transparent;
-
-    if (dominantColor.computeLuminance() > 0.6) {
-      Color contrastColor =
-          paletteGenerator.darkMutedColor?.color ?? Colors.black;
-      if (dominantColor == contrastColor) {
-        contrastColor = paletteGenerator.lightMutedColor?.color ?? Colors.white;
-      }
-      if (contrastColor.computeLuminance() < 0.6) {
-        dominantColor = contrastColor;
-      }
-    }
-
-    state = dominantColor;
-    //return dominantColor;
-  }
-}
-
-final nowPlayingPaletteProvider =
-    StateNotifierProvider.autoDispose<NowPlayingPalette, Color>((ref) {
-  return NowPlayingPalette(ref);
-});
+// class NowPlayingPalette extends StateNotifier<Color> {
+//   NowPlayingPalette(this.ref) : super(Colors.transparent);
+//
+//   final Ref ref;
+//
+//   // ref.watch(audioPlayerProvider).
+//
+//   Future<void> updatePalette(String imgUrl) async {
+//     PaletteGenerator paletteGenerator;
+//     paletteGenerator = await PaletteGenerator.fromImageProvider(
+//         ExtendedNetworkImageProvider(imgUrl));
+//     Color dominantColor =
+//         paletteGenerator.dominantColor?.color ?? Colors.transparent;
+//
+//     if (dominantColor.computeLuminance() > 0.6) {
+//       Color contrastColor =
+//           paletteGenerator.darkMutedColor?.color ?? Colors.black;
+//       if (dominantColor == contrastColor) {
+//         contrastColor = paletteGenerator.lightMutedColor?.color ?? Colors.white;
+//       }
+//       if (contrastColor.computeLuminance() < 0.6) {
+//         dominantColor = contrastColor;
+//       }
+//     }
+//
+//     state = dominantColor;
+//     //return dominantColor;
+//   }
+// }
+//
+// final nowPlayingPaletteProvider =
+//     StateNotifierProvider.autoDispose<NowPlayingPalette, Color>((ref) {
+//   return NowPlayingPalette(ref);
+// });

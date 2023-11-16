@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:drip/customwidgets/custom_left_pane.dart';
-import 'package:drip/datasources/audiofiles/playback.dart';
 import 'package:drip/pages/audioplayerbar.dart';
 import 'package:drip/pages/currentplaylist.dart' deferred as currentplaylist;
 import 'package:drip/pages/settings.dart' deferred as settings;
@@ -116,7 +115,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
         margin: const EdgeInsets.only(bottom: 85, top: 46),
         width: 400,
         child: Acrylic(
-          tint: ref.watch(nowPlayingPaletteProvider),
+          tint: ref.watch(audioPlayerProvider).color,
           elevation: 10,
           blurAmount: 20,
           luminosityAlpha: 0.4,

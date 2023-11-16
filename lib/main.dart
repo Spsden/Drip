@@ -56,10 +56,9 @@ Future<void> main() async {
   try {
     if (Platform.isWindows) {
       await WindowManager.instance.ensureInitialized();
-        await acrylic.Window.initialize();
+      await acrylic.Window.initialize();
 
       MediaKit.ensureInitialized();
-
 
 
       WindowOptions windowOptions = const WindowOptions(
@@ -95,18 +94,17 @@ Future<void> main() async {
     await AudioControlCentre.initialize();
 
 
-    runApp(ProviderScope(
-        // overrides: [audioControlCentreProvider.overrideWith((ref) {
-        //   final player = ref.watch(audioPlayerProvider);
-        //   final audioControlCentre = AudioControlCentre(player: player, ref: ref);
-        //   return audioControlCentre;
-        // })
-        // ],
-        child:  StartPage()));
+    runApp(const ProviderScope(
+      // overrides: [audioControlCentreProvider.overrideWith((ref) {
+      //   final player = ref.watch(audioPlayerProvider);
+      //   final audioControlCentre = AudioControlCentre(player: player, ref: ref);
+      //   return audioControlCentre;
+      // })
+      // ],
+        child: StartPage()));
   } catch (exception, stacktrace) {
     debugPrint(exception.toString());
     debugPrint(stacktrace.toString());
-
   }
 
   // if (isDesktop) {
@@ -166,15 +164,13 @@ Future<void> main() async {
   //await Window.initialize();
   //WidgetsFlutterBinding.ensureInitialized();
 
- 
-
 
   FlutterError.demangleStackTrace = (StackTrace stack) {
     if (stack is stack_trace.Trace) return stack.vmTrace;
     if (stack is stack_trace.Chain) {
       return stack
-        .toTrace()
-        .vmTrace;
+          .toTrace()
+          .vmTrace;
     }
     return stack;
   };

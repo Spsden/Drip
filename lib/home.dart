@@ -33,6 +33,6 @@ class StartPage extends ConsumerWidget {
           //   glowFactor: is10footScreen() ? 2.0 : 0.0,
           // ),
         ),
-        home: HomeScreen());
+        home:  const SplashScreen());
   }
 }

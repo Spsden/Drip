@@ -321,10 +321,6 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
   //       )).toList();
   // }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -349,34 +345,34 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
             : searchPageState.when(
                 data: (results) {
                   //return Text(results.toString());
-                  List<songs.Songs> songss = [];
-                  if (results['songSearch'] != null) {
-                    songss = results['songSearch'];
-                  }
+                  List<songs.Songs> songss  = results['songSearch'] ?? [];
+                  // if (results['songSearch'] != null) {
+                  //   songss = results['songSearch'];
+                  // }
 
-                  List<Artists> artists = [];
+                  List<Artists> artists  = results['artistSearch'] ?? [];
 
-                  if (results['artistSearch'] != null) {
-                    artists = results['artistSearch'];
-                  }
+                  // if (results['artistSearch'] != null) {
+                  //   artists = results['artistSearch'];
+                  // }
 
-                  List<Albums> albums = [];
-                  if (results['albumSearch'] != null) {
-                    albums = results['albumSearch'];
-                  }
-                  List<CommunityPlaylist> featuredPlaylist = [];
-                  if (results['featuredPlayListSearch'] != null) {
-                    featuredPlaylist = results['featuredPlayListSearch'];
-                  }
-                  List<CommunityPlaylist> communityPlaylist = [];
-                  if (results['communityPlaylistSearch'] != null) {
-                    communityPlaylist = results['communityPlaylistSearch'];
-                  }
+                  List<Albums> albums = results['albumSearch'] ?? [];
+                  // if (results['albumSearch'] != null) {
+                  //   albums = results['albumSearch'];
+                  // }
+                  List<CommunityPlaylist> featuredPlaylist =  results['featuredPlayListSearch'] ?? [];
+                  // if (results['featuredPlayListSearch'] != null) {
+                  //   featuredPlaylist = results['featuredPlayListSearch'];
+                  // }
+                  List<CommunityPlaylist> communityPlaylist =results['communityPlaylistSearch'] ?? [];
+                  // if (results['communityPlaylistSearch'] != null) {
+                  //   communityPlaylist = results['communityPlaylistSearch'];
+                  // }
                   // print(featuredPlaylist.length);
-                  List<Video> videos = [];
-                  if (results['videoSearch'] != null) {
-                    videos = results['videoSearch'];
-                  }
+                  List<Video> videos = results['videoSearch'] ?? [];
+                  // if (results['videoSearch'] != null) {
+                  //   videos = results['videoSearch'];
+                  // }
 
                   songss.addAll(videosToSongs(videos));
 
@@ -435,8 +431,8 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                             ?.apply(fontSizeFactor: 1.0),
                                       ),
                                       FilledButton(
-                                        child: Row(
-                                          children: const [
+                                        child: const Row(
+                                          children: [
                                             //Icon(FluentIcons.more),
                                             // spacer,
                                             Text('Show more',
