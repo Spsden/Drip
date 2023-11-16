@@ -14,3 +14,4 @@ class Output with _$Output {
 
 	factory Output.fromJson(Map<String, dynamic> json) => _$OutputFromJson(json);
 }
+

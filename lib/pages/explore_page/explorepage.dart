@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
 import 'package:drip/pages/explore_page/quick_picks.dart';
 import 'package:drip/pages/explore_page/trending_header.dart';
@@ -67,10 +69,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   // final TextEditingController _controller = TextEditingController();
 
 
+  //IMPLEMENT THIS VERY IMPORTANT
   late List<ScrollController> _listViewControllers;
 
   @override
   bool get wantKeepAlive => true;
+
 
   @override
   void initState() {
@@ -147,6 +151,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                   childCount: fullList!.length - 1, (context, index) {
                 final Output currentOutput = fullList[index];
                 final String? currentOutputTitle = currentOutput.title;
+
                 if (currentOutputTitle == "Quick picks") {
                   final List<List<Content>> quickPicks =
                   converter(currentOutput.contents ?? []);
@@ -164,7 +169,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                     },
                   );
 
-                } else
+                } else {
                   return Stack(
                     children: [
                       Column(children: [
@@ -177,9 +182,124 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                             )
                           ],
                         )
+                        ,  SizedBox(
+                          height: boxSize + 15,
+                          width: double.infinity,
+                          child: ListView.builder(
+                            // shrinkWrap: true,
+                          //  controller: _listViewControllers[index],
+                            physics: const BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            itemCount:currentOutput.contents?.length,
+                            itemBuilder: (context, idx) {
+                              // final List<Content> item = currentOutput.contents ?? [];
+                              bool isMusic = currentOutput.contents?[idx].videoId != null;
+                              String thumb = currentOutput.contents?[idx].thumbnails?.first.url ?? "assets/cover.jpg";
+                              String title = currentOutput.contents?[idx].title ?? "NA";
+
+
+
+                              return GestureDetector(
+                                onTap: () {
+                                  if (isMusic) {
+                                    // var query = item.title;
+                                    // launchUrl(Uri.parse('https://www.youtube.com/results?search_query=$query')
+                                    // );
+                                  } else {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => PlaylistMain(
+                                    //             playlistId: item['playlistId']
+                                    //                 .toString())));
+                                  }
+                                },
+                                child:
+
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.0),
+                                        color:
+                                        _themeMode == fluent.ThemeMode.dark ||
+                                            _themeMode ==
+                                                fluent.ThemeMode.system
+                                            ? fluent.Colors.grey[150]
+                                            .withOpacity(0.4)
+                                            : fluent.Colors.grey[30]),
+                                    margin: const EdgeInsets.only(right: 10),
+                                    width: isMusic
+                                        ? (boxSize - 30) * (16 / 9)
+                                        : boxSize - 30,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                          child: Card(
+                                            margin:
+                                            const EdgeInsets.only(top: 15.0),
+                                            elevation: 5,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(10.0),
+                                            ),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: ExtendedImage.network(
+                                             thumb,
+                                              fit: fluent.BoxFit.cover,
+
+                                              cache: true,
+                                              // loadStateChanged: loadingWidget(context),
+
+                                              clearMemoryCacheIfFailed: true,
+                                              // filterQuality: fluent.FilterQuality.medium,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 15.0,
+                                        ),
+                                        Text(
+                                          title,
+                                          textAlign: TextAlign.left,
+                                          softWrap: false,
+                                          style: const fluent.TextStyle(
+                                              fontWeight: FontWeight.w700),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              bottom: 15, left: 5, right: 5),
+                                          
+                                          // child: Text(
+                                          //   item['type'] != 'video'
+                                          //       ? '${item["count"]} Tracks | ${item["description"]}'
+                                          //       : '${item["count"]} | ${item["description"]}',
+                                          //   textAlign: TextAlign.center,
+                                          //   softWrap: false,
+                                          //   overflow: TextOverflow.ellipsis,
+                                          //   style: TextStyle(
+                                          //     fontSize: 11,
+                                          //     color: Theme.of(context)
+                                          //         .textTheme
+                                          //         .caption!
+                                          //         .color,
+                                          //   ),
+                                          // ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ])
                     ],
                   );
+                }
               }),
                 itemExtents:
                 List.generate(fullList!.length, (index) => 344.0)

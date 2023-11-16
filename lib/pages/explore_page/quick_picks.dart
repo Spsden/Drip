@@ -120,25 +120,22 @@ class QuickPicks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 350, // Adjust the height as per the UI requirement
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: songs.length,
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: SizedBox(
-              //height: 350,
-              width: 200,
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: songs.length,
+      physics: const BouncingScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: SizedBox(
+            //height: 350,
+            width: MediaQuery.of(context).size.width/3.4,
 
-              child: FourQuickPics(data: songs[index]),
-            ),
-          );
-        },
-      ),
+            child: FourQuickPics(data: songs[index]),
+          ),
+        );
+      },
     );
   }
 }
@@ -152,6 +149,8 @@ class FourQuickPics extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView.builder(
         itemCount: 4,
+        physics: NeverScrollableScrollPhysics(),
+
         itemBuilder: ((context, index) {
           final TrackCardData trackData = TrackCardData(
               title: data[index].title,
