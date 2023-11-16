@@ -80,20 +80,20 @@ import '../../datasources/searchresults/requests/youtubehomedata.dart';
 //   }
 // }
 
-class QuickPicks extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Music Tile Layout',
-      home: Scaffold(
-          appBar: AppBar(
-            title: Text('Quick Picks'),
-          ),
-          body: Placeholder()
-      ),
-    );
-  }
-}
+// class QuickPicks extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Music Tile Layout',
+//       home: Scaffold(
+//           appBar: AppBar(
+//             title: Text('Quick Picks'),
+//           ),
+//           body: Placeholder()
+//       ),
+//     );
+//   }
+// }
 
 List<List<Content>> converter(List<Content> songs) {
   int sublistSize = 4;
@@ -111,8 +111,8 @@ List<List<Content>> converter(List<Content> songs) {
   return listOfLists;
 }
 
-class SongListView extends StatelessWidget {
-  const SongListView({super.key, required this.songs});
+class QuickPicks extends StatelessWidget {
+  const QuickPicks({super.key, required this.songs});
 
   final List<List<Content>> songs;
 
@@ -123,12 +123,12 @@ class SongListView extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: songs.length,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(horizontal: 20),
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Container(
+            child: SizedBox(
               //height: 350,
               width: 200,
 
@@ -251,7 +251,7 @@ class Test extends ConsumerWidget {
                         future: _getModifiedList(currentOutput.contents ?? [
                         ]), builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Text(snapshot.data.toString());
+                          return QuickPicks(songs: snapshot.data as List<List<Content>>);
                         } else {
                           return const Center(
                             child: CircularProgressIndicator(),
