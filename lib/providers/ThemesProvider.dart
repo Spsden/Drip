@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -84,7 +85,9 @@ class ThemesProvider extends StateNotifier<AppTheme> {
 
   void setWindowEffect(WindowEffect windowEffect){
     state.windowEffect = windowEffect;
-    print('run');
+    if (kDebugMode) {
+      print('run');
+    }
   }
 }
 

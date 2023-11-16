@@ -67,7 +67,7 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
         selectedColor: ref.watch(themeProvider).color.withOpacity(0.4),
         indicatorColor: Colors.white,
 
-      //  backgroundColor: fluent.FluentTheme.of(context).cardColor,
+       backgroundColor: fluent.FluentTheme.of(context).cardColor,
         selectedTitleTextStyle: const TextStyle(color: Colors.white),
         unselectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,

@@ -88,23 +88,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
 
       drawerScrimColor: Colors.black.withOpacity(0.3),
       bottomNavigationBar: Platform.isWindows
-          ? Container(
-            child: Stack(
-                children: [
-                  Acrylic(
-                    tint: ref.watch(audioPlayerProvider).color,
-                    elevation: 10,
-                    child: Platform.isWindows
-                        ? AudioPlayerBar(
-                      scaffoldKey: _scaffoldKey,
-                    )
-                        : const SizedBox.shrink(),
-                  ),
-                  const Positioned(
-                      bottom: 70, left: 2, right: 2, child: SeekBar())
-                ],
-              ),
-          )
+          ? Stack(
+              children: [
+                Acrylic(
+                  tint: ref.watch(audioPlayerProvider).color,
+                  elevation: 10,
+                  child: Platform.isWindows
+                      ? AudioPlayerBar(
+                    scaffoldKey: _scaffoldKey,
+                  )
+                      : const SizedBox.shrink(),
+                ),
+                const Positioned(
+                    bottom: 70, left: 2, right: 2, child: SeekBar())
+              ],
+            )
           : const SizedBox.shrink(),
       key: _scaffoldKey,
       endDrawer: Container(
@@ -124,14 +122,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
         ),
       ),
       appBar: mat.AppBar(
-        foregroundColor: Colors.transparent,
+        //surfaceTintColor: Colors.blue,
+       // foregroundColor: Colors.blue,
         titleSpacing: 0,
         centerTitle: true,
         leadingWidth: 75,
         elevation: 0,
-         backgroundColor: FluentTheme.of(context).micaBackgroundColor,
+       //  backgroundColor: FluentTheme.of(context).micaBackgroundColor,
         automaticallyImplyLeading: true,
         leading: Button(
+
+          style: ButtonStyle(
+            backgroundColor: ButtonState.all(
+              Colors.transparent
+
+
+             //   FluentTheme.of(context).cardColor
+            )
+
+          ),
             onPressed: () async {
               if (Navigator.canPop(
                   navigatorKeys[ref.read(currentPageIndexProvider)]!
