@@ -21,6 +21,7 @@ _$ContentImpl _$$ContentImplFromJson(Map<String, dynamic> json) =>
           ? null
           : Album.fromJson(json['album'] as Map<String, dynamic>),
       description: json['description'] as String?,
+      playlistId: json['playlistId'] as String?,
     );
 
 Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$ContentImplToJson(_$ContentImpl instance) =>
       'isExplicit': instance.isExplicit,
       'album': instance.album,
       'description': instance.description,
+      'playlistId': instance.playlistId,
     };

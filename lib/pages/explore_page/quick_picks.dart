@@ -124,7 +124,7 @@ class QuickPicks extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemCount: songs.length,
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      //padding: const EdgeInsets.symmetric(horizontal: 20),
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -160,31 +160,28 @@ class FourQuickPics extends ConsumerWidget {
               duration: "na");
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: InkWell(
-              onTap: () {},
-              child: TrackCardSmall(
-                data: trackData,
-                color: Colors.lightBlue,
-                onTrackTap: () {
-                  CurrentMusicInstance currentMusicInstance =
-                      CurrentMusicInstance(
-                          title: trackData.title.toString(),
-                          author: data[index]
-                                  .artists
-                                  ?.map((artist) => artist.name.toString())
-                                  .toList() ??
-                              [],
-                          thumbs: data[index]
-                                  .thumbnails
-                                  ?.map((thumb) => thumb.url.toString())
-                                  .toList() ??
-                              [],
-                          urlOfVideo: 'NA',
-                          videoId: data[index].videoId.toString());
+            child: TrackCardSmall(
+              data: trackData,
+              color: Colors.lightBlue,
+              onTrackTap: () {
+                CurrentMusicInstance currentMusicInstance =
+                    CurrentMusicInstance(
+                        title: trackData.title.toString(),
+                        author: data[index]
+                                .artists
+                                ?.map((artist) => artist.name.toString())
+                                .toList() ??
+                            [],
+                        thumbs: data[index]
+                                .thumbnails
+                                ?.map((thumb) => thumb.url.toString())
+                                .toList() ??
+                            [],
+                        urlOfVideo: 'NA',
+                        videoId: data[index].videoId.toString());
 
-                  ref.read(audioPlayerProvider).open(currentMusicInstance);
-                },
-              ),
+                ref.read(audioPlayerProvider).open(currentMusicInstance);
+              },
             ),
           );
         }));

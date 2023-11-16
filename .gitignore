@@ -10,6 +10,7 @@
 .svn/
 .vscode
 .env
+cacheBox/
 
 # IntelliJ related
 *.iml

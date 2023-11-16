@@ -52,56 +52,52 @@ class TrackCardLarge extends StatelessWidget {
     var spacer = SizedBox(width: size / 80);
     var biggerSpacer = SizedBox(width: size / 40);
     if (SuperSize.width > 700) {
-      return mat.Material(
-        borderRadius: mat.BorderRadius.circular(10),
-        color: color,
-        child: mat.InkWell(
-          customBorder: mat.RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-          //  onHover: ,
-          onTap: () async {
-            onTrackTap();
-          },
-          borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //mainAxisSize: MainAxisSize.min,
-              children: [
-                ExtendedImage.network(
-                  data.thumbnail.toString(),
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  cache: false,
-                  shape: BoxShape.circle,
+      return mat.InkWell(
+        customBorder: mat.RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)),
+        //  onHover: ,
+        onTap: () async {
+          onTrackTap();
+        },
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //mainAxisSize: MainAxisSize.min,
+            children: [
+              ExtendedImage.network(
+                data.thumbnail.toString(),
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+                cache: false,
+                shape: BoxShape.circle,
+              ),
+              spacer,
+              SizedBox(
+                width: size * 1 / 6,
+                child: Text(
+                  data.title.toString(),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                spacer,
-                SizedBox(
-                  width: size * 1 / 6,
-                  child: Text(
-                    data.title.toString(),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              ),
+              spacer,
+              SizedBox(
+                width: size * 1 / 8,
+                child: Text(
+                  data.artist.toString(),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                spacer,
-                SizedBox(
-                  width: size * 1 / 8,
-                  child: Text(
-                    data.artist.toString(),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+              ),
+              SizedBox(
+                // width: localSize * 1 / 15,
+                child: Text(
+                  data.duration.toString(),
+                  overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(
-                  // width: localSize * 1 / 15,
-                  child: Text(
-                    data.duration.toString(),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
@@ -130,10 +126,14 @@ class TrackCardSmall extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size.width;
+    //var size = MediaQuery.of(context).size.width;
 
-    var spacer = SizedBox(width: size / 80);
+   /// var spacer = SizedBox(width: size / 80);
     return mat.ListTile(
+
+
+
+
       visualDensity: const mat.VisualDensity(vertical: -2),
       dense: true,
       tileColor:

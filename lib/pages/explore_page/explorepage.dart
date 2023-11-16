@@ -18,9 +18,11 @@ import 'package:hive/hive.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../datasources/audiofiles/activeaudiodata.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/content.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/output.dart';
+import '../../providers/audio_player_provider.dart';
 import '../common/loading_widget.dart';
 
 List<List<Content>> converter(List<Content> songs) {
@@ -221,6 +223,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                 String thumb = currentOutput
                                         .contents?[idx].thumbnails?.first.url ??
                                     "assets/cover.jpg";
+
                                 String title =
                                     currentOutput.contents?[idx].title ?? "NA";
                                 String desc =
@@ -232,14 +235,40 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                         .toList()
                                         .join(" ") ??
                                     "NA";
+                                String? playlistId = currentOutput.contents?[idx].playlistId ;
+
 
                                 return GestureDetector(
                                   onTap: () {
                                     if (isMusic) {
-                                      // var query = item.title;
-                                      // launchUrl(Uri.parse('https://www.youtube.com/results?search_query=$query')
-                                      // );
-                                    } else {
+                                      CurrentMusicInstance currentMusicInstance =
+                                      CurrentMusicInstance(
+                                          title: title,
+                                          author: currentOutput.contents?[idx].artists?.map((e) => e.name.toString()).toList() ?? [],
+
+                                          thumbs: currentOutput.contents?[idx]
+                                              .thumbnails
+                                              ?.map((thumb) => thumb.url.toString())
+                                              .toList() ??
+                                              [],
+                                          urlOfVideo: 'NA',
+                                          videoId: currentOutput.contents?[idx].videoId ?? "dQw4w9WgXcQ");
+
+                                      ref.read(audioPlayerProvider).open(currentMusicInstance);
+                                    } else if(playlistId != null){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => PlaylistMain(
+                                                  playlistId: playlistId
+                                              )
+                                          )
+                                      );
+
+                                    }
+                                    else {
+                                      print("exeption bhai");
+                                     // print();
                                       // Navigator.push(
                                       //     context,
                                       //     MaterialPageRoute(

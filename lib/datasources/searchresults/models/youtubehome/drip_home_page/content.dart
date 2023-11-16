@@ -16,7 +16,8 @@ class Content with _$Content {
 		List<Thumbnail>? thumbnails,
 		bool? isExplicit,
 		Album? album,
-    String? description
+    String? description,
+		String? playlistId
 	}) = _Content;
 
 	factory Content.fromJson(Map<String, dynamic> json) => _$ContentFromJson(json);
