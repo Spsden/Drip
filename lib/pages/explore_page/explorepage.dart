@@ -171,7 +171,9 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                             children: [
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
-                                child: Text('${currentOutput.title}'),
+                                child: Text('${currentOutput.title}',style: typography.title,
+                                  textAlign: fluent.TextAlign.left,),
+
                               )
                             ],
                           ),
