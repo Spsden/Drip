@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
@@ -23,9 +22,6 @@ import '../../datasources/searchresults/models/youtubehome/drip_home_page/conten
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
 import '../../datasources/searchresults/models/youtubehome/drip_home_page/output.dart';
 
-
-
-
 List<List<Content>> converter(List<Content> songs) {
   int sublistSize = 4;
 
@@ -45,6 +41,7 @@ List<List<Content>> converter(List<Content> songs) {
 Future<List<List<Content>>> _getModifiedList(List<Content> content) async {
   return compute(converter, content);
 }
+
 bool status = false;
 List searchedList = Hive.box('cache').get('ytHome', defaultValue: []) as List;
 List headList = Hive.box('cache').get('ytHomeHead', defaultValue: []) as List;
@@ -68,13 +65,11 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
   //     Hive.box('settings').get('showHistory', defaultValue: true) as bool;
   // final TextEditingController _controller = TextEditingController();
 
-
   //IMPLEMENT THIS VERY IMPORTANT
   late List<ScrollController> _listViewControllers;
 
   @override
   bool get wantKeepAlive => true;
-
 
   @override
   void initState() {
@@ -126,7 +121,6 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
     if (boxSize > 250) boxSize = 250;
     Size size = MediaQuery.of(context).size;
     return CustomScrollView(
-
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverAppBar(
@@ -138,189 +132,186 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
           floating: true,
           flexibleSpace: FlexibleSpaceBar(
               background: TrendingHeader(
-                headList: headList,
-              )),
-        ),(){
+            headList: headList,
+          )),
+        ),
+        () {
           if (dripHome is AsyncData) {
             final DripHomePage data = (dripHome as AsyncData).value;
             final List<Output>? fullList = data.output;
             // final listOfQuickPicks =
 
             return SliverKnownExtentsList(
-              delegate: SliverChildBuilderDelegate(
-                  childCount: fullList!.length - 1, (context, index) {
-                final Output currentOutput = fullList[index];
-                final String? currentOutputTitle = currentOutput.title;
+                delegate: SliverChildBuilderDelegate(
+                    childCount: fullList!.length - 1, (context, index) {
+                  final Output currentOutput = fullList[index];
+                  final String? currentOutputTitle = currentOutput.title;
 
-                if (currentOutputTitle == "Quick picks") {
-                  final List<List<Content>> quickPicks =
-                  converter(currentOutput.contents ?? []);
-                  return FutureBuilder(
-                    future: _getModifiedList(currentOutput.contents ?? []),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return QuickPicks(
-                            songs: snapshot.data as List<List<Content>>);
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
-                  );
-
-                } else {
-                  return Stack(
-                    children: [
-                      Column(children: [
-                        Row(
-                          children: [
-                            Padding(
+                  if (currentOutputTitle == "Quick picks") {
+                    final List<List<Content>> quickPicks =
+                        converter(currentOutput.contents ?? []);
+                    return FutureBuilder(
+                      future: _getModifiedList(currentOutput.contents ?? []),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return QuickPicks(
+                              songs: snapshot.data as List<List<Content>>);
+                        } else {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    );
+                  } else {
+                    return Stack(
+                      children: [
+                        Column(children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
+                                child: Text('${currentOutput.title}'),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: boxSize + 15,
+                            width: double.infinity,
+                            child: ListView.builder(
+                              // shrinkWrap: true,
+                              //  controller: _listViewControllers[index],
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
                               padding:
-                              const EdgeInsets.fromLTRB(7, 7, 0, 5),
-                              child: Text('${currentOutput.title}'),
-                            )
-                          ],
-                        )
-                        ,  SizedBox(
-                          height: boxSize + 15,
-                          width: double.infinity,
-                          child: ListView.builder(
-                            // shrinkWrap: true,
-                          //  controller: _listViewControllers[index],
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            itemCount:currentOutput.contents?.length,
-                            itemBuilder: (context, idx) {
-                              // final List<Content> item = currentOutput.contents ?? [];
-                              bool isMusic = currentOutput.contents?[idx].videoId != null;
-                              String thumb = currentOutput.contents?[idx].thumbnails?.first.url ?? "assets/cover.jpg";
-                              String title = currentOutput.contents?[idx].title ?? "NA";
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              itemCount: currentOutput.contents?.length,
+                              itemBuilder: (context, idx) {
+                                // final List<Content> item = currentOutput.contents ?? [];
+                                bool isMusic =
+                                    currentOutput.contents?[idx].videoId !=
+                                        null;
+                                String thumb = currentOutput
+                                        .contents?[idx].thumbnails?.first.url ??
+                                    "assets/cover.jpg";
+                                String title =
+                                    currentOutput.contents?[idx].title ?? "NA";
+                                String everythingElse = currentOutput
+                                        .contents?[idx].artists
+                                        ?.map((artist) => artist.name)
+                                        .toList()
+                                        .join(" ") ??
+                                    "NA";
 
-
-
-                              return GestureDetector(
-                                onTap: () {
-                                  if (isMusic) {
-                                    // var query = item.title;
-                                    // launchUrl(Uri.parse('https://www.youtube.com/results?search_query=$query')
-                                    // );
-                                  } else {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => PlaylistMain(
-                                    //             playlistId: item['playlistId']
-                                    //                 .toString())));
-                                  }
-                                },
-                                child:
-
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color:
-                                        _themeMode == fluent.ThemeMode.dark ||
-                                            _themeMode ==
-                                                fluent.ThemeMode.system
-                                            ? fluent.Colors.grey[150]
-                                            .withOpacity(0.4)
-                                            : fluent.Colors.grey[30]),
-                                    margin: const EdgeInsets.only(right: 10),
-                                    width: isMusic
-                                        ? (boxSize - 30) * (16 / 9)
-                                        : boxSize - 30,
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                          child: Card(
-                                            margin:
-                                            const EdgeInsets.only(top: 15.0),
-                                            elevation: 5,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (isMusic) {
+                                      // var query = item.title;
+                                      // launchUrl(Uri.parse('https://www.youtube.com/results?search_query=$query')
+                                      // );
+                                    } else {
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) => PlaylistMain(
+                                      //             playlistId: item['playlistId']
+                                      //                 .toString())));
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
                                               BorderRadius.circular(10.0),
-                                            ),
-                                            clipBehavior: Clip.antiAlias,
-                                            child: ExtendedImage.network(
-                                             thumb,
-                                              fit: fluent.BoxFit.cover,
+                                          color: _themeMode ==
+                                                      fluent.ThemeMode.dark ||
+                                                  _themeMode ==
+                                                      fluent.ThemeMode.system
+                                              ? fluent.Colors.grey[150]
+                                                  .withOpacity(0.4)
+                                              : fluent.Colors.grey[30]),
+                                      margin: const EdgeInsets.only(right: 10),
+                                      width: isMusic
+                                          ? (boxSize - 30) * (16 / 9)
+                                          : boxSize - 30,
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: Card(
+                                              margin: const EdgeInsets.only(
+                                                  top: 15.0),
+                                              elevation: 5,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: ExtendedImage.network(
+                                                thumb,
+                                                fit: fluent.BoxFit.cover,
 
-                                              cache: true,
-                                              // loadStateChanged: loadingWidget(context),
+                                                cache: true,
+                                                // loadStateChanged: loadingWidget(context),
 
-                                              clearMemoryCacheIfFailed: true,
-                                              // filterQuality: fluent.FilterQuality.medium,
+                                                clearMemoryCacheIfFailed: true,
+                                                // filterQuality: fluent.FilterQuality.medium,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 15.0,
-                                        ),
-                                        Text(
-                                          title,
-                                          textAlign: TextAlign.left,
-                                          softWrap: false,
-                                          style: const fluent.TextStyle(
-                                              fontWeight: FontWeight.w700),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              bottom: 15, left: 5, right: 5),
-                                          
-                                          // child: Text(
-                                          //   item['type'] != 'video'
-                                          //       ? '${item["count"]} Tracks | ${item["description"]}'
-                                          //       : '${item["count"]} | ${item["description"]}',
-                                          //   textAlign: TextAlign.center,
-                                          //   softWrap: false,
-                                          //   overflow: TextOverflow.ellipsis,
-                                          //   style: TextStyle(
-                                          //     fontSize: 11,
-                                          //     color: Theme.of(context)
-                                          //         .textTheme
-                                          //         .caption!
-                                          //         .color,
-                                          //   ),
-                                          // ),
-                                        )
-                                      ],
+                                          const SizedBox(
+                                            height: 15.0,
+                                          ),
+                                          Text(
+                                            title,
+                                            textAlign: TextAlign.left,
+                                            softWrap: false,
+                                            style: const fluent.TextStyle(
+                                                fontWeight: FontWeight.w700),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                bottom: 15, left: 5, right: 5),
+                                            child: Text(
+                                              everythingElse,
+                                              textAlign: TextAlign.center,
+                                              softWrap: false,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .caption!
+                                                    .color,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ])
-                    ],
-                  );
-                }
-              }),
-                itemExtents:
-                List.generate(fullList!.length, (index) => 344.0)
-
-            );
-
-
+                        ])
+                      ],
+                    );
+                  }
+                }),
+                itemExtents: List.generate(fullList!.length, (index) => 344.0));
           } else if (dripHome is AsyncError) {
             return const Text('Oops, something unexpected happened');
           } else {
             return SliverToBoxAdapter(child: const CircularProgressIndicator());
           }
-
-
         }(),
-
 
         SliverKnownExtentsList(
             delegate: SliverChildBuilderDelegate(
                 addAutomaticKeepAlives: true,
-
                 childCount: searchedList.length, (context, index) {
               return Stack(
                 children: [
@@ -348,15 +339,15 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 2),
                           itemCount:
-                          (searchedList[index]['playlists'] as List).length,
+                              (searchedList[index]['playlists'] as List).length,
                           itemBuilder: (context, idx) {
                             final item = searchedList[index]['playlists'][idx];
                             return GestureDetector(
                               onTap: () {
                                 if (item['type'] == 'video') {
                                   var query = item['title'].toString();
-                                  launchUrl(Uri.parse('https://www.youtube.com/results?search_query=$query')
-                                  );
+                                  launchUrl(Uri.parse(
+                                      'https://www.youtube.com/results?search_query=$query'));
                                 } else {
                                   Navigator.push(
                                       context,
@@ -372,12 +363,12 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10.0),
                                       color:
-                                      _themeMode == fluent.ThemeMode.dark ||
-                                          _themeMode ==
-                                              fluent.ThemeMode.system
-                                          ? fluent.Colors.grey[150]
-                                          .withOpacity(0.4)
-                                          : fluent.Colors.grey[30]),
+                                          _themeMode == fluent.ThemeMode.dark ||
+                                                  _themeMode ==
+                                                      fluent.ThemeMode.system
+                                              ? fluent.Colors.grey[150]
+                                                  .withOpacity(0.4)
+                                              : fluent.Colors.grey[30]),
                                   margin: const EdgeInsets.only(right: 10),
                                   width: item['type'] != 'playlist'
                                       ? (boxSize - 30) * (16 / 9)
@@ -387,11 +378,11 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                       Expanded(
                                         child: Card(
                                           margin:
-                                          const EdgeInsets.only(top: 15.0),
+                                              const EdgeInsets.only(top: 15.0),
                                           elevation: 5,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(10.0),
+                                                BorderRadius.circular(10.0),
                                           ),
                                           clipBehavior: Clip.antiAlias,
                                           child: ExtendedImage.network(
@@ -469,7 +460,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   );
                                 },
                                 foregroundColor: ref.watch(themeProvider).color,
-                                backgroundColor: ref.watch(themeProvider).cardColor,
+                                backgroundColor:
+                                    ref.watch(themeProvider).cardColor,
                                 elevation: 5.0,
                                 child: const Icon(
                                   Icons.navigate_before_rounded,
@@ -490,7 +482,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   );
                                 },
                                 foregroundColor: ref.watch(themeProvider).color,
-                                backgroundColor: ref.watch(themeProvider).cardColor,
+                                backgroundColor:
+                                    ref.watch(themeProvider).cardColor,
                                 elevation: 5.0,
                                 child: const Icon(
                                   Icons.navigate_next_rounded,
