@@ -143,7 +143,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
             if (dripHome is AsyncData) {
               final DripHomePage data = (dripHome as AsyncData).value;
               final List<Output>? fullList = data.output;
-              _listViewControllers.addAll(List.generate(fullList?.length ?? 0, (index) => ScrollController()));
+              _listViewControllers.addAll(List.generate(
+                  fullList?.length ?? 0, (index) => ScrollController()));
               // final listOfQuickPicks =
 
               return SliverKnownExtentsList(
@@ -178,7 +179,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   height: boxSize + 75,
                                   width: double.infinity,
                                   child: QuickPicks(
-                                      songs: snapshot.data as List<List<Content>>),
+                                      songs:
+                                          snapshot.data as List<List<Content>>),
                                 )
                               ],
                             );
@@ -197,7 +199,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                             Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(7, 7, 0, 5),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(7, 7, 0, 5),
                                   child: Text(
                                     '${currentOutput.title}',
                                     style: typography.title,
@@ -211,7 +214,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                               width: double.infinity,
                               child: ListView.builder(
                                 // shrinkWrap: true,
-                                  controller: _listViewControllers[index],
+                                controller: _listViewControllers[index],
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 padding:
@@ -222,55 +225,66 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   bool isMusic =
                                       currentOutput.contents?[idx].videoId !=
                                           null;
-                                  String thumb = currentOutput
-                                          .contents?[idx].thumbnails?.first.url ??
+                                  String thumb = currentOutput.contents?[idx]
+                                          .thumbnails?.first.url ??
                                       "assets/cover.jpg";
 
                                   String title =
-                                      currentOutput.contents?[idx].title ?? "NA";
-                                  String desc =
-                                      currentOutput.contents?[idx].description ??
-                                          "na";
+                                      currentOutput.contents?[idx].title ??
+                                          "NA";
+                                  String desc = currentOutput
+                                          .contents?[idx].description ??
+                                      "na";
                                   String everythingElse = currentOutput
                                           .contents?[idx].artists
                                           ?.map((artist) => artist.name)
                                           .toList()
                                           .join(" ") ??
                                       "NA";
-                                  String? playlistId = currentOutput.contents?[idx].playlistId ;
-
+                                  String? playlistId =
+                                      currentOutput.contents?[idx].playlistId;
 
                                   return GestureDetector(
                                     onTap: () {
                                       if (isMusic) {
-                                        CurrentMusicInstance currentMusicInstance =
-                                        CurrentMusicInstance(
-                                            title: title,
-                                            author: currentOutput.contents?[idx].artists?.map((e) => e.name.toString()).toList() ?? [],
+                                        CurrentMusicInstance
+                                            currentMusicInstance =
+                                            CurrentMusicInstance(
+                                                title: title,
+                                                author: currentOutput
+                                                        .contents?[idx].artists
+                                                        ?.map((e) =>
+                                                            e.name.toString())
+                                                        .toList() ??
+                                                    [],
+                                                thumbs: currentOutput
+                                                        .contents?[idx]
+                                                        .thumbnails
+                                                        ?.map((thumb) => thumb
+                                                            .url
+                                                            .toString())
+                                                        .toList() ??
+                                                    [],
+                                                urlOfVideo: 'NA',
+                                                videoId: currentOutput
+                                                        .contents?[idx]
+                                                        .videoId ??
+                                                    "dQw4w9WgXcQ");
 
-                                            thumbs: currentOutput.contents?[idx]
-                                                .thumbnails
-                                                ?.map((thumb) => thumb.url.toString())
-                                                .toList() ??
-                                                [],
-                                            urlOfVideo: 'NA',
-                                            videoId: currentOutput.contents?[idx].videoId ?? "dQw4w9WgXcQ");
-
-                                        ref.read(audioPlayerProvider).open(currentMusicInstance);
-                                      } else if(playlistId != null){
+                                        ref
+                                            .read(audioPlayerProvider)
+                                            .open(currentMusicInstance);
+                                      } else if (playlistId != null) {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => PlaylistMain(
-                                                    playlistId: playlistId
-                                                )
-                                            )
-                                        );
-
-                                      }
-                                      else {
+                                                builder: (context) =>
+                                                    PlaylistMain(
+                                                        playlistId:
+                                                            playlistId)));
+                                      } else {
                                         print("exeption bhai");
-                                       // print();
+                                        // print();
                                         // Navigator.push(
                                         //     context,
                                         //     MaterialPageRoute(
@@ -293,7 +307,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                                 ? fluent.Colors.grey[150]
                                                     .withOpacity(0.4)
                                                 : fluent.Colors.grey[30]),
-                                        margin: const EdgeInsets.only(right: 10),
+                                        margin:
+                                            const EdgeInsets.only(right: 10),
                                         width: isMusic
                                             ? (boxSize - 30) * (16 / 9)
                                             : boxSize - 30,
@@ -306,7 +321,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                                 elevation: 5,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(10.0),
+                                                      BorderRadius.circular(
+                                                          10.0),
                                                 ),
                                                 clipBehavior: Clip.antiAlias,
                                                 child: ExtendedImage.network(
@@ -316,7 +332,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                                   cache: true,
                                                   // loadStateChanged: loadingWidget(context),
 
-                                                  clearMemoryCacheIfFailed: true,
+                                                  clearMemoryCacheIfFailed:
+                                                      true,
                                                   // filterQuality: fluent.FilterQuality.medium,
                                                 ),
                                               ),
@@ -334,7 +351,9 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                             ),
                                             Container(
                                               margin: const EdgeInsets.only(
-                                                  bottom: 15, left: 5, right: 5),
+                                                  bottom: 15,
+                                                  left: 5,
+                                                  right: 5),
                                               child: Text(
                                                 desc,
                                                 textAlign: TextAlign.center,
@@ -357,18 +376,77 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                 },
                               ),
                             ),
-                          ])
+                          ]),
+                          Positioned.fill(
+                            top: 5,
+                            right: 10,
+                            child: Align(
+                                alignment: Alignment.topRight,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    FloatingActionButton.small(
+                                        heroTag: null,
+                                        onPressed: () {
+                                          _listViewControllers[index].animateTo(
+                                            _listViewControllers[index]
+                                                .position
+                                                .minScrollExtent,
+                                            duration:
+                                            const Duration(milliseconds: 500),
+                                            curve: Curves.ease,
+                                          );
+                                        },
+                                        foregroundColor:
+                                        ref.watch(themeProvider).color,
+                                        backgroundColor:
+                                        ref.watch(themeProvider).cardColor,
+                                        elevation: 5.0,
+                                        child: const Icon(
+                                          Icons.navigate_before_rounded,
+                                          size: 40.0,
+                                        )),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    FloatingActionButton.small(
+                                        heroTag: null,
+                                        onPressed: () {
+                                          _listViewControllers[index].animateTo(
+                                            _listViewControllers[index]
+                                                .position
+                                                .maxScrollExtent,
+                                            duration:
+                                            const Duration(milliseconds: 500),
+                                            curve: Curves.ease,
+                                          );
+                                        },
+                                        foregroundColor:
+                                        ref.watch(themeProvider).color,
+                                        backgroundColor:
+                                        ref.watch(themeProvider).cardColor,
+                                        elevation: 5.0,
+                                        child: const Icon(
+                                          Icons.navigate_next_rounded,
+                                          size: 40.0,
+                                        )),
+                                  ],
+                                )),
+                          )
                         ],
+
                       );
                     }
                   }),
-                  itemExtents: List.generate(fullList!.length, (index) => 344.0));
+                  itemExtents:
+                      List.generate(fullList!.length, (index) => 344.0));
             } else if (dripHome is AsyncError) {
               return const SliverToBoxAdapter(
                   child: Text('Oops, something unexpected happened'));
             } else {
               return SliverToBoxAdapter(
-                  child: loadingWidget(context, ref.watch(themeProvider).color));
+                  child:
+                      loadingWidget(context, ref.watch(themeProvider).color));
             }
           }(),
 
@@ -397,14 +475,16 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                           width: double.infinity,
                           child: ListView.builder(
                             // shrinkWrap: true,
-                             controller: _listViewControllers[index],
+                            controller: _listViewControllers[index],
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.symmetric(horizontal: 2),
                             itemCount:
-                                (searchedList[index]['playlists'] as List).length,
+                                (searchedList[index]['playlists'] as List)
+                                    .length,
                             itemBuilder: (context, idx) {
-                              final item = searchedList[index]['playlists'][idx];
+                              final item =
+                                  searchedList[index]['playlists'][idx];
                               return GestureDetector(
                                 onTap: () {
                                   if (item['type'] == 'video') {
@@ -421,17 +501,19 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                   }
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 0, 8, 0),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
-                                        color:
-                                            _themeMode == fluent.ThemeMode.dark ||
-                                                    _themeMode ==
-                                                        fluent.ThemeMode.system
-                                                ? fluent.Colors.grey[150]
-                                                    .withOpacity(0.4)
-                                                : fluent.Colors.grey[30]),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        color: _themeMode ==
+                                                    fluent.ThemeMode.dark ||
+                                                _themeMode ==
+                                                    fluent.ThemeMode.system
+                                            ? fluent.Colors.grey[150]
+                                                .withOpacity(0.4)
+                                            : fluent.Colors.grey[30]),
                                     margin: const EdgeInsets.only(right: 10),
                                     width: item['type'] != 'playlist'
                                         ? (boxSize - 30) * (16 / 9)
@@ -440,8 +522,8 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                       children: [
                                         Expanded(
                                           child: Card(
-                                            margin:
-                                                const EdgeInsets.only(top: 15.0),
+                                            margin: const EdgeInsets.only(
+                                                top: 15.0),
                                             elevation: 5,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
@@ -518,11 +600,13 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                       _listViewControllers[index]
                                           .position
                                           .minScrollExtent,
-                                      duration: const Duration(milliseconds: 500),
+                                      duration:
+                                          const Duration(milliseconds: 500),
                                       curve: Curves.ease,
                                     );
                                   },
-                                  foregroundColor: ref.watch(themeProvider).color,
+                                  foregroundColor:
+                                      ref.watch(themeProvider).color,
                                   backgroundColor:
                                       ref.watch(themeProvider).cardColor,
                                   elevation: 5.0,
@@ -540,11 +624,13 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                       _listViewControllers[index]
                                           .position
                                           .maxScrollExtent,
-                                      duration: const Duration(milliseconds: 500),
+                                      duration:
+                                          const Duration(milliseconds: 500),
                                       curve: Curves.ease,
                                     );
                                   },
-                                  foregroundColor: ref.watch(themeProvider).color,
+                                  foregroundColor:
+                                      ref.watch(themeProvider).color,
                                   backgroundColor:
                                       ref.watch(themeProvider).cardColor,
                                   elevation: 5.0,
