@@ -143,6 +143,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
             if (dripHome is AsyncData) {
               final DripHomePage data = (dripHome as AsyncData).value;
               final List<Output>? fullList = data.output;
+              _listViewControllers.addAll(List.generate(fullList?.length ?? 0, (index) => ScrollController()));
               // final listOfQuickPicks =
 
               return SliverKnownExtentsList(
@@ -210,7 +211,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                               width: double.infinity,
                               child: ListView.builder(
                                 // shrinkWrap: true,
-                                //  controller: _listViewControllers[index],
+                                  controller: _listViewControllers[index],
                                 physics: const BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 padding:
@@ -396,7 +397,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                           width: double.infinity,
                           child: ListView.builder(
                             // shrinkWrap: true,
-                            // controller: _listViewControllers[index],
+                             controller: _listViewControllers[index],
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             padding: const EdgeInsets.symmetric(horizontal: 2),

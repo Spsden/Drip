@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
 import 'package:system_theme/system_theme.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 
 
 

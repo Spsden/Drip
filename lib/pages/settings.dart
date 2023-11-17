@@ -323,7 +323,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Widget buildExpanderButtons(
-      BuildContext context, Function onTap, Widget leading, Widget title) {
+      BuildContext context, Function onTap, Widget? leading, Widget? title) {
     return HoverButton(
       // key: key,
       onPressed: () {

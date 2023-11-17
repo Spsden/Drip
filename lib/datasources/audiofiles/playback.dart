@@ -31,7 +31,7 @@ class AudioControlCentre extends ChangeNotifier {
   int index = 0;
   List<watchplaylist.Track> tracks = [];
   Map currentTrack = {'title': 'NA', 'artist': 'NA', 'thumb': 'NA'};
-  Color color = Colors.transparent;
+  Color? color ;
 
   double volume = 25.0;
   Duration position = Duration.zero;

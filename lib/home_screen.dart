@@ -91,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
           ? Stack(
               children: [
                 Acrylic(
-                  tint: ref.watch(audioPlayerProvider).color,
+                  tint: ref.watch(audioPlayerProvider).color ?? Colors.transparent,
                   elevation: 10,
                   child: Platform.isWindows
                       ? AudioPlayerBar(
