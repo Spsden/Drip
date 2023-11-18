@@ -7,18 +7,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 
-
 import '../../datasources/searchresults/requests/searchresultsservice.dart';
 import '../../theme.dart';
 import '../common/loading_widget.dart';
 import '../legacy_search.dart';
 
 class AlbumSearch extends StatelessWidget {
-  late List<Albums> albums = [];
+  final List<Albums> albums;
+  final dynamic dynamicData;
+  final bool localApi;
 
-  AlbumSearch({
+  const AlbumSearch({
     Key? key,
     required this.albums,
+    this.dynamicData,
+     this.localApi = false,
   }) : super(key: key);
 
   @override
@@ -42,7 +45,7 @@ class AlbumSearch extends StatelessWidget {
           //width: double.infinity,
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: albums.length,
+            itemCount: localApi ? dynamicData.length : albums.length,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -51,16 +54,18 @@ class AlbumSearch extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 15),
                 child: AlbumCard(
                     albums: Albums(
-                        title: albums[index].title,
-                        thumbnails: albums[index].thumbnails,
-                        browseId: albums[index].browseId,
-                        artists: albums[index].artists,
-                        duration: albums[index].duration,
-                        resultType: albums[index].resultType,
-                        category: albums[index].category,
-                        isExplicit: albums[index].isExplicit,
-                        type: albums[index].type,
-                        year: albums[index].year)),
+                        title: localApi
+                            ? dynamicData[index]['title'] :albums[index].title,
+                        thumbnails: localApi ? [Thumbnail(height: 200, url: dynamicData[index]['images'][1], width: 200)] :  albums[index].thumbnails,
+                        browseId: localApi ? dynamicData[index]['id'] ??"na": albums[index].browseId,
+                        artists:localApi ? [Artist(name:dynamicData[index]['artist'],id: 'NA' )]
+                            :albums[index].artists,
+                        duration: localApi ? "NA" :albums[index].duration,
+                        resultType: localApi ? "NA" : albums[index].resultType,
+                        category: localApi ? "NA" : albums[index].category,
+                        isExplicit: localApi ? false :albums[index].isExplicit,
+                        type: localApi ? "NA" : albums[index].type,
+                        year: localApi ? dynamicData[index]["subtitle"] : albums[index].year)),
               );
             },
           ),
@@ -78,71 +83,61 @@ class AlbumCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Typography typography = FluentTheme.of(context).typography;
     return HoveredCard(
-
-
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-
-              children: [
-                Expanded(
-
-                  child: FadeInImage(
-                    height: 170,
-
-
-                    placeholder: const AssetImage('assets/cover.jpg'),
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                      albums.thumbnails![1].url.toString(),
-                    ),
-                  ),
+            Expanded(
+              child: FadeInImage(
+                height: 170,
+                placeholder: const AssetImage('assets/cover.jpg'),
+                fit: BoxFit.cover,
+                image: NetworkImage(
+                  albums.thumbnails![0].url.toString(),
                 ),
-              ],
+              ),
             ),
-            Column(
-
-              children: [
-                Padding(
-
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(
-                    albums.title,
-                    textAlign: TextAlign.center,
-                    style:
-                    typography.bodyStrong?.apply(fontSizeFactor: 1.0,),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
+          ],
+        ),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                albums.title,
+                textAlign: TextAlign.center,
+                style: typography.bodyStrong?.apply(
+                  fontSizeFactor: 1.0,
                 ),
-                Padding(padding:
-                const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(
-                    '${albums.artists.firstOrNull == null ? 'NA' : albums.artists[0].name}\n${albums.year}',
-                    textAlign: TextAlign.center,
-                    style:
-                    typography.bodyStrong?.apply(fontSizeFactor: 1.0),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-
-                ),
-                Padding(padding:
-                const EdgeInsets.fromLTRB(10, 5, 10, 0),
-                  child: Text(
-                    albums.year,
-                    textAlign: TextAlign.center,
-                    style:
-                    typography.bodyStrong?.apply(fontSizeFactor: 1.0),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                )
-              ],
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '${albums.artists.firstOrNull == null ? 'NA' : albums.artists[0].name}\n${albums.year}',
+                textAlign: TextAlign.center,
+                style: typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+              child: Text(
+                albums.year,
+                textAlign: TextAlign.center,
+                style: typography.bodyStrong?.apply(fontSizeFactor: 1.0),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
             )
           ],
-        ));
+        )
+      ],
+    ));
   }
 }
 

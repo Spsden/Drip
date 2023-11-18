@@ -3,13 +3,13 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:drip/datasources/searchresults/models/youtubehome/drip_home_page/drip_home_page.dart';
 import 'package:drip_api/drip_api.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
 import 'package:riverpod/src/framework.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
-
 
 part 'youtubehomedata.g.dart';
 
@@ -28,17 +28,21 @@ dio.Dio createDioWithCache() {
 }
 
 dio.Dio dioInstance = createDioWithCache();
+String serverAddress = dotenv.get('SERVER');
+
+
 @riverpod
 Future<DripHomePage> getHome(GetHomeRef ref) async {
- // final response = await  get( Uri.https('drip-2023.vercel.app','/gethome'));
+  // final response = await  get( Uri.https('drip-2023.vercel.app','/gethome'));
 
-
-  final resdio = await  dioInstance.get('https://drip-2023.vercel.app/gethome');
-  print(resdio.data.runtimeType);
+  final resdio = await dioInstance.get("${serverAddress}gethome");
+  // print(resdio.data.runtimeType);
 ////  final jsondio =  jsonDecode(resdio)
   //final json = jsonDecode(response.body) as Map<String, dynamic>;
+  print(resdio.runtimeType);
   return DripHomePage.fromJson(resdio.data);
 }
+
 class ApiYouTube {
   String ysearch = 'www.youtube.com';
 

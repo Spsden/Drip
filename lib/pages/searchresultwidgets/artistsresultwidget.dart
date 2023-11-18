@@ -9,12 +9,16 @@ import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ArtistsSearch extends StatelessWidget {
-  late List<Artists> artists = [];
+  final List<Artists> artists;
+  final dynamic dynamicData;
+  final bool localApi;
 
-  ArtistsSearch({
-    Key? key,
-    required this.artists,
-  }) : super(key: key);
+  const ArtistsSearch(
+      {Key? key,
+      required this.artists,
+      this.dynamicData,
+      this.localApi = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +31,24 @@ class ArtistsSearch extends StatelessWidget {
           height: 250,
           // width: 800,
           child: ListView.builder(
-            itemCount: artists.length,
+            itemCount: localApi ? dynamicData.length : artists.length,
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
             itemBuilder: (context, index) {
               return ArtistCard(
                   artists: Artists(
-                      artist: artists[index].artist,
-                      subscribers: '',
-                      browseId: artists[index].browseId,
-                      category: artists[index].category,
-                      radioId: artists[index].radioId,
-                      resultType: artists[index].resultType,
-                      shuffleId: artists[index].shuffleId,
-                      thumbnails: artists[index].thumbnails));
+                      artist: localApi
+                          ? dynamicData[index]['title']
+                          : artists[index].artist,
+                      subscribers:
+                          localApi ? dynamicData[index]['subscribers'] : "NA",
+                      browseId: localApi ? dynamicData[index]['id'] : artists[index].browseId,
+                      category: localApi ? dynamicData[index]['id'] : artists[index].category,
+                      radioId: localApi ? dynamicData[index]['id'] :artists[index].radioId,
+                      resultType:localApi ? dynamicData[index]['id'] : artists[index].resultType,
+                      shuffleId:localApi ? dynamicData[index]['id'] : artists[index].shuffleId,
+                      thumbnails: localApi ? [Thumbnail(height: 200, url: dynamicData[index]['image'], width: 200)] :artists[index].thumbnails));
             },
           ),
         ),
@@ -162,54 +169,54 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
   Widget build(BuildContext context) {
     return ScaffoldPage(
         content: mat.GridView.custom(
-      //itemCount: ref.watch(artistsListResultsProvider(paged)).value?.length,
+            //itemCount: ref.watch(artistsListResultsProvider(paged)).value?.length,
 
-      // semanticChildCount: 10,
-      // shrinkWrap: true,
+            // semanticChildCount: 10,
+            // shrinkWrap: true,
 
-      physics: const BouncingScrollPhysics(),
-      controller: scrollController,
+            physics: const BouncingScrollPhysics(),
+            controller: scrollController,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200.0,
+              mainAxisSpacing: 5.0,
+              crossAxisSpacing: 10.0,
+              childAspectRatio: 1 / 1.5,
+            ),
+            childrenDelegate: mat.SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                const pageLimit = 5;
 
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200.0,
-        mainAxisSpacing: 5.0,
-        crossAxisSpacing: 10.0,
-        childAspectRatio: 1 / 1.5,
-      ),
-      childrenDelegate: mat.SliverChildBuilderDelegate(
+                final page = index ~/ pageLimit + 1;
 
-         (BuildContext context, int index) {
-        const pageLimit = 5;
+                final itemIndexInPage = index % pageLimit;
 
-        final page = index ~/ pageLimit + 1;
+                final results = ref.watch(artistsListResultsProvider(page));
 
-        final itemIndexInPage = index % pageLimit;
+                return results.when(
+                    error: (err, stack) => Text('error $err'),
+                    loading: () =>
+                        const Center(child: mat.CircularProgressIndicator()),
+                    data: (results) {
+                      // itemcount = results.length*page;
 
-        final results = ref.watch(artistsListResultsProvider(page));
+                      print(results.length * page);
+                      if (itemIndexInPage >= results.length) {
+                        scrollController.animateTo(50,
+                            duration: Duration(milliseconds: 600),
+                            curve: Curves.ease);
 
-        return results.when(
-            error: (err, stack) => Text('error $err'),
-            loading: () => const Center(child: mat.CircularProgressIndicator()),
-            data: (results) {
-              // itemcount = results.length*page;
+                        return null;
+                      }
 
-              print(results.length * page);
-              if (itemIndexInPage >= results.length) {
-                scrollController.animateTo(50,
-                    duration: Duration(milliseconds: 600), curve: Curves.ease);
+                      final result = results[itemIndexInPage];
+                      return
 
-                return null;
-              }
+                          //Container(height: 200,width: 200,color: Colors.red,);
 
-              final result = results[itemIndexInPage];
-              return
-
-                  //Container(height: 200,width: 200,color: Colors.red,);
-
-                  ArtistCard(artists: result);
-            });
-      },
-    )));
+                          ArtistCard(artists: result);
+                    });
+              },
+            )));
   }
 }
 

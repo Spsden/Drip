@@ -19,13 +19,17 @@ class TrackBars extends ConsumerStatefulWidget {
   final List<Songs> songs;
   final VoidCallback? onScroll;
   final bool? isLoading;
+  final dynamic dynamicData;
+  final bool localApi;
 
   const TrackBars(
       {Key? key,
       required this.isFromPrimarySearchPage,
       required this.songs,
       this.onScroll,
-      this.isLoading})
+      this.isLoading,
+      this.dynamicData,
+      this.localApi = false})
       : super(key: key);
 
   @override
@@ -33,7 +37,6 @@ class TrackBars extends ConsumerStatefulWidget {
 }
 
 class _TrackBarsState extends ConsumerState<TrackBars> {
-
   final ScrollController _sc = ScrollController();
 
   late WatchPlaylists watchPlaylists;
@@ -46,15 +49,13 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
 
   @override
   void initState() {
-
     super.initState();
 
-;
+
   }
 
   @override
   void dispose() {
-
     super.dispose();
 
     _sc.dispose();
@@ -69,13 +70,15 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
       // margin: const EdgeInsets.symmetric(vertical: 20.0),
       // height: 250,
       child: ListView.builder(
-          itemCount: widget.isFromPrimarySearchPage
-              ? widget.songs.length
+          itemCount: widget.localApi
+              ? widget.dynamicData.length
               : widget.songs.length + 1,
           shrinkWrap: true,
           controller: _sc,
           itemBuilder: (context, index) {
-            if (index == widget.songs.length) {
+            print(widget.localApi);
+
+            if (index == widget.dynamicData.length) {
               return Container(
                   alignment: Alignment.center,
                   width: 500,
@@ -83,10 +86,19 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
                   child:
                       loadingWidget(context, ref.watch(themeProvider).color));
             } else {
+
               return Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                 child: TrackCardLarge(
-                  data: TrackCardData(
+                  data: widget.localApi ?  TrackCardData(
+                      title: widget.dynamicData[index]['title'].toString(),
+                      artist: widget.dynamicData[index]['artist'],
+                      album: 'Drip',
+                      duration: widget.dynamicData[index]['duration'],
+                      thumbnail:
+                      widget.dynamicData[index]['image']):
+
+                  TrackCardData(
                       title: widget.songs[index].title.toString(),
                       artist: widget.songs[index].artists!.isEmpty
                           ? noneAlbum.first.name
@@ -99,21 +111,19 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
                   onTrackTap: () async {
                     CurrentMusicInstance currentMusicInstance =
                         CurrentMusicInstance(
-                            title: widget.songs[index].title.toString(),
-                            author: widget.songs[index].artists
+                            title: widget.localApi ?widget.dynamicData[index]['title'].toString() : widget.songs[index].title.toString(),
+                            author: widget.localApi ?widget.dynamicData[index]['artist'] : widget.songs[index].artists
                                     ?.map((e) => e.name.toString())
                                     .toList() ??
                                 [],
-                            thumbs: widget.songs[index].thumbnails
+                            thumbs:widget.localApi ? widget.dynamicData[index]['image'] :widget.songs[index].thumbnails
                                     ?.map((e) => e.url.toString())
                                     .toList() ??
                                 [],
                             urlOfVideo: 'NA',
-                            videoId: widget.songs[index].videoId);
+                            videoId:widget.localApi ? widget.dynamicData[index]['id'] :widget.songs[index].videoId);
 
                     ref.read(audioPlayerProvider).open(currentMusicInstance);
-
-
                   },
                   color: index % 2 != 0
                       ? Colors.transparent
@@ -144,21 +154,15 @@ class TrackList extends ConsumerStatefulWidget {
 }
 
 class _TrackListState extends ConsumerState<TrackList> {
-
-
   @override
   void initState() {
-
     super.initState();
   }
 
   @override
   void dispose() {
-
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -167,8 +171,7 @@ class _TrackListState extends ConsumerState<TrackList> {
       padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: ListView.custom(
         physics: const BouncingScrollPhysics(),
-        childrenDelegate:
-        SliverChildBuilderDelegate((context,index) {
+        childrenDelegate: SliverChildBuilderDelegate((context, index) {
           const pageLimit = 20;
 
           final page = index ~/ pageLimit + 1;
@@ -178,25 +181,27 @@ class _TrackListState extends ConsumerState<TrackList> {
           return results.when(
               data: (results) {
                 if (itemIndexInPage >= results.length) {
-
-
                   return null;
                 }
 
                 final result = results[itemIndexInPage];
                 return Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: TrackListItem(songs: result, color: itemIndexInPage % 2 != 0 ?Colors.transparent
-                      : ref.watch(themeProvider).mode ==
-                      ThemeMode.dark ||
-                      ref.watch(themeProvider).mode ==
-                          ThemeMode.system
-                      ? Colors.grey[150]
-                      : Colors.grey[40],),
+                  child: TrackListItem(
+                    songs: result,
+                    color: itemIndexInPage % 2 != 0
+                        ? Colors.transparent
+                        : ref.watch(themeProvider).mode == ThemeMode.dark ||
+                                ref.watch(themeProvider).mode ==
+                                    ThemeMode.system
+                            ? Colors.grey[150]
+                            : Colors.grey[40],
+                  ),
                 );
               },
-            error: (err, stack) => Text('error $err'),
-            loading: () => loadingWidget(context, ref.watch(themeProvider).color));
+              error: (err, stack) => Text('error $err'),
+              loading: () =>
+                  loadingWidget(context, ref.watch(themeProvider).color));
         }),
       ),
     );
@@ -222,19 +227,21 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
     return mat.Material(
       borderRadius: mat.BorderRadius.circular(10),
       color: widget.color,
-
       child: mat.InkWell(
         onTap: () async {
-
-          CurrentMusicInstance currentMusicInstance = CurrentMusicInstance(title:widget.songs.title
-              , author: widget.songs.artists?.map((e) => e.name.toString()).toList() ?? [],
-              thumbs:   widget.songs.thumbnails?.map((e) => e.url.toString()).toList() ??
-                  [], urlOfVideo: 'NA', videoId: widget.songs.videoId);
-         await  ref.read(audioPlayerProvider).open(currentMusicInstance);
-
-
-
-
+          CurrentMusicInstance currentMusicInstance = CurrentMusicInstance(
+              title: widget.songs.title,
+              author: widget.songs.artists
+                      ?.map((e) => e.name.toString())
+                      .toList() ??
+                  [],
+              thumbs: widget.songs.thumbnails
+                      ?.map((e) => e.url.toString())
+                      .toList() ??
+                  [],
+              urlOfVideo: 'NA',
+              videoId: widget.songs.videoId);
+          await ref.read(audioPlayerProvider).open(currentMusicInstance);
         },
         borderRadius: BorderRadius.circular(8),
         child: Padding(
@@ -257,7 +264,6 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                 width: MediaQuery.of(context).size.width * 1 / 4,
                 child: Text(
                   widget.songs.title.toString(),
-
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -266,7 +272,6 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                 width: MediaQuery.of(context).size.width * 1 / 8,
                 child: Text(
                   widget.songs.artists![0].name.toString(),
-
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -276,7 +281,6 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                   width: MediaQuery.of(context).size.width * 1 / 8,
                   child: Text(
                     widget.songs.album!.name.toString(),
-
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -284,7 +288,6 @@ class _TrackListItemState extends ConsumerState<TrackListItem> {
                 width: MediaQuery.of(context).size.width * 1 / 15,
                 child: Text(
                   widget.songs.duration.toString(),
-
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

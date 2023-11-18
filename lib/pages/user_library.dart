@@ -1,7 +1,6 @@
 import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
-import 'package:drip/pages/explore_page/quick_picks.dart';
-import 'package:drip/providers/ThemesProvider.dart';
+import 'package:drip/pages/searchresultwidgets/search_page_drip.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
     as playlist;
@@ -21,7 +20,7 @@ class UserLibrary extends ConsumerWidget {
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     return Scaffold(
-      body:Test()
+      body:AllSearchResults2()
 
       // Padding(
       //   padding: const EdgeInsets.symmetric(horizontal: 20),

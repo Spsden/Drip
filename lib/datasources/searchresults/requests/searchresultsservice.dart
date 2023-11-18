@@ -18,13 +18,12 @@ import 'package:http/http.dart' as http;
 import '../models/albumsdataclass.dart';
 import '../models/artistsdataclass.dart' as artists;
 import '../models/communityplaylistdataclass.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' ;
-
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SearchMusic {
-  static  String serverAddress = dotenv.get('SERVER');
-      // 'https://drip-server-fv6tn36q0-spsden.vercel.app/';
+  static String serverAddress = dotenv.get('SERVER');
+
+  // 'https://drip-server-fv6tn36q0-spsden.vercel.app/';
 
   //static const String serverAddress = 'http://192.168.199.131:5000/';
 
@@ -48,7 +47,7 @@ class SearchMusic {
         var featuredPlaylistList = [];
         String? topResultType = 'NONE';
 
-        Object? topResult = 'Lol';
+        Object? topResult;
 
         for (var i = 0; i < morefilter.length; i++) {
           var listMap = morefilter[i];
@@ -71,11 +70,12 @@ class SearchMusic {
             featuredPlaylistList.add(listMap);
           }
 
-        //  print(songslist);
+          //  print(songslist);
 
           try {
             if ((listMap['category']).toString() == 'Top result') {
               //print(listMap['resultType']);
+              print(jsonEncode(listMap));
               switch (listMap['resultType'] as String) {
                 case 'artist':
                   topResult = artists.artistFromJson(jsonEncode(listMap));
@@ -143,11 +143,11 @@ class SearchMusic {
           'topResultType': topResultType
         };
         print(topResultType);
+        print(topResult.toString());
 
         return mapOfSearchResults;
-        // return listofsearchresults;
       } else {
-        // print(response.statusCode.toString());
+
         return {};
       }
     } catch (e) {
@@ -171,9 +171,9 @@ class SearchMusic {
 
         return songOnlyResults;
       } else {
-        return  null;
+        return null;
 
-         // <songs.Songs>[];
+        // <songs.Songs>[];
       }
     } catch (e) {
       if (kDebugMode) {
@@ -260,7 +260,6 @@ class SearchMusic {
       }
     } catch (e) {
       //print(e.toString());
-
     }
   }
 
@@ -279,7 +278,6 @@ class SearchMusic {
         return playlists;
       } else {
         //print(response.statusCode.toString());
-
       }
     } catch (e) {
       //print(e.toString());
@@ -305,7 +303,6 @@ class SearchMusic {
       }
     } catch (e) {
       //print(e.toString());
-
     }
   }
 
@@ -327,7 +324,6 @@ class SearchMusic {
       }
     } catch (e) {
       //print(e.toString());
-
     }
   }
 
@@ -339,22 +335,19 @@ class SearchMusic {
       if (response.statusCode == 200) {
         var rawResponse = response.body;
 
-       // print(rawResponse);
+        // print(rawResponse);
 
         final List<PlaylistDataClass> moodPlaylists =
             playlistDataClassFromJson(rawResponse);
 
         return moodPlaylists;
       } else {
-
         return [response.statusCode];
-        print(response.statusCode);
       }
     } catch (e) {
       if (kDebugMode) {
         print(e.toString());
       }
-
     }
   }
 }

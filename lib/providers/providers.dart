@@ -1,6 +1,9 @@
+import 'dart:convert';
 
+import 'package:drip/datasources/searchresults/models/drip_api_search/drip_search_results/drip_search_results.dart';
 import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
+import 'package:drip_api/drip_api.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +34,18 @@ final searchResultsProvider = FutureProvider.autoDispose<Map>((ref) async {
     print('fetched');
     //print(jsonEncode(res
   }
+  return result;
+});
+
+final dripApiSearchResultsProvider =
+    FutureProvider.autoDispose<List<Map<String,dynamic>>>((ref) async {
+  final result = await YtMusicService().search(ref.watch(searchQueryProvider));
+  //List<DripSearchResults> dripSearchResults = result.map((e) => DripSearchResults.fromJson(jsonDecode(e.toString()))).toList();
+
+  if (kDebugMode) {
+    print('fetched');
+  }
+
   return result;
 });
 

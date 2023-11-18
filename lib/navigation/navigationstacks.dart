@@ -6,6 +6,7 @@ import 'package:drip/pages/playlistmainpage.dart';
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/search_page.dart';
+import 'package:drip/pages/searchresultwidgets/search_page_drip.dart';
 
 import 'package:flutter/material.dart';
 
@@ -142,10 +143,13 @@ class _SecondPageStackState extends State<SecondPageStack> {
           case 'searchpage':
             // final args =
             return MaterialPageRoute(
-                builder: (context) => AllSearchResults(
-                    navigatorKey : widget.navigatorKey,
-                    searchQuery : 'Arijit'),
-                settings: settingsforpagetwo);
+                builder: (context) =>
+                    AllSearchResults2(navigatorKey: widget.navigatorKey));
+
+          //     AllSearchResults(
+          //     navigatorKey : widget.navigatorKey,
+          //     searchQuery : 'Arijit'),
+          // settings: settingsforpagetwo);
 
           case 'songslistpage':
             final args = settingsforpagetwo.arguments;
@@ -188,7 +192,6 @@ class _SecondPageStackState extends State<SecondPageStack> {
                     child: child,
                   );
                 });
-
 
           case 'albumsListPage':
             final args = settingsforpagetwo.arguments;

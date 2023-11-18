@@ -25,10 +25,6 @@ class _MoodsAndCategoriesState extends ConsumerState<MoodsAndCategories> with Au
   bool status = false;
   final RandomColor _randomColor = RandomColor();
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
