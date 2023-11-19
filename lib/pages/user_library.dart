@@ -14,13 +14,15 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'album_page.dart';
+
 class UserLibrary extends ConsumerWidget {
   const UserLibrary({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     return Scaffold(
-      body:AllSearchResults2()
+      body:AlbumPage(albumId: "JJJ",)
 
       // Padding(
       //   padding: const EdgeInsets.symmetric(horizontal: 20),

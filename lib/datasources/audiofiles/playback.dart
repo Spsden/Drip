@@ -347,9 +347,12 @@ class AudioControlCentre extends ChangeNotifier {
     if (!existsInList) {
       if (recentlyPlayedBox.length > 15) {
         recentlyPlayedBox.deleteAt(14);
+        recentlyPlayedBox.add(recentlyPlayed);
+      }else{
+        recentlyPlayedBox.add(recentlyPlayed);
       }
 
-      recentlyPlayedBox.add(recentlyPlayed);
+
     }
     // print(recentlyPlayedBox.values.first.title);
   }

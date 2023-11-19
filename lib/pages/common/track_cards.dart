@@ -53,8 +53,8 @@ class TrackCardLarge extends StatelessWidget {
     //var biggerSpacer = SizedBox(width: size / 40);
     if (SuperSize.width > 700) {
       return mat.InkWell(
-        customBorder: mat.RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)),
+        customBorder:
+            mat.RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         //  onHover: ,
         onTap: () async {
           onTrackTap();
@@ -73,6 +73,29 @@ class TrackCardLarge extends StatelessWidget {
                 fit: BoxFit.cover,
                 cache: false,
                 shape: BoxShape.circle,
+                loadStateChanged: ((state) {
+                  switch (state.extendedImageLoadState) {
+                    case LoadState.loading:
+                      return Image.asset(
+                        "assets/ytCover.png",
+                        fit: BoxFit.fill,
+                      );
+                      break;
+
+                    //return null;
+                    //return state.completedWidget;
+                    case LoadState.completed:
+                      return ExtendedRawImage(
+                        image: state.extendedImageInfo?.image,
+                      );
+                      break;
+                    case LoadState.failed:
+                      return Image.asset(
+                        "assets/ytCover.png",
+                        fit: BoxFit.cover,
+                      );
+                  }
+                }),
               ),
               spacer,
               SizedBox(
@@ -128,12 +151,8 @@ class TrackCardSmall extends StatelessWidget {
   Widget build(BuildContext context) {
     //var size = MediaQuery.of(context).size.width;
 
-   /// var spacer = SizedBox(width: size / 80);
+    /// var spacer = SizedBox(width: size / 80);
     return mat.ListTile(
-
-
-
-
       visualDensity: const mat.VisualDensity(vertical: -2),
       dense: true,
       tileColor:

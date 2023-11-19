@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../models/albumdataclass.dart';
 import '../models/albumsdataclass.dart';
 import '../models/artistsdataclass.dart' as artists;
 import '../models/communityplaylistdataclass.dart';
@@ -147,7 +148,6 @@ class SearchMusic {
 
         return mapOfSearchResults;
       } else {
-
         return {};
       }
     } catch (e) {
@@ -281,6 +281,24 @@ class SearchMusic {
       }
     } catch (e) {
       //print(e.toString());
+    }
+  }
+
+  static Future<AlbumDataClass?> getAlbum(String albumId) async {
+    final response = await http.get(
+        Uri.parse("http://127.0.0.1:5000/albums?browseid=${albumId}"));
+    try {
+      if (response.statusCode == 200) {
+        final AlbumDataClass albumDataClass =
+            AlbumDataClass.fromJson(jsonDecode(response.body));
+        // print(albumDataClass.output?.title);
+
+        return albumDataClass;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 

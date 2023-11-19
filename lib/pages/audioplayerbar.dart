@@ -5,7 +5,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../datasources/audiofiles/playback.dart';
 import '../providers/audio_player_provider.dart';
 
 class AudioPlayerBar extends StatefulWidget {
@@ -62,7 +61,7 @@ class AudioPlayerBarState extends State<AudioPlayerBar>
             const Align(alignment: Alignment.center, child: PlayBackControls()),
             SizedBox(
 
-              // alignment: Alignment.centerRight,
+                // alignment: Alignment.centerRight,
                 width: (size.width * 3) / 10,
                 child: MoreControls(widget.scaffoldKey))
           ],
@@ -111,8 +110,11 @@ class TrackInfo extends ConsumerWidget {
         ExtendedImage.network(
           // ref.watch(activeAudioDataNotifier).thumbnail,
           prov.player!.state.playlist.medias.isNotEmpty
-              ? prov
-              .player!.state.playlist.medias[prov.index].extras!['thumbs'].first
+              ? prov.player!.state.playlist.medias[prov.index].extras!['thumbs']
+                      .isNotEmpty
+                  ? prov.player!.state.playlist.medias[prov.index]
+                      .extras!['thumbs'].isNotEmpty
+                  : 'https://i.imgur.com/L3Ip1wh.png'
               : 'https://i.imgur.com/L3Ip1wh.png',
 
           // width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
@@ -128,7 +130,7 @@ class TrackInfo extends ConsumerWidget {
                     fit: BoxFit.cover, image: AssetImage('assets/cover.jpg'));
 
               case LoadState.completed:
-              // _controller.forward();
+                // _controller.forward();
                 return ExtendedRawImage(
                   image: state.extendedImageInfo?.image,
                   width: 70,
@@ -140,13 +142,13 @@ class TrackInfo extends ConsumerWidget {
                 );
 
               case LoadState.failed:
-              //_controller.reset();
+                //_controller.reset();
                 return Image.asset(
-            "assets/driprec.png",
-            fit: BoxFit.fill,
-            );
+                  "assets/driprec.png",
+                  fit: BoxFit.fill,
+                );
 
-                  GestureDetector(
+                GestureDetector(
                   child: Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
@@ -167,24 +169,23 @@ class TrackInfo extends ConsumerWidget {
           width: 10,
         ),
         SizedBox(
-          width:90,
+          width: 90,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                   prov.player!.state.playlist.medias.isNotEmpty
-                      ? prov
-                      .player!.state.playlist.medias[prov.index].extras!['title']
+                      ? prov.player!.state.playlist.medias[prov.index]
+                          .extras!['title']
                       : 'Click to Play',
                   style: mat.Theme.of(context).textTheme.bodyText1,
                   maxLines: 1),
               const SizedBox(height: 4.0),
               Text(
                 prov.player!.state.playlist.medias.isNotEmpty
-                    ? prov
-                    .player!.state.playlist.medias[prov.index].extras!["author"].first
-
+                    ? prov.player!.state.playlist.medias[prov.index]
+                        .extras!["author"].first
                     : 'NA',
                 maxLines: 1,
                 style: TextStyle(
@@ -282,11 +283,11 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
                 ),
                 ref.watch(audioPlayerProvider).isBuffering
                     ? Container(
-                  margin: const EdgeInsets.all(8.0),
-                  width: largeIcons,
-                  height: largeIcons,
-                  child: const mat.CircularProgressIndicator(),
-                )
+                        margin: const EdgeInsets.all(8.0),
+                        width: largeIcons,
+                        height: largeIcons,
+                        child: const mat.CircularProgressIndicator(),
+                      )
                     : const SizedBox.shrink()
               ],
             ),
@@ -302,9 +303,9 @@ class _PlayBackControlsState extends ConsumerState<PlayBackControls>
           mat.IconButton(
             icon: ref.read(audioPlayerProvider).repeat == true
                 ? const Icon(
-              mat.Icons.repeat,
-              color: Colors.white,
-            )
+                    mat.Icons.repeat,
+                    color: Colors.white,
+                  )
                 : Icon(mat.Icons.repeat, color: Colors.white.withOpacity(0.5)),
             iconSize: smallIcons,
             onPressed: () {

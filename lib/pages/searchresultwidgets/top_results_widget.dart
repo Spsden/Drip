@@ -7,14 +7,7 @@ import '../../providers/audio_player_provider.dart';
 import '../artistspage.dart';
 import '../playlistmainpage.dart';
 
-// class TopResults extends StatelessWidget {
-//   const TopResults({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return  FluentCard();
-//   }
-// }
+
 
 class TopResultType {
   final String title;
@@ -38,7 +31,7 @@ class TopResults extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context,WidgetRef ref) {
-    print(topResult.type);
+   // print(topResult.type);
     return Material(
       elevation: 4.0,
       borderRadius: BorderRadius.circular(12.0),
