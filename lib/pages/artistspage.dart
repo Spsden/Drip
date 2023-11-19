@@ -12,6 +12,8 @@ import 'package:flutter/material.dart' as mat;
 import 'package:drip/datasources/searchresults/models/albumsdataclass.dart'
     as albumD;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drip/datasources/searchresults/models/songsdataclass.dart'
+    as track;
 
 import '../datasources/searchresults/models/artistsdataclass.dart' as artistD;
 
@@ -51,7 +53,8 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); // This is required when using AutomaticKeepAliveClientMixin
+    super.build(
+        context); // This is required when using AutomaticKeepAliveClientMixin
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
@@ -68,23 +71,22 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
           final Output? res = snapshot.data?.output;
           return buildArtistPage(res!, size, spacer, context);
         } else {
-
           return const Placeholder();
         }
       },
     );
   }
 
-  Widget buildArtistPage(Output res, Size size, Widget spacer, BuildContext context) {
+  Widget buildArtistPage(
+      Output res, Size size, Widget spacer, BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     // Rest of your UI code that uses artistData
-    return   CustomScrollView(
+    return CustomScrollView(
       //scrollBehavior: const CupertinoScrollBehavior(),
       physics: const BouncingScrollPhysics(),
       controller: ScrollController(),
       slivers: [
         mat.SliverAppBar(
-
           //leadingWidth: 0,
           titleSpacing: 0,
 
@@ -101,14 +103,13 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
               tooltip: 'Comment Icon',
               onPressed: () {},
             ), //IconButton
-
           ],
 
           expandedHeight: height / 2,
           stretch: true,
           flexibleSpace: mat.FlexibleSpaceBar(
-            titlePadding: const mat.EdgeInsets.only(
-                left: 20, bottom: 60, right: 20),
+            titlePadding:
+                const mat.EdgeInsets.only(left: 20, bottom: 60, right: 20),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -117,8 +118,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                   alignment: Alignment.bottomLeft,
                   width: 200,
                   child: Column(
-                      crossAxisAlignment:
-                      mat.CrossAxisAlignment.start,
+                      crossAxisAlignment: mat.CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
@@ -146,8 +146,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                     // width: 85,
                     child: mat.ElevatedButton(
                       style: mat.ButtonStyle(
-                          backgroundColor:
-                          mat.MaterialStateProperty.all(
+                          backgroundColor: mat.MaterialStateProperty.all(
                               ref.watch(themeProvider).color)),
                       onPressed: () {},
                       child: const Text('Play'),
@@ -162,9 +161,9 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
               blendMode: BlendMode.luminosity,
               shaderCallback: (bounds) {
                 return const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black])
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.black])
                     .createShader(bounds);
               },
               child: FadeInImage(
@@ -175,7 +174,6 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                   image: NetworkImage(
                     res.thumbnails!.last.url.toString(),
                   )),
-
             ),
           ),
 
@@ -186,8 +184,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
             isScrollable: true,
             indicator: mat.UnderlineTabIndicator(
                 borderSide: BorderSide(
-                    width: 4.0,
-                    color: ref.watch(themeProvider).color)),
+                    width: 4.0, color: ref.watch(themeProvider).color)),
             tabs: const [
               mat.Tab(text: 'Albums'),
               mat.Tab(text: 'Songs'),
@@ -199,110 +196,157 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
           ),
         ),
         SliverFillRemaining(
-            child: mat.TabBarView(
-                physics: const BouncingScrollPhysics(),
-                controller: _tabController,
-                children: [
-                  res.albums?.results != null
-                      ?
-
-                  GridView.builder(
-
-                    gridDelegate:
-                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200.0,
-                      mainAxisSpacing: 20.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 1 / 1.3,
+          child: mat.TabBarView(
+              physics: const BouncingScrollPhysics(),
+              controller: _tabController,
+              children: [
+                res.albums?.results != null
+                    ? GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200.0,
+                          mainAxisSpacing: 20.0,
+                          crossAxisSpacing: 10.0,
+                          childAspectRatio: 1 / 1.3,
+                        ),
+                        itemCount: res.albums?.results?.length,
+                        // shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return mat.Material(
+                              child: AlbumCard(
+                                  albums: albumD.Albums(
+                                      title: res.albums!.results![index].title
+                                          .toString(),
+                                      year: res.albums!.results![index].year
+                                          .toString(),
+                                      type: '',
+                                      isExplicit: false,
+                                      category: "NA",
+                                      artists: [],
+                                      resultType: 'albums',
+                                      duration: Duration.zero,
+                                      browseId: res
+                                          .albums!.results![index].browseId
+                                          .toString(),
+                                      thumbnails: res
+                                          .albums!.results![index].thumbnails
+                                          ?.map((e) => albumD.Thumbnail(
+                                              width: e.width ?? 100,
+                                              height: e.height ?? 100,
+                                              url: e.url.toString()))
+                                          .toList())));
+                        },
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                      )
+                    : const Text('No result'),
+                Column(
+                  children: [
+                    Button(child: Text("Show more"), onPressed: () {}),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: res.songs?.results?.length,
+                        itemBuilder: ((context, index) {
+                          return TrackListItem(
+                            songs: track.Songs(
+                                duration: "NA",
+                                album: track.Album(
+                                    name: res.songs!.results?[index].album?.name,
+                                    id: "NA"),
+                                title: res.songs?.results?[index].title ?? "NA",
+                                artists: [
+                                  track.Album(
+                                      name: res.songs!.results?[index].artists
+                                          ?.map((e) => e.name)
+                                          .toList()
+                                          .join(" "),
+                                      id: "NA")
+                                ],
+                                category: "NA",
+                                durationSeconds: 200,
+                                thumbnails: [
+                                  track.Thumbnail(
+                                      height: 22,
+                                      width: 22,
+                                      url: res.songs?.results?[index].thumbnails
+                                          ?.first.url ??
+                                          "assets/ytCover.png")
+                                ],
+                                feedbackTokens:
+                                track.FeedbackTokens(remove: null, add: null),
+                                isExplicit:
+                                res.songs?.results?[index].isExplicit ?? false,
+                                resultType: "SONG",
+                                videoId: res.songs?.results?[index].videoId ??
+                                    "dQw4w9WgXcQ",
+                                year: "NA"),
+                            color: index % 2 != 0
+                                ? Colors.transparent
+                                : ref.watch(themeProvider).mode == ThemeMode.dark ||
+                                ref.watch(themeProvider).mode ==
+                                    ThemeMode.system
+                                ? Colors.grey[150]
+                                : Colors.grey[40],
+                          );
+                        }),
+                      ),
                     ),
-                    itemCount: res.albums?.results?.length,
-                    // shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
+                  ],
+                )
+,
 
-                      return mat.Material(
-                          child: AlbumCard(
-                              albums: albumD.Albums(
-                                  title: res
-                                      .albums!.results![index].title
-                                      .toString(),
-                                  year: res
-                                      .albums!.results![index].year
-                                      .toString(),
-                                  type: '',
-                                  isExplicit: false,
-                                  category: "NA",
-                                  artists:[],
-                                  resultType: 'albums',
-                                  duration: Duration.zero,
-                                  browseId: res.albums!
-                                      .results![index].browseId
-                                      .toString(),
-                                  thumbnails: res.albums!
-                                      .results![index].thumbnails
-                                      ?.map((e) => albumD.Thumbnail(
-                                      width: e.width ?? 100,
-                                      height: e.height ?? 100,
-                                      url: e.url.toString()))
-                                      .toList())));
-                    },
-                    padding:
-                    const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  )
-                      : const Text('No result'),
-                  Text("song page"),
-                 // TrackList(songQuery: _artistsPage..toString()),
-                  res.related?.results != null
-                      ?
-                      Text("related")
+                // TrackList(songQuery: _artistsPage..toString()),
+                res.related?.results != null
+                    ? Text("related")
 
-                  // GridView(
-                  //     gridDelegate:
-                  //     const SliverGridDelegateWithMaxCrossAxisExtent(
-                  //       maxCrossAxisExtent: 200.0,
-                  //       mainAxisSpacing: 10.0,
-                  //       crossAxisSpacing: 10.0,
-                  //       childAspectRatio: 1 / 1.5,
-                  //     ),
-                  //     padding:
-                  //     const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  //     children: List.generate(
-                  //         _artistsPage.related!.results!.length,
-                  //             (index) {
-                  //           //List<artistD.Thumbnail> thumbs = []
-                  //
-                  //           return mat.Material(
-                  //             child: ArtistCard(
-                  //                 artists: artistD.Artists(
-                  //                     subscribers: '',
-                  //                     artist: _artistsPage
-                  //                         .related!.results![index].title,
-                  //                     browseId: _artistsPage.related!
-                  //                         .results![index].browseId,
-                  //                     category: 'null',
-                  //                     radioId: 'null',
-                  //                     resultType: 'null',
-                  //                     shuffleId: 'null',
-                  //                     thumbnails: _artistsPage.related!
-                  //                         .results![index].thumbnails
-                  //                         ?.map((e) => artistD.Thumbnail(
-                  //                         width: e.width,
-                  //                         height: e.height,
-                  //                         url: e.url.toString()))
-                  //                         .toList())),
-                  //           );
-                  //         }))
-                      : const Text('No result'),
-                  const Text('lol'),
-                  mat.ElevatedButton(
-                    onPressed: () {
-                      // print(context.watch<PlayerNotifiers>().searchVal);
-                      // print(_artistsPage
-                      //     .related?.results?.first.thumbnails?.first.url);
-                    },
-                    child: const Text('lol2'),
-                  ),
-                ]),)
+                    // GridView(
+                    //     gridDelegate:
+                    //     const SliverGridDelegateWithMaxCrossAxisExtent(
+                    //       maxCrossAxisExtent: 200.0,
+                    //       mainAxisSpacing: 10.0,
+                    //       crossAxisSpacing: 10.0,
+                    //       childAspectRatio: 1 / 1.5,
+                    //     ),
+                    //     padding:
+                    //     const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                    //     children: List.generate(
+                    //         _artistsPage.related!.results!.length,
+                    //             (index) {
+                    //           //List<artistD.Thumbnail> thumbs = []
+                    //
+                    //           return mat.Material(
+                    //             child: ArtistCard(
+                    //                 artists: artistD.Artists(
+                    //                     subscribers: '',
+                    //                     artist: _artistsPage
+                    //                         .related!.results![index].title,
+                    //                     browseId: _artistsPage.related!
+                    //                         .results![index].browseId,
+                    //                     category: 'null',
+                    //                     radioId: 'null',
+                    //                     resultType: 'null',
+                    //                     shuffleId: 'null',
+                    //                     thumbnails: _artistsPage.related!
+                    //                         .results![index].thumbnails
+                    //                         ?.map((e) => artistD.Thumbnail(
+                    //                         width: e.width,
+                    //                         height: e.height,
+                    //                         url: e.url.toString()))
+                    //                         .toList())),
+                    //           );
+                    //         }))
+                    : const Text('No result'),
+                const Text('lol'),
+                mat.ElevatedButton(
+                  onPressed: () {
+                    // print(context.watch<PlayerNotifiers>().searchVal);
+                    // print(_artistsPage
+                    //     .related?.results?.first.thumbnails?.first.url);
+                  },
+                  child: const Text('lol2'),
+                ),
+              ]),
+        )
       ],
     );
   }
