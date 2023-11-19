@@ -82,12 +82,15 @@ class CommunityPlaylistCard extends StatelessWidget {
     return mat.InkWell(
         onTap: () {
           Navigator.push(
-              context,
-              mat.MaterialPageRoute(
-                  builder: (context) => PlaylistMain(
-                      playlistId: localApi
-                          ? dynamicData['id']
-                          : communityPlaylist!.browseId.toString())));
+            context,
+            mat.MaterialPageRoute(
+              builder: (context) => PlaylistMain(
+                playlistId: localApi
+                    ? dynamicData['id']
+                    : communityPlaylist!.browseId.toString(),
+              ),
+            ),
+          );
         },
         child: HoveredCard(
             child: Column(
@@ -101,7 +104,8 @@ class CommunityPlaylistCard extends StatelessWidget {
                     placeholder: const AssetImage('assets/cover.jpg'),
                     fit: BoxFit.cover,
                     image: NetworkImage(localApi
-                            ? dynamicData['images'][1] ?? dynamicData['images'][0]
+                            ? dynamicData['images'][1] ??
+                                dynamicData['images'][0]
                             : communityPlaylist!.thumbnails[0].url
                         //albums.thumbnails![1].url.toString(),
                         ),

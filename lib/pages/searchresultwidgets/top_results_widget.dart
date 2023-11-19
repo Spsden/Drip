@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../datasources/audiofiles/activeaudiodata.dart';
+import '../../providers/audio_player_provider.dart';
 import '../artistspage.dart';
+import '../playlistmainpage.dart';
 
 // class TopResults extends StatelessWidget {
 //   const TopResults({super.key});
@@ -27,13 +31,14 @@ class TopResultType {
       required this.type});
 }
 
-class TopResults extends StatelessWidget {
+class TopResults extends ConsumerWidget {
   const TopResults({super.key, required this.topResult});
 
   final TopResultType topResult;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    print(topResult.type);
     return Material(
       elevation: 4.0,
       borderRadius: BorderRadius.circular(12.0),
@@ -51,6 +56,32 @@ class TopResults extends StatelessWidget {
                 ),
               );
             }
+
+            if (topResult.type == "Song" ||topResult.type == "Video") {
+              CurrentMusicInstance currentMusicInstance =
+              CurrentMusicInstance(
+                  title: topResult.title ,
+                  author: [topResult.description ?? "NA"] ?? [] ,
+                  thumbs:  [topResult.thumbs],
+                  urlOfVideo: 'NA',
+                  videoId: topResult.someId ?? 'NA' );
+
+              ref.read(audioPlayerProvider).open(currentMusicInstance);
+            }
+
+            if (topResult.type == "Playlist") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PlaylistMain(
+                    playlistId: topResult.someId.toString()
+                  ),
+                ),
+              );
+            }
+
+
+
           } else{
             if (kDebugMode) {
               print("No data");
