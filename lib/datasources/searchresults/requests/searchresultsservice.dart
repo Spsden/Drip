@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 
 import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart'
-    as artistPage;
+    as at;
 import 'package:drip/datasources/searchresults/models/moods_data_class.dart';
 import 'package:drip/datasources/searchresults/models/playlist_data_class.dart';
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
@@ -285,14 +285,14 @@ class SearchMusic {
   }
 
   static Future<AlbumDataClass?> getAlbum(String albumId) async {
-    final response = await http.get(
-        Uri.parse("http://127.0.0.1:5000/albums?browseid=${albumId}"));
+    final response = await http
+        .get(Uri.parse("http://127.0.0.1:5000/albums?browseid=${albumId}"));
     try {
       if (response.statusCode == 200) {
         final AlbumDataClass albumDataClass =
             AlbumDataClass.fromJson(jsonDecode(response.body));
         // print(albumDataClass.output?.title);
-       // print(response.body);
+        // print(response.body);
 
         return albumDataClass;
       } else {
@@ -303,25 +303,23 @@ class SearchMusic {
     }
   }
 
-  static Future getArtistPage(String channelId) async {
-    final response = await http
-        .get(Uri.parse('${serverAddress}artist?channelid=$channelId'));
-
+  static Future<at.ArtistPageData> getArtistPage(String channelId) async {
     try {
+      final response = await http
+          .get(Uri.parse('http://127.0.0.1:5000/artist?channelid=$channelId'));
+
       if (response.statusCode == 200) {
-        var rawResponse = response.body.toString();
-
-        //print(rawResponse);
-
-        final artistPage.ArtistsPageData artistsPage =
-            artistPage.artistsPageDataFromJson(rawResponse);
-        //print(artistsPage.name.toString());
+        final at.ArtistPageData artistsPage =
+            at.ArtistPageData.fromJson(jsonDecode(response.body));
         return artistsPage;
       } else {
-        //print(response.statusCode.toString());
+        // either throw an error or return a default ArtistPageData object
+        throw Exception(
+            'Failed to load artist page data: Status code ${response.statusCode}');
       }
     } catch (e) {
-      //print(e.toString());
+      //  either rethrow the exception or return a default ArtistPageData object
+      throw Exception('Error occurred while fetching artist page data: $e');
     }
   }
 

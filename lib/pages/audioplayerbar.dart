@@ -114,10 +114,14 @@ class TrackInfo extends ConsumerWidget {
             if (prov.player != null &&
                 prov.player!.state.playlist.medias.isNotEmpty &&
                 prov.player!.state.playlist.medias[prov.index].extras != null &&
-                prov.player!.state.playlist.medias[prov.index].extras!['thumbs'] != null &&
-                prov.player!.state.playlist.medias[prov.index].extras!['thumbs'].isNotEmpty) {
+                prov.player!.state.playlist.medias[prov.index]
+                        .extras!['thumbs'] !=
+                    null &&
+                prov.player!.state.playlist.medias[prov.index].extras!['thumbs']
+                    .isNotEmpty) {
               // Returning the first thumbnail URL if conditions are met
-              return prov.player!.state.playlist.medias[prov.index].extras!['thumbs'].first as String;
+              return prov.player!.state.playlist.medias[prov.index]
+                  .extras!['thumbs'].first as String;
             } else {
               // Returning the default URL if any condition fails
               return 'https://i.imgur.com/L3Ip1wh.png';

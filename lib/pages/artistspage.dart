@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/pages/common/tracklist.dart';
@@ -26,7 +28,7 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
     with
         AutomaticKeepAliveClientMixin<ArtistsPage>,
         SingleTickerProviderStateMixin {
-  late ArtistsPageData _artistsPage;
+  late ArtistPageData _artistsPage;
 
   bool status = false;
   bool fetched = false;
@@ -49,260 +51,258 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // This is required when using AutomaticKeepAliveClientMixin
     Typography typography = FluentTheme.of(context).typography;
     const spacer = SizedBox(width: 10.0);
     const biggerSpacer = SizedBox(width: 40.0);
     Size size = MediaQuery.of(context).size;
+
+    return FutureBuilder<ArtistPageData>(
+      future: SearchMusic.getArtistPage(widget.channelId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: Text('Please wait its loading...'));
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasData) {
+          final Output? res = snapshot.data?.output;
+          return buildArtistPage(res!, size, spacer, context);
+        } else {
+
+          return const Placeholder();
+        }
+      },
+    );
+  }
+
+  Widget buildArtistPage(Output res, Size size, Widget spacer, BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    // Rest of your UI code that uses artistData
+    return   CustomScrollView(
+      //scrollBehavior: const CupertinoScrollBehavior(),
+      physics: const BouncingScrollPhysics(),
+      controller: ScrollController(),
+      slivers: [
+        mat.SliverAppBar(
 
-    if (!status) {
-      status = true;
-      SearchMusic.getArtistPage(widget.channelId).then((value) => {
-            if (mounted)
-              {
-                setState(() {
-                  _artistsPage = value;
-                  fetched = true;
-                })
-              }
-          });
-    }
-    return Stack(
-      children: [
-        (!fetched)
-            ? const SizedBox()
-            : CustomScrollView(
-                //scrollBehavior: const CupertinoScrollBehavior(),
-                physics: const BouncingScrollPhysics(),
-                controller: ScrollController(),
-                slivers: [
-                  mat.SliverAppBar(
+          //leadingWidth: 0,
+          titleSpacing: 0,
 
-                    //leadingWidth: 0,
-                    titleSpacing: 0,
+          toolbarHeight: 10,
+          collapsedHeight: 30,
+          // titleSpacing: 5,
+          pinned: true,
+          elevation: 0,
+          //snap: true,
+          floating: true,
+          actions: <Widget>[
+            mat.IconButton(
+              icon: const Icon(mat.Icons.more_horiz_rounded),
+              tooltip: 'Comment Icon',
+              onPressed: () {},
+            ), //IconButton
 
-                    toolbarHeight: 10,
-                    collapsedHeight: 30,
-                    // titleSpacing: 5,
-                     pinned: true,
-                    elevation: 0,
-                    //snap: true,
-                     floating: true,
-                    actions: <Widget>[
-                      mat.IconButton(
-                        icon: const Icon(mat.Icons.more_horiz_rounded),
-                        tooltip: 'Comment Icon',
-                        onPressed: () {},
-                      ), //IconButton
+          ],
 
-                    ],
-
-                    expandedHeight: height / 2,
-                    stretch: true,
-                    flexibleSpace: mat.FlexibleSpaceBar(
-                      titlePadding: const mat.EdgeInsets.only(
-                          left: 20, bottom: 60, right: 20),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            alignment: Alignment.bottomLeft,
-                            width: 200,
-                            child: Column(
-                                crossAxisAlignment:
-                                    mat.CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    _artistsPage.name.toString(),
-                                    style: const mat.TextStyle(fontSize: 35),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const mat.Icon(mat.Icons.subscriptions),
-                                      spacer,
-                                      Text(
-                                        _artistsPage.subscribers.toString(),
-                                        style: const mat.TextStyle(
-                                            fontSize: 10, letterSpacing: 0.2),
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  )
-                                ]),
-                          ),
-                          Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              // width: 85,
-                              child: mat.ElevatedButton(
-                                style: mat.ButtonStyle(
-                                    backgroundColor:
-                                        mat.MaterialStateProperty.all(
-                                            ref.watch(themeProvider).color)),
-                                onPressed: () {},
-                                child: const Text('Play'),
-                              )),
-                        ],
-                      ),
-                      stretchModes: const [
-                        mat.StretchMode.zoomBackground,
-                        mat.StretchMode.blurBackground,
-                      ],
-                      background: ShaderMask(
-                        blendMode: BlendMode.luminosity,
-                        shaderCallback: (bounds) {
-                          return const LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [Colors.transparent, Colors.black])
-                              .createShader(bounds);
-                        },
-                        child: FadeInImage(
-                            placeholder: const AssetImage('assets/artist.jpg'),
-                            width: size.width,
-                            height: size.height,
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              _artistsPage.thumbnails!.last.url.toString(),
-                            )),
-
-                      ),
-                    ),
-
-                    bottom: mat.TabBar(
-                      indicatorWeight: 5,
-                      indicatorSize: mat.TabBarIndicatorSize.label,
-                      automaticIndicatorColorAdjustment: true,
-                      isScrollable: true,
-                      indicator: mat.UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              width: 4.0,
-                              color: ref.watch(themeProvider).color)),
-                      tabs: const [
-                        mat.Tab(text: 'Albums'),
-                        mat.Tab(text: 'Songs'),
-                        mat.Tab(text: 'Related'),
-                        mat.Tab(text: 'Singles'),
-                        mat.Tab(text: 'Videos'),
-                      ],
-                      controller: _tabController,
-                    ),
-                  ),
-                  SliverFillRemaining(
-                      child: mat.TabBarView(
-                          physics: const BouncingScrollPhysics(),
-                          controller: _tabController,
-                          children: [
-                        _artistsPage.albums?.results != null
-                            ? GridView.builder(
-
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 200.0,
-                                  mainAxisSpacing: 20.0,
-                                  crossAxisSpacing: 10.0,
-                                  childAspectRatio: 1 / 1.3,
-                                ),
-                                itemCount: _artistsPage.albums?.results?.length,
-                                // shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-
-                                  return mat.Material(
-                                      child: AlbumCard(
-                                          albums: albumD.Albums(
-                                              title: _artistsPage
-                                                  .albums!.results![index].title
-                                                  .toString(),
-                                              year: _artistsPage
-                                                  .albums!.results![index].year
-                                                  .toString(),
-                                              type: '',
-                                              isExplicit: false,
-                                              category: 'artist',
-                                              artists: List<albumD.Artist>.from([albumD.Artist(name: _artistsPage.name.toString(),id: 'lol')]),
-                                              resultType: 'albums',
-                                              duration: Duration.zero,
-                                              browseId: _artistsPage.albums!
-                                                  .results![index].browseId
-                                                  .toString(),
-                                              thumbnails: _artistsPage.albums!
-                                                  .results![index].thumbnails
-                                                  ?.map((e) => albumD.Thumbnail(
-                                                      width: e.width,
-                                                      height: e.height,
-                                                      url: e.url.toString()))
-                                                  .toList())));
-                                },
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                              )
-                            : const Text('No result'),
-                        TrackList(songQuery: _artistsPage.name.toString()),
-                        _artistsPage.related?.results != null
-                            ? GridView(
-                                gridDelegate:
-                                    const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 200.0,
-                                  mainAxisSpacing: 10.0,
-                                  crossAxisSpacing: 10.0,
-                                  childAspectRatio: 1 / 1.5,
-                                ),
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                                children: List.generate(
-                                    _artistsPage.related!.results!.length,
-                                    (index) {
-                                  //List<artistD.Thumbnail> thumbs = []
-
-                                  return mat.Material(
-                                    child: ArtistCard(
-                                        artists: artistD.Artists(
-                                            subscribers: '',
-                                            artist: _artistsPage
-                                                .related!.results![index].title,
-                                            browseId: _artistsPage.related!
-                                                .results![index].browseId,
-                                            category: 'null',
-                                            radioId: 'null',
-                                            resultType: 'null',
-                                            shuffleId: 'null',
-                                            thumbnails: _artistsPage.related!
-                                                .results![index].thumbnails
-                                                ?.map((e) => artistD.Thumbnail(
-                                                    width: e.width,
-                                                    height: e.height,
-                                                    url: e.url.toString()))
-                                                .toList())),
-                                  );
-                                }))
-                            : const Text('No result'),
-                        const Text('lol'),
-                        mat.ElevatedButton(
-                          onPressed: () {
-                            // print(context.watch<PlayerNotifiers>().searchVal);
-                            print(_artistsPage
-                                .related?.results?.first.thumbnails?.first.url);
-                          },
-                          child: const Text('lol2'),
+          expandedHeight: height / 2,
+          stretch: true,
+          flexibleSpace: mat.FlexibleSpaceBar(
+            titlePadding: const mat.EdgeInsets.only(
+                left: 20, bottom: 60, right: 20),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  alignment: Alignment.bottomLeft,
+                  width: 200,
+                  child: Column(
+                      crossAxisAlignment:
+                      mat.CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          res.name.toString(),
+                          style: const mat.TextStyle(fontSize: 35),
                         ),
-                      ]))
-                ],
-              ),
-        // Positioned.fill(
-        //   top: 12,
-        //   left: 10,
-        //   child: Align(
-        //       alignment: Alignment.topLeft,
-        //       child: FloatingBackButton(
-        //         onPressed: () {
-        //           Navigator.of(context).pop();
-        //         },
-        //       )),
-        // ),
+                        Row(
+                          children: [
+                            const mat.Icon(mat.Icons.subscriptions),
+                            spacer,
+                            Text(
+                              res.subscribers.toString(),
+                              style: const mat.TextStyle(
+                                  fontSize: 10, letterSpacing: 0.2),
+                              maxLines: 2,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        )
+                      ]),
+                ),
+                Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    // width: 85,
+                    child: mat.ElevatedButton(
+                      style: mat.ButtonStyle(
+                          backgroundColor:
+                          mat.MaterialStateProperty.all(
+                              ref.watch(themeProvider).color)),
+                      onPressed: () {},
+                      child: const Text('Play'),
+                    )),
+              ],
+            ),
+            stretchModes: const [
+              mat.StretchMode.zoomBackground,
+              mat.StretchMode.blurBackground,
+            ],
+            background: ShaderMask(
+              blendMode: BlendMode.luminosity,
+              shaderCallback: (bounds) {
+                return const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, Colors.black])
+                    .createShader(bounds);
+              },
+              child: FadeInImage(
+                  placeholder: const AssetImage('assets/artist.jpg'),
+                  width: size.width,
+                  height: size.height,
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    res.thumbnails!.last.url.toString(),
+                  )),
+
+            ),
+          ),
+
+          bottom: mat.TabBar(
+            indicatorWeight: 5,
+            indicatorSize: mat.TabBarIndicatorSize.label,
+            automaticIndicatorColorAdjustment: true,
+            isScrollable: true,
+            indicator: mat.UnderlineTabIndicator(
+                borderSide: BorderSide(
+                    width: 4.0,
+                    color: ref.watch(themeProvider).color)),
+            tabs: const [
+              mat.Tab(text: 'Albums'),
+              mat.Tab(text: 'Songs'),
+              mat.Tab(text: 'Related'),
+              mat.Tab(text: 'Singles'),
+              mat.Tab(text: 'Videos'),
+            ],
+            controller: _tabController,
+          ),
+        ),
+        SliverFillRemaining(
+            child: mat.TabBarView(
+                physics: const BouncingScrollPhysics(),
+                controller: _tabController,
+                children: [
+                  res.albums?.results != null
+                      ? Text("album space")
+
+                  // GridView.builder(
+                  //
+                  //   gridDelegate:
+                  //   const SliverGridDelegateWithMaxCrossAxisExtent(
+                  //     maxCrossAxisExtent: 200.0,
+                  //     mainAxisSpacing: 20.0,
+                  //     crossAxisSpacing: 10.0,
+                  //     childAspectRatio: 1 / 1.3,
+                  //   ),
+                  //   itemCount: _artistsPage.albums?.results?.length,
+                  //   // shrinkWrap: true,
+                  //   physics: const BouncingScrollPhysics(),
+                  //   itemBuilder: (context, index) {
+                  //
+                  //     return mat.Material(
+                  //         child: AlbumCard(
+                  //             albums: albumD.Albums(
+                  //                 title: _artistsPage
+                  //                     .albums!.results![index].title
+                  //                     .toString(),
+                  //                 year: _artistsPage
+                  //                     .albums!.results![index].year
+                  //                     .toString(),
+                  //                 type: '',
+                  //                 isExplicit: false,
+                  //                 category: 'artist',
+                  //                 artists: List<albumD.Artist>.from([albumD.Artist(name: _artistsPage.name.toString(),id: 'lol')]),
+                  //                 resultType: 'albums',
+                  //                 duration: Duration.zero,
+                  //                 browseId: _artistsPage.albums!
+                  //                     .results![index].browseId
+                  //                     .toString(),
+                  //                 thumbnails: _artistsPage.albums!
+                  //                     .results![index].thumbnails
+                  //                     ?.map((e) => albumD.Thumbnail(
+                  //                     width: e.width,
+                  //                     height: e.height,
+                  //                     url: e.url.toString()))
+                  //                     .toList())));
+                  //   },
+                  //   padding:
+                  //   const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  // )
+                      : const Text('No result'),
+                  Text("song page"),
+                 // TrackList(songQuery: _artistsPage..toString()),
+                  res.related?.results != null
+                      ?
+                      Text("related")
+
+                  // GridView(
+                  //     gridDelegate:
+                  //     const SliverGridDelegateWithMaxCrossAxisExtent(
+                  //       maxCrossAxisExtent: 200.0,
+                  //       mainAxisSpacing: 10.0,
+                  //       crossAxisSpacing: 10.0,
+                  //       childAspectRatio: 1 / 1.5,
+                  //     ),
+                  //     padding:
+                  //     const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  //     children: List.generate(
+                  //         _artistsPage.related!.results!.length,
+                  //             (index) {
+                  //           //List<artistD.Thumbnail> thumbs = []
+                  //
+                  //           return mat.Material(
+                  //             child: ArtistCard(
+                  //                 artists: artistD.Artists(
+                  //                     subscribers: '',
+                  //                     artist: _artistsPage
+                  //                         .related!.results![index].title,
+                  //                     browseId: _artistsPage.related!
+                  //                         .results![index].browseId,
+                  //                     category: 'null',
+                  //                     radioId: 'null',
+                  //                     resultType: 'null',
+                  //                     shuffleId: 'null',
+                  //                     thumbnails: _artistsPage.related!
+                  //                         .results![index].thumbnails
+                  //                         ?.map((e) => artistD.Thumbnail(
+                  //                         width: e.width,
+                  //                         height: e.height,
+                  //                         url: e.url.toString()))
+                  //                         .toList())),
+                  //           );
+                  //         }))
+                      : const Text('No result'),
+                  const Text('lol'),
+                  mat.ElevatedButton(
+                    onPressed: () {
+                      // print(context.watch<PlayerNotifiers>().searchVal);
+                      // print(_artistsPage
+                      //     .related?.results?.first.thumbnails?.first.url);
+                    },
+                    child: const Text('lol2'),
+                  ),
+                ]),)
       ],
     );
   }
