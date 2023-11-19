@@ -204,51 +204,51 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                 controller: _tabController,
                 children: [
                   res.albums?.results != null
-                      ? Text("album space")
+                      ?
 
-                  // GridView.builder(
-                  //
-                  //   gridDelegate:
-                  //   const SliverGridDelegateWithMaxCrossAxisExtent(
-                  //     maxCrossAxisExtent: 200.0,
-                  //     mainAxisSpacing: 20.0,
-                  //     crossAxisSpacing: 10.0,
-                  //     childAspectRatio: 1 / 1.3,
-                  //   ),
-                  //   itemCount: _artistsPage.albums?.results?.length,
-                  //   // shrinkWrap: true,
-                  //   physics: const BouncingScrollPhysics(),
-                  //   itemBuilder: (context, index) {
-                  //
-                  //     return mat.Material(
-                  //         child: AlbumCard(
-                  //             albums: albumD.Albums(
-                  //                 title: _artistsPage
-                  //                     .albums!.results![index].title
-                  //                     .toString(),
-                  //                 year: _artistsPage
-                  //                     .albums!.results![index].year
-                  //                     .toString(),
-                  //                 type: '',
-                  //                 isExplicit: false,
-                  //                 category: 'artist',
-                  //                 artists: List<albumD.Artist>.from([albumD.Artist(name: _artistsPage.name.toString(),id: 'lol')]),
-                  //                 resultType: 'albums',
-                  //                 duration: Duration.zero,
-                  //                 browseId: _artistsPage.albums!
-                  //                     .results![index].browseId
-                  //                     .toString(),
-                  //                 thumbnails: _artistsPage.albums!
-                  //                     .results![index].thumbnails
-                  //                     ?.map((e) => albumD.Thumbnail(
-                  //                     width: e.width,
-                  //                     height: e.height,
-                  //                     url: e.url.toString()))
-                  //                     .toList())));
-                  //   },
-                  //   padding:
-                  //   const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                  // )
+                  GridView.builder(
+
+                    gridDelegate:
+                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200.0,
+                      mainAxisSpacing: 20.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 1 / 1.3,
+                    ),
+                    itemCount: res.albums?.results?.length,
+                    // shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+
+                      return mat.Material(
+                          child: AlbumCard(
+                              albums: albumD.Albums(
+                                  title: res
+                                      .albums!.results![index].title
+                                      .toString(),
+                                  year: res
+                                      .albums!.results![index].year
+                                      .toString(),
+                                  type: '',
+                                  isExplicit: false,
+                                  category: "NA",
+                                  artists:[],
+                                  resultType: 'albums',
+                                  duration: Duration.zero,
+                                  browseId: res.albums!
+                                      .results![index].browseId
+                                      .toString(),
+                                  thumbnails: res.albums!
+                                      .results![index].thumbnails
+                                      ?.map((e) => albumD.Thumbnail(
+                                      width: e.width ?? 100,
+                                      height: e.height ?? 100,
+                                      url: e.url.toString()))
+                                      .toList())));
+                    },
+                    padding:
+                    const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                  )
                       : const Text('No result'),
                   Text("song page"),
                  // TrackList(songQuery: _artistsPage..toString()),
