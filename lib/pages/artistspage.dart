@@ -251,7 +251,8 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                             songs: track.Songs(
                                 duration: "NA",
                                 album: track.Album(
-                                    name: res.songs!.results?[index].album?.name,
+                                    name:
+                                        res.songs!.results?[index].album?.name,
                                     id: "NA"),
                                 title: res.songs?.results?[index].title ?? "NA",
                                 artists: [
@@ -269,72 +270,69 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                       height: 22,
                                       width: 22,
                                       url: res.songs?.results?[index].thumbnails
-                                          ?.first.url ??
+                                              ?.first.url ??
                                           "assets/ytCover.png")
                                 ],
-                                feedbackTokens:
-                                track.FeedbackTokens(remove: null, add: null),
+                                feedbackTokens: track.FeedbackTokens(
+                                    remove: null, add: null),
                                 isExplicit:
-                                res.songs?.results?[index].isExplicit ?? false,
+                                    res.songs?.results?[index].isExplicit ??
+                                        false,
                                 resultType: "SONG",
                                 videoId: res.songs?.results?[index].videoId ??
                                     "dQw4w9WgXcQ",
                                 year: "NA"),
                             color: index % 2 != 0
                                 ? Colors.transparent
-                                : ref.watch(themeProvider).mode == ThemeMode.dark ||
-                                ref.watch(themeProvider).mode ==
-                                    ThemeMode.system
-                                ? Colors.grey[150]
-                                : Colors.grey[40],
+                                : ref.watch(themeProvider).mode ==
+                                            ThemeMode.dark ||
+                                        ref.watch(themeProvider).mode ==
+                                            ThemeMode.system
+                                    ? Colors.grey[150]
+                                    : Colors.grey[40],
                           );
                         }),
                       ),
                     ),
                   ],
-                )
-,
+                ),
 
                 // TrackList(songQuery: _artistsPage..toString()),
                 res.related?.results != null
-                    ? Text("related")
+                    ? GridView(
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200.0,
+                          mainAxisSpacing: 10.0,
+                          crossAxisSpacing: 10.0,
+                          childAspectRatio: 1 / 1.5,
+                        ),
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                        children: List.generate(res.related!.results!.length,
+                            (index) {
+                          //List<artistD.Thumbnail> thumbs = []
 
-                    // GridView(
-                    //     gridDelegate:
-                    //     const SliverGridDelegateWithMaxCrossAxisExtent(
-                    //       maxCrossAxisExtent: 200.0,
-                    //       mainAxisSpacing: 10.0,
-                    //       crossAxisSpacing: 10.0,
-                    //       childAspectRatio: 1 / 1.5,
-                    //     ),
-                    //     padding:
-                    //     const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                    //     children: List.generate(
-                    //         _artistsPage.related!.results!.length,
-                    //             (index) {
-                    //           //List<artistD.Thumbnail> thumbs = []
-                    //
-                    //           return mat.Material(
-                    //             child: ArtistCard(
-                    //                 artists: artistD.Artists(
-                    //                     subscribers: '',
-                    //                     artist: _artistsPage
-                    //                         .related!.results![index].title,
-                    //                     browseId: _artistsPage.related!
-                    //                         .results![index].browseId,
-                    //                     category: 'null',
-                    //                     radioId: 'null',
-                    //                     resultType: 'null',
-                    //                     shuffleId: 'null',
-                    //                     thumbnails: _artistsPage.related!
-                    //                         .results![index].thumbnails
-                    //                         ?.map((e) => artistD.Thumbnail(
-                    //                         width: e.width,
-                    //                         height: e.height,
-                    //                         url: e.url.toString()))
-                    //                         .toList())),
-                    //           );
-                    //         }))
+                          return mat.Material(
+                            child: ArtistCard(
+                              artists: artistD.Artists(
+                                subscribers: '',
+                                artist: res.related!.results![index].title,
+                                browseId: res.related!.results![index].browseId,
+                                category: 'null',
+                                radioId: 'null',
+                                resultType: 'null',
+                                shuffleId: 'null',
+                                thumbnails: res
+                                    .related!.results![index].thumbnails
+                                    ?.map((e) => artistD.Thumbnail(
+                                        width: 100,
+                                        height: 100,
+                                        url: e.url.toString()))
+                                    .toList(),
+                              ),
+                            ),
+                          );
+                        }))
                     : const Text('No result'),
                 const Text('lol'),
                 mat.ElevatedButton(
