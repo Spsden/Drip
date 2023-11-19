@@ -116,7 +116,6 @@ class AudioControlCentre extends ChangeNotifier {
 
   Future<void> open(CurrentMusicInstance track, {int index = 0}) async {
     String streamLink = await getAudioUri(track.videoId);
-    debugPrint(streamLink);
 
     Map<String, dynamic> currentPlaying = {
       "title": track.title,

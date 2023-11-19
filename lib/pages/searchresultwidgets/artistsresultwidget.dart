@@ -1,12 +1,13 @@
 import 'package:drip/datasources/searchresults/models/artistsdataclass.dart';
+import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
 import 'package:drip/pages/artistspage.dart';
 import 'package:drip/providers/providers.dart';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ArtistsSearch extends StatelessWidget {
   final List<Artists> artists;
@@ -169,6 +170,28 @@ class ArtistCard extends StatelessWidget {
   }
 }
 
+final artistsProvider = FutureProvider.autoDispose
+    .family<PagingController<int, Artists>, String>((ref, query) {
+  //final propertyApi = ref.read(propertyApiProvider);
+  final controller = PagingController<int, Artists>(firstPageKey: 0);
+
+  controller.addPageRequestListener((pageKey) {
+    SearchMusic.getOnlyArtists(query, pageKey).then((newArtists) {
+      final isLastPage = newArtists.length < 5;
+      if (isLastPage) {
+        controller.appendLastPage(newArtists);
+      } else {
+        final nextPageKey = pageKey + 1;
+        controller.appendPage(newArtists, nextPageKey);
+      }
+    }).catchError((error) {
+      controller.error = error;
+    });
+  });
+
+  return controller;
+});
+
 class ArtistsSearchResults extends ConsumerStatefulWidget {
   final String artistQuery;
 
@@ -196,56 +219,76 @@ class _ArtistsSearchResultsState extends ConsumerState<ArtistsSearchResults> {
 
   @override
   Widget build(BuildContext context) {
+    final pagingController =
+        ref.watch(artistsProvider('justin')); // Default query is empty
     return ScaffoldPage(
-        content: mat.GridView.custom(
-            //itemCount: ref.watch(artistsListResultsProvider(paged)).value?.length,
-
-            // semanticChildCount: 10,
-            // shrinkWrap: true,
-
-            physics: const BouncingScrollPhysics(),
-            controller: scrollController,
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 5.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 1 / 1.5,
-            ),
-            childrenDelegate: mat.SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                const pageLimit = 5;
-
-                final page = index ~/ pageLimit + 1;
-
-                final itemIndexInPage = index % pageLimit;
-
-                final results = ref.watch(artistsListResultsProvider(page));
-
-                return results.when(
-                    error: (err, stack) => Text('error $err'),
-                    loading: () =>
-                        const Center(child: mat.CircularProgressIndicator()),
-                    data: (results) {
-                      // itemcount = results.length*page;
-
-                      print(results.length * page);
-                      if (itemIndexInPage >= results.length) {
-                        scrollController.animateTo(50,
-                            duration: Duration(milliseconds: 600),
-                            curve: Curves.ease);
-
-                        return null;
-                      }
-
-                      final result = results[itemIndexInPage];
-                      return
-
-                          //Container(height: 200,width: 200,color: Colors.red,);
-
-                          ArtistCard(artists: result);
-                    });
-              },
-            )));
+      content: pagingController.when(
+        data: (artists) => PagedGridView<int, Artists>(
+          pagingController: artists,
+          builderDelegate: PagedChildBuilderDelegate<Artists>(
+              itemBuilder: (context, artist, index) =>
+                  ArtistCard(artists: artist)),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200.0,
+            mainAxisSpacing: 5.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 1 / 1.5,
+          ),
+        ),
+        loading: () => Center(child: mat.CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(child: Text('Error: $error')),
+      ),
+      // content: mat.GridView.custom(
+      //   //itemCount: ref.watch(artistsListResultsProvider(paged)).value?.length,
+      //
+      //   // semanticChildCount: 10,
+      //   // shrinkWrap: true,
+      //
+      //   physics: const BouncingScrollPhysics(),
+      //   controller: scrollController,
+      //   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+      //     maxCrossAxisExtent: 200.0,
+      //     mainAxisSpacing: 5.0,
+      //     crossAxisSpacing: 10.0,
+      //     childAspectRatio: 1 / 1.5,
+      //   ),
+      //   childrenDelegate: mat.SliverChildBuilderDelegate(
+      //     (BuildContext context, int index) {
+      //       const pageLimit = 5;
+      //
+      //       final page = index ~/ pageLimit + 1;
+      //
+      //       final itemIndexInPage = index % pageLimit;
+      //
+      //       final results = ref.watch(artistsListResultsProvider(page));
+      //
+      //       return results.when(
+      //           error: (err, stack) => Text('error $err'),
+      //           loading: () =>
+      //               const Center(child: mat.CircularProgressIndicator()),
+      //           data: (results) {
+      //             // itemcount = results.length*page;
+      //
+      //             print(results.length * page);
+      //             if (itemIndexInPage >= results.length) {
+      //               // scrollController.animateTo(50,
+      //               //     duration: Duration(milliseconds: 600),
+      //               //     curve: Curves.ease);
+      //
+      //               return null;
+      //             }
+      //
+      //             final result = results[itemIndexInPage];
+      //             return
+      //
+      //                 //Container(height: 200,width: 200,color: Colors.red,);
+      //
+      //                 ArtistCard(artists: result);
+      //           });
+      //     },
+      //   ),
+      // ),
+    );
   }
 }
 

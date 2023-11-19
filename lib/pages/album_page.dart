@@ -154,6 +154,7 @@ class _AlbumPageState extends ConsumerState<AlbumPage>
                                 thumbnail: null),
                             songIndex: index,
                             onTrackTap: () {
+                             // print(tracks[index]);
 
                               CurrentMusicInstance currentMusicInstance =
                               CurrentMusicInstance(
@@ -163,7 +164,7 @@ class _AlbumPageState extends ConsumerState<AlbumPage>
                                       ?.map((e) => e.name.toString()).toList() ?? [],
                                   thumbs: [],
                                   urlOfVideo: 'NA',
-                                  videoId: tracks[index].videoId ?? "dQw4w9WgXcQ");
+                                  videoId: tracks[index].videoId.toString());
 
                               ref.read(audioPlayerProvider).open(currentMusicInstance);
                             },

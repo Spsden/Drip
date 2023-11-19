@@ -39,7 +39,7 @@ dependencies:
   sliding_sheet: ^0.5.2
   fluentui_system_icons: ^1.1.158
 #  material_floating_search_bar: ^0.3.7
-  infinite_scroll_pagination: ^3.1.0
+  infinite_scroll_pagination: ^4.0.0
   msix: ^3.0.1
   random_color: ^1.0.6-nullsafety
   gradient_widgets: ^0.6.0
@@ -73,7 +73,7 @@ dependencies:
       ref: d244151d8df1719cf0cd08c71862300eac1cdaca
   font_awesome_flutter: ^10.3.0
   easy_debounce: ^2.0.3
-  riverpod_infinite_scroll: ^1.0.9
+#  riverpod_infinite_scroll: ^1.0.9
   flutter_dotenv: ^5.1.0
   material_floating_search_bar_2: ^0.5.0
   freezed_annotation: ^2.4.1

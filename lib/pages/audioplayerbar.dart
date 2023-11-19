@@ -109,13 +109,20 @@ class TrackInfo extends ConsumerWidget {
       children: [
         ExtendedImage.network(
           // ref.watch(activeAudioDataNotifier).thumbnail,
-          prov.player!.state.playlist.medias.isNotEmpty
-              ? prov.player!.state.playlist.medias[prov.index].extras!['thumbs']
-                      .isNotEmpty
-                  ? prov.player!.state.playlist.medias[prov.index]
-                      .extras!['thumbs'].isNotEmpty
-                  : 'https://i.imgur.com/L3Ip1wh.png'
-              : 'https://i.imgur.com/L3Ip1wh.png',
+          (() {
+            // Checking if all the necessary conditions are met
+            if (prov.player != null &&
+                prov.player!.state.playlist.medias.isNotEmpty &&
+                prov.player!.state.playlist.medias[prov.index].extras != null &&
+                prov.player!.state.playlist.medias[prov.index].extras!['thumbs'] != null &&
+                prov.player!.state.playlist.medias[prov.index].extras!['thumbs'].isNotEmpty) {
+              // Returning the first thumbnail URL if conditions are met
+              return prov.player!.state.playlist.medias[prov.index].extras!['thumbs'].first as String;
+            } else {
+              // Returning the default URL if any condition fails
+              return 'https://i.imgur.com/L3Ip1wh.png';
+            }
+          })(),
 
           // width: MediaQuery.of(context).size.width > 500 ? 70 : 0,
           // height: MediaQuery.of(context).size.height > 500 ? 70 : 0,

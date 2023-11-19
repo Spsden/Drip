@@ -183,11 +183,11 @@ class SearchMusic {
     }
   }
 
-  static Future getOnlyArtists(String searchquery, int pageNum) async {
+  static Future getOnlyArtists(String searchQuery, int pageNum) async {
     //int numOfResults = 30;
 
     final response = await http.get(Uri.parse(
-        '${serverAddress}searchwithfilter?query=$searchquery&filter=artists&pageNum=$pageNum'));
+        '${serverAddress}searchwithfilter?query=$searchQuery&filter=artists&pageNum=$pageNum&limit=5'));
 
     if (response.statusCode == 200) {
       var responselist = jsonDecode(response.body) as List;
@@ -292,6 +292,7 @@ class SearchMusic {
         final AlbumDataClass albumDataClass =
             AlbumDataClass.fromJson(jsonDecode(response.body));
         // print(albumDataClass.output?.title);
+       // print(response.body);
 
         return albumDataClass;
       } else {
