@@ -65,7 +65,7 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
   Widget build(BuildContext context) {
     Hive.openBox('recentlyPlayed');
     return Container(
-      alignment: Alignment.centerLeft,
+      //alignment: Alignment.centerLeft,
       //padding: EdgeInsets.only(top: 20),
       // margin: const EdgeInsets.symmetric(vertical: 20.0),
       // height: 250,
@@ -111,12 +111,12 @@ class _TrackBarsState extends ConsumerState<TrackBars> {
                   onTrackTap: () async {
                     CurrentMusicInstance currentMusicInstance =
                         CurrentMusicInstance(
-                            title: widget.localApi ?widget.dynamicData[index]['title'].toString() : widget.songs[index].title.toString(),
-                            author: widget.localApi ?widget.dynamicData[index]['artist'] : widget.songs[index].artists
+                            title: widget.localApi ? widget.dynamicData[index]['title'].toString() : widget.songs[index].title.toString(),
+                            author: widget.localApi ? [widget.dynamicData[index]['artist']] : widget.songs[index].artists
                                     ?.map((e) => e.name.toString())
                                     .toList() ??
                                 [],
-                            thumbs:widget.localApi ? widget.dynamicData[index]['image'] :widget.songs[index].thumbnails
+                            thumbs:widget.localApi ? [widget.dynamicData[index]['image']] :widget.songs[index].thumbnails
                                     ?.map((e) => e.url.toString())
                                     .toList() ??
                                 [],

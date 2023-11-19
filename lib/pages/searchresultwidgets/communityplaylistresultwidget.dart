@@ -101,7 +101,7 @@ class CommunityPlaylistCard extends StatelessWidget {
                     placeholder: const AssetImage('assets/cover.jpg'),
                     fit: BoxFit.cover,
                     image: NetworkImage(localApi
-                            ? dynamicData['images'][1]
+                            ? dynamicData['images'][1] ?? dynamicData['images'][0]
                             : communityPlaylist!.thumbnails[0].url
                         //albums.thumbnails![1].url.toString(),
                         ),

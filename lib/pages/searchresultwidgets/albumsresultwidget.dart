@@ -21,7 +21,7 @@ class AlbumSearch extends StatelessWidget {
     Key? key,
     required this.albums,
     this.dynamicData,
-     this.localApi = false,
+    this.localApi = false,
   }) : super(key: key);
 
   @override
@@ -55,17 +55,34 @@ class AlbumSearch extends StatelessWidget {
                 child: AlbumCard(
                     albums: Albums(
                         title: localApi
-                            ? dynamicData[index]['title'] :albums[index].title,
-                        thumbnails: localApi ? [Thumbnail(height: 200, url: dynamicData[index]['images'][1], width: 200)] :  albums[index].thumbnails,
-                        browseId: localApi ? dynamicData[index]['id'] ??"na": albums[index].browseId,
-                        artists:localApi ? [Artist(name:dynamicData[index]['artist'],id: 'NA' )]
-                            :albums[index].artists,
-                        duration: localApi ? "NA" :albums[index].duration,
+                            ? dynamicData[index]['title']
+                            : albums[index].title,
+                        thumbnails: localApi
+                            ? [
+                                Thumbnail(
+                                    height: 200,
+                                    url: dynamicData[index]['images'][1],
+                                    width: 200)
+                              ]
+                            : albums[index].thumbnails,
+                        browseId: localApi
+                            ? dynamicData[index]['id'] ?? "na"
+                            : albums[index].browseId,
+                        artists: localApi
+                            ? [
+                                Artist(
+                                    name: dynamicData[index]['artist'],
+                                    id: 'NA')
+                              ]
+                            : albums[index].artists,
+                        duration: localApi ? "NA" : albums[index].duration,
                         resultType: localApi ? "NA" : albums[index].resultType,
                         category: localApi ? "NA" : albums[index].category,
-                        isExplicit: localApi ? false :albums[index].isExplicit,
+                        isExplicit: localApi ? false : albums[index].isExplicit,
                         type: localApi ? "NA" : albums[index].type,
-                        year: localApi ? dynamicData[index]["subtitle"] : albums[index].year)),
+                        year: localApi
+                            ? dynamicData[index]["subtitle"]
+                            : albums[index].year)),
               );
             },
           ),
@@ -76,8 +93,12 @@ class AlbumSearch extends StatelessWidget {
 }
 
 class AlbumCard extends ConsumerWidget {
-  const AlbumCard({Key? key, required this.albums}) : super(key: key);
-  final Albums albums;
+  const AlbumCard(
+      {Key? key, required this.albums, this.localApi = false, this.dynamicData})
+      : super(key: key);
+  final Albums? albums;
+  final dynamic dynamicData;
+  final bool localApi;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,7 +115,9 @@ class AlbumCard extends ConsumerWidget {
                 placeholder: const AssetImage('assets/cover.jpg'),
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  albums.thumbnails![0].url.toString(),
+                  localApi
+                      ? dynamicData['images']['1'] ?? dynamicData['images']['0']
+                      : albums!.thumbnails![0].url.toString(),
                 ),
               ),
             ),
@@ -105,7 +128,7 @@ class AlbumCard extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Text(
-                albums.title,
+                localApi ? dynamicData['title'] : albums!.title,
                 textAlign: TextAlign.center,
                 style: typography.bodyStrong?.apply(
                   fontSizeFactor: 1.0,
@@ -117,7 +140,9 @@ class AlbumCard extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Text(
-                '${albums.artists.firstOrNull == null ? 'NA' : albums.artists[0].name}\n${albums.year}',
+                localApi
+                    ? dynamicData['subtitle']
+                    : '${albums!.artists.firstOrNull == null ? 'NA' : albums!.artists[0].name}\n${albums!.year}',
                 textAlign: TextAlign.center,
                 style: typography.bodyStrong?.apply(fontSizeFactor: 1.0),
                 overflow: TextOverflow.ellipsis,
@@ -127,7 +152,7 @@ class AlbumCard extends ConsumerWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
               child: Text(
-                albums.year,
+                albums!.year,
                 textAlign: TextAlign.center,
                 style: typography.bodyStrong?.apply(fontSizeFactor: 1.0),
                 overflow: TextOverflow.ellipsis,

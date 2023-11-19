@@ -43,12 +43,29 @@ class ArtistsSearch extends StatelessWidget {
                           : artists[index].artist,
                       subscribers:
                           localApi ? dynamicData[index]['subscribers'] : "NA",
-                      browseId: localApi ? dynamicData[index]['id'] : artists[index].browseId,
-                      category: localApi ? dynamicData[index]['id'] : artists[index].category,
-                      radioId: localApi ? dynamicData[index]['id'] :artists[index].radioId,
-                      resultType:localApi ? dynamicData[index]['id'] : artists[index].resultType,
-                      shuffleId:localApi ? dynamicData[index]['id'] : artists[index].shuffleId,
-                      thumbnails: localApi ? [Thumbnail(height: 200, url: dynamicData[index]['image'], width: 200)] :artists[index].thumbnails));
+                      browseId: localApi
+                          ? dynamicData[index]['id']
+                          : artists[index].browseId,
+                      category: localApi
+                          ? dynamicData[index]['id']
+                          : artists[index].category,
+                      radioId: localApi
+                          ? dynamicData[index]['id']
+                          : artists[index].radioId,
+                      resultType: localApi
+                          ? dynamicData[index]['id']
+                          : artists[index].resultType,
+                      shuffleId: localApi
+                          ? dynamicData[index]['id']
+                          : artists[index].shuffleId,
+                      thumbnails: localApi
+                          ? [
+                              Thumbnail(
+                                  height: 200,
+                                  url: dynamicData[index]['image'],
+                                  width: 200)
+                            ]
+                          : artists[index].thumbnails));
             },
           ),
         ),
@@ -58,18 +75,23 @@ class ArtistsSearch extends StatelessWidget {
 }
 
 class ArtistCard extends StatelessWidget {
-  const ArtistCard({Key? key, required this.artists}) : super(key: key);
+  const ArtistCard(
+      {Key? key,
+      required this.artists,
+      this.dynamicData,
+      this.localApi = false})
+      : super(key: key);
 
-  final Artists artists;
+  final Artists? artists;
+  final dynamic dynamicData;
+  final bool localApi;
 
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
 
-    //return
-
     return Hero(
-        tag: artists.shuffleId.toString(),
+        tag: localApi ? dynamicData['id'] : artists!.shuffleId.toString(),
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -85,18 +107,25 @@ class ArtistCard extends StatelessWidget {
                   // ,
 
                   Navigator.push(
-                      context,
-                      mat.MaterialPageRoute(
-                          builder: (context) => ArtistsPage(
-                              channelId: artists.browseId.toString())));
+                    context,
+                    mat.MaterialPageRoute(
+                      builder: (context) => ArtistsPage(
+                          channelId: localApi
+                              ? dynamicData['id']
+                              : artists!.browseId.toString()),
+                    ),
+                  );
                 },
                 child: mat.Card(
                   elevation: 5,
                   clipBehavior: Clip.antiAlias,
                   shape: const CircleBorder(),
                   child: ExtendedImage.network(
-                    artists.thumbnails?.last.url.toString() ??
-                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
+                    localApi
+                        ? dynamicData['images']['1'] ??
+                            dynamicData['images']['0']
+                        : artists!.thumbnails?.last.url.toString() ??
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAQ7BhOGwDxmTw_6aRu2zlOiQ-WdTdF2XUxKBEAz_Q1MrOReLWZ-W4FaCUBkt5xod2cA&usqp=CAU',
                     width: 160,
                     height: 160,
                     fit: BoxFit.cover,
@@ -127,7 +156,7 @@ class ArtistCard extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                artists.artist.toString(),
+                localApi ? dynamicData['title'] : artists!.artist.toString(),
                 textAlign: TextAlign.left,
                 softWrap: false,
                 style: typography.body?.apply(fontSizeFactor: 1.2),

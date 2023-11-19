@@ -50,7 +50,7 @@ class TrackCardLarge extends StatelessWidget {
     var size = MediaQuery.of(context).size.width;
 
     var spacer = SizedBox(width: size / 80);
-    var biggerSpacer = SizedBox(width: size / 40);
+    //var biggerSpacer = SizedBox(width: size / 40);
     if (SuperSize.width > 700) {
       return mat.InkWell(
         customBorder: mat.RoundedRectangleBorder(

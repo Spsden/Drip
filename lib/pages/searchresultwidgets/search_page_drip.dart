@@ -1,5 +1,4 @@
-import 'package:drip/datasources/searchresults/models/songsdataclass.dart';
-import 'package:drip/pages/common/track_cards.dart';
+import 'package:drip/pages/searchresultwidgets/top_results_widget.dart';
 import 'package:drip/providers/providers.dart';
 
 import 'package:flutter/material.dart' as mat;
@@ -68,7 +67,7 @@ class StaggeredAnimationContainer extends StatelessWidget {
         horizontalOffset: 50.0,
         child: FadeInAnimation(
           child: Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
+              margin: const EdgeInsets.symmetric(vertical: 20),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: child),
         ),
@@ -91,6 +90,9 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    const spacer = SizedBox(height: 10.0);
+    //const biggerSpacer = SizedBox(height: 40.0);
+
     final String searchQuery = ref.watch(searchQueryProvider);
     Typography typography = FluentTheme.of(context).typography;
     final AsyncValue<List<Map<String, dynamic>>> searchResults =
@@ -103,84 +105,90 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
               )
             : searchResults.when(
                 data: (results) {
-                  return AnimationLimiter(
-                    child: ListView.builder(
-                      itemCount: results.length,
-                      itemBuilder: ((context, index) {
-                        List<dynamic> x = results[index]['items'];
-
-                        // SearchResultClass s = SearchResultClass(
-                        //     title: results[index]['title'], items: x.cast());
-
-                        switch (results[index]['title']) {
-                          case 'Top result':
-                            return const Text('Selected Top result');
-                          case 'Songs':
-                            return StaggeredAnimationContainer(
-                              index: index,
-                              child: SizedBox(
-                                  //  height: 400,
-                                  child: Column(children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Songs & Videos",
-                                        style: typography.subtitle
-                                            ?.apply(fontSizeFactor: 1.0),
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: results.length,
+                    itemBuilder: ((context, index) {
+                      switch (results[index]['title']) {
+                        case 'Top result':
+                          var topData = results[index]['items'][0];
+                          return TopResults(
+                            topResult: TopResultType(
+                                title: topData['title'],
+                                thumbs: topData['images'].length == 1
+                                    ? topData['images'][0]
+                                    : topData['images'][1],
+                                someId: topData['id'],
+                            type: topData['type'],
+                            description: topData['subtitle']),
+                          );
+                        case 'Songs':
+                          return StaggeredAnimationContainer(
+                            index: index,
+                            child: SizedBox(
+                                //  height: 400,
+                                child: Column(children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Songs & Videos",
+                                      style: typography.subtitle
+                                          ?.apply(fontSizeFactor: 1.0),
+                                    ),
+                                    FilledButton(
+                                      child: const Row(
+                                        children: [
+                                          //Icon(FluentIcons.more),
+                                          // spacer,
+                                          Text('Show more',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500)),
+                                        ],
                                       ),
-                                      FilledButton(
-                                        child: const Row(
-                                          children: [
-                                            //Icon(FluentIcons.more),
-                                            // spacer,
-                                            Text('Show more',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          Navigator.of(context).pushNamed(
-                                              'songslistpage',
-                                              arguments: "searj");
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed(
+                                            'songslistpage',
+                                            arguments: searchQuery);
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                Container(
+                              ),
+                              Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: TrackBars(
+                                    songs: const [],
+                                    localApi: true,
+                                    dynamicData: results[index]['items'],
+                                    isFromPrimarySearchPage: true,
+                                  )),
+                            ])),
+                          );
+
+                        case 'Videos':
+                          // Handle Videos
+                          return StaggeredAnimationContainer(
+                            index: index,
+                            child: SizedBox(
+                                // height: 400,
+                                child: Container(
                                     alignment: Alignment.centerLeft,
                                     child: TrackBars(
-                                      songs: [],
+                                      songs: const [],
                                       localApi: true,
                                       dynamicData: results[index]['items'],
                                       isFromPrimarySearchPage: true,
-                                    )),
-                              ])),
-                            );
-
-                          case 'Videos':
-                            // Handle Videos
-                            return StaggeredAnimationContainer(
-                              index: index,
-                              child: SizedBox(
-                                  // height: 400,
-                                  child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: TrackBars(
-                                        songs: [],
-                                        localApi: true,
-                                        dynamicData: results[index]['items'],
-                                        isFromPrimarySearchPage: true,
-                                      ))),
-                            );
-                          case 'Artists':
-                            return Column(
+                                    ))),
+                          );
+                        case 'Artists':
+                          return StaggeredAnimationContainer(
+                            index: index,
+                            child: Column(
                               children: [
                                 SizedBox(
                                   width: double.infinity,
@@ -211,7 +219,7 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                             mat.MaterialPageRoute(
                                               builder: (context) =>
                                                   ArtistsSearchResults(
-                                                      artistQuery: "search"),
+                                                      artistQuery: searchQuery),
                                             ),
                                           );
                                         },
@@ -219,15 +227,19 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                     ],
                                   ),
                                 ),
+                                spacer,
                                 ArtistsSearch(
                                     artists: const [],
                                     localApi: true,
                                     dynamicData: results[index]['items']),
                               ],
-                            );
+                            ),
+                          );
 
-                          case 'Featured playlists':
-                            return Column(children: [
+                        case 'Featured playlists':
+                          return StaggeredAnimationContainer(
+                            index: index,
+                            child: Column(children: [
                               SizedBox(
                                 width: double.infinity,
                                 child: Row(
@@ -255,8 +267,9 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                           context,
                                           mat.MaterialPageRoute(
                                             builder: (context) =>
-                                                const PlaylistInfinitePaginationWidget(
-                                              communityPlaylistQuery: "dsx",
+                                                PlaylistInfinitePaginationWidget(
+                                              communityPlaylistQuery:
+                                                  searchQuery,
                                             ),
                                           ),
                                         );
@@ -265,14 +278,18 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                   ],
                                 ),
                               ),
+                              spacer,
                               CommunityPlaylistSearch(
                                 communityPlaylist: const [],
                                 localApi: true,
                                 dynamicData: results[index]['items'],
                               ),
-                            ]);
-                          case 'Community playlists':
-                            return Column(children: [
+                            ]),
+                          );
+                        case 'Community playlists':
+                          return StaggeredAnimationContainer(
+                            index: index,
+                            child: Column(children: [
                               SizedBox(
                                 width: double.infinity,
                                 child: Row(
@@ -300,8 +317,9 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                           context,
                                           mat.MaterialPageRoute(
                                             builder: (context) =>
-                                                const PlaylistInfinitePaginationWidget(
-                                              communityPlaylistQuery: "dsx",
+                                                PlaylistInfinitePaginationWidget(
+                                              communityPlaylistQuery:
+                                                  searchQuery,
                                             ),
                                           ),
                                         );
@@ -310,14 +328,18 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                   ],
                                 ),
                               ),
+                              spacer,
                               CommunityPlaylistSearch(
                                 communityPlaylist: const [],
                                 localApi: true,
                                 dynamicData: results[index]['items'],
                               ),
-                            ]);
-                          case 'Albums':
-                            return mat.Column(
+                            ]),
+                          );
+                        case 'Albums':
+                          return StaggeredAnimationContainer(
+                            index: index,
+                            child: Column(
                               children: [
                                 SizedBox(
                                   width: double.infinity,
@@ -347,37 +369,36 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                     ],
                                   ),
                                 ),
+                                spacer,
                                 AlbumSearch(
-                                  albums: [],
+                                  albums: const [],
                                   localApi: true,
                                   dynamicData: results[index]['items'],
                                 ),
                               ],
-                            );
+                            ),
+                          );
 
-                          // case 'Podcasts':
-                          //   // Handle Podcasts
-                          //   print('Selected Podcasts');
-                          //   break;
-                          // case 'Profiles':
-                          //   // Handle Profiles
-                          //   print('Selected Profiles');
-                          //   break;
-                          // case 'Episodes':
-                          //   // Handle Episodes
-                          //   print('Selected Episodes');
-                            break;
-                          default:
-                            // Handle case where x doesn't match any of the options
-                            return const SizedBox.shrink();
-                        }
-                      }),
-                    ),
+                        // case 'Podcasts':
+                        //   // Handle Podcasts
+                        //   print('Selected Podcasts');
+                        //   break;
+                        // case 'Profiles':
+                        //   // Handle Profiles
+                        //   print('Selected Profiles');
+                        //   break;
+                        // case 'Episodes':
+                        //   // Handle Episodes
+                        //   print('Selected Episodes');
+                        default:
+                          // Handle case where x doesn't match any of the options
+                          return const SizedBox.shrink();
+                      }
+                    }),
                   );
-                  return Text(results.toString());
                 },
                 error: (err, _) => Text(err.toString()),
-                loading: () => ProgressRing()));
+                loading: () => const ProgressRing()));
   }
 
   @override

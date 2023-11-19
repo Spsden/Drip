@@ -125,9 +125,9 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
                                     child: widget,
                                   )),
                               children: [
-                                (topResultType != null && topResult != null)
-                                    ? topResultWidget(context, results)
-                                    : const SizedBox.shrink(),
+                                // (topResultType != null && topResult != null)
+                                //     ? topResultWidget(context, results)
+                                //     : const SizedBox.shrink(),
                                 // topResult != null
                                 //     ? Container(
                                 //         height: topResultType == 'video' ||
@@ -412,70 +412,60 @@ class _AllSearchResultsState extends ConsumerState<AllSearchResults>
   bool get wantKeepAlive => true;
 }
 
-Widget topResultWidget(BuildContext context, dynamic results) {
-  Typography typography = FluentTheme.of(context).typography;
-
-  Widget topWidget = const SizedBox();
-  late TopResultType topResult;
-  switch (results['topResultType']) {
-    case 'artist':
-      artist_data_class.Artists artist = results['topResults'];
-
-      topResult = TopResultType(
-          title: artist.artist ?? "NA",
-          thumbs:
-              artist.thumbnails?.map((e) => e.url.toString()).toList() ?? [],
-          description: "NA",
-          someId: artist.browseId);
-      //topWidget = ArtistCard(artists: results['topResults']);
-
-      break;
-
-    case 'album':
-      topWidget = AlbumCard(albums: results['topResults']);
-
-      break;
-
-    case 'video':
-      topWidget = TrackListItem(
-        songs: videosToSongs([results['topResults']]).first,
-        color: Colors.transparent,
-      );
-      break;
-    case 'song':
-      topWidget = TrackListItem(
-        songs: [results['topResults']].first,
-        color: Colors.transparent,
-      );
-      break;
-    case 'playlist':
-      topWidget = CommunityPlaylistCard(
-          communityPlaylist: [results['topResults']].first);
-
-      // TrackBars(
-      // songs: [...results['topResults']], isFromPrimarySearchPage: true);
-
-      break;
-  }
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Top result",
-            style: typography.subtitle?.apply(fontSizeFactor: 1.0),
-          ),
-        ],
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      SizedBox(
-        child: TopResults(topResult: topResult),
-      )
-    ],
-  );
-}
+// Widget topResultWidget(BuildContext context, dynamic results) {
+//   Typography typography = FluentTheme.of(context).typography;
+//
+//
+//   switch (results['type']) {
+//     case 'Artist':
+//       artist_data_class.Artists artist = results['topResults'];
+//
+//       return ArtistCard(artists:null,localApi: true,dynamicData:results);
+//
+//     case 'Album':
+//      return AlbumCard(albums: null,localApi: true,dynamicData:results);
+//
+//
+//     case 'video':
+//       topWidget = TrackListItem(
+//         songs: videosToSongs([results['topResults']]).first,
+//         color: Colors.transparent,
+//       );
+//       break;
+//     case 'song':
+//       topWidget = TrackListItem(
+//         songs: [results['topResults']].first,
+//         color: Colors.transparent,
+//       );
+//       break;
+//     case 'playlist':
+//       topWidget = CommunityPlaylistCard(
+//           communityPlaylist: [results['topResults']].first);
+//
+//       // TrackBars(
+//       // songs: [...results['topResults']], isFromPrimarySearchPage: true);
+//
+//       break;
+//   }
+//
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Text(
+//             "Top result",
+//             style: typography.subtitle?.apply(fontSizeFactor: 1.0),
+//           ),
+//         ],
+//       ),
+//       const SizedBox(
+//         height: 10,
+//       ),
+//       SizedBox(
+//         child: TopResults(topResult: topResult),
+//       )
+//     ],
+//   );
+// }
