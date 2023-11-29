@@ -22,38 +22,36 @@ class UserLibrary extends ConsumerWidget {
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     return Scaffold(
-      body:AlbumPage(albumId: "JJJ",)
+      body:
 
-      // Padding(
-      //   padding: const EdgeInsets.symmetric(horizontal: 20),
-      //   child: ListView(
-      //     children:  [
-      //       AddPlayListWidget(),
-      //       // Container(
-      //       //   child: Row(
-      //       //     children: [
-      //       //       Container(
-      //       //         width: 200,
-      //       //         height: 200,
-      //       //         color: Colors.yellow,
-      //       //       ),
-      //       //       Container(
-      //       //         width: 200,
-      //       //         height: 200,
-      //       //         color: Colors.red,
-      //       //       )
-      //       //     ],
-      //       //   ),
-      //       // ),
-      //       Container(
-      //         child: Test(),
-      //       ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: ListView(
+          children:  [
+            AddPlayListWidget(),
+            // Container(
+            //   child: Row(
+            //     children: [
+            //       Container(
+            //         width: 200,
+            //         height: 200,
+            //         color: Colors.yellow,
+            //       ),
+            //       Container(
+            //         width: 200,
+            //         height: 200,
+            //         color: Colors.red,
+            //       )
+            //     ],
+            //   ),
+            // ),
+
       // fluent.AutoSuggestBox(items: []),
-      //       DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
-      //       ImportedAndSavedPlaylists()
-      //     ],
-      //   ),
-      // ),
+            DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
+            ImportedAndSavedPlaylists()
+          ],
+        ),
+      ),
     );
   }
 }
@@ -83,7 +81,7 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
         year: data.year ?? "NA",
         tracks: List<tracks.Track>.from(data.tracks.map((e) => tracks.Track(
             album: List<String>.from(['lol']),
-            artists: List<String>.from(['lol']),
+            artists: List<String>.from(e.artists.map((e) => e.name).toList()),
             duration: e.duration,
             durationSeconds: e.durationSeconds,
             isAvailable: e.isAvailable,
@@ -101,6 +99,7 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
   Future addPlaylist(String url) async {
     Uri uri = Uri.parse(url);
     String lol = uri.query.split("=")[1].split("&")[0];
+    print(lol);
 
     playlist.Playlists playlists = await SearchMusic.getPlaylist(lol, 50);
     final recentlyPlayedBox = Hive.box('savedPlaylists');
@@ -211,7 +210,8 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
     return ValueListenableBuilder(
         valueListenable: Hive.box('savedPlaylists').listenable(),
         builder: (context, Box box, _) {
-          List recent = List.from(box.values.toList().reversed);
+          List<SavedPlayList> recent = List.from(box.values.toList().reversed);
+          recent.forEach((element) {print(element.id);});
           if (box.values.isEmpty) {
             return const Center(
               child: Text('No recent searches'),
@@ -223,10 +223,10 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 mainAxisExtent: 370,
-                maxCrossAxisExtent: 400.0,
+                maxCrossAxisExtent: 380.0,
                 mainAxisSpacing: 15.0,
                 crossAxisSpacing: 15.0,
-                childAspectRatio: 100 / 115,
+                childAspectRatio: 80 / 100,
               ),
               itemBuilder: (context, index) {
                 SavedPlayList savedPlayList = recent[index];
@@ -234,6 +234,7 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
                 return
 
                     //Placeholder() ;
+                  //FeelGoodPlaylist();
                     PlaylistContainer(data: savedPlayList);
               });
         });

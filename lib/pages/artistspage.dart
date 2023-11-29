@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:drip/datasources/searchresults/models/artistpagedataclass.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
@@ -7,7 +6,6 @@ import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
 import 'package:drip/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:drip/datasources/searchresults/models/albumsdataclass.dart'
     as albumD;
@@ -30,7 +28,6 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
     with
         AutomaticKeepAliveClientMixin<ArtistsPage>,
         SingleTickerProviderStateMixin {
-  late ArtistPageData _artistsPage;
 
   bool status = false;
   bool fetched = false;
@@ -63,12 +60,14 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
     return FutureBuilder<ArtistPageData>(
       future: SearchMusic.getArtistPage(widget.channelId),
       builder: (context, snapshot) {
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: Text('Please wait its loading...'));
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
           final Output? res = snapshot.data?.output;
+          print(res?.name.toString());
           return buildArtistPage(res!, size, spacer, context);
         } else {
           return const Placeholder();
@@ -81,6 +80,12 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
       Output res, Size size, Widget spacer, BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     // Rest of your UI code that uses artistData
+    final List<SongResults> filteredSongResults = res.songs?.results
+        ?.where((item) => item.videoId != null)
+        .toList() ?? [];
+    final List<SongResults> filteredVideoResults = res.videos?.results
+        ?.where((item) => item.videoId != null)
+        .toList() ?? [];
     return CustomScrollView(
       //scrollBehavior: const CupertinoScrollBehavior(),
       physics: const BouncingScrollPhysics(),
@@ -95,8 +100,8 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
           // titleSpacing: 5,
           pinned: true,
           elevation: 0,
-          //snap: true,
-          floating: true,
+          snap: false,
+          floating: false,
           actions: <Widget>[
             mat.IconButton(
               icon: const Icon(mat.Icons.more_horiz_rounded),
@@ -153,10 +158,10 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                     )),
               ],
             ),
-            stretchModes: const [
-              mat.StretchMode.zoomBackground,
-              mat.StretchMode.blurBackground,
-            ],
+            // stretchModes: const [
+            //   mat.StretchMode.zoomBackground,
+            //   mat.StretchMode.blurBackground,
+            // ],
             background: ShaderMask(
               blendMode: BlendMode.luminosity,
               shaderCallback: (bounds) {
@@ -176,12 +181,16 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                   )),
             ),
           ),
+          backgroundColor: ref.watch(themeProvider).color,
+
 
           bottom: mat.TabBar(
             indicatorWeight: 5,
             indicatorSize: mat.TabBarIndicatorSize.label,
             automaticIndicatorColorAdjustment: true,
             isScrollable: true,
+
+
             indicator: mat.UnderlineTabIndicator(
                 borderSide: BorderSide(
                     width: 4.0, color: ref.watch(themeProvider).color)),
@@ -194,9 +203,11 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
             ],
             controller: _tabController,
           ),
+
         ),
         SliverFillRemaining(
           child: mat.TabBarView(
+
               physics: const BouncingScrollPhysics(),
               controller: _tabController,
               children: [
@@ -242,22 +253,22 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                     : const Text('No result'),
                 Column(
                   children: [
-                    Button(child: Text("Show more"), onPressed: () {}),
+                    Button(child: const Text("Show more"), onPressed: () {}),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: res.songs?.results?.length,
+                        itemCount: filteredSongResults.length,
                         itemBuilder: ((context, index) {
                           return TrackListItem(
                             songs: track.Songs(
                                 duration: "NA",
                                 album: track.Album(
                                     name:
-                                        res.songs!.results?[index].album?.name,
+                                    filteredSongResults[index].album?.name,
                                     id: "NA"),
-                                title: res.songs?.results?[index].title ?? "NA",
+                                title:filteredSongResults[index].title ?? "NA",
                                 artists: [
                                   track.Album(
-                                      name: res.songs!.results?[index].artists
+                                      name: filteredSongResults[index].artists
                                           ?.map((e) => e.name)
                                           .toList()
                                           .join(" "),
@@ -269,17 +280,17 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                                   track.Thumbnail(
                                       height: 22,
                                       width: 22,
-                                      url: res.songs?.results?[index].thumbnails
+                                      url: filteredSongResults[index].thumbnails
                                               ?.first.url ??
                                           "assets/ytCover.png")
                                 ],
                                 feedbackTokens: track.FeedbackTokens(
                                     remove: null, add: null),
                                 isExplicit:
-                                    res.songs?.results?[index].isExplicit ??
+                                filteredSongResults[index].isExplicit ??
                                         false,
                                 resultType: "SONG",
-                                videoId: res.songs?.results?[index].videoId ??
+                                videoId: filteredSongResults[index].videoId ??
                                     "dQw4w9WgXcQ",
                                 year: "NA"),
                             color: index % 2 != 0
@@ -335,14 +346,64 @@ class _ArtistsPageState extends ConsumerState<ArtistsPage>
                         }))
                     : const Text('No result'),
                 const Text('lol'),
-                mat.ElevatedButton(
-                  onPressed: () {
-                    // print(context.watch<PlayerNotifiers>().searchVal);
-                    // print(_artistsPage
-                    //     .related?.results?.first.thumbnails?.first.url);
-                  },
-                  child: const Text('lol2'),
+                Column(
+                  children: [
+                    Button(child: const Text("Show more"), onPressed: () {}),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredVideoResults.length,
+                        itemBuilder: ((context, index) {
+
+                          return TrackListItem(
+                            songs: track.Songs(
+                                duration: "NA",
+                                album: track.Album(
+                                    name:
+                                   "NA",
+                                    id: "NA"),
+                                title: filteredVideoResults[index].title ?? "NA",
+                                artists: [
+                                  track.Album(
+                                      name: filteredVideoResults[index].artists
+                                          ?.map((e) => e.name)
+                                          .toList()
+                                          .join(" "),
+                                      id: "NA")
+                                ],
+                                category: "NA",
+                                durationSeconds: 200,
+                                thumbnails: [
+                                  track.Thumbnail(
+                                      height: 22,
+                                      width: 22,
+                                      url: filteredVideoResults[index].thumbnails
+                                          ?.first.url ??
+                                          "assets/ytCover.png")
+                                ],
+                                feedbackTokens: track.FeedbackTokens(
+                                    remove: null, add: null),
+                                isExplicit:
+                                filteredVideoResults[index].isExplicit ??
+                                    false,
+                                resultType: "SONG",
+                                videoId : filteredVideoResults[index].videoId ??
+                                    "dQw4w9WgXcQ",
+                                year: "NA"),
+                            color: index % 2 != 0
+                                ? Colors.transparent
+                                : ref.watch(themeProvider).mode ==
+                                ThemeMode.dark ||
+                                ref.watch(themeProvider).mode ==
+                                    ThemeMode.system
+                                ? Colors.grey[150]
+                                : Colors.grey[40],
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
                 ),
+
               ]),
         )
       ],

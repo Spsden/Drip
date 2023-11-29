@@ -155,7 +155,7 @@ class FourQuickPics extends ConsumerWidget {
           final TrackCardData trackData = TrackCardData(
               title: data[index].title,
               thumbnail: data[index].thumbnails?.first.url,
-              artist: data[index].artists?.join(" "),
+              artist: data[index].artists?.map((e)=>e.name).toList().join(" "),
               album: data[index].album?.name,
               duration: "na");
           return Padding(

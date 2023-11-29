@@ -1,10 +1,8 @@
-import 'dart:convert';
 
 import 'package:drip/datasources/searchresults/requests/youtubehomedata.dart';
 import 'package:drip/pages/explore_page/quick_picks.dart';
 import 'package:drip/pages/explore_page/trending_header.dart';
 import 'package:drip/pages/playlistmainpage.dart';
-import 'package:drip/providers/providers.dart';
 import 'package:drip/theme.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
@@ -283,6 +281,7 @@ class _YouTubeHomeScreenState extends ConsumerState<YouTubeHomeScreen>
                                                         playlistId:
                                                             playlistId)));
                                       } else {
+
                                         print("exeption bhai");
                                         // print();
                                         // Navigator.push(

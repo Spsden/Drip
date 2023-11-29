@@ -286,7 +286,7 @@ class SearchMusic {
 
   static Future<AlbumDataClass?> getAlbum(String albumId) async {
     final response = await http
-        .get(Uri.parse("http://127.0.0.1:5000/albums?browseid=${albumId}"));
+        .get(Uri.parse("${serverAddress}albums?browseid=${albumId}"));
     try {
       if (response.statusCode == 200) {
         final AlbumDataClass albumDataClass =
@@ -306,7 +306,7 @@ class SearchMusic {
   static Future<at.ArtistPageData> getArtistPage(String channelId) async {
     try {
       final response = await http
-          .get(Uri.parse('http://127.0.0.1:5000/artist?channelid=$channelId'));
+          .get(Uri.parse('${serverAddress}artist?channelid=$channelId'));
 
       if (response.statusCode == 200) {
         final at.ArtistPageData artistsPage =
