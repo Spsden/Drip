@@ -28,17 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
       pageBuilder: (context, animation, secondaryAnimation) =>
           const HomeScreen(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
+        // const begin = Offset(0.0, 1.0);
+        // const end = Offset.zero;
+        // const curve = Curves.ease;
 
-        return DrillInPageTransition(child: child, animation: animation);
+        return DrillInPageTransition(animation: animation, child: child);
 
 
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
       },
     );
   }
@@ -65,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
           const SizedBox(
             height: 10,
           ),
-          ProgressRing()
+          const ProgressRing()
 
           //        Consumer(
           //          builder: (context,watch,child) {

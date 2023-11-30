@@ -4,7 +4,6 @@ import 'package:drip/datasources/searchresults/requests/searchresultsservice.dar
 import 'package:drip/datasources/searchresults/models/watchplaylistdataclass.dart'
     as watchplaylist;
 import 'package:drip/datasources/searchresults/local_models/recently_played.dart';
-import 'package:drip/providers/providers.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +12,8 @@ import 'package:hive/hive.dart';
 import 'package:media_kit/media_kit.dart' as mediakit;
 import 'package:palette_generator/palette_generator.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
+    as pd;
 
 import 'activeaudiodata.dart';
 
@@ -31,7 +32,7 @@ class AudioControlCentre extends ChangeNotifier {
   int index = 0;
   List<watchplaylist.Track> tracks = [];
   Map currentTrack = {'title': 'NA', 'artist': 'NA', 'thumb': 'NA'};
-  Color? color ;
+  Color? color;
 
   double volume = 25.0;
   Duration position = Duration.zero;
@@ -112,6 +113,76 @@ class AudioControlCentre extends ChangeNotifier {
 
     return dominantColor;
     //return dominantColor;
+  }
+
+  Future<void> openAPlaylist(List<pd.Track> playlistItems) async {
+    /// @TODO optimize playlist loading.
+    String streamLink =
+        await getAudioUri(playlistItems[0].videoId ?? "dQw4w9WgXcQ");
+
+    //List<mediakit.Media> listOfMedia = [];
+    List<String?>? listOfThumbs =
+        playlistItems[0].thumbnails.map((e) => e.url.toString()).toList();
+    List<String?>? listOfArtists =
+        playlistItems[0].artists.map((e) => e.name.toString()).toList();
+
+    Map<String, dynamic> currentPlaying = {
+      "title": playlistItems[0].title,
+      "author": listOfArtists ?? [],
+      "thumbs": listOfThumbs ?? [],
+      "urlOfVideo": 'NA',
+      "videoId": playlistItems[0].videoId
+    };
+    player?.stop();
+    await player?.open(
+      mediakit.Playlist([mediakit.Media(streamLink, extras: currentPlaying)],
+          index: index),
+    );
+    tracks.clear();
+
+    for (int i = 1; i < playlistItems.length; i++) {
+      pd.Track element = playlistItems[i];
+
+      if (element.videoId != null) {
+        List<String?> listOfThumbs =
+            element.thumbnails.map((e) => e.url.toString()).toList();
+        List<String?>? listOfArtists =
+            element.artists.map((e) => e.name.toString()).toList();
+
+        //  print(listOfThumbs.map((e) => e.toString()).toString());
+        Map<String, dynamic> currentPlaying = {
+          "title": element.title,
+          "author": listOfArtists ?? [],
+          "thumbs": listOfThumbs,
+          "urlOfVideo": 'NA',
+          "videoId": element.videoId
+        };
+        watchplaylist.Track track = watchplaylist.Track(
+            album: watchplaylist.Album(
+                name: element.album?.name, id: element.album?.id),
+            artists: element.artists
+                .map((e) => watchplaylist.Album(id: e.id, name: e.name))
+                .toList(),
+            feedbackTokens: "na",
+            length: element.duration,
+            likeStatus: "NA",
+            thumbnail: element.thumbnails
+                .map((e) => watchplaylist.Thumbnail(
+                    height: e.height,
+                    url: e.url ?? 'https://i.imgur.com/L3Ip1wh.png',
+                    width: e.width))
+                .toList(),
+            title: element.title,
+            videoId: element.videoId,
+            year: "NA",
+            views: "NA");
+        final String streamLink =
+            await getAudioUri(element.videoId ?? "dQw4w9WgXcQ");
+        player?.add(mediakit.Media(streamLink, extras: currentPlaying));
+
+        tracks.add(track);
+      }
+    }
   }
 
   Future<void> open(CurrentMusicInstance track, {int index = 0}) async {
@@ -212,7 +283,7 @@ class AudioControlCentre extends ChangeNotifier {
             logLevel: mediakit.MPVLogLevel.error,
             vo: null,
             title: "Drip",
-            ready: () => {print("deciduous")}));
+            ready: () => {debugPrint("player initialized")}));
     audioControlCentreInstance.player?.stream.playlist.listen((event) async {
       if (event.index < 0 || event.index > event.medias.length - 1) {
         return;
@@ -347,17 +418,16 @@ class AudioControlCentre extends ChangeNotifier {
       if (recentlyPlayedBox.length > 15) {
         recentlyPlayedBox.deleteAt(14);
         recentlyPlayedBox.add(recentlyPlayed);
-      }else{
+      } else {
         recentlyPlayedBox.add(recentlyPlayed);
       }
-
-
     }
     // print(recentlyPlayedBox.values.first.title);
   }
 
   @override
   Future<void> dispose() async {
+    super.dispose();
     await player?.dispose();
   }
 }

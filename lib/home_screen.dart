@@ -47,7 +47,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WindowListener {
       SecondPageStack(searchArgs: searchQuery, navigatorKey: navigatorKeys[1]),
       DeferredWidget(currentplaylist.loadLibrary,
           () => currentplaylist.CurrentPlaylist(fromMainPage: true)),
-      DeferredWidget(userlibrary.loadLibrary, () => userlibrary.UserLibrary()),
+        ThirdPageStack(navigatorKey: navigatorKeys[3],),
+     // DeferredWidget(userlibrary.loadLibrary, () => userlibrary.UserLibrary()),
       DeferredWidget(settings.loadLibrary, () => settings.SettingsPage()),
     ];
   }

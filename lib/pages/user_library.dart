@@ -1,6 +1,5 @@
 import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
-import 'package:drip/pages/searchresultwidgets/search_page_drip.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
     as playlist;
@@ -14,47 +13,192 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'album_page.dart';
 
-class UserLibrary extends ConsumerWidget {
-  const UserLibrary({Key? key}) : super(key: key);
+
+class UserLibrary extends StatefulWidget {
+  const UserLibrary({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  State<UserLibrary> createState() => _UserLibraryState();
+}
+
+class _UserLibraryState extends State<UserLibrary> {
+  SavedPlayList addToLocalData(playlist.Playlists data) {
+    SavedPlayList savedPlayList = SavedPlayList(
+        playListTitle: data.title ?? "NA",
+        playListSource: "Youtube",
+        id: data.id ?? "NA",
+        thumbnail: data.thumbnails.last.url ?? "NA",
+        description: data.description ?? "NA",
+        author: data.author?.name ?? "NA",
+        trackCount: data.trackCount.toString(),
+        year: data.year ?? "NA",
+        tracks: List<tracks.Track>.from(data.tracks.map((e) => tracks.Track(
+            album: List<String>.from(['lol']),
+            artists: List<String>.from(e.artists.map((e) => e.name).toList()),
+            duration: e.duration,
+            durationSeconds: e.durationSeconds,
+            isAvailable: e.isAvailable,
+            isExplicit: e.isExplicit,
+            thumbnails: List<String>.from([e.thumbnails.first.url]),
+            title: e.title,
+            videoId: e.videoId))));
+    return savedPlayList;
+  }
+
+  String pol(String x) {
+    return x;
+  }
+
+  Future addPlaylist(String url) async {
+    Uri uri = Uri.parse(url);
+    String lol = uri.query.split("=")[1].split("&")[0];
+    print(lol);
+
+    playlist.Playlists playlists = await SearchMusic.getPlaylist(lol, 50);
+    final recentlyPlayedBox = Hive.box('savedPlaylists');
+    recentlyPlayedBox.add(addToLocalData(playlists));
+  }
+
+  final TextEditingController _textEditingController = TextEditingController();
+
+  void showContentDialog(BuildContext context) async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => fluent.ContentDialog(
+        style: fluent.ContentDialogThemeData(
+            decoration: fluent.BoxDecoration(
+                color: fluent.FluentTheme.of(context).micaBackgroundColor,
+                borderRadius: BorderRadius.circular(8))),
+        title: const Text('Playlist Link'),
+        content: fluent.TextBox(
+          controller: _textEditingController,
+        ),
+        actions: [
+          fluent.Button(
+            child: const Text('Import'),
+            onPressed: () async {
+              String ll = _textEditingController.text;
+              //   'https://music.youtube.com/playlist?list=PLEKd4tmw8baciGt7F1Gl-bltDdbmAULkT&feature=share';
+              addPlaylist(ll);
+              debugPrint(ll);
+              _textEditingController.clear();
+
+              Navigator.pop(context, 'User deleted file');
+              // Delete file here
+            },
+          ),
+          fluent.FilledButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context, 'User canceled dialog');
+                _textEditingController.clear();
+              }),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(onPressed: (){showContentDialog(context);}, label: const Icon(
+        Icons.add,
+        size: 50,
+      ),),
       body:
 
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: ListView(
-          children:  [
-            AddPlayListWidget(),
-            // Container(
-            //   child: Row(
-            //     children: [
-            //       Container(
-            //         width: 200,
-            //         height: 200,
-            //         color: Colors.yellow,
-            //       ),
-            //       Container(
-            //         width: 200,
-            //         height: 200,
-            //         color: Colors.red,
-            //       )
-            //     ],
-            //   ),
-            // ),
+      const Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+          child:  ImportedAndSavedPlaylists()
 
-      // fluent.AutoSuggestBox(items: []),
-            DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
-            ImportedAndSavedPlaylists()
-          ],
-        ),
+        //   ListView(
+        //     children:  [
+        //       AddPlayListWidget(),
+        //       // Container(
+        //       //   child: Row(
+        //       //     children: [
+        //       //       Container(
+        //       //         width: 200,
+        //       //         height: 200,
+        //       //         color: Colors.yellow,
+        //       //       ),
+        //       //       Container(
+        //       //         width: 200,
+        //       //         height: 200,
+        //       //         color: Colors.red,
+        //       //       )
+        //       //     ],
+        //       //   ),
+        //       // ),
+        //
+        // // fluent.AutoSuggestBox(items: []),
+        //       DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
+        //
+        //     ],
+        //   ),
       ),
     );
   }
 }
+
+// class UserLibrary extends ConsumerWidget {
+//   const UserLibrary({Key? key}) : super(key: key);
+//
+//
+//
+//   @override
+//   Widget build(BuildContext context,WidgetRef ref) {
+//     return Scaffold(
+//       floatingActionButton: FloatingActionButton.extended(onPressed: (){}, label: const Icon(
+//         Icons.add,
+//         size: 50,
+//       ),),
+//       body:
+//
+//       const Padding(
+//         padding:  EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+//         child:  ImportedAndSavedPlaylists()
+//
+//       //   ListView(
+//       //     children:  [
+//       //       AddPlayListWidget(),
+//       //       // Container(
+//       //       //   child: Row(
+//       //       //     children: [
+//       //       //       Container(
+//       //       //         width: 200,
+//       //       //         height: 200,
+//       //       //         color: Colors.yellow,
+//       //       //       ),
+//       //       //       Container(
+//       //       //         width: 200,
+//       //       //         height: 200,
+//       //       //         color: Colors.red,
+//       //       //       )
+//       //       //     ],
+//       //       //   ),
+//       //       // ),
+//       //
+//       // // fluent.AutoSuggestBox(items: []),
+//       //       DragToMoveArea(child: Container(color: Colors.blue,width: 300,)),
+//       //
+//       //     ],
+//       //   ),
+//       ),
+//     );
+//   }
+// }
 
 
 
@@ -211,7 +355,7 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
         valueListenable: Hive.box('savedPlaylists').listenable(),
         builder: (context, Box box, _) {
           List<SavedPlayList> recent = List.from(box.values.toList().reversed);
-          recent.forEach((element) {print(element.id);});
+         // recent.forEach((element) {print(element.id);});
           if (box.values.isEmpty) {
             return const Center(
               child: Text('No recent searches'),
@@ -219,14 +363,14 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
           }
           return GridView.builder(
               itemCount: recent.length,
-              physics: const ClampingScrollPhysics(),
-              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+             // shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisExtent: 370,
+                mainAxisExtent: 390,
                 maxCrossAxisExtent: 380.0,
                 mainAxisSpacing: 15.0,
                 crossAxisSpacing: 15.0,
-                childAspectRatio: 80 / 100,
+             //   childAspectRatio: 80 / 100,
               ),
               itemBuilder: (context, index) {
                 SavedPlayList savedPlayList = recent[index];

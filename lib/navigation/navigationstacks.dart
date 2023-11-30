@@ -5,8 +5,8 @@ import 'package:drip/pages/playlistmainpage.dart';
 
 import 'package:drip/pages/searchresultwidgets/albumsresultwidget.dart';
 import 'package:drip/pages/searchresultwidgets/artistsresultwidget.dart';
-import 'package:drip/pages/searchresultwidgets/search_page.dart';
 import 'package:drip/pages/searchresultwidgets/search_page_drip.dart';
+import 'package:drip/pages/user_library.dart';
 
 import 'package:flutter/material.dart';
 
@@ -19,10 +19,10 @@ class FirstPageStack extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FirstPageStackState createState() => _FirstPageStackState();
+  FirstPageStackState createState() => FirstPageStackState();
 }
 
-class _FirstPageStackState extends State<FirstPageStack> {
+class FirstPageStackState extends State<FirstPageStack> {
   bool onWillPop() {
     if (Navigator.of(context).canPop()) {
       return true;
@@ -41,7 +41,6 @@ class _FirstPageStackState extends State<FirstPageStack> {
             return MaterialPageRoute(
                 builder: (context) => const YouTubeHomeScreen(),
                 settings: settings);
-            break;
 
           // case 'searchpage':
           //   final args = settings.arguments;
@@ -87,7 +86,6 @@ class _FirstPageStackState extends State<FirstPageStack> {
                   );
                 });
 
-            break;
 
           // case 'playlists':
           //   final args = settings.arguments;
@@ -129,10 +127,10 @@ class SecondPageStack extends StatefulWidget {
   final GlobalKey? navigatorKey;
 
   @override
-  _SecondPageStackState createState() => _SecondPageStackState();
+  SecondPageStackState createState() => SecondPageStackState();
 }
 
-class _SecondPageStackState extends State<SecondPageStack> {
+class SecondPageStackState extends State<SecondPageStack> {
   @override
   Widget build(BuildContext context) {
     return Navigator(
@@ -171,7 +169,6 @@ class _SecondPageStackState extends State<SecondPageStack> {
                   );
                 });
 
-            break;
 
           case 'artistListPage':
             final args = settingsforpagetwo.arguments;
@@ -213,7 +210,6 @@ class _SecondPageStackState extends State<SecondPageStack> {
                   );
                 });
 
-            break;
 
           case 'artistsPage':
             final args = settingsforpagetwo.arguments;
@@ -246,12 +242,12 @@ class _SecondPageStackState extends State<SecondPageStack> {
                     ),
                 transitionsBuilder:
                     (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(1.0, 0.0);
-                  const end = Offset.zero;
-                  const curve = Curves.fastLinearToSlowEaseIn;
+                  // const begin = Offset(1.0, 0.0);
+                  // const end = Offset.zero;
+                  // const curve = Curves.fastLinearToSlowEaseIn;
 
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
+                  // var tween = Tween(begin: begin, end: end)
+                  //     .chain(CurveTween(curve: curve));
 
                   return Align(
                       child: FadeTransition(
@@ -261,7 +257,59 @@ class _SecondPageStackState extends State<SecondPageStack> {
                   ));
                 });
 
-            break;
+        }
+        return null;
+      },
+    );
+  }
+}
+
+
+
+
+class ThirdPageStack extends StatefulWidget {
+  const ThirdPageStack({super.key, this.fromFirstPage, this.navigatorKey});
+
+  // final String searchArgs;
+  final bool? fromFirstPage;
+  final GlobalKey? navigatorKey;
+
+  @override
+  State<ThirdPageStack> createState() => _ThirdPageStackState();
+}
+
+class _ThirdPageStackState extends State<ThirdPageStack> {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      initialRoute: 'saved_playlists',
+      key : widget.navigatorKey,
+      onGenerateRoute: (RouteSettings settingsForPageThree) {
+        switch(settingsForPageThree.name){
+          case 'saved_playlists':
+            return MaterialPageRoute(builder: (context) => const UserLibrary());
+          case 'playlist_page':
+            final  args = settingsForPageThree.arguments;
+            return PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+
+                    PlaylistMain(
+                      playlistId: args.toString(),
+                    ),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.fastLinearToSlowEaseIn;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                });
         }
         return null;
       },

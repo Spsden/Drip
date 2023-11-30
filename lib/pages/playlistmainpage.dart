@@ -139,11 +139,11 @@ class _PlaylistMainState extends ConsumerState<PlaylistMain> {
                                       ),
                                     ),
                                     FilledButton(
-                                      child: const Row(
+                                      child:  const Row(
                                         children: [
                                           Icon(FluentIcons.play),
                                           spacer,
-                                          Text('Shuffle',
+                                          Text('Play',
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w500)),
@@ -151,6 +151,7 @@ class _PlaylistMainState extends ConsumerState<PlaylistMain> {
                                       ),
                                       onPressed: () async {
                                         // AudioControlClass.shuffle(_tracks);
+                                        ref.read(audioPlayerProvider).openAPlaylist(_tracks);
 
                                         print("pressed here");
                                       },
