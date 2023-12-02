@@ -319,7 +319,7 @@ class _AllSearchResults2State extends ConsumerState<AllSearchResults2>
                                             builder: (context) =>
                                                 PlaylistInfinitePaginationWidget(
                                               communityPlaylistQuery:
-                                                  searchQuery,
+                                                   searchQuery,
                                             ),
                                           ),
                                         );

@@ -70,7 +70,7 @@ dependencies:
   easy_sidemenu:
     git:
       url: https://github.com/Spsden/easy_sidemenu.git
-      ref: d244151d8df1719cf0cd08c71862300eac1cdaca
+      ref: 764055fc47a4a84fb279a5c763763c19df0e8948
   font_awesome_flutter: ^10.3.0
   easy_debounce: ^2.0.3
 #  riverpod_infinite_scroll: ^1.0.9

@@ -61,10 +61,10 @@ packages:
     dependency: transitive
     description:
       name: badges
-      sha256: "727580d938b7a1ff47ea42df730d581415606b4224cfa708671c10287f8d3fe6"
+      sha256: a7b6bbd60dce418df0db3058b53f9d083c22cdb5132a052145dc267494df0b84
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "3.1.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -356,11 +356,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d244151d8df1719cf0cd08c71862300eac1cdaca
-      resolved-ref: d244151d8df1719cf0cd08c71862300eac1cdaca
+      ref: "764055fc47a4a84fb279a5c763763c19df0e8948"
+      resolved-ref: "764055fc47a4a84fb279a5c763763c19df0e8948"
       url: "https://github.com/Spsden/easy_sidemenu.git"
     source: git
-    version: "0.4.1"
+    version: "0.5.0"
   expandable_text:
     dependency: "direct main"
     description:
