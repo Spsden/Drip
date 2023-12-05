@@ -1,6 +1,5 @@
 import 'package:drip/theme.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -145,11 +144,11 @@ class _CustomLeftBarState extends ConsumerState<CustomLeftBar> {
             return ExpansionTile(
 
                 // height: 50,
-                title: IconToText(),
+                title: const IconToText(),
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: 20,
                     itemBuilder: (context, index) {
                       return ListTile(
@@ -179,8 +178,8 @@ class _IconToTextState extends State<IconToText> {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return constraints.maxWidth >= 100
-            ? Text('Playlist')
-            : Icon(CupertinoIcons.play_arrow_solid, size: 30);
+            ? const Text('Playlist')
+            : const Icon(CupertinoIcons.play_arrow_solid, size: 30);
       },
     );
   }

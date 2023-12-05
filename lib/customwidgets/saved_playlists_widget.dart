@@ -144,19 +144,22 @@ import '../pages/playlistmainpage.dart';
 //   }
 // }
 
-
 class PlaylistContainer extends StatelessWidget {
+  final Function delCallBack;
   final SavedPlayList data;
 
-  const PlaylistContainer({Key? key, required this.data}) : super(key: key);
+   PlaylistContainer({Key? key, required this.data, required this.delCallBack}) : super(key: key);
 
-  @override
+  final menuController = fluent.FlyoutController();
+
   Widget build(BuildContext context) {
     List<localtracks.Track> tracks = data.tracks.sublist(0, 3);
     debugPrint(tracks.length.toString());
     Size size = MediaQuery.of(context).size;
 
-    tracks.forEach((element) {print(element.artists.first);});
+    tracks.forEach((element) {
+      print(element.artists.first);
+    });
 
     //Typography typography = FluentTheme.of(context).typography;
 
@@ -165,7 +168,7 @@ class PlaylistContainer extends StatelessWidget {
 
     return Material(
       child: InkWell(
-        onTap: (){
+        onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -174,177 +177,228 @@ class PlaylistContainer extends StatelessWidget {
               ),
             ),
           );
-
-
         },
-        child: Card(
-          color: Colors.transparent,
-          elevation: 10,
-          // height: 500,
-          // width: 400,
-          //margin: const EdgeInsets.all(10),
-          // padding: const EdgeInsets.all(8),
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(8),
-          //   color: fluent.FluentTheme.of(context)
-          //       .resources
-          //       .cardBackgroundFillColorDefault,
-          // ),
-          child: Column(
-            children: [
-              // ListTile(
-              //   title: Text(data.playListTitle),
-              //
-              //   leading: Image.network(
-              //     data.thumbnail,
-              //     fit: BoxFit.cover,
-              //     //height: 90,
-              //   ),
+        child: Stack(
+          children: [
+            Card(
+              color: Colors.transparent,
+              elevation: 10,
+
+              // height: 500,
+              // width: 400,
+              //margin: const EdgeInsets.all(10),
+              // padding: const EdgeInsets.all(8),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.circular(8),
+              //   color: fluent.FluentTheme.of(context)
+              //       .resources
+              //       .cardBackgroundFillColorDefault,
               // ),
-              fluent.Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    ExtendedImage.network(
-                      data.thumbnail,
-                      width: 70,
-                      height: 90,
-                      fit: BoxFit.fill,
-                      cache: true,
-                     // border: Border.all(color: Colors.red, width: 1.0),
-                      shape: BoxShape.rectangle,
-                      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                      //cancelToken: cancellationToken,
-                    ),
-                    // Image.network(
-                    //   data.thumbnail,
-                    //   fit: BoxFit.cover,
-                    //
-                    //   height:90,
-                    // ),
-                    // Center(
-                    const SizedBox(width: 10),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:  [
-                          Text(
-                            data.playListTitle,
-                            style:
-                                const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            maxLines: 2,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            data.description,
-                            style:  TextStyle(fontSize: 15,fontWeight: FontWeight.w300,color:Colors.white.withOpacity(0.7)),
-                            maxLines: 2,
-                            softWrap: true,
-
-
-
-                          ),
-                        ],
-                      ),
-                    ),
-                    // )
-                  ],
-                ),
-              ),
-               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  "Relive some of the biggest pop song of the 2010s",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 15,fontWeight: FontWeight.w200,color: Colors.white.withOpacity(0.7)),
-                ),
-              ),
-
-              Column(
-                  children: tracks
-                      .map(
-                        (e) => ListTile(
-                          leading: Image.network(
-                            e.thumbnails.first,
-                            width: 70,
-                            height: 70,
-                            fit: BoxFit.cover,
-                          ),
-                          title: Text(e.title ?? 'na',maxLines: 2,overflow: TextOverflow.ellipsis,),
-                          subtitle: Text(
-                            e.artists.join(" "),maxLines: 1,overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: const Icon(Icons.more_vert),
-                          //tileColor: Colors.green,
-                          onTap: () {},
+              child: Column(
+                children: [
+                  // ListTile(
+                  //   title: Text(data.playListTitle),
+                  //
+                  //   leading: Image.network(
+                  //     data.thumbnail,
+                  //     fit: BoxFit.cover,
+                  //     //height: 90,
+                  //   ),
+                  // ),
+                  fluent.Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        ExtendedImage.network(
+                          data.thumbnail,
+                          width: 70,
+                          height: 90,
+                          fit: BoxFit.fill,
+                          cache: true,
+                          // border: Border.all(color: Colors.red, width: 1.0),
+                          shape: BoxShape.rectangle,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          //cancelToken: cancellationToken,
                         ),
-                      )
-                      .toList()
+                        // Image.network(
+                        //   data.thumbnail,
+                        //   fit: BoxFit.cover,
+                        //
+                        //   height:90,
+                        // ),
+                        // Center(
+                        const SizedBox(width: 10),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data.playListTitle,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                maxLines: 2,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                data.description,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w300,
+                                    color: Colors.white.withOpacity(0.7)),
+                                maxLines: 2,
+                                softWrap: true,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      "Relive some of the biggest pop song of the 2010s",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white.withOpacity(0.7)),
+                    ),
+                  ),
 
-                  // [
-                  //   ListTile(
-                  //     leading: Image.network(
-                  //       image_url,
-                  //       width: 70,
-                  //     ),
-                  //     title: Text("Apna Bana Le"),
-                  //     subtitle: Text("Arijit Singh"),
-                  //     trailing: const Icon(Icons.more_vert),
-                  //     tileColor: Colors.green,
-                  //     onTap: () {},
-                  //   ),
-                  //   ListTile(
-                  //     leading: Image.network(
-                  //       image_url,
-                  //       width: 70,
-                  //     ),
-                  //     title: Text("Apna Bana Le"),
-                  //     subtitle: Text("Arijit Singh"),
-                  //     trailing: const Icon(Icons.more_vert),
-                  //     onTap: () {},
-                  //   ),
-                  //   ListTile(
-                  //     leading: Image.network(
-                  //       image_url,
-                  //       width: 70,
-                  //     ),
-                  //     title: Text("Apna Bana Le"),
-                  //     subtitle: Text("Arijit Singh"),
-                  //     trailing: const Icon(Icons.more_vert),
-                  //     onTap: () {},
-                  //   ),
-                  //   Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.start,
-                  //       children: [
-                  //         ElevatedButton(
-                  //           onPressed: () {},
-                  //           style: ElevatedButton.styleFrom(
-                  //               shape: const CircleBorder(),
-                  //               minimumSize: const Size(50, 50)),
-                  //           child: const Icon(Icons.play_arrow_rounded),
-                  //         ),
-                  //         const SizedBox(
-                  //           width: 20,
-                  //         ),
-                  //         ElevatedButton(
-                  //           onPressed: () {},
-                  //           style: ElevatedButton.styleFrom(
-                  //               shape: const CircleBorder(),
-                  //               minimumSize: const Size(50, 50)),
-                  //           child: const Icon(Icons.delete),
-                  //         )
-                  //       ],
-                  //     ),
-                  //   )
-                  // ],
+                  Column(
+                      children: tracks
+                          .map(
+                            (e) => ListTile(
+                              leading: Image.network(
+                                e.thumbnails.first,
+                                width: 70,
+                                height: 70,
+                                fit: BoxFit.cover,
+                              ),
+                              title: Text(
+                                e.title ?? 'na',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                e.artists.join(" "),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              // trailing: const Icon(Icons.more_vert),
+                              //tileColor: Colors.green,
+                              onTap: () {},
+                            ),
+                          )
+                          .toList()
+
+                      // [
+                      //   ListTile(
+                      //     leading: Image.network(
+                      //       image_url,
+                      //       width: 70,
+                      //     ),
+                      //     title: Text("Apna Bana Le"),
+                      //     subtitle: Text("Arijit Singh"),
+                      //     trailing: const Icon(Icons.more_vert),
+                      //     tileColor: Colors.green,
+                      //     onTap: () {},
+                      //   ),
+                      //   ListTile(
+                      //     leading: Image.network(
+                      //       image_url,
+                      //       width: 70,
+                      //     ),
+                      //     title: Text("Apna Bana Le"),
+                      //     subtitle: Text("Arijit Singh"),
+                      //     trailing: const Icon(Icons.more_vert),
+                      //     onTap: () {},
+                      //   ),
+                      //   ListTile(
+                      //     leading: Image.network(
+                      //       image_url,
+                      //       width: 70,
+                      //     ),
+                      //     title: Text("Apna Bana Le"),
+                      //     subtitle: Text("Arijit Singh"),
+                      //     trailing: const Icon(Icons.more_vert),
+                      //     onTap: () {},
+                      //   ),
+                      //   Align(
+                      //     alignment: Alignment.centerLeft,
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.start,
+                      //       children: [
+                      //         ElevatedButton(
+                      //           onPressed: () {},
+                      //           style: ElevatedButton.styleFrom(
+                      //               shape: const CircleBorder(),
+                      //               minimumSize: const Size(50, 50)),
+                      //           child: const Icon(Icons.play_arrow_rounded),
+                      //         ),
+                      //         const SizedBox(
+                      //           width: 20,
+                      //         ),
+                      //         ElevatedButton(
+                      //           onPressed: () {},
+                      //           style: ElevatedButton.styleFrom(
+                      //               shape: const CircleBorder(),
+                      //               minimumSize: const Size(50, 50)),
+                      //           child: const Icon(Icons.delete),
+                      //         )
+                      //       ],
+                      //     ),
+                      //   )
+                      // ],
+                      )
+                ],
+              ),
+            ),
+            Positioned(
+              right: 0,
+              child: fluent.FlyoutTarget(
+                  controller: menuController,
+                  child: fluent.Button(
+                    child: const Icon(Icons.menu_rounded),
+                    onPressed: () {
+                      menuController.showFlyout(
+                        autoModeConfiguration: fluent.FlyoutAutoConfiguration(
+                          preferredMode: fluent.FlyoutPlacementMode.topCenter,
+                        ),
+                        barrierDismissible: true,
+                        dismissOnPointerMoveAway: false,
+                        dismissWithEsc: true,
+                    //    navigatorKey: rootNavigatorKey.currentState,
+                        builder: (context) {
+                          return fluent.MenuFlyout(items: [
+
+                            fluent.MenuFlyoutItem(
+                              leading: const Icon(fluent.FluentIcons.delete),
+                              text: const Text('Delete'),
+                              onPressed: () {
+                                delCallBack();
+
+                                fluent.Flyout.of(context).close;
+
+                          }
+
+                               ,
+                            ),
+
+                          ]);
+                        },
+                      );
+                    },
                   )
-            ],
-          ),
+              )
+            ),
+          ],
         ),
       ),
     );

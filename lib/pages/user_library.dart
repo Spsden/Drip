@@ -1,5 +1,6 @@
 import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
 import 'package:drip/datasources/searchresults/requests/searchresultsservice.dart';
+import 'package:drip/providers/local/saved_playlist_provider.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
     as playlist;
@@ -56,7 +57,7 @@ class _UserLibraryState extends State<UserLibrary> {
     print(lol);
 
     playlist.Playlists playlists = await SearchMusic.getPlaylist(lol, 50);
-    final recentlyPlayedBox = Hive.box('savedPlaylists');
+    final recentlyPlayedBox = Hive.box('sahghvedPlaylists');
     recentlyPlayedBox.add(addToLocalData(playlists));
   }
 
@@ -246,7 +247,8 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
     print(lol);
 
     playlist.Playlists playlists = await SearchMusic.getPlaylist(lol, 50);
-    final recentlyPlayedBox = Hive.box('savedPlaylists');
+   // final savedPlayLists =
+    final recentlyPlayedBox = Hive.box('savedPnnlaylists');
     recentlyPlayedBox.add(addToLocalData(playlists));
   }
 
@@ -329,9 +331,9 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: fluent.FluentTheme.of(context).cardColor),
-        child: Column(
+        child: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(
               Icons.add,
               size: 50,
@@ -344,6 +346,19 @@ class _AddPlayListWidgetState extends State<AddPlayListWidget> {
   }
 }
 
+// Future<void> deleteSavedPlaylistById(String playlistId) async {
+//   final box = Hive.box('savedPlaylists');
+//   // Find the playlist by the `id` field and delete it
+//   final keyToDelete = box.keys.firstWhere(
+//         (k) => box.get(k).id == playlistId,
+//     orElse: () => null,
+//   );
+//
+//   if (keyToDelete != null) {
+//     await box.delete(keyToDelete);
+//   }
+// }
+
 class ImportedAndSavedPlaylists extends ConsumerWidget {
   const ImportedAndSavedPlaylists({Key? key}) : super(key: key);
 
@@ -351,36 +366,122 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //  List<Widget> recent =
     // List.generate(10, (index) => const PlaylistContainer());
-    return ValueListenableBuilder(
-        valueListenable: Hive.box('savedPlaylists').listenable(),
-        builder: (context, Box box, _) {
-          List<SavedPlayList> recent = List.from(box.values.toList().reversed);
-         // recent.forEach((element) {print(element.id);});
-          if (box.values.isEmpty) {
-            return const Center(
-              child: Text('No recent searches'),
-            );
-          }
-          return GridView.builder(
-              itemCount: recent.length,
-              physics: const BouncingScrollPhysics(),
-             // shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisExtent: 390,
-                maxCrossAxisExtent: 380.0,
-                mainAxisSpacing: 15.0,
-                crossAxisSpacing: 15.0,
-             //   childAspectRatio: 80 / 100,
-              ),
-              itemBuilder: (context, index) {
-                SavedPlayList savedPlayList = recent[index];
-                // recent_model.RecentlyPlayed recentlyPlayed = recent[index];
-                return
+    // final AsyncValue<List<SavedPlayList>> savedPlayLists =
+    // ref.watch(savedPlaylistsProvider);
+    final savedPlaylists = ref.watch(getAllSavedPlaylistsProvider);
+    return
 
-                    //Placeholder() ;
-                  //FeelGoodPlaylist();
-                    PlaylistContainer(data: savedPlayList);
-              });
-        });
+      savedPlaylists.when(data: ((data) {
+      print(data.toString());
+      return GridView.builder(
+          itemCount: data.length,
+          physics: const BouncingScrollPhysics(),
+          // shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            mainAxisExtent: 390,
+            maxCrossAxisExtent: 380.0,
+            mainAxisSpacing: 15.0,
+            crossAxisSpacing: 15.0,
+            //   childAspectRatio: 80 / 100,
+          ),
+          itemBuilder: (context, index) {
+            SavedPlayList savedPlayList = data[index];
+            // recent_model.RecentlyPlayed recentlyPlayed = recent[index];
+            return
+
+              //Placeholder() ;
+              //FeelGoodPlaylist();
+              PlaylistContainer(data: savedPlayList,delCallBack: () {
+                ref.read(savedPlayListHiveData.notifier).removeSavedPlaylist(savedPlayList.id);
+              },);
+          });
+
+
+    }), error: ((error, stackTrace) {
+      return Text(error.toString());
+
+    }), loading: () {
+      return CircularProgressIndicator();
+    },);
+
+
+      // ValueListenableBuilder(
+      //   valueListenable: Hive.box('savedPlaylists').listenable(),
+      //
+      //   builder: (context, Box box, _) {
+      //     List<SavedPlayList> recent = List.from(box.values.toList().reversed);
+      //     box.keys.forEach((element) {print(element.toString() + "yyyyy" + element.runtimeType.toString());});
+      //     //recent.forEach((element) {print(element.);});
+      //     if (box.values.isEmpty) {
+      //       return const Center(
+      //         child: Text('No recent searches'),
+      //       );
+      //     }
+      //     return GridView.builder(
+      //         itemCount: recent.length,
+      //         physics: const BouncingScrollPhysics(),
+      //         // shrinkWrap: true,
+      //         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+      //           mainAxisExtent: 390,
+      //           maxCrossAxisExtent: 380.0,
+      //           mainAxisSpacing: 15.0,
+      //           crossAxisSpacing: 15.0,
+      //           //   childAspectRatio: 80 / 100,
+      //         ),
+      //         itemBuilder: (context, index) {
+      //           SavedPlayList savedPlayList = recent[index];
+      //           // recent_model.RecentlyPlayed recentlyPlayed = recent[index];
+      //           return
+      //
+      //             //Placeholder() ;
+      //             //FeelGoodPlaylist();
+      //             PlaylistContainer(data: savedPlayList);
+      //         });
+      //   });
   }
 }
+
+
+
+// class ImportedAndSavedPlaylists extends ConsumerWidget {
+//   const ImportedAndSavedPlaylists({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     //  List<Widget> recent =
+//     // List.generate(10, (index) => const PlaylistContainer());
+//     return ValueListenableBuilder(
+//         valueListenable: Hive.box('savedPlaylists').listenable(),
+//
+//         builder: (context, Box box, _) {
+//           List<SavedPlayList> recent = List.from(box.values.toList().reversed);
+//           box.keys.forEach((element) {print(element.toString() + "yyyyy" + element.runtimeType.toString());});
+//          //recent.forEach((element) {print(element.);});
+//           if (box.values.isEmpty) {
+//             return const Center(
+//               child: Text('No recent searches'),
+//             );
+//           }
+//           return GridView.builder(
+//               itemCount: recent.length,
+//               physics: const BouncingScrollPhysics(),
+//              // shrinkWrap: true,
+//               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+//                 mainAxisExtent: 390,
+//                 maxCrossAxisExtent: 380.0,
+//                 mainAxisSpacing: 15.0,
+//                 crossAxisSpacing: 15.0,
+//              //   childAspectRatio: 80 / 100,
+//               ),
+//               itemBuilder: (context, index) {
+//                 SavedPlayList savedPlayList = recent[index];
+//                 // recent_model.RecentlyPlayed recentlyPlayed = recent[index];
+//                 return
+//
+//                     //Placeholder() ;
+//                   //FeelGoodPlaylist();
+//                     PlaylistContainer(data: savedPlayList);
+//               });
+//         });
+//   }
+// }

@@ -6,7 +6,7 @@ part of 'youtubehomedata.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getHomeHash() => r'2c64876dc5219ecbffc03adfd6fbc7c21ab2a677';
+String _$getHomeHash() => r'277607454193b60ec5d2c8cf7a945d57cd6c5dea';
 
 /// See also [getHome].
 @ProviderFor(getHome)

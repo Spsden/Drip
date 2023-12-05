@@ -91,7 +91,7 @@ Future<void> main() async {
     Hive.registerAdapter(SavedPlayListAdapter());
     Hive.registerAdapter(TrackAdapter());
     await openHiveBox('recentlyPlayed');
-    await openHiveBox('savedPlaylists');
+   await openHiveBox('savedPlaylists');
     await AudioControlCentre.initialize();
 
 
