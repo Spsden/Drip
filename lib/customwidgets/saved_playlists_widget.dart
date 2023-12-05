@@ -1,8 +1,6 @@
 import 'package:drip/datasources/searchresults/local_models/saved_playlist.dart';
-import 'package:drip/datasources/searchresults/models/playlistdataclass.dart';
 import 'package:drip/datasources/searchresults/local_models/tracks_local.dart'
     as localtracks;
-import 'package:expandable_text/expandable_text.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import "package:flutter/material.dart";
@@ -67,9 +65,11 @@ import "package:flutter/material.dart";
 //   }
 // }
 
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../datasources/audiofiles/activeaudiodata.dart';
 import '../pages/playlistmainpage.dart';
+import '../providers/audio_player_provider.dart';
 
 // class FeelGoodPlaylist extends StatelessWidget {
 //   @override
@@ -144,7 +144,7 @@ import '../pages/playlistmainpage.dart';
 //   }
 // }
 
-class PlaylistContainer extends StatelessWidget {
+class PlaylistContainer extends ConsumerWidget {
   final Function delCallBack;
   final SavedPlayList data;
 
@@ -152,14 +152,13 @@ class PlaylistContainer extends StatelessWidget {
 
   final menuController = fluent.FlyoutController();
 
-  Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context,WidgetRef ref) {
     List<localtracks.Track> tracks = data.tracks.sublist(0, 3);
     debugPrint(tracks.length.toString());
-    Size size = MediaQuery.of(context).size;
+    //Size size = MediaQuery.of(context).size;
 
-    tracks.forEach((element) {
-      print(element.artists.first);
-    });
+
 
     //Typography typography = FluentTheme.of(context).typography;
 
@@ -260,7 +259,7 @@ class PlaylistContainer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      "Relive some of the biggest pop song of the 2010s",
+                      data.description,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.start,
@@ -293,7 +292,16 @@ class PlaylistContainer extends StatelessWidget {
                               ),
                               // trailing: const Icon(Icons.more_vert),
                               //tileColor: Colors.green,
-                              onTap: () {},
+                              onTap: () async{
+                                CurrentMusicInstance currentMusicInstance = CurrentMusicInstance(
+                                    title: e.title ?? "NA",
+                                    author: e.artists ,
+                                    thumbs: e.thumbnails,
+                                    urlOfVideo: 'NA',
+                                    videoId: e.videoId ?? "dQw4w9WgXcQ");
+                                await ref.read(audioPlayerProvider).open(currentMusicInstance);
+
+                              },
                             ),
                           )
                           .toList()

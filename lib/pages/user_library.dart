@@ -6,13 +6,9 @@ import 'package:drip/datasources/searchresults/models/playlistdataclass.dart'
     as playlist;
 import 'package:drip/datasources/searchresults/local_models/tracks_local.dart'
     as tracks;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:drip/customwidgets/saved_playlists_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:window_manager/window_manager.dart';
 
 class UserLibrary extends ConsumerStatefulWidget {
   const UserLibrary({super.key});
@@ -49,7 +45,7 @@ class _UserLibraryState extends ConsumerState<UserLibrary> {
     try {
       Uri uri = Uri.parse(url);
       String lol = uri.query.split("=")[1].split("&")[0];
-      print(lol);
+      debugPrint(lol);
 
       playlist.Playlists playlists = await SearchMusic.getPlaylist(lol, 50);
       ref
@@ -363,7 +359,6 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
     final savedPlaylists = ref.watch(getAllSavedPlaylistsProvider);
     return savedPlaylists.when(
       data: ((data) {
-        print(data.toString());
         return GridView.builder(
             itemCount: data.length,
             physics: const BouncingScrollPhysics(),
@@ -396,7 +391,7 @@ class ImportedAndSavedPlaylists extends ConsumerWidget {
         return Text(error.toString());
       }),
       loading: () {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       },
     );
 
