@@ -18,6 +18,9 @@ class SavedPlayListsNotifier extends StateNotifier<List?> {
   void removeSavedPlaylist(String id) async {
     state = await repo.removeSavedPlaylist(id);
   }
+  void addSavedPlaylist(SavedPlayList savedPlayList) async{
+    state = await repo.addSavedPlaylist(savedPlayList);
+  }
 
   // Future<void> deletePlaylist(String playlistId) async {
   //   await repo.deletePlaylist(playlistId);
